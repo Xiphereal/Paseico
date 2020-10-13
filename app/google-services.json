@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "436698572362",
+    "firebase_url": "https://paseico.firebaseio.com",
+    "project_id": "paseico",
+    "storage_bucket": "paseico.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:436698572362:android:d421ca6a59c7f2151168b3",
+        "android_client_info": {
+          "package_name": "app.paseico"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "436698572362-7rc77gl76pjspq6u1ekhu3p7as4fg65m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.paseico",
+            "certificate_hash": "c6cf45c35697a3d20e45e55c975d8dff5d7e208d"
+          }
+        },
+        {
+          "client_id": "436698572362-939rqotju6snl6p0ha2fdb506sln8l21.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmc0RXPi2VVU1Qo8wjF08DZQ3ema9q78s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "436698572362-939rqotju6snl6p0ha2fdb506sln8l21.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
