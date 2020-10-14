@@ -1,4 +1,4 @@
-package app.paseico;
+package app.paseico.data;
 
 public class PointOfInterest {
     private double latitude;
