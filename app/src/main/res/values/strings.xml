@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Paseico</string>
+    <string name="title_activity_main_map">Map</string>
 </resources>
