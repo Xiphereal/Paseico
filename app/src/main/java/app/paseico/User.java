@@ -12,12 +12,6 @@ public class User {
         this.username = u;
     }
 
-    public User(String n, String u, String e, String p) {
-        this.name = n;
-        this.email = e;
-        this.username = u;
-        this.password = p;
-    }
 
 
     public String getName() {

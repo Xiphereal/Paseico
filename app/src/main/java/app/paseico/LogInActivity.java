@@ -37,11 +37,10 @@ import com.google.firebase.database.ValueEventListener;
 public class LogInActivity extends AppCompatActivity {
 
     static final int GOOGLE_SIGN = 123;
-    FirebaseAuth mAuth;
+    private FirebaseAuth mAuth;
     SignInButton btn_google_login;
     GoogleSignInClient mGoogleSignInClient;
     UserDao uDao = new UserDao();
-    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +65,18 @@ public class LogInActivity extends AppCompatActivity {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
 
-
-
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            // User is signed in
+        } else {
+            // No user is signed in
+        }
+        updateUI(currentUser);//ignore this one
     }
 
     void SignInGoogle(){
