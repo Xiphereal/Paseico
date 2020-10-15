@@ -20,4 +20,11 @@ public class UserDao implements IUserDao {
         User newUser = new User(user.getDisplayName(),username,user.getEmail());
         myUsersRef.child(user.getUid()).setValue(newUser);
     }
+
+    @Override
+    public void addUser(FirebaseUser user, String username, String name, String surname) {
+        String fullname = name + " " + surname;
+        User newUser = new User(fullname,username,user.getEmail());
+        myUsersRef.child(user.getUid()).setValue(newUser);
+    }
 }

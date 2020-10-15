@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -52,6 +53,16 @@ public class LogInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SignInGoogle();
+            }
+        });
+
+        TextView register = findViewById(R.id.textViewRegister);
+        register.setOnClickListener(new View.OnClickListener() { //On click you go to the register form
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LogInActivity.this, RegisterActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 

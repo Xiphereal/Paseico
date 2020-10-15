@@ -20,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -58,33 +59,42 @@ public class RegisterActivity extends AppCompatActivity {
         String password = etPassword.getText().toString();
         String passwordConf = etPasswordConf.getText().toString();
         if(name != null && surname !=null && email != null && username != null && password != null && passwordConf != null){ //Check that the fields aren't empty
-            if(password.equals(passwordConf)){ //Check if passwords match
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-                ref.child("users").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists()){
-                            //username already exists
-                            Context context = getApplicationContext();
-                            CharSequence text = "Ese nombre de usuario ya está en uso, por favor utilice otro";
-                            int duration = Toast.LENGTH_SHORT;
+            if(password.length()>=6) {
+                if (password.equals(passwordConf)) { //Check if passwords match
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                    DatabaseReference userNameRef = ref.child("users");
+                    Query queries = userNameRef.orderByChild("username").equalTo(username);
+                    ValueEventListener eventListener = new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(!dataSnapshot.exists()) {
+                                //create new user
+                                submitRegister(name, surname, email, username, password);
+                            } else {
+                                Context context = getApplicationContext();
+                                CharSequence text = "Ese nombre de usuario ya existe";
+                                int duration = Toast.LENGTH_SHORT;
 
-                            Toast toast = Toast.makeText(context, text, duration);
-                            toast.show();
-                        } else {
-                            // User does not exist, we can register it
-                            submitRegister(name,  surname,  email,  username,  password,  passwordConf);
+                                Toast toast = Toast.makeText(context, text, duration);
+                                toast.show();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                    }
-                });
-            }
-            else{ //Passwords doesn't match
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {}
+                    };
+                    queries.addListenerForSingleValueEvent(eventListener);
+                } else { //Passwords doesn't match
+                    Context context = getApplicationContext();
+                    CharSequence text = "Las contraseñas no coinciden";
+                    int duration = Toast.LENGTH_SHORT;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
+            }else{
                 Context context = getApplicationContext();
-                CharSequence text = "Las contraseñas no coinciden";
+                CharSequence text = "La contraseña debe contener mínimo 6 caracteres";
                 int duration = Toast.LENGTH_SHORT;
 
                 Toast toast = Toast.makeText(context, text, duration);
@@ -100,21 +110,19 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private void submitRegister(String name, String surname, String email, String username, String password, String passwordConf){
+    private void submitRegister(String name, String surname, String email, String username, String password){
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d("TAG", "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             UserDao uDao = new UserDao();
-                            uDao.addGoogleUser(user);
+                            uDao.addUser(user,username, name, surname);
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w("TAG", "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(RegisterActivity.this, "Authentication failed.",
+                            Toast.makeText(RegisterActivity.this, "Error: El correo electrónico ya existe",
                                     Toast.LENGTH_SHORT).show();
                         }
 
