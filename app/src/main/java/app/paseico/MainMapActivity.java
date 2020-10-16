@@ -17,29 +17,28 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 
 public class MainMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private static GoogleMap mainMap;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_map);
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        initializeMapFragment();
 
         registerCreateNewRouteButtonTransition();
     }
 
+    private void initializeMapFragment() {
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.main_map);
+        mapFragment.getMapAsync(this);
+    }
+
     private void registerCreateNewRouteButtonTransition() {
         ExtendedFloatingActionButton extendedFloatingActionButton = findViewById(R.id.extended_fab);
-        extendedFloatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent createNewRouteIntent = new Intent(getApplicationContext(), CreateNewRouteActivity.class);
-                startActivity(createNewRouteIntent);
-            }
+        extendedFloatingActionButton.setOnClickListener(view -> {
+            Intent createNewRouteIntent = new Intent(getApplicationContext(), CreateNewRouteActivity.class);
+            startActivity(createNewRouteIntent);
         });
     }
 
@@ -53,17 +52,12 @@ public class MainMapActivity extends FragmentActivity implements OnMapReadyCallb
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mainMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
         LatLng valenciaCathedral = new LatLng(39.47, -0.38);
-        LatLng albertosBar = new LatLng(39.47,-0.37);
-        mainMap.addMarker(new MarkerOptions().position(valenciaCathedral).title("Cathedral"));
-        mainMap.addMarker(new MarkerOptions().position(albertosBar).title("Alberto's bar"));
-        mainMap.moveCamera(CameraUpdateFactory.newLatLng(valenciaCathedral));
-    }
+        googleMap.addMarker(new MarkerOptions().position(valenciaCathedral).title("Cathedral"));
+        LatLng albertosBar = new LatLng(39.47, -0.37);
+        googleMap.addMarker(new MarkerOptions().position(albertosBar).title("Alberto's bar"));
 
-    public static GoogleMap getMap(){
-        return mainMap;
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(valenciaCathedral));
+        googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
     }
 }
