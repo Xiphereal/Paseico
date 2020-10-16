@@ -8,11 +8,15 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.PointOfInterest;
+
+import app.paseico.data.PointOfInterest;
+import app.paseico.data.Route;
 
 public class CreateNewRouteActivity extends AppCompatActivity {
 
     private static GoogleMap createRouteMap;
+    private Route routeToBeCreated;
+    private PointOfInterest[] pointsSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +30,7 @@ public class CreateNewRouteActivity extends AppCompatActivity {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 LatLng latLonOfMarker = marker.getPosition();
-                
+
                 return true;
             }
         });
