@@ -28,9 +28,9 @@ public class RouteStatusActivity extends AppCompatActivity {
         setContentView(R.layout.activity_route_status);
 
         ListView listView = findViewById(R.id.listView);
+        pointsOfInterests.add("Current location");
         pointsOfInterests.add("POI 1");
         pointsOfInterests.add("POI 2");
-        pointsOfInterests.add("POI 3");
         //locations.add(new LatLng(0,0));
 
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, pointsOfInterests);
