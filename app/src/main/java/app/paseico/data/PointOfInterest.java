@@ -1,14 +1,14 @@
 package app.paseico.data;
 
+import com.google.android.gms.maps.model.Marker;
+
 public class PointOfInterest {
-    private double latitude;
-    private double longitude;
+    private Marker googleMarker;
     private String name;
 
-    public PointOfInterest(double lat, double lon, String nam)
+    public PointOfInterest(Marker googleMarker, String nam)
     {
-        this.latitude = lat;
-        this.longitude = lon;
+        this.googleMarker = googleMarker;
         this.name = nam;
     }
 }

@@ -2,17 +2,14 @@ package app.paseico;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
 import java.util.List;
 
 import app.paseico.data.PointOfInterest;
-import app.paseico.data.Route;
 
 public class CreateNewRouteActivity extends AppCompatActivity {
 
@@ -27,13 +24,9 @@ public class CreateNewRouteActivity extends AppCompatActivity {
     }
 
     private void addPointOfInterestToRoute(){
-        createRouteMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                LatLng latLonOfMarker = marker.getPosition();
-                pointsSelected.add(new PointOfInterest(latLonOfMarker.latitude,latLonOfMarker.longitude, marker.getId()));
-                return true;
-            }
+        createRouteMap.setOnMarkerClickListener(marker -> {
+            pointsSelected.add(new PointOfInterest(marker, marker.getId()));
+            return true;
         });
     }
 
