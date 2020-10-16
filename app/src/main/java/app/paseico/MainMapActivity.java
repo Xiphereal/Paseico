@@ -16,7 +16,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 
 public class MainMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
+    private static GoogleMap mainMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,19 +45,24 @@ public class MainMapActivity extends FragmentActivity implements OnMapReadyCallb
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
+     * This is where we can add markers or lines, add listeners or move the camera.
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+        mainMap = googleMap;
 
         // Add a marker in Sydney and move the camera
         LatLng valenciaCathedral = new LatLng(39.47, -0.38);
-        mMap.addMarker(new MarkerOptions().position(valenciaCathedral).title("Marker in Valencia"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(valenciaCathedral));
+        LatLng albertosBar = new LatLng(39.47,-0.37);
+        mainMap.addMarker(new MarkerOptions().position(valenciaCathedral).title("Cathedral"));
+        mainMap.addMarker(new MarkerOptions().position(albertosBar).title("Alberto's bar"));
+        mainMap.moveCamera(CameraUpdateFactory.newLatLng(valenciaCathedral));
+    }
+
+    public static GoogleMap getMap(){
+        return mainMap;
     }
 }
