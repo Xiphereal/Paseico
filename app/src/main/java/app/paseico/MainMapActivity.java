@@ -53,9 +53,6 @@ public class MainMapActivity extends FragmentActivity implements OnMapReadyCallb
     @Override
     public void onMapReady(GoogleMap googleMap) {
         LatLng valenciaCathedral = new LatLng(39.47, -0.38);
-        googleMap.addMarker(new MarkerOptions().position(valenciaCathedral).title("Cathedral"));
-        LatLng albertosBar = new LatLng(39.47, -0.37);
-        googleMap.addMarker(new MarkerOptions().position(albertosBar).title("Alberto's bar"));
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(valenciaCathedral));
         googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
