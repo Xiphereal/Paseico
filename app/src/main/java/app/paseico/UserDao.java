@@ -27,4 +27,6 @@ public class UserDao implements IUserDao {
         User newUser = new User(fullname,username,user.getEmail());
         myUsersRef.child(user.getUid()).setValue(newUser);
     }
+
+
 }

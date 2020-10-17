@@ -58,7 +58,12 @@ public class RegisterActivity extends AppCompatActivity {
         String username = etUsername.getText().toString();
         String password = etPassword.getText().toString();
         String passwordConf = etPasswordConf.getText().toString();
-        if(name != null && surname !=null && email != null && username != null && password != null && passwordConf != null){ //Check that the fields aren't empty
+        if(name != null
+                && surname !=null
+                && email != null
+                && username != null
+                && password != null
+                && passwordConf != null){ //Check that the fields aren't empty
             if(password.length()>=6) {
                 if (password.equals(passwordConf)) { //Check if passwords match
                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference();

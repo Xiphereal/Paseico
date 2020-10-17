@@ -6,10 +6,10 @@ public class User {
     private String username;
     private String password;
 
-    public User(String n, String u, String e) {
-        this.name = n;
-        this.email = e;
-        this.username = u;
+    public User(String name, String username, String email) {
+        this.name = name;
+        this.email = email;
+        this.username = username;
     }
 
 

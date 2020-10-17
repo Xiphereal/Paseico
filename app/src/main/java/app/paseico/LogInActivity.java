@@ -40,6 +40,7 @@ public class LogInActivity extends AppCompatActivity {
     static final int GOOGLE_SIGN = 123;
     private FirebaseAuth mAuth;
     SignInButton btn_google_login;
+    EditText etEmail, etPassword;
     GoogleSignInClient mGoogleSignInClient;
     UserDao uDao = new UserDao();
 
@@ -47,6 +48,17 @@ public class LogInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
+
+        etEmail = findViewById(R.id.editTextEmail);
+        etPassword = findViewById(R.id.editTextPassword);
+        Button btnLogin = findViewById(R.id.buttonLogIn);
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SignIn();
+            }
+        });
 
         btn_google_login = findViewById(R.id.sign_in_button);
         btn_google_login.setOnClickListener(new View.OnClickListener() {
@@ -148,7 +160,37 @@ public class LogInActivity extends AppCompatActivity {
                 });
     }
 
+    public void SignIn(){
+        mAuth.signInWithEmailAndPassword(etEmail.getText().toString(), etPassword.getText().toString())
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("TAG", "signInWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user);
+                            goToMainScreen();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("TAG", "signInWithEmail:failure", task.getException());
+                            Toast.makeText(LogInActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            updateUI(null);
+                            // ...
+                        }
+
+                        // ...
+                    }
+                });
+    }
     private void updateUI(FirebaseUser user) {
 
+    }
+
+    private void goToMainScreen(){
+        Intent intent = new Intent(LogInActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
