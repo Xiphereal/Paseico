@@ -7,6 +7,19 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
+    <!-- Added temporal material design component to test that dependencies are correctly resolved. -->
+    <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+                android:id="@+id/app_bar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:title="Paseico"/>
+    </com.google.android.material.appbar.AppBarLayout>
+
     <TextView
             android:text="Hi Router! Have you walk yet today? :)"
             android:id="@+id/textView"
