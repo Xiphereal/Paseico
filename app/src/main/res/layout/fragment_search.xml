@@ -67,9 +67,10 @@
 
     <Spinner
         android:id="@+id/spinner_route_theme"
-        android:layout_width="95dp"
-        android:layout_height="18dp"
+        android:layout_width="149dp"
+        android:layout_height="34dp"
         android:layout_marginTop="24dp"
+        android:entries="@array/themes_of_route"
         android:spinnerMode="dropdown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView_theme"
@@ -99,21 +100,23 @@
 
     <Spinner
         android:id="@+id/spinner_route_length"
-        android:layout_width="94dp"
-        android:layout_height="21dp"
-        android:layout_marginTop="52dp"
+        android:layout_width="140dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="36dp"
+        android:entries="@array/lengths_of_route"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.436"
         app:layout_constraintStart_toEndOf="@+id/textView_length"
         app:layout_constraintTop_toBottomOf="@+id/spinner_route_theme" />
 
     <Spinner
         android:id="@+id/spinner_route_estimated_time"
-        android:layout_width="105dp"
-        android:layout_height="23dp"
+        android:layout_width="167dp"
+        android:layout_height="32dp"
         android:layout_marginLeft="68dp"
         android:layout_marginStart="68dp"
         android:layout_marginTop="52dp"
+        android:entries="@array/estimated_times_of_route"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/textView_estimatedTime"
@@ -153,7 +156,7 @@
         android:layout_marginLeft="56dp"
         android:layout_marginStart="56dp"
         android:layout_marginTop="36dp"
-        android:text="@string/minimumOfPoints"
+        android:text="@string/minimum_of_points"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textview_numOfPOI" />
 

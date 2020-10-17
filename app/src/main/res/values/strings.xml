@@ -16,7 +16,39 @@
     <string name ="lenght">Longitud:</string>
     <string name="estimated_time">Duración estimada:</string>
     <string name="number_of_POI">Número de puntos de interés:</string>
-    <string name="minimumOfPoints">Mínimo de puntos:</string>
+    <string name="minimum_of_points">Mínimo de puntos:</string>
+
+    <string name="default_spinner_choice">Indiferente</string>
+
+    <!--Strings arrays used to populate searchFragment spinners -->
+    <string-array name="themes_of_route">
+        <item>@string/default_spinner_choice</item>
+        <item>Museos</item>
+        <item>Restaurantes</item>
+        <item>Monumentos</item>
+        <item>Naturaleza</item>
+        <item>Bares</item>
+    </string-array>
+    <string-array name="lengths_of_route">
+        <item>@string/default_spinner_choice</item>
+        <item>&gt; 1 km</item> <!-- &gt; is '<' -->
+        <item>1-2 km</item>
+        <item>2-3 km</item>
+        <item>3-4 km</item>
+        <item>4-5 km</item>
+        <item>&lt; 5km</item> <!-- &lt; is '>' -->
+    </string-array>
+    <string-array name="estimated_times_of_route">
+        <item>@string/default_spinner_choice</item>
+        <item>&gt; 30 min</item> <!-- &gt; is '<' -->
+        <item>30-60 min</item>
+        <item>1-2 h</item>
+        <item>2-3 h</item>
+        <item>3-4 h</item>
+        <item>4-5 h</item>
+        <item>&lt; 5 h</item> <!-- &lt; is '>' -->
+    </string-array>
+
 
 
 
