@@ -1,12 +1,25 @@
 <resources>
     <string name="app_name">Paseico</string>
     <string name="title_activity_route_search">RouteSearch</string>
-    <!-- Strings used for fragments for navigation -->
+
+    <!-- Strings used for route search fragments for navigation -->
     <string name="search_fragment_label">First Fragment</string>
     <string name="route_list_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
+    <!-- Strings used for buttons names-->
+    <string name="search">Buscar</string>
+    <string name="previous">Volver</string>
+
+    <!-- Strings used for textviews names-->
+    <string name="key_word">Palabras clave:</string>
+    <string name="theme">Temática:</string>
+    <string name ="lenght">Longitud:</string>
+    <string name="estimated_time">Duración estimada:</string>
+    <string name="number_of_POI">Número de puntos de interés:</string>
+    <string name="minimumOfPoints">Mínimo de puntos:</string>
+
+
+
+    <string name="search_fragment_title">Seleccione el filtro de búsqueda</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>

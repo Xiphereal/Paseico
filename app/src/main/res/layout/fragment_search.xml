@@ -7,22 +7,166 @@
     tools:context=".SearchFragment">
 
     <Button
-        android:id="@+id/button_first"
+        android:id="@+id/btn_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/next"
+        android:layout_marginBottom="108dp"
+        android:text="@string/search"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textview_first" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textview_first"
+        android:id="@+id/textView_routeSearchTitle"
+        android:layout_width="244dp"
+        android:layout_height="39dp"
+        android:text="@string/search_fragment_title"
+        app:layout_constraintBottom_toTopOf="@id/btn_search"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.113" />
+
+    <EditText
+        android:id="@+id/editText_keyWord"
+        android:layout_width="207dp"
+        android:layout_height="46dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="36dp"
+        android:ems="10"
+        android:hint="Nombre de la ruta"
+        android:inputType="textPersonName"
+        android:selectAllOnFocus="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_routeSearchTitle" />
+
+    <TextView
+        android:id="@+id/textView_keyWord"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_first_fragment"
-        app:layout_constraintBottom_toTopOf="@id/button_first"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="36dp"
+        android:text="@string/key_word"
+        app:layout_constraintEnd_toStartOf="@+id/editText_keyWord"
+        app:layout_constraintHorizontal_bias="0.702"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_routeSearchTitle" />
+
+    <TextView
+        android:id="@+id/textView_theme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="52dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="52dp"
+        android:text="@string/theme"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_keyWord" />
+
+    <Spinner
+        android:id="@+id/spinner_route_theme"
+        android:layout_width="95dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="24dp"
+        android:spinnerMode="dropdown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView_theme"
+        app:layout_constraintTop_toBottomOf="@+id/editText_keyWord" />
+
+    <TextView
+        android:id="@+id/textView_length"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="64dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="52dp"
+        android:text="@string/lenght"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_theme" />
+
+    <TextView
+        android:id="@+id/textView_estimatedTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="36dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="52dp"
+        android:text="@string/estimated_time"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_length" />
+
+    <Spinner
+        android:id="@+id/spinner_route_length"
+        android:layout_width="94dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="52dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toEndOf="@+id/textView_length"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_route_theme" />
+
+    <Spinner
+        android:id="@+id/spinner_route_estimated_time"
+        android:layout_width="105dp"
+        android:layout_height="23dp"
+        android:layout_marginLeft="68dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="52dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textView_estimatedTime"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_route_length" />
+
+    <TextView
+        android:id="@+id/textview_numOfPOI"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="52dp"
+        android:text="@string/number_of_POI"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_estimatedTime" />
+
+    <EditText
+        android:id="@+id/editText_numberOfPOI"
+        android:layout_width="123dp"
+        android:layout_height="37dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:focusableInTouchMode="true"
+        android:inputType="number"
+        android:nextFocusDown="@id/spinner_route_theme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textview_numOfPOI"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_route_estimated_time" />
+
+    <TextView
+        android:id="@+id/textView_pointsEarnedCompletingRoute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="56dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="36dp"
+        android:text="@string/minimumOfPoints"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textview_numOfPOI" />
+
+    <EditText
+        android:id="@+id/editText_minimumOfPoints"
+        android:layout_width="128dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.369"
+        app:layout_constraintStart_toEndOf="@+id/textView_pointsEarnedCompletingRoute"
+        app:layout_constraintTop_toBottomOf="@+id/editText_numberOfPOI" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
