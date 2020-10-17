@@ -7,6 +7,11 @@ public class Route {
     private String name;
     private List<PointOfInterest> pointsOfInterest;
 
+    public Route(String name, List<PointOfInterest> pointOfInterests) {
+        this.name = name;
+        this.pointsOfInterest = pointOfInterests;
+    }
+
     public String getName() {
         return name;
     }
