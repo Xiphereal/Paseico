@@ -17,7 +17,7 @@ public class RouteListFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.route_list_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_route_list, container, false);
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {

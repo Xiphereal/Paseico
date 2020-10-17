@@ -9,7 +9,7 @@
         android:id="@+id/SearchFragment"
         android:name="app.paseico.SearchFragment"
         android:label="@string/search_fragment_label"
-        tools:layout="@layout/search_fragment">
+        tools:layout="@layout/fragment_search">
         <action
             android:id="@+id/action_SearchFragment_to_RouteListFragment"
             app:destination="@id/RouteListFragment" />
@@ -18,7 +18,7 @@
         android:id="@+id/RouteListFragment"
         android:name="app.paseico.RouteListFragment"
         android:label="@string/route_list_fragment_label"
-        tools:layout="@layout/route_list_fragment">
+        tools:layout="@layout/fragment_route_list">
 
         <action
             android:id="@+id/action_RouteListFragment_to_SearchFragment"
