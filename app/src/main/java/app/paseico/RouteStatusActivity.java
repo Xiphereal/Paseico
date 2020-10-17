@@ -13,25 +13,32 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PointOfInterest;
 
 import java.util.ArrayList;
 
+import app.paseico.data.PointOfInterestPaseico;
+
 public class RouteStatusActivity extends AppCompatActivity {
     static ArrayList<String> pointsOfInterests = new ArrayList<String>();
-    //static ArrayList<LatLng> locations = new ArrayList<LatLng>();
+    static ArrayList<LatLng> locations = new ArrayList<LatLng>();
     static ArrayAdapter arrayAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_status);
 
         ListView listView = findViewById(R.id.listView);
-        pointsOfInterests.add("Current location");
-        pointsOfInterests.add("POI 1");
-        pointsOfInterests.add("POI 2");
-        //locations.add(new LatLng(0,0));
+
+        PointOfInterestPaseico POI1 = new PointOfInterestPaseico("Mercado central", 39.4736, -0.3790);
+        PointOfInterestPaseico POI2 = new PointOfInterestPaseico("Torre de Quart", 39.4758, -0.3839);
+        pointsOfInterests.add("Localización actual");
+        pointsOfInterests.add(POI1.getName());
+        pointsOfInterests.add(POI2.getName());
+        locations.add(new LatLng(0,0));
+        locations.add(new LatLng(POI1.getLatitude(),POI1.getLongitude()));
+        locations.add(new LatLng(POI2.getLatitude(), POI2.getLongitude()));
 
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, pointsOfInterests);
 

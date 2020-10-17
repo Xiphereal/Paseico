@@ -85,12 +85,13 @@ public class RoutingActivity extends FragmentActivity implements OnMapReadyCallb
             } else {
                 ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
             }
+        } else {
+            Location placeLocation = new Location(LocationManager.GPS_PROVIDER);
+            placeLocation.setLatitude(RouteStatusActivity.locations.get(intent.getIntExtra("placeNumber",0)).latitude);
+            placeLocation.setLongitude(RouteStatusActivity.locations.get(intent.getIntExtra("placeNumber",0)).longitude);
 
+            centerMapOnLocation(placeLocation, RouteStatusActivity.pointsOfInterests.get(intent.getIntExtra("placeNumber",0)));
         }
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 }
