@@ -7,15 +7,18 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CreateNewRouteActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap createNewRouteMap;
-    private List<PointOfInterest> pointsSelected;
+    private List<PointOfInterest> pointsSelected = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,8 +26,6 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         setContentView(R.layout.activity_create_new_route);
 
         initializeMapFragment();
-
-
     }
 
     private void initializeMapFragment() {
@@ -34,11 +35,47 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         mapFragment.getMapAsync(this);
     }
 
-    private void registerOnMarkerClickListener(){
+    private void registerOnMarkerClickListener() {
         createNewRouteMap.setOnMarkerClickListener(marker -> {
-            pointsSelected.add(new PointOfInterest(marker, marker.getId()));
+
+            PointOfInterest poi = findClickedPointOfInterest(marker);
+
+            if (isPointOfInterestSelected(poi)) {
+                marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+
+                pointsSelected.remove(poi);
+            } else {
+                marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+
+                pointsSelected.add(new PointOfInterest(marker, marker.getId()));
+            }
+
             return true;
         });
+    }
+
+    private PointOfInterest findClickedPointOfInterest(Marker marker) {
+        for (PointOfInterest poi : pointsSelected) {
+            if (poi.getGoogleMarker().equals(marker))
+                return poi;
+        }
+
+        return null;
+    }
+
+    private boolean isPointOfInterestSelected(PointOfInterest poi) {
+        return poi != null;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        createNewRouteMap = googleMap;
+        addFakePOIsToMap(createNewRouteMap);
+        LatLng fakeUserPosition = new LatLng(39.475,-0.375);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(fakeUserPosition));
+        googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+
+        registerOnMarkerClickListener();
     }
 
     private void addFakePOIsToMap(GoogleMap googleMap) {
@@ -52,16 +89,5 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         googleMap.addMarker(new MarkerOptions().position(ayuntamiento).title("Ayuntamiento"));
         LatLng gulliver = new LatLng(39.462987, -0.359719);
         googleMap.addMarker(new MarkerOptions().position(gulliver).title("Gulliver"));
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        createNewRouteMap = googleMap;
-        addFakePOIsToMap(createNewRouteMap);
-        LatLng fakeUserPosition = new LatLng(39.475,-0.375);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(fakeUserPosition));
-        googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
-
-        registerOnMarkerClickListener();
     }
 }
