@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +30,12 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText etName, etSurname, etUsername, etEmail, etPassword, etPasswordConf;
     private Button btnRegister;
     private FirebaseAuth mAuth;
+    String name = null;
+    String surname = null;
+    String email = null;
+    String username = null;
+    String password = null;
+    String passwordConf = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,18 +61,20 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void checkRegister(){
-        String name = etName.getText().toString();
-        String surname = etSurname.getText().toString();
-        String email = etEmail.getText().toString();
-        String username = etUsername.getText().toString();
-        String password = etPassword.getText().toString();
-        String passwordConf = etPasswordConf.getText().toString();
-        if(name != null
-                && surname !=null
-                && email != null
-                && username != null
-                && password != null
-                && passwordConf != null){ //Check that the fields aren't empty
+
+         name = etName.getText().toString();
+         surname = etSurname.getText().toString();
+         email = etEmail.getText().toString();
+         username = etUsername.getText().toString();
+         password = etPassword.getText().toString();
+         passwordConf = etPasswordConf.getText().toString();
+        if(!TextUtils.isEmpty(etName.getText().toString())
+                &&!TextUtils.isEmpty(etSurname.getText().toString())
+                &&!TextUtils.isEmpty(etEmail.getText().toString())
+                &&!TextUtils.isEmpty(etUsername.getText().toString())
+                &&!TextUtils.isEmpty(etPassword.getText().toString())
+                &&!TextUtils.isEmpty(etPasswordConf.getText().toString())
+        ){ //Check that the fields aren't empty
             if(password.length()>=6) {
                 if (password.equals(passwordConf)) { //Check if passwords match
                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
