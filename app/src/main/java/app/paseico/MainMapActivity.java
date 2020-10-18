@@ -1,7 +1,6 @@
 package app.paseico;
 
 import android.content.Intent;
-import android.view.View;
 import androidx.fragment.app.FragmentActivity;
 
 import android.os.Bundle;
@@ -33,7 +32,7 @@ public class MainMapActivity extends FragmentActivity implements OnMapReadyCallb
     }
 
     private void registerCreateNewRouteButtonTransition() {
-        ExtendedFloatingActionButton extendedFloatingActionButton = findViewById(R.id.extended_fab);
+        ExtendedFloatingActionButton extendedFloatingActionButton = findViewById(R.id.create_new_route_button);
         extendedFloatingActionButton.setOnClickListener(view -> {
             Intent createNewRouteIntent = new Intent(getApplicationContext(), CreateNewRouteActivity.class);
             startActivity(createNewRouteIntent);

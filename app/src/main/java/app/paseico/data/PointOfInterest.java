@@ -16,4 +16,8 @@ public class PointOfInterest {
         this.googleMarker = googleMarker;
         this.name = name;
     }
+
+    public Marker getGoogleMarker() {
+        return googleMarker;
+    }
 }
