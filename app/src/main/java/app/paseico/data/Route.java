@@ -5,9 +5,9 @@ import java.util.List;
 
 public class Route {
     private String name;
-    private String theme;   // The value of theme should be a constant.
+    private String theme;   // TODO :The value of theme should be a constant.
     private double length;  // Meters.
-    private int estimatedTime;  // Minutes
+    private double estimatedTime;  // Minutes
     private int points;     // Points earned when the route is completed.
     private List<PointOfInterest> pointsOfInterest;
 
@@ -35,11 +35,11 @@ public class Route {
         this.length = length;
     }
 
-    public int getEstimatedTime() {
+    public double getEstimatedTime() {
         return estimatedTime;
     }
 
-    public void setEstimatedTime(int estimatedTime) {
+    public void setEstimatedTime(double estimatedTime) {
         this.estimatedTime = estimatedTime;
     }
 
