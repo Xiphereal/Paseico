@@ -1,7 +1,11 @@
 package app.paseico;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -16,6 +20,17 @@ public class MainActivity extends AppCompatActivity {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         TextView prueba = findViewById(R.id.textView);
-        prueba.setText(user.getEmail());
+        prueba.setText("Bienvenido a paseico!");
+
+        Button btnLogOut = findViewById(R.id.buttonLogOut);
+        btnLogOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(MainActivity.this, LogInActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 }

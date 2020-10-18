@@ -13,11 +13,11 @@ public class UserDao implements IUserDao {
     }
 
     @Override
-    public void addGoogleUser(FirebaseUser user) {
+    public void addGoogleUser(FirebaseUser user, String name) {
         String email = user.getEmail();
         String[] parts = email.split("@");
         String username = parts[0];
-        User newUser = new User(user.getDisplayName(),username,user.getEmail());
+        User newUser = new User(name,username,user.getEmail());
         myUsersRef.child(user.getUid()).setValue(newUser);
     }
 

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterActivity">
+    tools:context=".RegisterActivity"
+    android:background="@drawable/geometrics_cut">
 
     <EditText
         android:id="@+id/editTextPasswordConf"
@@ -34,7 +35,7 @@
         android:id="@+id/editTextUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="200dp"
         android:ems="10"
         android:hint="Nombre de usuario"
         android:inputType="textPersonName"
@@ -46,7 +47,7 @@
         android:id="@+id/editTextName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="30dp"
         android:ems="10"
         android:hint="Nombre"
         android:inputType="textPersonName"
@@ -80,7 +81,7 @@
 
     <Button
         android:id="@+id/buttonRegister"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
         android:text="Registrarse"

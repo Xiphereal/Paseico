@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -125,6 +127,20 @@ public class RegisterActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             UserDao uDao = new UserDao();
                             uDao.addUser(user,username, name, surname);
+                            Toast.makeText(RegisterActivity.this, "Registro completado!",
+                                    Toast.LENGTH_SHORT).show();
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() { //Wait 2 secs to load the next activity (LoginScreen)
+                                @Override
+                                public void run() {
+                                    try {
+                                        FirebaseAuth.getInstance().signOut();
+                                        Intent intent = new Intent(RegisterActivity.this, LogInActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }catch (Exception e){}
+                                }
+                            },2000);
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(RegisterActivity.this, "Error: El correo electrónico ya existe",

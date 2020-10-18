@@ -9,10 +9,9 @@
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
-        android:layout_width="300dp"
-        android:layout_height="100dp"
+        android:layout_width="258dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="150dp"
-        android:background="#E86F6F"
         app:layout_constraintBottom_toTopOf="@+id/textViewRegister"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -22,18 +21,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
-        android:text="No tienes una cuenta? Regístrate aqui"
+        android:text="No tienes una cuenta? \n      Regístrate aqui"
         android:textColor="#2196F3"
-        android:textSize="18sp"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/buttonLogIn"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:text="Iniciar Sesión"
         app:layout_constraintBottom_toTopOf="@+id/sign_in_button"
         app:layout_constraintEnd_toEndOf="parent"
