@@ -40,6 +40,7 @@
         android:hint="Nombre de la ruta"
         android:inputType="textPersonName"
         android:selectAllOnFocus="false"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_keyWord"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_routeSearchTitle" />
 
@@ -47,10 +48,10 @@
         android:id="@+id/textView_keyWord"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="48dp"
         android:text="@string/key_word"
         app:layout_constraintEnd_toStartOf="@+id/editText_keyWord"
-        app:layout_constraintHorizontal_bias="0.702"
+        app:layout_constraintHorizontal_bias="0.658"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_routeSearchTitle" />
 
@@ -58,9 +59,9 @@
         android:id="@+id/textView_theme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="52dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginLeft="72dp"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="72dp"
         android:text="@string/theme"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_keyWord" />
@@ -72,9 +73,12 @@
         android:layout_marginTop="24dp"
         android:entries="@array/themes_of_route"
         android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_theme"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.348"
         app:layout_constraintStart_toEndOf="@+id/textView_theme"
-        app:layout_constraintTop_toBottomOf="@+id/editText_keyWord" />
+        app:layout_constraintTop_toBottomOf="@+id/editText_keyWord"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/textView_length"
@@ -91,9 +95,9 @@
         android:id="@+id/textView_estimatedTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="36dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="56dp"
         android:text="@string/estimated_time"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_length" />
@@ -102,20 +106,20 @@
         android:id="@+id/spinner_route_length"
         android:layout_width="140dp"
         android:layout_height="30dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="52dp"
         android:entries="@array/lengths_of_route"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.436"
+        app:layout_constraintHorizontal_bias="0.375"
         app:layout_constraintStart_toEndOf="@+id/textView_length"
         app:layout_constraintTop_toBottomOf="@+id/spinner_route_theme" />
 
     <Spinner
         android:id="@+id/spinner_route_estimated_time"
-        android:layout_width="167dp"
-        android:layout_height="32dp"
-        android:layout_marginLeft="68dp"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="52dp"
+        android:layout_width="108dp"
+        android:layout_height="31dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="44dp"
         android:entries="@array/estimated_times_of_route"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -153,9 +157,9 @@
         android:id="@+id/textView_pointsEarnedCompletingRoute"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="56dp"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginLeft="52dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="56dp"
         android:text="@string/minimum_of_points"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textview_numOfPOI" />
@@ -164,12 +168,36 @@
         android:id="@+id/editText_minimumOfPoints"
         android:layout_width="128dp"
         android:layout_height="33dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="28dp"
         android:ems="10"
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.369"
+        app:layout_constraintHorizontal_bias="0.391"
         app:layout_constraintStart_toEndOf="@+id/textView_pointsEarnedCompletingRoute"
         app:layout_constraintTop_toBottomOf="@+id/editText_numberOfPOI" />
+
+    <TextView
+        android:id="@+id/textview_kmOfRoute"
+        android:layout_width="34dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginRight="28dp"
+        android:text="@string/km"
+        app:layout_constraintBottom_toBottomOf="@+id/spinner_route_length"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/spinner_route_length"
+        app:layout_constraintTop_toTopOf="@+id/spinner_route_length" />
+
+    <TextView
+        android:id="@+id/textView_timeOfRoute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hours"
+        app:layout_constraintBottom_toBottomOf="@+id/spinner_route_estimated_time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.193"
+        app:layout_constraintStart_toEndOf="@+id/spinner_route_estimated_time"
+        app:layout_constraintTop_toTopOf="@+id/spinner_route_estimated_time"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
