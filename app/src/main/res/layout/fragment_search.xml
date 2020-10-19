@@ -19,15 +19,15 @@
 
     <TextView
         android:id="@+id/textView_routeSearchTitle"
-        android:layout_width="244dp"
-        android:layout_height="39dp"
+        android:layout_width="202dp"
+        android:layout_height="31dp"
         android:text="@string/search_fragment_title"
         app:layout_constraintBottom_toTopOf="@id/btn_search"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.113" />
+        app:layout_constraintVertical_bias="0.089" />
 
     <EditText
         android:id="@+id/editText_keyWord"
@@ -87,7 +87,7 @@
         android:layout_marginLeft="64dp"
         android:layout_marginStart="64dp"
         android:layout_marginTop="52dp"
-        android:text="@string/lenght"
+        android:text="@string/length"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_theme" />
 
@@ -127,7 +127,7 @@
         app:layout_constraintTop_toBottomOf="@+id/spinner_route_length" />
 
     <TextView
-        android:id="@+id/textview_numOfPOI"
+        android:id="@+id/textview_minNumOfPOI"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
@@ -138,7 +138,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView_estimatedTime" />
 
     <EditText
-        android:id="@+id/editText_numberOfPOI"
+        android:id="@+id/editText_minimumNumberOfPOI"
         android:layout_width="123dp"
         android:layout_height="37dp"
         android:layout_marginLeft="24dp"
@@ -150,7 +150,7 @@
         android:nextFocusDown="@id/spinner_route_theme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textview_numOfPOI"
+        app:layout_constraintStart_toEndOf="@+id/textview_minNumOfPOI"
         app:layout_constraintTop_toBottomOf="@+id/spinner_route_estimated_time" />
 
     <TextView
@@ -162,7 +162,7 @@
         android:layout_marginTop="56dp"
         android:text="@string/minimum_of_points"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textview_numOfPOI" />
+        app:layout_constraintTop_toBottomOf="@+id/textview_minNumOfPOI" />
 
     <EditText
         android:id="@+id/editText_minimumOfPoints"
@@ -174,7 +174,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.391"
         app:layout_constraintStart_toEndOf="@+id/textView_pointsEarnedCompletingRoute"
-        app:layout_constraintTop_toBottomOf="@+id/editText_numberOfPOI" />
+        app:layout_constraintTop_toBottomOf="@+id/editText_minimumNumberOfPOI" />
 
     <TextView
         android:id="@+id/textview_kmOfRoute"
@@ -199,5 +199,14 @@
         app:layout_constraintStart_toEndOf="@+id/spinner_route_estimated_time"
         app:layout_constraintTop_toTopOf="@+id/spinner_route_estimated_time"
         app:layout_constraintVertical_bias="1.0" />
+
+    <Spinner
+        android:id="@+id/spinner_filter"
+        android:layout_width="155dp"
+        android:layout_height="32dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_routeSearchTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView_routeSearchTitle"
+        app:layout_constraintTop_toTopOf="@+id/textView_routeSearchTitle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
