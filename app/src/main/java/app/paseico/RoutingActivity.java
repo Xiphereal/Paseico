@@ -19,7 +19,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -36,7 +39,7 @@ public class RoutingActivity extends FragmentActivity implements OnMapReadyCallb
     static Location previousLKL = null;
     private GoogleMap mMap;
     private boolean permissionGranted = false;
-    private double totalDistance = 0;
+    static private double totalDistance = 0;
 
     public void centerMapOnLocation(Location location, String title) {
         if (location != null) {
@@ -50,7 +53,13 @@ public class RoutingActivity extends FragmentActivity implements OnMapReadyCallb
     public void placePOIsFromRoute(ArrayList<String> POIsNames, ArrayList<LatLng> POIsLocations){
 
         for (int i = 1; i< POIsNames.size(); i++) {
-            mMap.addMarker(new MarkerOptions().position(POIsLocations.get(i)).title(POIsNames.get(i)));
+            if(!RouteStatusActivity.isCompleted.get(i)) {
+                mMap.addMarker(new MarkerOptions().position(POIsLocations.get(i)).title(POIsNames.get(i)));
+            }
+            else {
+                mMap.addMarker(new MarkerOptions().position(new LatLng(currentDestination.getLatitude(),currentDestination.getLongitude())).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+
+            }
         }
     }
 
@@ -86,8 +95,12 @@ public class RoutingActivity extends FragmentActivity implements OnMapReadyCallb
                 totalDistance = totalDistance + previousLKL.distanceTo(lastKnownLocation);
                 System.out.println(totalDistance);
                 if (currentDestination != null) {
-                    if (lastKnownLocation.distanceTo(currentDestination) < 200) {
-                        System.out.println("A MENOS DE 200 METROS");
+                    if (lastKnownLocation.distanceTo(currentDestination) < 100) {
+                        System.out.println("HAS COMPLETADO LA RUTA");
+                        RouteStatusActivity.isCompleted.set(getIntent().getIntExtra("placeNumber",0), true);
+                        updateMyLatLng();
+                        mMap.addMarker(new MarkerOptions().position(new LatLng(currentDestination.getLatitude(),currentDestination.getLongitude())).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                        //TE SACA A LA LISTA
                     } else {
                         System.out.println("A MUCHO MAS DE 200 METROS");
                     }
@@ -160,7 +173,7 @@ public class RoutingActivity extends FragmentActivity implements OnMapReadyCallb
 
     public void onBackPressed() {
         System.out.println("EL BACK HA SIDO PRESSEADO");
-        currentDestination = null;
+        //currentDestination = null;
         finish();
     }
 
