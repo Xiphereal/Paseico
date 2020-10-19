@@ -31,8 +31,10 @@ public class RoutingActivity extends FragmentActivity implements OnMapReadyCallb
     LatLng usertolatlng;
     static Location lastKnownLocation = null;
     static Location currentDestination = null;
+    static Location previousLKL = null;
     private GoogleMap mMap;
     private boolean permissionGranted = false;
+    private double totalDistance = 0;
 
     public void centerMapOnLocation(Location location, String title) {
         if (location != null) {
@@ -69,7 +71,10 @@ public class RoutingActivity extends FragmentActivity implements OnMapReadyCallb
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
+                previousLKL = lastKnownLocation;
                 lastKnownLocation = location;
+                totalDistance = totalDistance + previousLKL.distanceTo(lastKnownLocation);
+                System.out.println(totalDistance);
                 if (currentDestination != null) {
                     if (lastKnownLocation.distanceTo(currentDestination) < 200) {
                         System.out.println("A MENOS DE 200 METROS");
