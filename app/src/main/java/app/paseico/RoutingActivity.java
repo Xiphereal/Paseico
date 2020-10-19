@@ -28,9 +28,11 @@ public class RoutingActivity extends FragmentActivity implements OnMapReadyCallb
     // device enters the proximity of a given geographical location
     LocationManager locationManager;
     LocationListener locationListener;
+    LatLng usertolatlng;
     static Location lastKnownLocation = null;
     static Location currentDestination = null;
     private GoogleMap mMap;
+    private boolean permissionGranted = false;
 
     public void centerMapOnLocation(Location location, String title) {
         if (location != null) {
@@ -47,11 +49,16 @@ public class RoutingActivity extends FragmentActivity implements OnMapReadyCallb
 
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
+                mMap.setMyLocationEnabled(true);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
                 lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 centerMapOnLocation(lastKnownLocation, "Your Location");
             }
         }
+    }
+
+    protected void updateMyLatLng() {
+        usertolatlng = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
     }
 
     @Override
@@ -63,19 +70,21 @@ public class RoutingActivity extends FragmentActivity implements OnMapReadyCallb
             @Override
             public void onLocationChanged(@NonNull Location location) {
                 lastKnownLocation = location;
-                if (currentDestination != null){
-                    if (lastKnownLocation.distanceTo(currentDestination) < 200){System.out.println("A MENOS DE 200 METROS");}
-                    else{
+                if (currentDestination != null) {
+                    if (lastKnownLocation.distanceTo(currentDestination) < 200) {
+                        System.out.println("A MENOS DE 200 METROS");
+                    } else {
                         System.out.println("A MUCHO MAS DE 200 METROS");
                     }
                 }
             }
         };
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
             lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            permissionGranted = true;
         } else {
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -87,22 +96,35 @@ public class RoutingActivity extends FragmentActivity implements OnMapReadyCallb
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            } else {
+                mMap.setMyLocationEnabled(true);
+            }
         Intent intent = getIntent();
         //checking current user location
         if (intent.getIntExtra ("placeNumber", 0) == 0) {
             //zoom in on user location
-            centerMapOnLocation(lastKnownLocation, "Your location");
+            currentDestination = null;
+            updateMyLatLng(); //Actualiza el latlng del usuario
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(usertolatlng, 17));
         } else {
             Location placeLocation = new Location(LocationManager.GPS_PROVIDER);
             placeLocation.setLatitude(RouteStatusActivity.locations.get(intent.getIntExtra("placeNumber",0)).latitude);
             placeLocation.setLongitude(RouteStatusActivity.locations.get(intent.getIntExtra("placeNumber",0)).longitude);
             centerMapOnLocation(placeLocation, RouteStatusActivity.pointsOfInterests.get(intent.getIntExtra("placeNumber",0)));
-            LatLng miubi = new LatLng(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(miubi).title("Tu ubicación"));
             currentDestination = placeLocation;
+            updateMyLatLng();
 
         }
 
 
     }
+
+    public void onBackPressed() {
+        System.out.println("EL BACK HA SIDO PRESSEADO");
+        currentDestination = null;
+        finish();
+    }
+
 }
