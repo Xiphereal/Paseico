@@ -1,9 +1,15 @@
 package app.paseico;
 
+import android.content.Context;
 import android.content.Intent;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -12,12 +18,22 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import app.paseico.data.Route;
+
 public class MainMapActivity extends FragmentActivity implements OnMapReadyCallback {
+    private ListView createdRoutesListView;
+    private ArrayAdapter<String> createdRoutesListViewAdapter;
+    private static List<String> createdRoutes = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_map);
+        createdRoutesListView = findViewById(R.id.createdRoutes_listView);
 
         initializeMapFragment();
 
@@ -37,6 +53,10 @@ public class MainMapActivity extends FragmentActivity implements OnMapReadyCallb
             Intent createNewRouteIntent = new Intent(getApplicationContext(), CreateNewRouteActivity.class);
             startActivity(createNewRouteIntent);
         });
+
+        //add route created to list of routes created
+        createdRoutesListViewAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,createdRoutes);
+        createdRoutesListView.setAdapter(createdRoutesListViewAdapter);
     }
 
     /**
@@ -53,5 +73,9 @@ public class MainMapActivity extends FragmentActivity implements OnMapReadyCallb
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(valenciaCathedral));
         googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+    }
+
+    public static List<String> getCreatedRoutes(){
+        return createdRoutes;
     }
 }

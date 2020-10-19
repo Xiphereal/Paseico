@@ -20,4 +20,10 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               tools:context=".MainMapActivity"/>
+
+    <ListView
+        android:id="@+id/createdRoutes_listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

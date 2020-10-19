@@ -3,6 +3,9 @@ package app.paseico;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
@@ -24,6 +27,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     private GoogleMap createNewRouteMap;
     private List<PointOfInterest> selectedPointsOfInterest = new ArrayList<>();
+    private static Route newRoute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +55,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         TextInputEditText textInputEditText = findViewById(R.id.route_name_textInputEditText);
 
         // TODO: Store the route in Firebase.
-        Route newRoute = new Route(textInputEditText.getText().toString(), selectedPointsOfInterest);
+        newRoute = new Route(textInputEditText.getText().toString(), selectedPointsOfInterest);
 
         // TODO: When the conditions are not met, we must show an error message and just close the dialog on click OK.
         showConfirmationDialog();
@@ -67,6 +71,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
                 .setPositiveButton("OK", (dialog, which) -> {
                     // Take the user back to the main map activity
                     Intent goToMainMapIntent = new Intent(getApplicationContext(), MainMapActivity.class);
+                    //We add the created route name to the createdRoutes before returning to the main activity
+                    MainMapActivity.getCreatedRoutes().add(newRoute.getName());
                     startActivity(goToMainMapIntent);
                 });
 
@@ -134,5 +140,9 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     private boolean isPointOfInterestSelected(PointOfInterest poi) {
         return poi != null;
+    }
+
+    public static Route getRoute(){
+        return newRoute;
     }
 }
