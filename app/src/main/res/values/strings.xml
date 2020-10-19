@@ -25,7 +25,7 @@
 
 
     <string name="lt0.5">&lt; 0,5</string>
-    <string name="between0.5_1">1-2</string>
+    <string name="between0.5_1">0.5-1</string>
     <string name="lt1">&lt; 1</string> <!-- &lt; is '<' -->
     <string name="between1_2">1-2</string>
     <string name="between2_3">2-3</string>
