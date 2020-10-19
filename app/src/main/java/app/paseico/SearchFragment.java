@@ -23,8 +23,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -67,6 +70,8 @@ public class SearchFragment extends Fragment {
         spinner_length = fragmentSearchLayout.findViewById(R.id.spinner_route_length);
         spinner_estimatedTime = fragmentSearchLayout.findViewById(R.id.spinner_route_estimated_time);
 
+        routeList = new ArrayList<Route>();
+
         return fragmentSearchLayout;
     }
 
@@ -94,50 +99,25 @@ public class SearchFragment extends Fragment {
                             Log.d("Ruta1", "listener");
                             Log.d("Ruta1", "task is " + task.isSuccessful());
                             if (task.isSuccessful()) {
-                                Log.d("Ruta2", "task is " + task.isSuccessful());
-                                Log.d("Ruta3", ((QuerySnapshot)task.getResult()).size() + "");
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Log.d("Ruta3", document.getId() + " => " + document.getData());
-                                    Log.d("Ruta3", task.getResult().toString());
-                                    if(Double.parseDouble(document.getData().get("length").toString()) <= maximumOfLength
-                                        || Double.parseDouble(document.getData().get("length").toString()) >= minimumOfLength
-                                        || Double.parseDouble(document.getData().get("estimatedTime").toString()) <= maximumTime
-                                        || Double.parseDouble(document.getData().get("estimatedTime").toString()) >= minimumTime
-                                        || ((List<PointOfInterest>) document.getData().get("POIs")).size() >= numberOfPOI){
-                                        Log.d("Ruta3", document.getId() + "=>" + document.getData(), task.getException());
-                                            //routeList.add((Route) document.getData().values()); 
-                                    }
+                                filterByLengthEstimatedTimePointsPOIAndKeyWords(task);
 
-                                }
-                                Log.d("Ruta3", "fin for");
                             } else {
                                 Log.d("routes", "Error getting documents: ", task.getException());
                             }
                         }
                     });
                 } else {
-                    routesReference.whereArrayContainsAny("name", keyWords)
-                            .whereGreaterThan("points", minimumOfPoints)
+                    routesReference.whereGreaterThan("points", minimumOfPoints)
                             .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    if((Double) document.getData().get("length") <= maximumOfLength
-                                            || (Double) document.getData().get("length") >= minimumOfLength
-                                            || (Double) document.getData().get("estimatedTime") <= maximumTime
-                                            || (Double) document.getData().get("estimatedTime") >= minimumTime
-                                            || ((List<PointOfInterest>) document.getData().get("POIs")).size() >= numberOfPOI){
-                                        Log.d("routes", document.getId() + "=>" + document.getData(), task.getException());
-                                        routeList.add((Route) document.getData().values());
-                                    }
-                                }
+                                filterByLengthEstimatedTimePointsPOIAndKeyWords(task);
                             } else {
                                 Log.d("routes", "Error getting documents: ", task.getException());
                             }
                         }
                     });
-                    //routesReference2.orderByChild("name")
                 }
 
                 //NavHostFragment.findNavController(SearchFragment.this)
@@ -184,19 +164,53 @@ public class SearchFragment extends Fragment {
         String lengthRange = spinner_length.getSelectedItem().toString();
         if (lengthRange != getString(R.string.default_spinner_choice)) {
             if (lengthRange == getString(R.string.lt1)) {
-                minimumTime = 0;
-                maximumTime = 1000;
+                minimumOfLength = 0;
+                maximumOfLength = 1000;
             } else if (lengthRange ==getString(R.string.gt5)) {
-                minimumTime = 5000;
-                maximumTime = Double.MAX_VALUE;
+                minimumOfLength = 5000;
+                maximumOfLength = Double.MAX_VALUE;
             } else {
-                String [] rangeOfTime = lengthRange.split("-");
-                minimumTime = Double.parseDouble(rangeOfTime[0]) * 1000;
-                maximumTime = Double.parseDouble(rangeOfTime[1]) * 1000;
+                String [] rangeOfLength = lengthRange.split("-");
+                minimumOfLength = Double.parseDouble(rangeOfLength[0]) * 1000;
+                maximumOfLength = Double.parseDouble(rangeOfLength[1]) * 1000;
             }
         } else {
-            minimumTime = Double.MIN_VALUE;
-            maximumTime = Double.MAX_VALUE;
+            minimumOfLength = Double.MIN_VALUE;
+            maximumOfLength = Double.MAX_VALUE;
         }
+    }
+
+    private void filterByLengthEstimatedTimePointsPOIAndKeyWords(Task<QuerySnapshot> task){
+        Log.d("Ruta2", "task is " + task.isSuccessful());
+        Log.d("Ruta3", ((QuerySnapshot)task.getResult()).size() + "");
+        for (QueryDocumentSnapshot document : task.getResult()) {
+            String name = document.getData().get("name").toString();
+            String theme = document.getData().get("theme").toString();
+            double length = Double.parseDouble(document.getData().get("length").toString());
+            double estimatedTime = Double.parseDouble(document.getData().get("estimatedTime").toString());
+            int points = Integer.parseInt(document.getData().get("points").toString());
+            Map<String, PointOfInterest> pois = (HashMap)document.getData().get("POIs");
+            ArrayList<PointOfInterest> pointOfInterests = new ArrayList<PointOfInterest>(pois.values());
+
+            Log.d("Ruta3", document.getId() + " => " + document.getData());
+            Log.d("Ruta3", task.getResult().toString());
+            if(length <= maximumOfLength
+                    && length >= minimumOfLength
+                    && estimatedTime <= maximumTime
+                    && estimatedTime >= minimumTime
+                    && pointOfInterests.size() >= numberOfPOI){
+                Log.d("RutaDentro", document.getId() + "=>" + document.getData(), task.getException());
+                for(String keyword : keyWords){
+                    if(name.contains(keyword)){
+                        Route route = new Route(name, theme, length, estimatedTime, points, pointOfInterests);
+                        routeList.add(route);
+                        Log.d("bucle", document.getId() + "=>" + document.getData(), task.getException());
+                        break;
+                    }
+                }
+            }
+
+        }
+        Log.d("Ruta3", "fin for");
     }
 }
