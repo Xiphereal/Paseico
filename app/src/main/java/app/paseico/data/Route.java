@@ -11,6 +11,20 @@ public class Route {
     private int points;     // Points earned when the route is completed.
     private List<PointOfInterest> pointsOfInterest;
 
+    public Route(String name, List<PointOfInterest> pointOfInterests) {
+        this.name = name;
+        this.pointsOfInterest = pointOfInterests;
+    }
+
+    public Route(String name, String theme, double length, double estimatedTime, int points, List<PointOfInterest> pointsOfInterest) {
+        this.name = name;
+        this.theme = theme;
+        this.length = length;
+        this.estimatedTime = estimatedTime;
+        this.points = points;
+        this.pointsOfInterest = pointsOfInterest;
+    }
+
     public String getName() {
         return name;
     }
