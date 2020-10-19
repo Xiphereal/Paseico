@@ -22,6 +22,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
 public class RoutingActivity extends FragmentActivity implements OnMapReadyCallback {
     //LocationManager class provides access to the system location services. These services allow applications
     // to obtain periodic updates of the device's geographical location, or to be notified when the
@@ -40,6 +42,13 @@ public class RoutingActivity extends FragmentActivity implements OnMapReadyCallb
             //mMap.clear();
             mMap.addMarker(new MarkerOptions().position(userLocation).title(title));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 17));
+        }
+    }
+
+    public void placePOIsFromRoute(ArrayList<String> POIsNames, ArrayList<LatLng> POIsLocations){
+
+        for (int i = 1; i< POIsNames.size(); i++) {
+            mMap.addMarker(new MarkerOptions().position(POIsLocations.get(i)).title(POIsNames.get(i)));
         }
     }
 
@@ -66,19 +75,7 @@ public class RoutingActivity extends FragmentActivity implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routing);
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        /*locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(@NonNull Location location) {
-                lastKnownLocation = location;
-                if (currentDestination != null) {
-                    if (lastKnownLocation.distanceTo(currentDestination) < 200) {
-                        System.out.println("A MENOS DE 200 METROS");
-                    } else {
-                        System.out.println("A MUCHO MAS DE 200 METROS");
-                    }
-                }
-            }
-        };*/
+
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -131,6 +128,12 @@ public class RoutingActivity extends FragmentActivity implements OnMapReadyCallb
             } else {
                 mMap.setMyLocationEnabled(true);
             }
+
+        ArrayList<String> POIsNames = RouteStatusActivity.pointsOfInterests;
+        ArrayList<LatLng> POIsLocations = RouteStatusActivity.locations;
+
+        //It allows to represent the POIS from the route
+        placePOIsFromRoute(POIsNames, POIsLocations);
         Intent intent = getIntent();
         //checking current user location
         if (intent.getIntExtra ("placeNumber", 0) == 0) {
