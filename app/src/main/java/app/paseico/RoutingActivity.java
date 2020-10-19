@@ -66,7 +66,7 @@ public class RoutingActivity extends FragmentActivity implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routing);
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new LocationListener() {
+        /*locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
                 lastKnownLocation = location;
@@ -78,7 +78,37 @@ public class RoutingActivity extends FragmentActivity implements OnMapReadyCallb
                     }
                 }
             }
+        };*/
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                //centerMapOnLocation(location, "Your Location");
+                lastKnownLocation = location;
+                if (currentDestination != null) {
+                    if (lastKnownLocation.distanceTo(currentDestination) < 200) {
+                        System.out.println("A MENOS DE 200 METROS");
+                    } else {
+                        System.out.println("A MUCHO MAS DE 200 METROS");
+                    }
+                }
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
         };
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
             lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
