@@ -23,5 +23,8 @@
         <action
             android:id="@+id/action_RouteListFragment_to_SearchFragment"
             app:destination="@id/SearchFragment" />
+        <argument
+            android:name="filteredList"
+            app:argType="app.paseico.data.Route[]" />
     </fragment>
 </navigation>
