@@ -10,6 +10,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,6 +30,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -62,7 +64,10 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
     static ArrayList<String> pointsOfInterests = new ArrayList<String>();
     static ArrayList<LatLng> locations = new ArrayList<LatLng>();
     static ArrayList<Boolean> isCompleted = new ArrayList<>();
+    static int actualPOI;
     static ArrayAdapter arrayAdapter;
+
+    static Location currentDestination;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,13 +104,22 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //if (isCompleted.get(i) == false) {
                 LatLng destination = new LatLng(locations.get(i).latitude,locations.get(i).longitude);
+
+
+
                 start=new LatLng(myLocation.getLatitude(),myLocation.getLongitude());
                 //start route finding
                 mMap.clear();
                 Findroutes(start,destination);
+                currentDestination = new Location(destination.toString());
+                currentDestination.setLatitude(destination.latitude);
+                currentDestination.setLongitude(destination.longitude);
+                actualPOI = i;
                 //} else {System.out.println("Destino YA VISITADO");}
             }
         });
+
+
     }
 
     private void requestPermision() {
@@ -161,6 +175,18 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
                         ltlng, 16f);
                 mMap.animateCamera(cameraUpdate);
+
+                if (currentDestination != null) {
+                    myLocation = location;
+                    if (myLocation.distanceTo(currentDestination) < 100) {
+                        System.out.println("HAS COMPLETADO LA RUTA");
+                        mMap.addMarker(new MarkerOptions().position(new LatLng(currentDestination.getLatitude(),currentDestination.getLongitude())).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                        isCompleted.set(actualPOI,true);
+                        //TE SACA A LA LISTA
+                    } else {
+                        System.out.println("A MUCHO MAS DE 200 METROS");
+                    }
+                }
             }
         });
 
