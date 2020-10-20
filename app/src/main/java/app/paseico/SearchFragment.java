@@ -31,6 +31,7 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
@@ -81,40 +82,50 @@ public class SearchFragment extends Fragment {
         view.findViewById(R.id.btn_search).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("Ruta1", "click");
                 assignValueOfFilterVariables();
 
 
                 FirebaseFirestore database = FirebaseFirestore.getInstance();
                 CollectionReference routesReference = database.collection("route");
-                Log.d("Ruta1", "bd");
 
                 if (themeOfRoute != getString(R.string.default_spinner_choice)) {
 
                     routesReference.whereEqualTo("theme", themeOfRoute)
-                            .whereGreaterThan("points", minimumOfPoints)
+                            .whereGreaterThanOrEqualTo("rewardPoints", minimumOfPoints)
                             .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            Log.d("Ruta1", "listener");
-                            Log.d("Ruta1", "task is " + task.isSuccessful());
+                            Log.d("RutaTheme", "task is " + task.isSuccessful());
                             if (task.isSuccessful()) {
                                 filterByLengthEstimatedTimePointsPOIAndKeyWords(task);
 
+                                Route [] filteredRoutes = new Route[routeList.size()];
+                                routeList.toArray(filteredRoutes);
+                                NavDirections action = SearchFragmentDirections.actionSearchFragmentToRouteListFragment(filteredRoutes);
+                                NavHostFragment.findNavController(SearchFragment.this)
+                                        .navigate(action);
                             } else {
-                                Log.d("routes", "Error getting documents: ", task.getException());
+                                Log.d("Ruta error", "Error getting documents: ", task.getException());
                             }
                         }
                     });
+
                 } else {
-                    routesReference.whereGreaterThan("points", minimumOfPoints)
+                    routesReference.whereGreaterThanOrEqualTo("rewardPoints", minimumOfPoints)
                             .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
+                                Log.d("RutaNoTheme", "task is " + task.isSuccessful());
                                 filterByLengthEstimatedTimePointsPOIAndKeyWords(task);
+
+                                Route [] filteredRoutes = new Route[routeList.size()];
+                                routeList.toArray(filteredRoutes);
+                                NavDirections action = SearchFragmentDirections.actionSearchFragmentToRouteListFragment(filteredRoutes);
+                                NavHostFragment.findNavController(SearchFragment.this)
+                                        .navigate(action);
                             } else {
-                                Log.d("routes", "Error getting documents: ", task.getException());
+                                Log.d("Ruta Error", "Error getting documents: ", task.getException());
                             }
                         }
                     });
@@ -138,9 +149,9 @@ public class SearchFragment extends Fragment {
         } else {
             minimumOfPoints = -1;
         }
-        Log.d("Ruta1", "antes de keyword");
+
         keyWords = Arrays.asList(et_keyWord.getText().toString().trim().split("\\s+"));
-        Log.d("Ruta1", "despues de keyword");
+
         themeOfRoute = spinner_theme.getSelectedItem().toString();
 
         String estimatedTimeRange = spinner_estimatedTime.getSelectedItem().toString();
@@ -184,13 +195,21 @@ public class SearchFragment extends Fragment {
         Log.d("Ruta2", "task is " + task.isSuccessful());
         Log.d("Ruta3", ((QuerySnapshot)task.getResult()).size() + "");
         for (QueryDocumentSnapshot document : task.getResult()) {
+            Route route = document.toObject(Route.class);
+
             String name = document.getData().get("name").toString();
             String theme = document.getData().get("theme").toString();
             double length = Double.parseDouble(document.getData().get("length").toString());
             double estimatedTime = Double.parseDouble(document.getData().get("estimatedTime").toString());
-            int points = Integer.parseInt(document.getData().get("points").toString());
-            Map<String, PointOfInterest> pois = (HashMap)document.getData().get("POIs");
-            ArrayList<PointOfInterest> pointOfInterests = new ArrayList<PointOfInterest>(pois.values());
+            int points = Integer.parseInt(document.getData().get("rewardPoints").toString());
+            Map<String, PointOfInterest> pois = (HashMap)document.getData().get("pointsOfInterest");
+            ArrayList<PointOfInterest> pointOfInterests;
+            if(pois != null){
+                pointOfInterests = new ArrayList<PointOfInterest>(pois.values());
+            } else {
+                pointOfInterests = new ArrayList<PointOfInterest>();
+            }
+
 
             Log.d("Ruta3", document.getId() + " => " + document.getData());
             Log.d("Ruta3", task.getResult().toString());
@@ -198,11 +217,12 @@ public class SearchFragment extends Fragment {
                     && length >= minimumOfLength
                     && estimatedTime <= maximumTime
                     && estimatedTime >= minimumTime
-                    && pointOfInterests.size() >= numberOfPOI){
+                    && pointOfInterests.size() >= numberOfPOI) {
                 Log.d("RutaDentro", document.getId() + "=>" + document.getData(), task.getException());
                 for(String keyword : keyWords){
                     if(name.contains(keyword)){
-                        Route route = new Route(name, theme, length, estimatedTime, points, pointOfInterests);
+                        //Route route = new Route(name, theme, length, estimatedTime, points, pointOfInterests);
+
                         routeList.add(route);
                         Log.d("bucle", document.getId() + "=>" + document.getData(), task.getException());
                         break;
@@ -211,6 +231,6 @@ public class SearchFragment extends Fragment {
             }
 
         }
-        Log.d("Ruta3", "fin for");
+        Log.d("Ruta3", "fin for--> longitud" + routeList.size());
     }
 }
