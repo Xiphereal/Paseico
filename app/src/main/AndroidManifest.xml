@@ -43,7 +43,11 @@
             android:value="AIzaSyAMLXmyf_ai85V6PdlA7jYhjL-nSgHl7mA" />
 
         <activity android:name=".RouteStatusActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".RoutingActivity"
@@ -51,11 +55,7 @@
 
         </activity>
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

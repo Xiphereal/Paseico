@@ -22,6 +22,7 @@ import app.paseico.data.PointOfInterestPaseico;
 public class RouteStatusActivity extends AppCompatActivity {
     static ArrayList<String> pointsOfInterests = new ArrayList<String>();
     static ArrayList<LatLng> locations = new ArrayList<LatLng>();
+    static ArrayList<Boolean> isCompleted = new ArrayList<>();
     static ArrayAdapter arrayAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,11 @@ public class RouteStatusActivity extends AppCompatActivity {
             locations.add(new LatLng(0, 0));
             locations.add(new LatLng(POI1.getLatitude(), POI1.getLongitude()));
             locations.add(new LatLng(POI2.getLatitude(), POI2.getLongitude()));
+            for(int i = 0; i < locations.size(); i++) {
+                isCompleted.add(false);
+            }
         }
+
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, pointsOfInterests);
 
         listView.setAdapter(arrayAdapter);
@@ -47,10 +52,11 @@ public class RouteStatusActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //if (isCompleted.get(i) == false) {
                 Intent intent = new Intent(getApplicationContext(), RoutingActivity.class);
                 intent.putExtra("placeNumber",i);
 
-                startActivity(intent);
+                startActivity(intent); //} else {System.out.println("Destino YA VISITADO");}
             }
         });
     }
