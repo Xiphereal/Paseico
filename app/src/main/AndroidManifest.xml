@@ -42,22 +42,18 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAMLXmyf_ai85V6PdlA7jYhjL-nSgHl7mA" />
 
-        <activity android:name=".RouteStatusActivity">
 
+        <activity android:name=".RouteStatusActivity">
         </activity>
         <activity
             android:name=".RoutingActivity"
             android:label="@string/title_activity_routing">
-
         </activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
     </application>
-
 </manifest>

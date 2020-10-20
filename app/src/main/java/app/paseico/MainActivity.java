@@ -46,6 +46,7 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
     //google map object
     private GoogleMap mMap;
 
+
     //current and destination location objects
     Location myLocation = null;
     Location destinationLocation = null;
