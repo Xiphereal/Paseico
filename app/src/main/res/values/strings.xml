@@ -10,6 +10,10 @@
     <string name="search">Buscar</string>
     <string name="previous">Volver</string>
 
+
+    <string name="zero">0</string>
+    <string name="route_name_hint">Nombre de la ruta</string>
+
     <!-- Strings used for textviews names-->
     <string name="key_word">Palabras clave:</string>
     <string name="theme">Temática:</string>
