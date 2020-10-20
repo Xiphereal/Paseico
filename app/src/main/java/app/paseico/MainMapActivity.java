@@ -54,7 +54,10 @@ public class MainMapActivity extends FragmentActivity implements OnMapReadyCallb
             startActivity(createNewRouteIntent);
         });
 
-        //add route created to list of routes created
+        updateCreatedRoutesListView();
+    }
+
+    private void updateCreatedRoutesListView(){
         createdRoutesListViewAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,createdRoutes);
         createdRoutesListView.setAdapter(createdRoutesListViewAdapter);
     }

@@ -32,4 +32,12 @@
                 android:layout_height="wrap_content"
         />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <ListView
+        android:id="@+id/markedPOIs_listView"
+        android:layout_width="130dp"
+        android:layout_height="360dp"
+        android:layout_marginStart="10pt"
+        android:layout_marginLeft="10pt"
+        android:layout_marginTop="40pt" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

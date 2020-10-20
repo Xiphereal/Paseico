@@ -15,4 +15,8 @@ public class PointOfInterest {
     public Marker getGoogleMarker() {
         return googleMarker;
     }
+
+    public String getName(){
+        return name;
+    }
 }

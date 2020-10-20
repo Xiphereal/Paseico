@@ -26,13 +26,19 @@ import java.util.List;
 public class CreateNewRouteActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap createNewRouteMap;
+
     private List<PointOfInterest> selectedPointsOfInterest = new ArrayList<>();
     private static Route newRoute;
+
+    private ListView markedPOIsListView;
+    private ArrayAdapter<String> markedPOIsAdapter;
+    private List<String> markedPOIs = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_route);
+        markedPOIsListView = findViewById(R.id.markedPOIs_listView);
 
         initializeMapFragment();
 
@@ -69,10 +75,10 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         builder.setMessage("La nueva ruta ha sido guardada satisfactoriamente.")
                 .setTitle("Finalizar creación de ruta")
                 .setPositiveButton("OK", (dialog, which) -> {
-                    // Take the user back to the main map activity
-                    Intent goToMainMapIntent = new Intent(getApplicationContext(), MainMapActivity.class);
                     //We add the created route name to the createdRoutes before returning to the main activity
                     MainMapActivity.getCreatedRoutes().add(newRoute.getName());
+                    // Take the user back to the main map activity
+                    Intent goToMainMapIntent = new Intent(getApplicationContext(), MainMapActivity.class);
                     startActivity(goToMainMapIntent);
                 });
 
@@ -118,15 +124,27 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
             if (isPointOfInterestSelected(poi)) {
                 marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
+                markedPOIs.remove(poi.getName());
+
                 selectedPointsOfInterest.remove(poi);
             } else {
                 marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
 
-                selectedPointsOfInterest.add(new PointOfInterest(marker, marker.getId()));
+                markedPOIs.add(marker.getTitle());
+
+                selectedPointsOfInterest.add(new PointOfInterest(marker, marker.getTitle()));
             }
+
+            updateMarkedPOIsListView();
 
             return true;
         });
+    }
+
+    private void updateMarkedPOIsListView(){
+        //add route created to list of routes created
+        markedPOIsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,markedPOIs);
+        markedPOIsListView.setAdapter(markedPOIsAdapter);
     }
 
     private PointOfInterest findClickedPointOfInterest(Marker marker) {
