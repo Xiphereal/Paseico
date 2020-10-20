@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -61,7 +62,10 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
     static ArrayList<String> pointsOfInterestNames = new ArrayList<String>();
     static ArrayList<LatLng> locations = new ArrayList<LatLng>();
     static ArrayList<Boolean> isCompleted = new ArrayList<>();
+    static int actualPOI;
     static ArrayAdapter arrayAdapter;
+
+    static Location currentDestination;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,21 +104,26 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //if (isCompleted.get(i) == false) {
                 LatLng destination = new LatLng(locations.get(i).latitude,locations.get(i).longitude);
+
+
+
                 start=new LatLng(myLocation.getLatitude(),myLocation.getLongitude());
                 //start route finding
                 mMap.clear();
                 Findroutes(start,destination);
+                currentDestination = new Location(destination.toString());
+                currentDestination.setLatitude(destination.latitude);
+                currentDestination.setLongitude(destination.longitude);
+                actualPOI = i;
                 //} else {System.out.println("Destino YA VISITADO");}
             }
         });
 
 
+
     }
 
     public void placePOIsFromRoute(ArrayList<String> POIsNames, ArrayList<LatLng> POIsLocations, ArrayList<Boolean> POIsCompleted){
-        System.out.println(POIsNames.size());
-        System.out.println(POIsLocations.size()+"locations");
-        System.out.println(POIsCompleted.size());
 
         for (int i = 0; i< POIsNames.size(); i++) {
             if (POIsCompleted.get(i)){
@@ -123,6 +132,7 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
                 mMap.addMarker(new MarkerOptions().position(POIsLocations.get(i)).title(POIsNames.get(i)));
             }
         }
+
     }
 
     private void requestPermision() {
@@ -178,6 +188,18 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
                         ltlng, 16f);
                 mMap.animateCamera(cameraUpdate);
+
+                if (currentDestination != null) {
+                    myLocation = location;
+                    if (myLocation.distanceTo(currentDestination) < 100) {
+                        System.out.println("HAS COMPLETADO LA RUTA");
+                        mMap.addMarker(new MarkerOptions().position(new LatLng(currentDestination.getLatitude(),currentDestination.getLongitude())).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                        isCompleted.set(actualPOI,true);
+                        //TE SACA A LA LISTA
+                    } else {
+                        System.out.println("A MUCHO MAS DE 200 METROS");
+                    }
+                }
             }
         });
 
