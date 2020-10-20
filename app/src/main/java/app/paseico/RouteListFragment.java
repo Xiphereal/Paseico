@@ -1,6 +1,7 @@
 package app.paseico;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+import app.paseico.data.Route;
 
 public class RouteListFragment extends Fragment {
 
@@ -22,6 +24,9 @@ public class RouteListFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Route[] filteredRoutes = RouteListFragmentArgs.fromBundle(getArguments()).getFilteredList();
+        Log.d("Ruta Fragment", filteredRoutes.length + "");
 
         view.findViewById(R.id.button_second).setOnClickListener(new View.OnClickListener() {
             @Override
