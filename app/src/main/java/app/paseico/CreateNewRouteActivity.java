@@ -54,18 +54,9 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     private void registerFinalizeRouteCreationButtonTransition() {
         ExtendedFloatingActionButton extendedFloatingActionButton = findViewById(R.id.finalize_route_creation_button);
-        extendedFloatingActionButton.setOnClickListener(view -> tryFinalizeRouteCreation());
-    }
-
-    private void tryFinalizeRouteCreation() {
-        TextInputEditText textInputEditText = findViewById(R.id.route_name_textInputEditText);
-
-
-        newRoute = new Route(textInputEditText.getText().toString(), selectedPointsOfInterest);
-        FirebaseService.saveRoute(newRoute);
 
         // TODO: When the conditions are not met, we must show an error message and just close the dialog on click OK.
-        showConfirmationDialog();
+        extendedFloatingActionButton.setOnClickListener(view -> showConfirmationDialog());
     }
 
     private void showConfirmationDialog() {
@@ -76,6 +67,10 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         builder.setMessage("La nueva ruta ha sido guardada satisfactoriamente.")
                 .setTitle("Finalizar creación de ruta")
                 .setPositiveButton("OK", (dialog, which) -> {
+                    TextInputEditText textInputEditText = findViewById(R.id.route_name_textInputEditText);
+                    newRoute = new Route(textInputEditText.getText().toString(), selectedPointsOfInterest);
+                    FirebaseService.saveRoute(newRoute);
+
                     //We add the created route name to the createdRoutes before returning to the main activity
                     MainMapActivity.getCreatedRoutes().add(newRoute.getName());
 
@@ -94,6 +89,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
         addFakePOIsToMap(createNewRouteMap);
 
+        //TODO: Move camera to real user position.
         LatLng fakeUserPosition = new LatLng(39.475, -0.375);
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(fakeUserPosition));
 
