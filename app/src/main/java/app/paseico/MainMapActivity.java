@@ -1,13 +1,9 @@
 package app.paseico;
 
-import android.content.Context;
 import android.content.Intent;
 import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -21,19 +17,19 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import java.util.ArrayList;
 import java.util.List;
 
-import app.paseico.data.Route;
-
 public class MainMapActivity extends FragmentActivity implements OnMapReadyCallback {
     private ListView createdRoutesListView;
     private ArrayAdapter<String> createdRoutesListViewAdapter;
     private static List<String> createdRoutes = new ArrayList<>();
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_map);
-        createdRoutesListView = findViewById(R.id.createdRoutes_listView);
+        createdRoutesListView = findViewById(R.id.created_routes_list_view);
 
         initializeMapFragment();
 

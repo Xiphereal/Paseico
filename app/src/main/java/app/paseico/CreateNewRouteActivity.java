@@ -38,7 +38,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_route);
-        markedPOIsListView = findViewById(R.id.markedPOIs_listView);
+        markedPOIsListView = findViewById(R.id.marked_pois_list_view);
 
         initializeMapFragment();
 

@@ -22,7 +22,7 @@
               tools:context=".MainMapActivity"/>
 
     <ListView
-        android:id="@+id/createdRoutes_listView"
+        android:id="@+id/created_routes_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
