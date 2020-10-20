@@ -9,6 +9,7 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
+import app.paseico.service.FirebaseService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -26,7 +27,6 @@ import java.util.List;
 public class CreateNewRouteActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap createNewRouteMap;
-
     private List<PointOfInterest> selectedPointsOfInterest = new ArrayList<>();
     private static Route newRoute;
 
@@ -60,8 +60,9 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     private void tryFinalizeRouteCreation() {
         TextInputEditText textInputEditText = findViewById(R.id.route_name_textInputEditText);
 
-        // TODO: Store the route in Firebase.
+
         newRoute = new Route(textInputEditText.getText().toString(), selectedPointsOfInterest);
+        FirebaseService.saveRoute(newRoute);
 
         // TODO: When the conditions are not met, we must show an error message and just close the dialog on click OK.
         showConfirmationDialog();
@@ -115,6 +116,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
         LatLng gulliver = new LatLng(39.462987, -0.359719);
         googleMap.addMarker(new MarkerOptions().position(gulliver).title("Gulliver"));
+
     }
 
     private void registerOnMarkerClickListener() {

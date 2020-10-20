@@ -10,6 +10,7 @@ public class Route {
     private double estimatedTime;  // Minutes
     private int points;     // Points earned when the route is completed.
     private List<PointOfInterest> pointsOfInterest;
+    //TODO: Route should have s reference to User, in order to know which user created de Route.
 
     public Route(String name, List<PointOfInterest> pointOfInterests) {
         this.name = name;
