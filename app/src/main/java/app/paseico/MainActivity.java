@@ -102,8 +102,8 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
                 LatLng destination = new LatLng(locations.get(i).latitude,locations.get(i).longitude);
                 start=new LatLng(myLocation.getLatitude(),myLocation.getLongitude());
                 //start route finding
+                mMap.clear();
                 Findroutes(start,destination);
-
                 //} else {System.out.println("Destino YA VISITADO");}
             }
         });
@@ -189,8 +189,7 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
 
 
     // function to find Routes.
-    public void Findroutes(LatLng Start, LatLng End)
-    {
+    public void Findroutes(LatLng Start, LatLng End) {
         if(Start==null || End==null) {
             Toast.makeText(MainActivity.this,"Unable to get location",Toast.LENGTH_LONG).show();
         }
@@ -257,13 +256,6 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
             }
 
         }
-
-        //Add Marker on route starting position
-        MarkerOptions startMarker = new MarkerOptions();
-        startMarker.position(polylineStartLatLng);
-        startMarker.title("My Location");
-        mMap.addMarker(startMarker);
-
         //Add Marker on route ending position
         MarkerOptions endMarker = new MarkerOptions();
         endMarker.position(polylineEndLatLng);
@@ -279,6 +271,5 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Findroutes(start,end);
-
     }
 }
