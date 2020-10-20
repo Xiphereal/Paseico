@@ -22,9 +22,6 @@ public class MainMapActivity extends FragmentActivity implements OnMapReadyCallb
     private ArrayAdapter<String> createdRoutesListViewAdapter;
     private static List<String> createdRoutes = new ArrayList<>();
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

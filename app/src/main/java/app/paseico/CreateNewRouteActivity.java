@@ -78,6 +78,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
                 .setPositiveButton("OK", (dialog, which) -> {
                     //We add the created route name to the createdRoutes before returning to the main activity
                     MainMapActivity.getCreatedRoutes().add(newRoute.getName());
+
                     // Take the user back to the main map activity
                     Intent goToMainMapIntent = new Intent(getApplicationContext(), MainMapActivity.class);
                     startActivity(goToMainMapIntent);
@@ -116,7 +117,6 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
         LatLng gulliver = new LatLng(39.462987, -0.359719);
         googleMap.addMarker(new MarkerOptions().position(gulliver).title("Gulliver"));
-
     }
 
     private void registerOnMarkerClickListener() {
@@ -143,9 +143,9 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         });
     }
 
-    private void updateMarkedPOIsListView(){
+    private void updateMarkedPOIsListView() {
         //add route created to list of routes created
-        markedPOIsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,markedPOIs);
+        markedPOIsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, markedPOIs);
         markedPOIsListView.setAdapter(markedPOIsAdapter);
     }
 
@@ -162,7 +162,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         return poi != null;
     }
 
-    public static Route getRoute(){
+    public static Route getRoute() {
         return newRoute;
     }
 }

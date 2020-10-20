@@ -1,17 +1,16 @@
 package app.paseico.data;
 
-
 import java.util.List;
 
 public class Route {
     private String name;
-    private String theme;   // TODO :The value of theme should be a constant.
+    private String theme;   // TODO: The value of theme should be a constant.
     private double length;  // Meters.
     private double estimatedTime;  // Minutes
-    private int points;     // Points earned when the route is completed.
+    private int rewardPoints;     // Points earned when the route is completed.
     private List<PointOfInterest> pointsOfInterest;
-    //TODO: Route should have s reference to User, in order to know which user created de Route.
 
+    //TODO: Route should have a reference to the author User, in order to know which user created the Route.
     public Route(String name, List<PointOfInterest> pointOfInterests) {
         this.name = name;
         this.pointsOfInterest = pointOfInterests;
@@ -49,12 +48,12 @@ public class Route {
         this.estimatedTime = estimatedTime;
     }
 
-    public int getPoints() {
-        return points;
+    public int getRewardPoints() {
+        return rewardPoints;
     }
 
-    public void setPoints(int points) {
-        this.points = points;
+    public void setRewardPoints(int rewardPoints) {
+        this.rewardPoints = rewardPoints;
     }
 
     public List<PointOfInterest> getPointsOfInterest() {
