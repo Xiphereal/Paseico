@@ -1,13 +1,11 @@
 package app.paseico;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -29,9 +27,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -60,7 +58,7 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
     //polyline object
     private List<Polyline> polylines = null;
 
-    static ArrayList<String> pointsOfInterests = new ArrayList<String>();
+    static ArrayList<String> pointsOfInterestNames = new ArrayList<String>();
     static ArrayList<LatLng> locations = new ArrayList<LatLng>();
     static ArrayList<Boolean> isCompleted = new ArrayList<>();
     static ArrayAdapter arrayAdapter;
@@ -79,11 +77,11 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
         mapFragment.getMapAsync(this);
 
         ListView listView = findViewById(R.id.ListViewRoute);
-        if (pointsOfInterests.isEmpty() && locations.isEmpty()) {
+        if (pointsOfInterestNames.isEmpty() && locations.isEmpty()) {
             PointOfInterestPaseico POI1 = new PointOfInterestPaseico("Mercado central", 39.4736, -0.3790);
             PointOfInterestPaseico POI2 = new PointOfInterestPaseico("Torre de Quart", 39.4758, -0.3839);
-            pointsOfInterests.add(POI1.getName());
-            pointsOfInterests.add(POI2.getName());
+            pointsOfInterestNames.add(POI1.getName());
+            pointsOfInterestNames.add(POI2.getName());
             locations.add(new LatLng(POI1.getLatitude(), POI1.getLongitude()));
             locations.add(new LatLng(POI2.getLatitude(), POI2.getLongitude()));
             for(int i = 0; i < locations.size(); i++) {
@@ -91,7 +89,9 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
             }
         }
 
-        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, pointsOfInterests);
+
+
+        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, pointsOfInterestNames);
 
         listView.setAdapter(arrayAdapter);
 
@@ -107,6 +107,22 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
                 //} else {System.out.println("Destino YA VISITADO");}
             }
         });
+
+
+    }
+
+    public void placePOIsFromRoute(ArrayList<String> POIsNames, ArrayList<LatLng> POIsLocations, ArrayList<Boolean> POIsCompleted){
+        System.out.println(POIsNames.size());
+        System.out.println(POIsLocations.size()+"locations");
+        System.out.println(POIsCompleted.size());
+
+        for (int i = 0; i< POIsNames.size(); i++) {
+            if (POIsCompleted.get(i)){
+                mMap.addMarker(new MarkerOptions().position(POIsLocations.get(i)).title(POIsNames.get(i)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+            } else {
+                mMap.addMarker(new MarkerOptions().position(POIsLocations.get(i)).title(POIsNames.get(i)));
+            }
+        }
     }
 
     private void requestPermision() {
@@ -184,6 +200,7 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         getMyLocation();
+        placePOIsFromRoute(pointsOfInterestNames, locations, isCompleted);
 
     }
 
