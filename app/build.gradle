@@ -43,4 +43,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:18.0.0'
     implementation 'com.google.firebase:firebase-firestore:21.2.1'
     implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'org.jetbrains:annotations:19.0.0'
+    implementation 'org.jetbrains:annotations:19.0.0'
+    implementation 'com.android.support:multidex:1.0.3'
+
 }
