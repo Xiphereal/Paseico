@@ -6,6 +6,11 @@ public class Route {
     private String name;
     private List<PointOfInterestPaseico> pointsOfInterest;
 
+    public Route(String name, List<PointOfInterestPaseico> pois){
+        this.name = name;
+        this.pointsOfInterest = pois;
+    }
+
     public String getName() {
         return name;
     }

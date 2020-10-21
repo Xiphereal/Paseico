@@ -6,7 +6,9 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -14,6 +16,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.NumberPicker;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.directions.route.AbstractRouting;
@@ -29,6 +33,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -61,11 +66,13 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
 
     static ArrayList<String> pointsOfInterestNames = new ArrayList<String>();
     static ArrayList<LatLng> locations = new ArrayList<LatLng>();
-    static ArrayList<Boolean> isCompleted = new ArrayList<>();
+    static ArrayList<Boolean> isCompleted = new ArrayList<Boolean>();
     static int actualPOI;
+    static int poisLeft = 0;
     static ArrayAdapter arrayAdapter;
 
     static Location currentDestination;
+    static ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,16 +87,43 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        ListView listView = findViewById(R.id.ListViewRoute);
+        listView = findViewById(R.id.ListViewRoute);
         if (pointsOfInterestNames.isEmpty() && locations.isEmpty()) {
             PointOfInterestPaseico POI1 = new PointOfInterestPaseico("Mercado central", 39.4736, -0.3790);
-            PointOfInterestPaseico POI2 = new PointOfInterestPaseico("Torre de Quart", 39.4758, -0.3839);
+            PointOfInterestPaseico POI2 = new PointOfInterestPaseico("Torres de Quart", 39.4758, -0.3839);
+            PointOfInterestPaseico POI3 = new PointOfInterestPaseico("Torres de Serranos", 39.479284, -0.376167);
+            PointOfInterestPaseico POI4 = new PointOfInterestPaseico("El Miguelete", 39.475326 , -0.375607);
+            PointOfInterestPaseico POI5 = new PointOfInterestPaseico("Lonja de la Seda", 39.47441 , -0.378259);
+            PointOfInterestPaseico POI6 = new PointOfInterestPaseico("Plaza de la virgen", 39.476391 , -0.375277);
+
             pointsOfInterestNames.add(POI1.getName());
             pointsOfInterestNames.add(POI2.getName());
+            pointsOfInterestNames.add(POI3.getName());
+            pointsOfInterestNames.add(POI4.getName());
+            pointsOfInterestNames.add(POI5.getName());
+            pointsOfInterestNames.add(POI6.getName());
             locations.add(new LatLng(POI1.getLatitude(), POI1.getLongitude()));
             locations.add(new LatLng(POI2.getLatitude(), POI2.getLongitude()));
+            locations.add(new LatLng(POI3.getLatitude(), POI3.getLongitude()));
+            locations.add(new LatLng(POI4.getLatitude(), POI4.getLongitude()));
+            locations.add(new LatLng(POI5.getLatitude(), POI5.getLongitude()));
+            locations.add(new LatLng(POI6.getLatitude(), POI6.getLongitude()));
+
+            List<PointOfInterestPaseico> pois = new ArrayList<PointOfInterestPaseico>();
+            pois.add(POI1);
+            pois.add(POI2);
+            pois.add(POI3);
+            pois.add(POI4);
+            pois.add(POI5);
+            pois.add(POI6);
+
+            app.paseico.data.Route actualRoute = new app.paseico.data.Route("Descubriendo valencia", pois);
+            TextView routeTitle = findViewById(R.id.textViewTitleRoutingActivity);
+            routeTitle.setText(actualRoute.getName());
+
             for(int i = 0; i < locations.size(); i++) {
                 isCompleted.add(false);
+                poisLeft++;
             }
         }
 
@@ -103,34 +137,41 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //if (isCompleted.get(i) == false) {
+
+
                 LatLng destination = new LatLng(locations.get(i).latitude,locations.get(i).longitude);
-
-
 
                 start=new LatLng(myLocation.getLatitude(),myLocation.getLongitude());
                 //start route finding
                 mMap.clear();
+                placePOIsFromRoute(pointsOfInterestNames, locations, isCompleted);
                 Findroutes(start,destination);
                 currentDestination = new Location(destination.toString());
                 currentDestination.setLatitude(destination.latitude);
                 currentDestination.setLongitude(destination.longitude);
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
+                        new LatLng(currentDestination.getLatitude(),currentDestination.getLongitude()), 16f);
+                mMap.animateCamera(cameraUpdate);
                 actualPOI = i;
-                //} else {System.out.println("Destino YA VISITADO");}
             }
         });
-
-
 
     }
 
     public void placePOIsFromRoute(ArrayList<String> POIsNames, ArrayList<LatLng> POIsLocations, ArrayList<Boolean> POIsCompleted){
+        mMap.clear();
 
-        for (int i = 0; i< POIsNames.size(); i++) {
-            if (POIsCompleted.get(i)){
-                mMap.addMarker(new MarkerOptions().position(POIsLocations.get(i)).title(POIsNames.get(i)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-            } else {
-                mMap.addMarker(new MarkerOptions().position(POIsLocations.get(i)).title(POIsNames.get(i)));
+            for (int i = 0; i < POIsNames.size(); i++) {
+                if (POIsCompleted.get(i)) {
+                    mMap.addMarker(new MarkerOptions().position(POIsLocations.get(i)).title(POIsNames.get(i)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                } else {
+                    mMap.addMarker(new MarkerOptions().position(POIsLocations.get(i)).title(POIsNames.get(i)));
+                }
             }
+        if(poisLeft == 0) {
+            Intent intent = new Intent(MainActivity.this, RouteFinishedActivity.class);
+            startActivity(intent);
+            finish();
         }
 
     }
@@ -186,32 +227,29 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
                 myLocation=location;
                 LatLng ltlng=new LatLng(location.getLatitude(),location.getLongitude());
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
-                        ltlng, 16f);
+                       ltlng, 16f);
+
                 mMap.animateCamera(cameraUpdate);
 
                 if (currentDestination != null) {
                     myLocation = location;
-                    if (myLocation.distanceTo(currentDestination) < 100) {
-                        System.out.println("HAS COMPLETADO LA RUTA");
-                        mMap.addMarker(new MarkerOptions().position(new LatLng(currentDestination.getLatitude(),currentDestination.getLongitude())).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                    if (myLocation.distanceTo(currentDestination) < 50) {
+                        System.out.println("HAS COMPLETADO EL POI");
+                        currentDestination = null;
                         isCompleted.set(actualPOI,true);
-                        //TE SACA A LA LISTA
-                    } else {
-                        System.out.println("A MUCHO MAS DE 200 METROS");
+                         // MARK IT IN GREEN COLOR
+                        poisLeft--;
+                        placePOIsFromRoute(pointsOfInterestNames, locations, isCompleted);
                     }
                 }
             }
         });
 
-        //get destination location when user click on map
+        //get destination location when user click on map    ///DEACTIVATED THIS IS NOT NEEDED (WE CAN DELETE IT BUT LETS KEEP IT A BIT BECAUSE WE DON'T KNOW IF WE'RE GONNA NEED IT IN THE FUTURE)
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                //end=latLng;
-                //mMap.clear();
-                //start=new LatLng(myLocation.getLatitude(),myLocation.getLongitude());
-                   //start route finding
-                //Findroutes(start,end);
+
             }
         });
 
@@ -236,7 +274,7 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
         {
 
             Routing routing = new Routing.Builder()
-                    .travelMode(AbstractRouting.TravelMode.DRIVING)
+                    .travelMode(AbstractRouting.TravelMode.WALKING)
                     .withListener(this)
                     .alternativeRoutes(true)
                     .waypoints(Start, End)
@@ -257,7 +295,7 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
 
     @Override
     public void onRoutingStart() {
-        Toast.makeText(MainActivity.this,"Finding Route...",Toast.LENGTH_LONG).show();
+
     }
 
     //If Route finding success..
@@ -293,13 +331,7 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
             else {
 
             }
-
         }
-        //Add Marker on route ending position
-        MarkerOptions endMarker = new MarkerOptions();
-        endMarker.position(polylineEndLatLng);
-        endMarker.title("Destination");
-        mMap.addMarker(endMarker);
     }
 
     @Override
