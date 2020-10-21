@@ -23,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -171,7 +172,7 @@ public class SearchFragment extends Fragment {
                 maximumTime = Double.parseDouble(rangeOfTime[1]) * 60;
             }
         } else {
-            minimumTime = Double.MIN_VALUE;
+            minimumTime = -Double.MAX_VALUE;
             maximumTime = Double.MAX_VALUE;
         }
 
@@ -189,33 +190,33 @@ public class SearchFragment extends Fragment {
                 maximumOfLength = Double.parseDouble(rangeOfLength[1]) * 1000;
             }
         } else {
-            minimumOfLength = Double.MIN_VALUE;
+            minimumOfLength = -Double.MAX_VALUE;
             maximumOfLength = Double.MAX_VALUE;
         }
     }
 
     private void filterByLengthEstimatedTimePointsPOIAndKeyWords(Task<QuerySnapshot> task){
         Log.d("Ruta2", "task is " + task.isSuccessful());
-        Log.d("Ruta3", ((QuerySnapshot)task.getResult()).size() + "");
+        Log.d("Ruta4", "tamaño array tras consulta"+ ((QuerySnapshot)task.getResult()).size() + "");
         for (QueryDocumentSnapshot document : task.getResult()) {
-            Route route = document.toObject(Route.class);
 
             String name = document.getData().get("name").toString();
-            String theme = document.getData().get("theme").toString();
+            Object theme_obj = document.getData().get("theme");
+            String theme = theme_obj != null ? theme_obj.toString() : null;
             double length = Double.parseDouble(document.getData().get("length").toString());
             double estimatedTime = Double.parseDouble(document.getData().get("estimatedTime").toString());
             int points = Integer.parseInt(document.getData().get("rewardPoints").toString());
-            Map<String, PointOfInterest> pois = (HashMap)document.getData().get("pointsOfInterest");
-            ArrayList<PointOfInterest> pointOfInterests;
-            if(pois != null){
-                pointOfInterests = new ArrayList<PointOfInterest>(pois.values());
-            } else {
-                pointOfInterests = new ArrayList<PointOfInterest>();
-            }
+            //Map<String, PointOfInterest> pois = (HashMap)document.getData().get("pointsOfInterest");
+            ArrayList<PointOfInterest> pointOfInterests = (ArrayList)document.getData().get("pointsOfInterest");
+//            if(pois != null){
+//                pointOfInterests = new ArrayList<PointOfInterest>(pois.values());
+//            } else {
+//                pointOfInterests = new ArrayList<PointOfInterest>();
+//            }
 
 
             Log.d("Ruta3", document.getId() + " => " + document.getData());
-            Log.d("Ruta3", task.getResult().toString());
+
             if(length <= maximumOfLength
                     && length >= minimumOfLength
                     && estimatedTime <= maximumTime
@@ -224,7 +225,7 @@ public class SearchFragment extends Fragment {
                 Log.d("RutaDentro", document.getId() + "=>" + document.getData(), task.getException());
                 for(String keyword : keyWords){
                     if(name.contains(keyword)){
-                        //Route route = new Route(name, theme, length, estimatedTime, points, pointOfInterests);
+                        Route route = new Route(name, theme, length, estimatedTime, points, pointOfInterests);
 
                         routeList.add(route);
                         Log.d("bucle", document.getId() + "=>" + document.getData(), task.getException());
