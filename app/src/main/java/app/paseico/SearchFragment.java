@@ -89,7 +89,7 @@ public class SearchFragment extends Fragment {
                 FirebaseFirestore database = FirebaseFirestore.getInstance();
                 CollectionReference routesReference = database.collection("route");
 
-                if (themeOfRoute != null && themeOfRoute != getString(R.string.default_spinner_choice)) {
+                if (themeOfRoute == null || themeOfRoute != getString(R.string.default_spinner_choice)) {
 
                     routesReference.whereEqualTo("theme", themeOfRoute)
                             .whereGreaterThanOrEqualTo("rewardPoints", minimumOfPoints)
@@ -206,14 +206,8 @@ public class SearchFragment extends Fragment {
             double length = Double.parseDouble(document.getData().get("length").toString());
             double estimatedTime = Double.parseDouble(document.getData().get("estimatedTime").toString());
             int points = Integer.parseInt(document.getData().get("rewardPoints").toString());
-            //Map<String, PointOfInterest> pois = (HashMap)document.getData().get("pointsOfInterest");
-            ArrayList<PointOfInterest> pointOfInterests = (ArrayList)document.getData().get("pointsOfInterest");
-//            if(pois != null){
-//                pointOfInterests = new ArrayList<PointOfInterest>(pois.values());
-//            } else {
-//                pointOfInterests = new ArrayList<PointOfInterest>();
-//            }
 
+            ArrayList<PointOfInterest> pointOfInterests = (ArrayList)document.getData().get("pointsOfInterest");
 
             Log.d("Ruta3", document.getId() + " => " + document.getData());
 
