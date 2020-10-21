@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +76,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
                     MainMapActivity.getCreatedRoutes().add(newRoute.getName());
 
                     // Take the user back to the main map activity
+                    // TODO: Clean the current activity state to prevent the user retrieve the state when
+                    //  using the backstack.
                     Intent goToMainMapIntent = new Intent(getApplicationContext(), MainMapActivity.class);
                     startActivity(goToMainMapIntent);
                 });
@@ -89,7 +92,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
         addFakePOIsToMap(createNewRouteMap);
 
-        //TODO: Move camera to real user position.
+        // TODO: Move camera to real user position.
         LatLng fakeUserPosition = new LatLng(39.475, -0.375);
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(fakeUserPosition));
 
@@ -120,17 +123,9 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
             PointOfInterest poi = findClickedPointOfInterest(marker);
 
             if (isPointOfInterestSelected(poi)) {
-                marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-
-                markedPOIs.remove(poi.getName());
-
-                selectedPointsOfInterest.remove(poi);
+                deselectPointOfInterest(marker, poi);
             } else {
-                marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-
-                markedPOIs.add(marker.getTitle());
-
-                selectedPointsOfInterest.add(new PointOfInterest(marker, marker.getTitle()));
+                selectPointOfInterest(marker);
             }
 
             updateMarkedPOIsListView();
@@ -139,13 +134,29 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         });
     }
 
+    private void deselectPointOfInterest(@NotNull Marker marker, @NotNull PointOfInterest poi) {
+        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+
+        markedPOIs.remove(poi.getName());
+
+        selectedPointsOfInterest.remove(poi);
+    }
+
+    private void selectPointOfInterest(@NotNull Marker marker) {
+        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+
+        markedPOIs.add(marker.getTitle());
+
+        selectedPointsOfInterest.add(new PointOfInterest(marker, marker.getTitle()));
+    }
+
     private void updateMarkedPOIsListView() {
         //add route created to list of routes created
         markedPOIsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, markedPOIs);
         markedPOIsListView.setAdapter(markedPOIsAdapter);
     }
 
-    private PointOfInterest findClickedPointOfInterest(Marker marker) {
+    private PointOfInterest findClickedPointOfInterest(@NotNull Marker marker) {
         for (PointOfInterest poi : selectedPointsOfInterest) {
             if (poi.getGoogleMarker().equals(marker))
                 return poi;
