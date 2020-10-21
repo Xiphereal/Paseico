@@ -25,6 +25,7 @@
     <string name="hours">h</string>
 
     <string name="default_spinner_choice">Indiferente</string>
+    <string name="no_theme_choice">Sin temática</string>
 
 
 
@@ -41,6 +42,7 @@
         <item></item>
     </string-array>
     <string-array name="themes_of_route">
+        <item>@string/no_theme_choice</item>
         <item>@string/default_spinner_choice</item>
         <item>Museos</item>
         <item>Restaurantes</item>

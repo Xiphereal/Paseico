@@ -88,7 +88,7 @@ public class SearchFragment extends Fragment {
                 FirebaseFirestore database = FirebaseFirestore.getInstance();
                 CollectionReference routesReference = database.collection("route");
 
-                if (themeOfRoute != getString(R.string.default_spinner_choice)) {
+                if (themeOfRoute != null && themeOfRoute != getString(R.string.default_spinner_choice)) {
 
                     routesReference.whereEqualTo("theme", themeOfRoute)
                             .whereGreaterThanOrEqualTo("rewardPoints", minimumOfPoints)
@@ -153,6 +153,9 @@ public class SearchFragment extends Fragment {
         keyWords = Arrays.asList(et_keyWord.getText().toString().trim().split("\\s+"));
 
         themeOfRoute = spinner_theme.getSelectedItem().toString();
+        if(themeOfRoute == getString(R.string.no_theme_choice)){
+            themeOfRoute = null;
+        }
 
         String estimatedTimeRange = spinner_estimatedTime.getSelectedItem().toString();
         if (estimatedTimeRange != getString(R.string.default_spinner_choice)) {
