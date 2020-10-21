@@ -38,12 +38,9 @@
     <string name="between4_5">4-5</string>
     <string name="gt5">&gt; 5</string> <!-- &gt; is '>' -->
     <!--Strings arrays used to populate searchFragment spinners -->
-    <string-array name="filter_options">
-        <item></item>
-    </string-array>
     <string-array name="themes_of_route">
-        <item>@string/no_theme_choice</item>
         <item>@string/default_spinner_choice</item>
+        <item>@string/no_theme_choice</item>
         <item>Museos</item>
         <item>Restaurantes</item>
         <item>Monumentos</item>
