@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -74,6 +76,8 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
     static Location currentDestination;
     static ListView listView;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +90,8 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        ImageButton cancelRoute = findViewById(R.id.buttonCancelRoute);
 
         listView = findViewById(R.id.ListViewRoute);
         if (pointsOfInterestNames.isEmpty() && locations.isEmpty()) {
@@ -155,6 +161,23 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
                 actualPOI = i;
             }
         });
+
+        cancelRoute.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                poisLeft = 0;
+                for(int i = 0; i < locations.size(); i++) {
+                    isCompleted.set(i, false);
+                    poisLeft++;
+                }
+
+                Intent intent = new Intent(MainActivity.this, TemporalRoutesMenu.class);
+                startActivity(intent);
+                finish();
+            }
+
+        });
+
+
 
     }
 
@@ -343,4 +366,6 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Findroutes(start,end);
     }
+
+
 }
