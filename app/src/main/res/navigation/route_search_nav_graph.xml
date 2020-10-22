@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/route_search_nav_graph"
+    app:startDestination="@id/SearchFragment">
+
+    <fragment
+        android:id="@+id/SearchFragment"
+        android:name="app.paseico.SearchFragment"
+        android:label="@string/search_fragment_label"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_SearchFragment_to_RouteListFragment"
+            app:destination="@id/RouteListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/RouteListFragment"
+        android:name="app.paseico.RouteListFragment"
+        android:label="@string/route_list_fragment_label"
+        tools:layout="@layout/fragment_route_list">
+
+        <action
+            android:id="@+id/action_RouteListFragment_to_SearchFragment"
+            app:destination="@id/SearchFragment" />
+        <argument
+            android:name="filteredList"
+            app:argType="app.paseico.data.Route[]" />
+    </fragment>
+</navigation>
