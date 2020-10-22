@@ -30,7 +30,10 @@ public class MainMapActivity extends FragmentActivity implements OnMapReadyCallb
 
         initializeMapFragment();
 
+        updateCreatedRoutesListView();
+
         registerCreateNewRouteButtonTransition();
+        registerSearchRouteButtonTransition();
     }
 
     private void initializeMapFragment() {
@@ -40,19 +43,25 @@ public class MainMapActivity extends FragmentActivity implements OnMapReadyCallb
         mapFragment.getMapAsync(this);
     }
 
+    private void updateCreatedRoutesListView(){
+        createdRoutesListViewAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,createdRoutes);
+        createdRoutesListView.setAdapter(createdRoutesListViewAdapter);
+    }
+
     private void registerCreateNewRouteButtonTransition() {
         ExtendedFloatingActionButton extendedFloatingActionButton = findViewById(R.id.create_new_route_button);
         extendedFloatingActionButton.setOnClickListener(view -> {
             Intent createNewRouteIntent = new Intent(getApplicationContext(), CreateNewRouteActivity.class);
             startActivity(createNewRouteIntent);
         });
-
-        updateCreatedRoutesListView();
     }
 
-    private void updateCreatedRoutesListView(){
-        createdRoutesListViewAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,createdRoutes);
-        createdRoutesListView.setAdapter(createdRoutesListViewAdapter);
+    private void registerSearchRouteButtonTransition() {
+        ExtendedFloatingActionButton extendedFloatingActionButton = findViewById(R.id.route_search_button);
+        extendedFloatingActionButton.setOnClickListener(view -> {
+            Intent searchRouteIntent = new Intent(getApplicationContext(), RouteSearchActivity.class);
+            startActivity(searchRouteIntent);
+        });
     }
 
     /**
