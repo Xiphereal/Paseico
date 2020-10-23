@@ -24,12 +24,12 @@ public class Route implements Parcelable {
         this.pointsOfInterest = pointOfInterests;
     }
 
-    public Route(String name, String theme, double length, double estimatedTime, int points, List<PointOfInterest> pointsOfInterest) {
+    public Route(String name, String theme, double length, double estimatedTime, int rewardPoints, List<PointOfInterest> pointsOfInterest) {
         this.name = name;
         this.theme = theme;
         this.length = length;
         this.estimatedTime = estimatedTime;
-        this.rewardPoints = points;
+        this.rewardPoints = rewardPoints;
         this.pointsOfInterest = pointsOfInterest;
     }
 
@@ -65,11 +65,11 @@ public class Route implements Parcelable {
         this.estimatedTime = estimatedTime;
     }
 
-    public int getPoints() {
+    public int getRewardPoints() {
         return rewardPoints;
     }
 
-    public void setPoints(int points) {
+    public void setRewardPoints(int points) {
         this.rewardPoints = points;
     }
 
@@ -106,7 +106,6 @@ public class Route implements Parcelable {
         @Override
         public Route createFromParcel(Parcel in){
             return new Route(in);
-
         }
 
         @Override
@@ -114,7 +113,6 @@ public class Route implements Parcelable {
             return new Route[0];
         }
     };
-
 
     @Override
     public int describeContents() {
