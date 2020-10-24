@@ -33,25 +33,20 @@ public class RouteListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Route[] filteredRoutes = RouteListFragmentArgs.fromBundle(getArguments()).getFilteredList();
-        List<String> filteredRoutesList = new ArrayList<String>();
+        List<String> filteredRoutesList = new ArrayList<>();
 
-        for(Route route : filteredRoutes){
+        for (Route route : filteredRoutes) {
             filteredRoutesList.add(route.getName());
         }
 
-        ArrayAdapter<String> adapter_filteredRoutes = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_expandable_list_item_1, filteredRoutesList);
+        ArrayAdapter<String> adapter_filteredRoutes = new ArrayAdapter<>(getActivity(), android.R.layout.simple_expandable_list_item_1, filteredRoutesList);
 
         ListView listView_filteredRoutes = (ListView) view.findViewById(R.id.listView_filteredRoutes);
         listView_filteredRoutes.setAdapter(adapter_filteredRoutes);
 
 
-        view.findViewById(R.id.button_second).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(RouteListFragment.this)
-                        .navigate(R.id.action_RouteListFragment_to_SearchFragment);
-            }
-        });
+        view.findViewById(R.id.button_second).setOnClickListener(view1 -> NavHostFragment.findNavController(RouteListFragment.this)
+                .navigate(R.id.action_RouteListFragment_to_SearchFragment));
 
 
     }
