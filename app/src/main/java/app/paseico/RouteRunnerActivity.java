@@ -1,52 +1,53 @@
+
 package app.paseico;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
+        import androidx.annotation.NonNull;
+        import androidx.core.app.ActivityCompat;
+        import androidx.core.content.ContextCompat;
+        import androidx.fragment.app.FragmentActivity;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.location.Location;
-import android.location.LocationListener;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.NumberPicker;
-import android.widget.TextView;
-import android.widget.Toast;
+        import android.Manifest;
+        import android.content.Intent;
+        import android.content.pm.PackageManager;
+        import android.graphics.Color;
+        import android.location.Location;
+        import android.location.LocationListener;
+        import android.os.Bundle;
+        import android.view.View;
+        import android.widget.AdapterView;
+        import android.widget.ArrayAdapter;
+        import android.widget.Button;
+        import android.widget.ImageButton;
+        import android.widget.ListView;
+        import android.widget.NumberPicker;
+        import android.widget.TextView;
+        import android.widget.Toast;
 
-import com.directions.route.AbstractRouting;
-import com.directions.route.Route;
-import com.directions.route.RouteException;
-import com.directions.route.Routing;
-import com.directions.route.RoutingListener;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.material.snackbar.Snackbar;
+        import com.directions.route.AbstractRouting;
+        import com.directions.route.Route;
+        import com.directions.route.RouteException;
+        import com.directions.route.Routing;
+        import com.directions.route.RoutingListener;
+        import com.google.android.gms.common.ConnectionResult;
+        import com.google.android.gms.common.api.GoogleApiClient;
+        import com.google.android.gms.maps.CameraUpdate;
+        import com.google.android.gms.maps.CameraUpdateFactory;
+        import com.google.android.gms.maps.GoogleMap;
+        import com.google.android.gms.maps.OnMapReadyCallback;
+        import com.google.android.gms.maps.SupportMapFragment;
+        import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+        import com.google.android.gms.maps.model.CameraPosition;
+        import com.google.android.gms.maps.model.LatLng;
+        import com.google.android.gms.maps.model.MarkerOptions;
+        import com.google.android.gms.maps.model.PolylineOptions;
+        import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
-import java.util.List;
+        import java.util.ArrayList;
+        import java.util.List;
 
-import app.paseico.data.PointOfInterestPaseico;
+        import app.paseico.data.PointOfInterestPaseico;
 
-public class MainActivity<Polyline> extends FragmentActivity implements OnMapReadyCallback,
+public class RouteRunnerActivity<Polyline> extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener, RoutingListener {
 
     //google map object
@@ -81,7 +82,7 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_route_runner);
 
         //request location permission.
         requestPermision();
@@ -170,7 +171,7 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
                     poisLeft++;
                 }
 
-                Intent intent = new Intent(MainActivity.this, TemporalRoutesMenu.class);
+                Intent intent = new Intent(RouteRunnerActivity.this, TemporalRoutesMenu.class);
                 startActivity(intent);
                 finish();
             }
@@ -184,15 +185,15 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
     public void placePOIsFromRoute(ArrayList<String> POIsNames, ArrayList<LatLng> POIsLocations, ArrayList<Boolean> POIsCompleted){
         mMap.clear();
 
-            for (int i = 0; i < POIsNames.size(); i++) {
-                if (POIsCompleted.get(i)) {
-                    mMap.addMarker(new MarkerOptions().position(POIsLocations.get(i)).title(POIsNames.get(i)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-                } else {
-                    mMap.addMarker(new MarkerOptions().position(POIsLocations.get(i)).title(POIsNames.get(i)));
-                }
+        for (int i = 0; i < POIsNames.size(); i++) {
+            if (POIsCompleted.get(i)) {
+                mMap.addMarker(new MarkerOptions().position(POIsLocations.get(i)).title(POIsNames.get(i)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+            } else {
+                mMap.addMarker(new MarkerOptions().position(POIsLocations.get(i)).title(POIsNames.get(i)));
             }
+        }
         if(poisLeft == 0) {
-            Intent intent = new Intent(MainActivity.this, RouteFinishedActivity.class);
+            Intent intent = new Intent(RouteRunnerActivity.this, RouteFinishedActivity.class);
             startActivity(intent);
             finish();
         }
@@ -250,7 +251,7 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
                 myLocation=location;
                 LatLng ltlng=new LatLng(location.getLatitude(),location.getLongitude());
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
-                       ltlng, 16f);
+                        ltlng, 16f);
 
                 mMap.animateCamera(cameraUpdate);
 
@@ -260,7 +261,7 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
                         System.out.println("HAS COMPLETADO EL POI");
                         currentDestination = null;
                         isCompleted.set(actualPOI,true);
-                         // MARK IT IN GREEN COLOR
+                        // MARK IT IN GREEN COLOR
                         poisLeft--;
                         placePOIsFromRoute(pointsOfInterestNames, locations, isCompleted);
                     }
@@ -291,7 +292,7 @@ public class MainActivity<Polyline> extends FragmentActivity implements OnMapRea
     // function to find Routes.
     public void Findroutes(LatLng Start, LatLng End) {
         if(Start==null || End==null) {
-            Toast.makeText(MainActivity.this,"Unable to get location",Toast.LENGTH_LONG).show();
+            Toast.makeText(RouteRunnerActivity.this,"Unable to get location",Toast.LENGTH_LONG).show();
         }
         else
         {

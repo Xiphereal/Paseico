@@ -25,6 +25,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".RouteRunnerActivity"></activity>
+        <activity android:name=".data.RouteRunnerActivity" />
         <activity android:name=".TemporalRoutesMenu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,9 +50,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAMLXmyf_ai85V6PdlA7jYhjL-nSgHl7mA" />
 
-        <activity android:name=".MainActivity">
-
-        </activity>
     </application>
 
 </manifest>
