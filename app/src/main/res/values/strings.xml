@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">Paseico</string>
+
+    <string name="title_activity_routing">Map</string>
+    <string name="title_activity_route_navigator">Map</string>
+    <string name="title_activity_maps">Map</string>
+
     <string name="title_activity_main_map">Map</string>
     <string name="title_activity_route_search">RouteSearch</string>
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAMLXmyf_ai85V6PdlA7jYhjL-nSgHl7mA</string>
@@ -72,4 +77,5 @@
 
     <string name="search_fragment_title">Seleccione el filtro de búsqueda</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
 </resources>

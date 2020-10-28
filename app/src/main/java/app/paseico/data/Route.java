@@ -1,6 +1,7 @@
 package app.paseico.data;
 
 
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -31,6 +32,7 @@ public class Route implements Parcelable {
         this.estimatedTime = estimatedTime;
         this.rewardPoints = rewardPoints;
         this.pointsOfInterest = pointsOfInterest;
+
     }
 
     public String getName() {
@@ -40,6 +42,7 @@ public class Route implements Parcelable {
     public void setName(String name) {
         this.name = name;
     }
+
 
     public String getTheme() {
         return theme;
