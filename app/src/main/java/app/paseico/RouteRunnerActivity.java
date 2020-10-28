@@ -9,17 +9,13 @@ package app.paseico;
         import android.Manifest;
         import android.content.Intent;
         import android.content.pm.PackageManager;
-        import android.graphics.Color;
         import android.location.Location;
-        import android.location.LocationListener;
         import android.os.Bundle;
         import android.view.View;
         import android.widget.AdapterView;
         import android.widget.ArrayAdapter;
-        import android.widget.Button;
         import android.widget.ImageButton;
         import android.widget.ListView;
-        import android.widget.NumberPicker;
         import android.widget.TextView;
         import android.widget.Toast;
 
@@ -36,7 +32,6 @@ package app.paseico;
         import com.google.android.gms.maps.OnMapReadyCallback;
         import com.google.android.gms.maps.SupportMapFragment;
         import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-        import com.google.android.gms.maps.model.CameraPosition;
         import com.google.android.gms.maps.model.LatLng;
         import com.google.android.gms.maps.model.MarkerOptions;
         import com.google.android.gms.maps.model.PolylineOptions;
@@ -45,21 +40,18 @@ package app.paseico;
         import java.util.ArrayList;
         import java.util.List;
 
-        import app.paseico.data.PointOfInterestPaseico;
+        import app.paseico.data.PointOfInterest;
 
 public class RouteRunnerActivity<Polyline> extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener, RoutingListener {
 
     //google map object
     private GoogleMap mMap;
-
-
     //current and destination location objects
     Location myLocation = null;
     Location destinationLocation = null;
     protected LatLng start = null;
     protected LatLng end = null;
-
     //to get location permissions.
     private final static int LOCATION_REQUEST_CODE = 23;
     boolean locationPermission = false;
@@ -83,7 +75,8 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_runner);
-
+        Intent intent = getIntent();
+        Bundle b = intent.getExtras();
         //request location permission.
         requestPermision();
 
@@ -96,45 +89,28 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
 
         listView = findViewById(R.id.ListViewRoute);
         if (pointsOfInterestNames.isEmpty() && locations.isEmpty()) {
-            PointOfInterestPaseico POI1 = new PointOfInterestPaseico("Mercado central", 39.4736, -0.3790);
-            PointOfInterestPaseico POI2 = new PointOfInterestPaseico("Torres de Quart", 39.4758, -0.3839);
-            PointOfInterestPaseico POI3 = new PointOfInterestPaseico("Torres de Serranos", 39.479284, -0.376167);
-            PointOfInterestPaseico POI4 = new PointOfInterestPaseico("El Miguelete", 39.475326 , -0.375607);
-            PointOfInterestPaseico POI5 = new PointOfInterestPaseico("Lonja de la Seda", 39.47441 , -0.378259);
-            PointOfInterestPaseico POI6 = new PointOfInterestPaseico("Plaza de la virgen", 39.476391 , -0.375277);
 
-            pointsOfInterestNames.add(POI1.getName());
-            pointsOfInterestNames.add(POI2.getName());
-            pointsOfInterestNames.add(POI3.getName());
-            pointsOfInterestNames.add(POI4.getName());
-            pointsOfInterestNames.add(POI5.getName());
-            pointsOfInterestNames.add(POI6.getName());
-            locations.add(new LatLng(POI1.getLatitude(), POI1.getLongitude()));
-            locations.add(new LatLng(POI2.getLatitude(), POI2.getLongitude()));
-            locations.add(new LatLng(POI3.getLatitude(), POI3.getLongitude()));
-            locations.add(new LatLng(POI4.getLatitude(), POI4.getLongitude()));
-            locations.add(new LatLng(POI5.getLatitude(), POI5.getLongitude()));
-            locations.add(new LatLng(POI6.getLatitude(), POI6.getLongitude()));
 
-            List<PointOfInterestPaseico> pois = new ArrayList<PointOfInterestPaseico>();
-            pois.add(POI1);
-            pois.add(POI2);
-            pois.add(POI3);
-            pois.add(POI4);
-            pois.add(POI5);
-            pois.add(POI6);
+            //WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
+            //ASK JOSE IF YOU DONT KNOW HOW TO PASS THE ROUTE HERE
+            //JUST UNCOMMENT THIS CODE WHEN U'RE READY TO PASS FROM ANOTHER INTENT (WITH THE STRING "route" on the putextra method) AND IT WILL WORK
+            //WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
+    /*
+            app.paseico.data.Route route = (app.paseico.data.Route) b.get("route");
+            List<PointOfInterest> routePois = route.getPointsOfInterest();
+            for(int i = 0; i < routePois.size(); i++){
+                pointsOfInterestNames.add(routePois.get(i).getName());
+                locations.add(routePois.get(i).getGoogleMarker().getPosition());
+            }
 
-            app.paseico.data.Route actualRoute = new app.paseico.data.Route("Descubriendo valencia", pois);
             TextView routeTitle = findViewById(R.id.textViewTitleRoutingActivity);
-            routeTitle.setText(actualRoute.getName());
-
+            routeTitle.setText(route.getName());
+    */
             for(int i = 0; i < locations.size(); i++) {
                 isCompleted.add(false);
                 poisLeft++;
             }
         }
-
-
 
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, pointsOfInterestNames);
 
