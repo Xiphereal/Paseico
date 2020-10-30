@@ -1,3 +1,81 @@
 <resources>
     <string name="app_name">Paseico</string>
+
+    <string name="title_activity_routing">Map</string>
+    <string name="title_activity_route_navigator">Map</string>
+    <string name="title_activity_maps">Map</string>
+
+    <string name="title_activity_main_map">Map</string>
+    <string name="title_activity_route_search">RouteSearch</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAMLXmyf_ai85V6PdlA7jYhjL-nSgHl7mA</string>
+
+    <!-- Strings used for route search fragments for navigation -->
+    <string name="search_fragment_label">First Fragment</string>
+    <string name="route_list_fragment_label">Second Fragment</string>
+
+    <!-- Strings used for buttons names-->
+    <string name="search">Buscar</string>
+    <string name="previous">Volver</string>
+
+
+    <string name="zero">0</string>
+    <string name="route_name_hint">Nombre de la ruta</string>
+
+    <!-- Strings used for textviews names-->
+    <string name="key_word">Palabras clave:</string>
+    <string name="theme">Temática:</string>
+    <string name="length">Longitud:</string>
+    <string name="estimated_time">Duración estimada:</string>
+    <string name="number_of_POI">Número de puntos de interés:</string>
+    <string name="minimum_of_points">Mínimo de puntos:</string>
+    <string name="km">km</string>
+    <string name="hours">h</string>
+
+    <string name="default_spinner_choice">Indiferente</string>
+    <string name="no_theme_choice">Sin temática</string>
+
+
+
+    <string name="lt0.5">&lt; 0,5</string>
+    <string name="between0.5_1">0.5-1</string>
+    <string name="lt1">&lt; 1</string> <!-- &lt; is '<' -->
+    <string name="between1_2">1-2</string>
+    <string name="between2_3">2-3</string>
+    <string name="between3_4">3-4</string>
+    <string name="between4_5">4-5</string>
+    <string name="gt5">&gt; 5</string> <!-- &gt; is '>' -->
+    <!--Strings arrays used to populate searchFragment spinners -->
+    <string-array name="themes_of_route">
+        <item>@string/default_spinner_choice</item>
+        <item>@string/no_theme_choice</item>
+        <item>Museos</item>
+        <item>Restaurantes</item>
+        <item>Monumentos</item>
+        <item>Naturaleza</item>
+        <item>Bares</item>
+    </string-array>
+    <string-array name="lengths_of_route">
+        <item>@string/default_spinner_choice</item>
+        <item>@string/lt1</item>
+        <item>@string/between1_2</item>
+        <item>@string/between2_3</item>
+        <item>@string/between3_4</item>
+        <item>@string/between4_5</item>
+        <item>@string/gt5</item>
+    </string-array>
+    <string-array name="estimated_times_of_route">
+        <item>@string/default_spinner_choice</item>
+        <item>@string/lt0.5</item>
+        <item>@string/between0.5_1</item>
+        <item>@string/between1_2</item>
+        <item>@string/between2_3</item>
+        <item>@string/between3_4</item>
+        <item>@string/between4_5</item>
+        <item>@string/gt5</item>
+    </string-array>
+
+
+    <string name="search_fragment_title">Seleccione el filtro de búsqueda</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
 </resources>

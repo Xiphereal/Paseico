@@ -1,0 +1,86 @@
+package app.paseico;
+
+import android.content.Intent;
+import androidx.fragment.app.FragmentActivity;
+
+import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainMapActivity extends FragmentActivity implements OnMapReadyCallback {
+    private ListView createdRoutesListView;
+    private ArrayAdapter<String> createdRoutesListViewAdapter;
+    private static List<String> createdRoutes = new ArrayList<>();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main_map);
+        createdRoutesListView = findViewById(R.id.created_routes_list_view);
+
+        initializeMapFragment();
+
+        updateCreatedRoutesListView();
+
+        registerCreateNewRouteButtonTransition();
+        registerSearchRouteButtonTransition();
+    }
+
+    private void initializeMapFragment() {
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.main_map);
+        mapFragment.getMapAsync(this);
+    }
+
+    private void updateCreatedRoutesListView(){
+        createdRoutesListViewAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,createdRoutes);
+        createdRoutesListView.setAdapter(createdRoutesListViewAdapter);
+    }
+
+    private void registerCreateNewRouteButtonTransition() {
+        ExtendedFloatingActionButton extendedFloatingActionButton = findViewById(R.id.create_new_route_button);
+        extendedFloatingActionButton.setOnClickListener(view -> {
+            Intent createNewRouteIntent = new Intent(getApplicationContext(), CreateNewRouteActivity.class);
+            startActivity(createNewRouteIntent);
+        });
+    }
+
+    private void registerSearchRouteButtonTransition() {
+        ExtendedFloatingActionButton extendedFloatingActionButton = findViewById(R.id.route_search_button);
+        extendedFloatingActionButton.setOnClickListener(view -> {
+            Intent searchRouteIntent = new Intent(getApplicationContext(), RouteSearchActivity.class);
+            startActivity(searchRouteIntent);
+        });
+    }
+
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we can add markers or lines, add listeners or move the camera.
+     * If Google Play services is not installed on the device, the user will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * installed Google Play services and returned to the app.
+     */
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        LatLng valenciaCathedral = new LatLng(39.47, -0.38);
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(valenciaCathedral));
+        googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+    }
+
+    public static List<String> getCreatedRoutes(){
+        return createdRoutes;
+    }
+}
