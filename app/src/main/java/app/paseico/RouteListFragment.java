@@ -1,7 +1,6 @@
 package app.paseico;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -45,7 +42,7 @@ public class RouteListFragment extends Fragment {
         listView_filteredRoutes.setAdapter(adapter_filteredRoutes);
 
 
-        view.findViewById(R.id.button_second).setOnClickListener(view1 -> NavHostFragment.findNavController(RouteListFragment.this)
+        view.findViewById(R.id.btn_routeList_back).setOnClickListener(view1 -> NavHostFragment.findNavController(RouteListFragment.this)
                 .navigate(R.id.action_RouteListFragment_to_SearchFragment));
 
 
