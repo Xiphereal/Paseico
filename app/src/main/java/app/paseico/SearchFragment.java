@@ -26,20 +26,20 @@ import java.util.List;
 
 public class SearchFragment extends Fragment {
 
-    EditText et_keyWord;
-    EditText et_numberOfPOI;
-    EditText et_minimumOfPoints;
-    Spinner spinner_theme;
-    Spinner spinner_length;
-    Spinner spinner_estimatedTime;
-    List<String> keyWords;
-    String themeOfRoute;
-    int numberOfPOI;
-    int minimumOfPoints;
-    double minimumOfLength;
-    double maximumOfLength;
-    double minimumTime;
-    double maximumTime;
+    private EditText et_keyWord;
+    private EditText et_numberOfPOI;
+    private EditText et_minimumOfPoints;
+    private Spinner spinner_theme;
+    private Spinner spinner_length;
+    private Spinner spinner_estimatedTime;
+    private List<String> keyWords;
+    private String themeOfRoute;
+    private int numberOfPOI;
+    private int minimumOfPoints;
+    private double minimumOfLength;
+    private double maximumOfLength;
+    private double minimumTime;
+    private double maximumTime;
     List<Route> routeList;
 
     @Override
@@ -65,6 +65,7 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Action performed when a user search routes
         view.findViewById(R.id.btn_search).setOnClickListener(view1 -> {
             assignValueOfFilterVariables();
 
