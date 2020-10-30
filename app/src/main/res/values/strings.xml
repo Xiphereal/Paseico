@@ -16,6 +16,7 @@
     <!-- Strings used for buttons names-->
     <string name="search">Buscar</string>
     <string name="previous">Volver</string>
+    <string name="start_route">Empezar ruta</string>
 
 
     <string name="zero">0</string>
@@ -27,13 +28,13 @@
     <string name="length">Longitud:</string>
     <string name="estimated_time">Duración estimada:</string>
     <string name="number_of_POI">Número de puntos de interés:</string>
-    <string name="minimum_of_points">Mínimo de puntos:</string>
+    <string name="minimum_of_reward_points">Mínimo de puntos:</string>
     <string name="km">km</string>
     <string name="hours">h</string>
+    <string name="reward_points">Puntos:</string>
 
     <string name="default_spinner_choice">Indiferente</string>
     <string name="no_theme_choice">Sin temática</string>
-
 
 
     <string name="lt0.5">&lt; 0,5</string>
@@ -44,7 +45,10 @@
     <string name="between3_4">3-4</string>
     <string name="between4_5">4-5</string>
     <string name="gt5">&gt; 5</string> <!-- &gt; is '>' -->
+
     <!--Strings arrays used to populate searchFragment spinners -->
+    <string name="search_fragment_title">Seleccione el filtro de búsqueda</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string-array name="themes_of_route">
         <item>@string/default_spinner_choice</item>
         <item>@string/no_theme_choice</item>
@@ -54,6 +58,8 @@
         <item>Naturaleza</item>
         <item>Bares</item>
     </string-array>
+
+
     <string-array name="lengths_of_route">
         <item>@string/default_spinner_choice</item>
         <item>@string/lt1</item>
@@ -73,9 +79,5 @@
         <item>@string/between4_5</item>
         <item>@string/gt5</item>
     </string-array>
-
-
-    <string name="search_fragment_title">Seleccione el filtro de búsqueda</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
 </resources>
