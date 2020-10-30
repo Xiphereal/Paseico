@@ -52,7 +52,7 @@
         <activity android:name=".RouteFinishedActivity" />
 
         <activity android:name=".RegisterActivity"/>
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".MainMenuActivity"/>
         <activity android:name=".LogInActivity"/>
         <activity android:name=".OpeningActivity">
         <intent-filter>

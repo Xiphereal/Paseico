@@ -41,7 +41,7 @@ public class OpeningActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     } else {
-                        Intent intent = new Intent(OpeningActivity.this, MainActivity.class);
+                        Intent intent = new Intent(OpeningActivity.this, MainMenuActivity.class);
                         startActivity(intent);
                         finish();
                     }

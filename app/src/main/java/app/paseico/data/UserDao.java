@@ -1,8 +1,11 @@
-package app.paseico;
+package app.paseico.data;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import app.paseico.IUserDao;
+import app.paseico.data.User;
 
 public class UserDao implements IUserDao {
     private DatabaseReference myUsersRef = FirebaseDatabase.getInstance().getReference("users"); //Node users reference

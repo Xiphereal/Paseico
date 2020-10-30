@@ -1,4 +1,4 @@
-package app.paseico;
+package app.paseico.data;
 
 public class User {
     private String name;

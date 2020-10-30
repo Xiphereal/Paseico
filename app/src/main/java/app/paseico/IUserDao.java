@@ -2,6 +2,8 @@ package app.paseico;
 
 import com.google.firebase.auth.FirebaseUser;
 
+import app.paseico.data.User;
+
 
 public interface IUserDao {
     public User getUser();
