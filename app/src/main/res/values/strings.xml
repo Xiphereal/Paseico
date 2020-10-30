@@ -35,7 +35,6 @@
     <string name="no_theme_choice">Sin temática</string>
 
 
-
     <string name="lt0.5">&lt; 0,5</string>
     <string name="between0.5_1">0.5-1</string>
     <string name="lt1">&lt; 1</string> <!-- &lt; is '<' -->
@@ -77,5 +76,17 @@
 
     <string name="search_fragment_title">Seleccione el filtro de búsqueda</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="title_activity_main_menu">MainMenuActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_profile">Perfil</string>
+    <string name="menu_routes">Rutas</string>
+    <string name="menu_searcher">Buscar rutas</string>
+    <string name="menu_marketplace">Tienda</string>
 
 </resources>
