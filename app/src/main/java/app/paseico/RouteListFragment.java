@@ -1,9 +1,11 @@
 package app.paseico;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -41,6 +43,16 @@ public class RouteListFragment extends Fragment {
         ListView listView_filteredRoutes = (ListView) view.findViewById(R.id.listView_filteredRoutes);
         listView_filteredRoutes.setAdapter(adapter_filteredRoutes);
 
+        listView_filteredRoutes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Route selectedRoute = filteredRoutes[position];
+
+                Intent selectedRouteIntent = new Intent(getActivity(), RouteInformationActivity.class);
+                selectedRouteIntent.putExtra("route", selectedRoute);
+                startActivity(selectedRouteIntent);
+            }
+        });
 
         view.findViewById(R.id.btn_routeList_back).setOnClickListener(view1 -> NavHostFragment.findNavController(RouteListFragment.this)
                 .navigate(R.id.action_RouteListFragment_to_SearchFragment));
