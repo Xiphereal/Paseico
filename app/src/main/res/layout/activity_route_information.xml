@@ -18,7 +18,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView_routeInfo_rewardPointsText" />
 
     <TextView
-        android:id="@+id/textView_routeInfo_themeText6"
+        android:id="@+id/textView_routeInfo_length"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@+id/textView_routeInfo_themeText3"
@@ -60,7 +60,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView_routeInfo_estimatedTimeText3" />
 
     <TextView
-        android:id="@+id/textView_routeInfo_numberOfPOIText2"
+        android:id="@+id/textView_routeInfo_numberOfPOI"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@+id/textView_routeInfo_numberOfPOIText"
@@ -144,6 +144,6 @@
         android:layout_marginTop="68dp"
         android:text="@string/start_route"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_routeInfo_numberOfPOIText2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_routeInfo_numberOfPOI" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
