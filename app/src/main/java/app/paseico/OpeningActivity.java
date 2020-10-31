@@ -20,8 +20,6 @@ public class OpeningActivity extends AppCompatActivity {
         setContentView(R.layout.activity_opening);
 
         mAuth = FirebaseAuth.getInstance();
-
-
     }
 
     @Override
@@ -36,7 +34,7 @@ public class OpeningActivity extends AppCompatActivity {
                 try {
                     ProgressBar pBar = findViewById(R.id.progressBar);
                     pBar.setVisibility(View.GONE);
-                    if(currentUser == null){
+                    if (currentUser == null) {
                         Intent intent = new Intent(OpeningActivity.this, LogInActivity.class);
                         startActivity(intent);
                         finish();
@@ -45,8 +43,10 @@ public class OpeningActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     }
-                }catch (Exception e){}
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-        },2000);
+        }, 2000);
     }
 }
