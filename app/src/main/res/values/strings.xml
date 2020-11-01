@@ -88,5 +88,7 @@
     <string name="menu_routes">Rutas</string>
     <string name="menu_searcher">Buscar rutas</string>
     <string name="menu_marketplace">Tienda</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

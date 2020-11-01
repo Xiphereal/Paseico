@@ -1,18 +1,50 @@
 package app.paseico.data;
 
+import android.provider.ContactsContract;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import app.paseico.IUserDao;
 import app.paseico.data.User;
 
 public class UserDao implements IUserDao {
     private DatabaseReference myUsersRef = FirebaseDatabase.getInstance().getReference("users"); //Node users reference
+    private User user = new User();
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private FirebaseUser fbusr = firebaseAuth.getCurrentUser();
+    private DatabaseReference myActualUserRef;
+
+    public UserDao() {
+        try {
+            myActualUserRef = myUsersRef.child(fbusr.getUid());
+            myActualUserRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    user = snapshot.getValue(User.class);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    System.out.println("The db connection failed");
+                }
+            });
+            
+        } catch(Exception e){}
+    }
 
     @Override
     public User getUser() {
-        return null;
+        return user;
     }
 
     @Override
@@ -29,6 +61,15 @@ public class UserDao implements IUserDao {
         String fullname = name + " " + surname;
         User newUser = new User(fullname,username,user.getEmail());
         myUsersRef.child(user.getUid()).setValue(newUser);
+    }
+
+    @Override
+    public void updatePoints(int pts) {
+        final int points = pts;
+        int actualPoints = user.getPoints();
+        int updatedPoints = points + actualPoints;
+        final DatabaseReference myPointsReference = myActualUserRef.child("points");
+        myPointsReference.setValue(updatedPoints);
     }
 
 
