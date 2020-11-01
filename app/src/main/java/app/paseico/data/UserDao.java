@@ -4,6 +4,7 @@ import android.provider.ContactsContract;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,7 +39,7 @@ public class UserDao implements IUserDao {
                     System.out.println("The db connection failed");
                 }
             });
-            
+
         } catch(Exception e){}
     }
 
@@ -63,14 +64,6 @@ public class UserDao implements IUserDao {
         myUsersRef.child(user.getUid()).setValue(newUser);
     }
 
-    @Override
-    public void updatePoints(int pts) {
-        final int points = pts;
-        int actualPoints = user.getPoints();
-        int updatedPoints = points + actualPoints;
-        final DatabaseReference myPointsReference = myActualUserRef.child("points");
-        myPointsReference.setValue(updatedPoints);
-    }
 
 
 }

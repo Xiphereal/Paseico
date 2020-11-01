@@ -1,5 +1,9 @@
 package app.paseico.data;
 
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class User {
     private String name;
     private String email;
@@ -7,6 +11,7 @@ public class User {
     private String password;
     private int points;
     private boolean boost;
+    private LocalDateTime boostExpires;
 
     public User(String name, String username, String email) {
         this.name = name;
@@ -14,6 +19,7 @@ public class User {
         this.username = username;
         this.points = 0;
         this.boost = false;
+        this.boostExpires = null;
     }
 
     public User(){}

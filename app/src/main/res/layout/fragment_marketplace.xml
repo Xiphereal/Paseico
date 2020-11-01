@@ -8,28 +8,16 @@ android:layout_height="match_parent"
 tools:context=".ui.marketplace.marketplaceFragment">
 
     <TextView
-        android:id="@+id/marketplaceTitleTextView"
+        android:id="@+id/textViewMarketplaceName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="PASEICO"
-        android:textSize="50sp"
+        android:text="Marketplace"
+        android:textSize="36sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textViewMarketplaceName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Marketplace"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/marketplaceTitleTextView" />
 
     <Button
         android:id="@+id/buttonMarketplaceDescuentos"
@@ -251,5 +239,28 @@ tools:context=".ui.marketplace.marketplaceFragment">
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageViewBuyBoost5w" />
+
+    <TextView
+        android:id="@+id/textViewMarketplacePTS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewMarketplaceBoostPrice2000" />
+
+    <ProgressBar
+        android:id="@+id/progressBarMarketPlace"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,6 +9,5 @@ public interface IUserDao {
     public User getUser();
     public void addGoogleUser(FirebaseUser user,String name);
     public void addUser(FirebaseUser user, String username, String name, String surname);
-    void updatePoints(int points);
 
 }
