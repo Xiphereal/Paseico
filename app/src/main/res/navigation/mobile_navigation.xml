@@ -1,25 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_profile">
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/mobile_navigation"
+            app:startDestination="@id/UserCreatedRoutes">
 
     <fragment
-        android:id="@+id/nav_profile"
-        android:name="app.paseico.ui.profile.profileFragment"
-        android:label="@string/menu_profile"
-        tools:layout="@layout/fragment_profile" />
+            android:id="@+id/Profile"
+            android:name="app.paseico.mainMenu.profile.profileFragment"
+            android:label="@string/menu_profile"
+            tools:layout="@layout/fragment_profile"/>
 
     <fragment
-        android:id="@+id/nav_routes"
-        android:name="app.paseico.ui.routes.RoutesFragment"
-        android:label="@string/menu_routes"
-        tools:layout="@layout/fragment_routes" />
+            android:id="@+id/UserCreatedRoutes"
+            android:name="app.paseico.mainMenu.userCreatedRoutes.UserCreatedRoutesFragment"
+            android:label="@string/menu_user_created_routes"
+            tools:layout="@layout/fragment_user_created_routes"/>
 
     <fragment
-        android:id="@+id/nav_searcher"
-        android:name="app.paseico.ui.searcher.SlideshowFragment"
-        android:label="@string/menu_searcher"
-        tools:layout="@layout/fragment_slideshow" />
+            android:id="@+id/RouteSearchFragment"
+            android:name="app.paseico.mainMenu.searcher.RouteSearchFragment"
+            android:label="@string/menu_route_search_fragment_label"
+            tools:layout="@layout/fragment_route_search">
+        <action
+                android:id="@+id/action_RouteSearchFragment_to_RouteSearchResult"
+                app:destination="@id/RouteSearchResult"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/RouteSearchResult"
+            android:name="app.paseico.mainMenu.searcher.RouteSearchResultFragment"
+            android:label="@string/route_search_result_fragment_label"
+            tools:layout="@layout/fragment_route_search_result">
+
+        <action
+                android:id="@+id/action_RouteSearchResult_to_RouteSearchFragment"
+                app:destination="@id/RouteSearchFragment"/>
+        <argument
+                android:name="filteredList"
+                app:argType="app.paseico.data.Route[]"/>
+    </fragment>
 </navigation>

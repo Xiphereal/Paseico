@@ -1,4 +1,4 @@
-package app.paseico.ui.profile;
+package app.paseico.mainMenu.profile;
 
 import android.content.Intent;
 import android.os.Bundle;

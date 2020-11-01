@@ -1,7 +1,6 @@
-package app.paseico;
+package app.paseico.mainMenu.searcher;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,16 +8,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+import app.paseico.R;
 import app.paseico.data.Route;
 
-public class RouteListFragment extends Fragment {
+public class RouteSearchResultFragment extends Fragment {
 
     @Override
     public View onCreateView(
@@ -26,13 +24,13 @@ public class RouteListFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_route_list, container, false);
+        return inflater.inflate(R.layout.fragment_route_search_result, container, false);
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Route[] filteredRoutes = RouteListFragmentArgs.fromBundle(getArguments()).getFilteredList();
+        Route[] filteredRoutes = RouteSearchResultFragmentArgs.fromBundle(getArguments()).getFilteredList();
         List<String> filteredRoutesList = new ArrayList<>();
 
         for (Route route : filteredRoutes) {
@@ -45,8 +43,8 @@ public class RouteListFragment extends Fragment {
         listView_filteredRoutes.setAdapter(adapter_filteredRoutes);
 
 
-        view.findViewById(R.id.button_second).setOnClickListener(view1 -> NavHostFragment.findNavController(RouteListFragment.this)
-                .navigate(R.id.action_RouteListFragment_to_SearchFragment));
+        view.findViewById(R.id.button_second).setOnClickListener(view1 -> NavHostFragment.findNavController(RouteSearchResultFragment.this)
+                .navigate(R.id.action_RouteSearchResult_to_RouteSearchFragment));
 
 
     }

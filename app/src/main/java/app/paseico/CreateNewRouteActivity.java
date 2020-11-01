@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import app.paseico.service.FirebaseService;
+import app.paseico.mainMenu.userCreatedRoutes.UserCreatedRoutesFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -73,13 +74,13 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
                     FirebaseService.saveRoute(newRoute);
 
                     //We add the created route name to the createdRoutes before returning to the main activity
-                    MainMapActivity.getCreatedRoutes().add(newRoute.getName());
+                    UserCreatedRoutesFragment.getCreatedRoutes().add(newRoute.getName());
 
                     // Take the user back to the main map activity
                     // TODO: Clean the current activity state to prevent the user retrieve the state when
                     //  using the backstack.
-                    Intent goToMainMapIntent = new Intent(getApplicationContext(), MainMapActivity.class);
-                    startActivity(goToMainMapIntent);
+                    Intent goToRoutesIntent = new Intent(getApplicationContext(), MainMenuActivity.class);
+                    startActivity(goToRoutesIntent);
                 });
 
         AlertDialog dialog = builder.create();
