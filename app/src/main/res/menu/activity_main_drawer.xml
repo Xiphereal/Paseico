@@ -9,10 +9,6 @@
                 android:icon="@drawable/ic_menu_camera"
                 android:title="@string/menu_profile"/>
         <item
-                android:id="@+id/nav_create_new_route"
-                android:icon="@drawable/ic_menu_gallery"
-                android:title="Crear Nueva Ruta"/>
-        <item
                 android:id="@+id/nav_routes"
                 android:icon="@drawable/ic_menu_gallery"
                 android:title="@string/menu_routes"/>
