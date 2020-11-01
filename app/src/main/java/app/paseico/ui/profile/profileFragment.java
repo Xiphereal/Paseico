@@ -17,8 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import app.paseico.LogInActivity;
-import app.paseico.MainActivity;
+import app.paseico.login.LogInActivity;
 import app.paseico.R;
 
 public class profileFragment extends Fragment {

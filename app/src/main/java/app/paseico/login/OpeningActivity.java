@@ -1,4 +1,4 @@
-package app.paseico;
+package app.paseico.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +8,8 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import app.paseico.MainMenuActivity;
+import app.paseico.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
