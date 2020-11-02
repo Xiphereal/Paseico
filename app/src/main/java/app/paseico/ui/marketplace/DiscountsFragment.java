@@ -9,9 +9,14 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,16 +37,42 @@ import app.paseico.data.User;
 
 public class DiscountsFragment extends Fragment {
     private View root;
+
     private DatabaseReference myDiscounts = FirebaseDatabase.getInstance().getReference("discounts");
+    private DatabaseReference myUsersRef = FirebaseDatabase.getInstance().getReference("users"); //Node users reference
+    private DatabaseReference myActualUserRef;
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private FirebaseUser fbusr = firebaseAuth.getCurrentUser();
+
+    private User user = new User();
+
     private List<Discount> discounts;
     private List<DiscountObj> listDiscounts = new ArrayList<DiscountObj>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
+
+
         root =inflater.inflate(R.layout.fragment_discounts, container, false);
 
+        ListView discountsList = root.findViewById(R.id.ListViewDiscounts);
+        TextView myUserPoints = root.findViewById(R.id.textViewDiscountsUserPoints);
+
+        myActualUserRef = myUsersRef.child(fbusr.getUid());
+        myActualUserRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                user = snapshot.getValue(User.class);
+                myUserPoints.setText("Tus puntos: "+user.getPoints());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("The db connection failed");
+            }
+        });
         myDiscounts.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -50,7 +81,7 @@ public class DiscountsFragment extends Fragment {
                 Map<String, Discount> map = snapshot.getValue(genericTypeIndicator);
                 discounts = new ArrayList<>(map.values());
 
-                ListView discountsList = root.findViewById(R.id.ListViewDiscounts);
+
 
                 for(int i = 0; i < discounts.size(); i++){
                     String n = discounts.get(i).getName();
@@ -61,6 +92,8 @@ public class DiscountsFragment extends Fragment {
 
                 ArrayAdapter<DiscountObj> adapter = new ArrayAdapter<DiscountObj>(getActivity(), android.R.layout.simple_list_item_1, listDiscounts);
                 discountsList.setAdapter(adapter);
+
+
             }
 
             @Override
@@ -69,6 +102,19 @@ public class DiscountsFragment extends Fragment {
             }
         });
 
+        discountsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                final DatabaseReference myPointsReference = myActualUserRef.child("points");
+                if(discounts.get(i).getPoints()<=user.getPoints()){
+                    int updatedPoints = user.getPoints() - discounts.get(i).getPoints();
+                    myPointsReference.setValue(updatedPoints);
+                    Toast.makeText(getActivity(), "Enhorabuena! Acabas de canjear un descuento de " + discounts.get(i).getName() , Toast.LENGTH_SHORT).show();
+                } else{
+                    Toast.makeText(getActivity(), "No tienes puntos suficientes para canjear el descuento de " + discounts.get(i).getName() , Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
 
         return root;
