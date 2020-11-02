@@ -8,6 +8,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -28,9 +30,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.Map;
 
 import app.paseico.R;
+import app.paseico.SearchFragment;
+import app.paseico.SearchFragmentDirections;
+import app.paseico.data.Discount;
 import app.paseico.data.User;
 
 
@@ -45,14 +56,16 @@ public class marketplaceFragment extends Fragment {
     private DatabaseReference myActualUserRef;
     private Button btsDiscounts;
     private TextView tv7,tvm1000,tvm2000,tvm6000,tvme3,tvme5,tvme12,tvBoost,tvB2w,tvB5w,tvBPrice2000,tvBPrice6000,pointsView;
-    private  ImageView btnBuyBoost2w,btnBuyBoost5w,btnBuy1000pts,btnBuy2000pts,btnBuy6000pts;
+    private  ImageView btnBuyBoost2w,btnBuyBoost5w,btnBuy1000pts,btnBuy2000pts,btnBuy6000pts, btnFreeAd;
     private ProgressBar pbar;
+    private DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-         root = inflater.inflate(R.layout.fragment_marketplace, container, false);
-
+        root = inflater.inflate(R.layout.fragment_marketplace, container, false);
+        btnFreeAd = root.findViewById(R.id.imageViewFreeAd);
+        btnFreeAd.setVisibility(View.GONE);
         pbar = root.findViewById(R.id.progressBarMarketPlace);
         btsDiscounts =  root.findViewById(R.id.buttonMarketplaceDescuentos);
         btsDiscounts.setVisibility(View.GONE);
@@ -140,13 +153,31 @@ public class marketplaceFragment extends Fragment {
         });
 
         btnBuyBoost5w.setOnClickListener(new View.OnClickListener(){
-            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
                 buyBoost(5);
             }
         });
 
+       /* btnFreeAd.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                try {
+                    watchFreeAd();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        });*/
+
+       btsDiscounts.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               NavDirections action = marketplaceFragmentDirections.actionNavMarketplaceToDiscountsFragment();
+               NavHostFragment.findNavController(marketplaceFragment.this)
+                       .navigate(action);
+           }
+       });
 
         return root;
     }
@@ -158,6 +189,7 @@ public class marketplaceFragment extends Fragment {
         final DatabaseReference myPointsReference = myActualUserRef.child("points");
         myPointsReference.setValue(updatedPoints);
         successAnimation();
+        Toast.makeText(getActivity(), "Puntos comprados!", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -167,11 +199,12 @@ public class marketplaceFragment extends Fragment {
         final DatabaseReference myBoostReference = myActualUserRef.child("boost");
         final DatabaseReference myBoostDateReference = myActualUserRef.child("boostExpires");
         if(!user.isBoost()) {
-            LocalDateTime actualDate = LocalDateTime.now();
+            Date actualDate = new Date();
             if(option == 2 && user.getPoints() >= 2000 || option == 5 && user.getPoints() >= 6000) {
-                actualDate = actualDate.plusWeeks(option);
+                actualDate.setDate((int) (actualDate.getDate() + (7*option)));
                 myBoostReference.setValue(true);
-                myBoostDateReference.setValue(actualDate);
+                String strActualDate = dateFormat.format(actualDate).toString();
+                myBoostDateReference.setValue(strActualDate);
                 int actualPoints = user.getPoints();
                 int pointsToSubtract;
                 if(option == 2){pointsToSubtract = -2000;}else{pointsToSubtract = -6000;}
@@ -191,6 +224,7 @@ public class marketplaceFragment extends Fragment {
     }
 
     private void elementsVisible(){
+        btnFreeAd.setVisibility(View.VISIBLE);
         pbar.setVisibility(View.GONE);
         btsDiscounts.setVisibility(View.VISIBLE);
         tv7.setVisibility(View.VISIBLE);
@@ -239,4 +273,38 @@ public class marketplaceFragment extends Fragment {
             }
         },450);
     }
+
+
+    /*private void watchFreeAd() throws ParseException {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date = new Date();
+            Date actualDate = date;
+            String strDate = dateFormat.format(actualDate).toString();
+
+            String strLastFreeAd = user.getLastFreeAd();
+            Date lastFreeAd = dateFormat.parse(strLastFreeAd);
+            Date plus24Date = new Date();
+            plus24Date.setDate(lastFreeAd.getDate() + 1);
+
+
+            if (plus24Date.compareTo(actualDate) > 0) {
+                final int points = 5;
+                int actualPoints = user.getPoints();
+                int updatedPoints = points + actualPoints;
+                final DatabaseReference myPointsReference = myActualUserRef.child("points");
+                final DatabaseReference myLastFreeAdReference = myActualUserRef.child("lastFreeAd");
+                myPointsReference.setValue(updatedPoints);
+                myLastFreeAdReference.setValue(strDate);
+                successAnimation();
+                Toast.makeText(getActivity(), "Gracias por ver el video! Aqui tienes 5 puntos! Vuelve dentro de 24 horas!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), "Aún no puedes ver otro video, tienen que pasar 24 horas desde la ultima vez!", Toast.LENGTH_SHORT).show();
+            }
+
+    }
+    */
+
+
+
+
 }

@@ -15,6 +15,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import app.paseico.IUserDao;
 import app.paseico.data.User;
 
@@ -53,14 +57,22 @@ public class UserDao implements IUserDao {
         String email = user.getEmail();
         String[] parts = email.split("@");
         String username = parts[0];
-        User newUser = new User(name,username,user.getEmail());
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        date.setDate(date.getDate() -1);
+        String strDate = dateFormat.format(date).toString();
+        User newUser = new User(name,username,user.getEmail(),strDate);
         myUsersRef.child(user.getUid()).setValue(newUser);
     }
 
     @Override
     public void addUser(FirebaseUser user, String username, String name, String surname) {
         String fullname = name + " " + surname;
-        User newUser = new User(fullname,username,user.getEmail());
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        date.setDate(date.getDate() -1);
+        String strDate = dateFormat.format(date).toString();
+        User newUser = new User(fullname,username,user.getEmail(),strDate);
         myUsersRef.child(user.getUid()).setValue(newUser);
     }
 

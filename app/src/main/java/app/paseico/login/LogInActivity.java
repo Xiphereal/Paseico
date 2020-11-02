@@ -133,10 +133,11 @@ public class LogInActivity extends AppCompatActivity {
                             handler.postDelayed(new Runnable() { //Wait 2 secs to load the next activity (LoginScreen)
                                 @Override
                                 public void run() {
-                                    try {
+
+                                        Log.w("TAG", "GOOOOOOOOOOOOGLE", task.getException());
                                         uDao.addGoogleUser(user,account.getDisplayName());
                                         goToMainScreen();
-                                    }catch (Exception e){}
+
                                 }
                             },3000);
 
@@ -164,7 +165,6 @@ public class LogInActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("TAG", "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-
                             goToMainScreen();
                         } else {
                             // If sign in fails, display a message to the user.
