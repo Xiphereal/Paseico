@@ -41,3 +41,4 @@ public class PointOfInterest {
     public void setLongitude(Double longitude) { this.longitude = longitude; }
     public void setLatitude(Double latitude) { this.latitude = latitude; }
 }
+//
