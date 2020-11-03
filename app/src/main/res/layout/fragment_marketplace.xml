@@ -28,7 +28,7 @@ tools:context=".ui.marketplace.marketplaceFragment">
         android:layout_marginTop="20dp"
         android:layout_marginEnd="50dp"
         android:layout_marginRight="50dp"
-        android:text="DESCUENTOS"
+        android:text="@string/discounts"
         app:backgroundTint="#FF5722"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -86,33 +86,31 @@ tools:context=".ui.marketplace.marketplaceFragment">
 
     <ImageView
         android:id="@+id/imageViewBuy2000Points"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_marginTop="10dp"
-        android:src="@drawable/logo"
+        android:src="@drawable/coin_stack_1"
         app:layout_constraintEnd_toStartOf="@+id/imageViewBuy6000Points"
         app:layout_constraintStart_toEndOf="@+id/imageViewBuy1000Points"
         app:layout_constraintTop_toBottomOf="@+id/textViewMarketplace2000" />
 
     <ImageView
         android:id="@+id/imageViewBuy6000Points"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginRight="30dp"
-        android:src="@drawable/logo"
+        android:layout_marginEnd="40dp"
+        android:src="@drawable/coins_1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewMarketplace6000" />
 
     <ImageView
         android:id="@+id/imageViewBuy1000Points"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="10dp"
-        android:src="@drawable/logo"
+        android:src="@drawable/coin_1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewMarketplace1000" />
 
@@ -194,23 +192,21 @@ tools:context=".ui.marketplace.marketplaceFragment">
 
     <ImageView
         android:id="@+id/imageViewBuyBoost2w"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="65dp"
-        android:layout_marginLeft="65dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="75dp"
         android:layout_marginTop="10dp"
-        android:src="@drawable/logo"
+        android:src="@drawable/fireworks_1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewMarketplaceBoost2w" />
 
     <ImageView
         android:id="@+id/imageViewBuyBoost5w"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="65dp"
-        android:layout_marginRight="65dp"
-        android:src="@drawable/logo"
+        android:layout_marginEnd="75dp"
+        android:src="@drawable/startup_1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewMarketplace5w" />
 

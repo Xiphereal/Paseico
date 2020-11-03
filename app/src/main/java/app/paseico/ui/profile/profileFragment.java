@@ -36,6 +36,7 @@ public class profileFragment extends Fragment {
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseUser fbusr = firebaseAuth.getCurrentUser();
     private DatabaseReference myActualUserRef;
+    private  Boolean firstTimeCheckBoost = false;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -62,7 +63,10 @@ public class profileFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 user = snapshot.getValue(User.class);
-                if(user.isBoost()){checkBoost();}
+                if(user.isBoost() && !firstTimeCheckBoost){
+                    checkBoost();
+                    firstTimeCheckBoost = true;
+                }
             }
 
             @Override
@@ -77,22 +81,22 @@ public class profileFragment extends Fragment {
 
     public void checkBoost() {  //Check if the boost its already gone
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-
-        String strBoostDateEnding = user.getBoostExpires();
-        Date actualDate = new Date();
-        Date boostDateEnding = null;
-        try {
-            boostDateEnding = dateFormat.parse(strBoostDateEnding);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        if(actualDate.compareTo(boostDateEnding) >= 0){
-            Toast.makeText(getActivity(), "Tu boost ha caducado!", Toast.LENGTH_SHORT).show();
-            final DatabaseReference myBoostReference = myActualUserRef.child("boost");
-            myBoostReference.setValue(false);
-        }
-        else{
-            Toast.makeText(getActivity(), "Tienes un boost activo que caducará el día :" + user.getBoostExpires(), Toast.LENGTH_SHORT).show();
+        if(user.getBoostExpires() != null) {
+            String strBoostDateEnding = user.getBoostExpires();
+            Date actualDate = new Date();
+            Date boostDateEnding = null;
+            try {
+                boostDateEnding = dateFormat.parse(strBoostDateEnding);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            if (actualDate.compareTo(boostDateEnding) >= 0) {
+                Toast.makeText(getActivity(), "Tu boost ha caducado!", Toast.LENGTH_SHORT).show();
+                final DatabaseReference myBoostReference = myActualUserRef.child("boost");
+                myBoostReference.setValue(false);
+            } else {
+                Toast.makeText(getActivity(), "Tienes un boost activo que caducará el día :" + user.getBoostExpires(), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
