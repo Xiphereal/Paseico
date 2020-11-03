@@ -35,8 +35,6 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     private ArrayAdapter<String> markedPOIsAdapter;
     private List<String> markedPOIs = new ArrayList<>();
 
-    private Marker selectedMarker;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
