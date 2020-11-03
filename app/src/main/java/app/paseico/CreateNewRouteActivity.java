@@ -156,12 +156,12 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     }
 
     private PointOfInterest findClickedPointOfInterest(@NotNull Marker marker) {
-        LatLng l = marker.getPosition();
-        Double lat = l.latitude;
-        Double lon = l.longitude;
-        PointOfInterest p = new PointOfInterest(lat,lon,marker.getTitle());
+        LatLng latLangMarker = marker.getPosition();
+        Double lat = latLangMarker.latitude;
+        Double lon = latLangMarker.longitude;
+        PointOfInterest markerPOI = new PointOfInterest(lat,lon,marker.getTitle());
         for (PointOfInterest poi : selectedPointsOfInterest) {
-            if (poi.equals(p)){
+            if (poi.equals(markerPOI)){
                 return poi;
             }
         }
