@@ -31,6 +31,13 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+        <activity
+            android:name=".MainMapActivity"
+            android:label="@string/title_activity_main_map"></activity>
+        <activity
+            android:name=".RouteSearchActivity"
+            android:label="@string/title_activity_route_search"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".CreateNewRouteActivity"></activity>
         <activity android:name=".RouteRunnerActivity" />
         <activity android:name=".TemporalRoutesMenu"></activity>
