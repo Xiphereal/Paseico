@@ -1,4 +1,4 @@
-package app.paseico.ui.marketplace;
+package app.paseico.mainMenu.marketplace;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -54,8 +54,7 @@ public class DiscountsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
-
-        root =inflater.inflate(R.layout.fragment_discounts, container, false);
+        root = inflater.inflate(R.layout.fragment_discounts, container, false);
 
         ListView discountsList = root.findViewById(R.id.ListViewDiscounts);
         TextView myUserPoints = root.findViewById(R.id.textViewDiscountsUserPoints);
@@ -65,7 +64,7 @@ public class DiscountsFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 user = snapshot.getValue(User.class);
-                myUserPoints.setText("Tus puntos: "+user.getPoints());
+                myUserPoints.setText("Tus puntos: " + user.getPoints());
             }
 
             @Override
@@ -82,12 +81,11 @@ public class DiscountsFragment extends Fragment {
                 discounts = new ArrayList<>(map.values());
 
 
-
-                for(int i = 0; i < discounts.size(); i++){
+                for (int i = 0; i < discounts.size(); i++) {
                     String n = discounts.get(i).getName();
                     String p = discounts.get(i).getPercentage();
                     int pts = discounts.get(i).getPoints();
-                    listDiscounts.add(new DiscountObj(n,p,pts));
+                    listDiscounts.add(new DiscountObj(n, p, pts));
                 }
 
                 ArrayAdapter<DiscountObj> adapter = new ArrayAdapter<DiscountObj>(getActivity(), android.R.layout.simple_list_item_1, listDiscounts);
@@ -106,12 +104,12 @@ public class DiscountsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 final DatabaseReference myPointsReference = myActualUserRef.child("points");
-                if(discounts.get(i).getPoints()<=user.getPoints()){
+                if (discounts.get(i).getPoints() <= user.getPoints()) {
                     int updatedPoints = user.getPoints() - discounts.get(i).getPoints();
                     myPointsReference.setValue(updatedPoints);
-                    Toast.makeText(getActivity(), "Enhorabuena! Acabas de canjear un descuento de " + discounts.get(i).getName() , Toast.LENGTH_SHORT).show();
-                } else{
-                    Toast.makeText(getActivity(), "No tienes puntos suficientes para canjear el descuento de " + discounts.get(i).getName() , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Enhorabuena! Acabas de canjear un descuento de " + discounts.get(i).getName(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "No tienes puntos suficientes para canjear el descuento de " + discounts.get(i).getName(), Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -43,7 +43,7 @@
 
     <fragment
             android:id="@+id/nav_marketplace"
-            android:name="app.paseico.ui.marketplace.marketplaceFragment"
+            android:name="app.paseico.mainMenu.marketplace.marketplaceFragment"
             android:label="@string/menu_searcher"
             tools:layout="@layout/fragment_marketplace">
         <action
@@ -52,7 +52,7 @@
     </fragment>
     <fragment
             android:id="@+id/discountsFragment"
-            android:name="app.paseico.ui.marketplace.DiscountsFragment"
+            android:name="app.paseico.mainMenu.marketplace.DiscountsFragment"
             android:label="fragment_discounts"
             tools:layout="@layout/fragment_discounts"/>
 </navigation>

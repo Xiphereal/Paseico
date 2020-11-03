@@ -1,9 +1,5 @@
 package app.paseico.data;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
-
 public class User {
     private String name;
     private String email;
@@ -14,11 +10,8 @@ public class User {
     private String boostExpires;
     private String lastFreeAd;
 
-
-    public User(){
-
+    public User() {
     }
-
 
     public User(String name, String username, String email, String lastFreeAd) {
         this.name = name;
@@ -28,12 +21,7 @@ public class User {
         this.boost = false;
         this.boostExpires = null;
         this.lastFreeAd = lastFreeAd;
-
     }
-
-
-
-
 
     public String getName() {
         return name;
@@ -75,9 +63,13 @@ public class User {
         this.points = points;
     }
 
-    public void addPoints(int pts) {this.points = this.points + pts;}
+    public void addPoints(int pts) {
+        this.points = this.points + pts;
+    }
 
-    public void subtractPoints(int pts) {this.points = this.points - pts;}
+    public void subtractPoints(int pts) {
+        this.points = this.points - pts;
+    }
 
     public boolean isBoost() {
         return boost;
@@ -87,7 +79,12 @@ public class User {
         this.boost = boost;
     }
 
-    public String getLastFreeAd(){return lastFreeAd;}
-    public String getBoostExpires(){return boostExpires;}
+    public String getLastFreeAd() {
+        return lastFreeAd;
+    }
+
+    public String getBoostExpires() {
+        return boostExpires;
+    }
 }
 
