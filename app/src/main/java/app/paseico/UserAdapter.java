@@ -19,18 +19,20 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.auth.User;
+
 import java.util.List;
 
+import app.paseico.Fragment.ProfileFragment;
+import app.paseico.data.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     private Context mContext;
-    private List<User> mUsers; //CAMBIAR CUANDO SE IMPLEMENTE LOGIN ES USER PASEICO NO USER FIREBASE
+    private List<User> mUsers;
     private FirebaseUser firebaseUser;
 
-    public UserAdapter(Context mContext, List<User> mUsers) //CAMBIAR CUANDO SE IMPLEMENTE LOGIN ES USER PASEICO NO USER FIREBASE
+    public UserAdapter(Context mContext, List<User> mUsers)
     {
         this.mContext = mContext;
         this.mUsers = mUsers;
@@ -50,9 +52,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         holder.btn_follow.setVisibility(View.VISIBLE);
 
-        /*holder.username.setText(user.getUsername());
-        holder.fullname.setText(user.getFullname)
-        Glide.with(mContext).load(user.getImageurl()).into(holder.image_profile);*/
+        holder.username.setText(user.getUsername());
+        holder.fullname.setText(user.getName());
+        Glide.with(mContext).load(user.getImageurl()).into(holder.image_profile);
         isFollowing(user.getId(), holder.btn_follow);
 
         if (user.getId().equals(firebaseUser.getUid())){
@@ -66,7 +68,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 editor.putString("profileid", user.getId());
                 editor.apply();
 
-                ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_view_tag, //.fragment_container
+                ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction().replace(R.id.main_map, //DUDA hecho para activity_main_map
                         new ProfileFragment()).commit();
             }
         });
@@ -127,6 +129,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        })
+        });
     }
 }
