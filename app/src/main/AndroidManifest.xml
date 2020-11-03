@@ -33,7 +33,8 @@
 
         <activity
             android:name=".MainMapActivity"
-            android:label="@string/title_activity_main_map"></activity>
+            android:label="@string/title_activity_main_map">
+        </activity>
         <activity
             android:name=".RouteSearchActivity"
             android:label="@string/title_activity_route_search"
