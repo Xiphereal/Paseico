@@ -7,6 +7,8 @@ package app.paseico;
         import androidx.fragment.app.FragmentActivity;
 
         import android.Manifest;
+        import android.app.AlertDialog;
+        import android.content.DialogInterface;
         import android.content.Intent;
         import android.content.pm.PackageManager;
         import android.location.Location;
@@ -14,6 +16,7 @@ package app.paseico;
         import android.view.View;
         import android.widget.AdapterView;
         import android.widget.ArrayAdapter;
+        import android.widget.Button;
         import android.widget.ImageButton;
         import android.widget.ListView;
         import android.widget.TextView;
@@ -131,6 +134,14 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
             }
         }
 
+
+        cancelRoute.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v){
+
+            }
+
+        });
+
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, pointsOfInterestNames);
 
         listView.setAdapter(arrayAdapter);
@@ -160,21 +171,49 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
 
         cancelRoute.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
-                poisLeft = 0;
-                for(int i = 0; i < locations.size(); i++) {
-                    isCompleted.set(i, false);
+                CreateConfirmation();
+                System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                /*for(int j = 0; j < locations.size(); j++) {
+                    isCompleted.set(j, false);
                     poisLeft++;
                 }
-
                 Intent intent = new Intent(RouteRunnerActivity.this, TemporalRoutesMenu.class);
                 startActivity(intent);
-                finish();
+                finish();*/
             }
 
         });
 
 
 
+    }
+
+    public void CreateConfirmation() {
+        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("¿Estás seguro de que deseas cancelar?");
+        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                poisLeft = 0;
+                for(int j = 0; j < locations.size(); j++) {
+                    isCompleted.set(j, false);
+                    poisLeft++;
+                }
+                Intent intent = new Intent(RouteRunnerActivity.this, TemporalRoutesMenu.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        builder.create();
+        builder.show();
     }
 
     public void placePOIsFromRoute(ArrayList<String> POIsNames, ArrayList<LatLng> POIsLocations, ArrayList<Boolean> POIsCompleted){
@@ -225,6 +264,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
             }
         }
     }
+
 
     //to get user location
     private void getMyLocation() {
@@ -282,6 +322,8 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
         placePOIsFromRoute(pointsOfInterestNames, locations, isCompleted);
 
     }
+
+
 
 
     // function to find Routes.
