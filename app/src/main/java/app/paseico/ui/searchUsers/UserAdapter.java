@@ -1,4 +1,4 @@
-package app.paseico;
+package app.paseico.ui.searchUsers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
-import app.paseico.Fragment.ProfileFragment;
+import app.paseico.R;
 import app.paseico.data.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -54,21 +54,22 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         holder.username.setText(user.getUsername());
         holder.fullname.setText(user.getName());
-        Glide.with(mContext).load(user.getImageurl()).into(holder.image_profile);
-        isFollowing(user.getId(), holder.btn_follow);
+        Glide.with(mContext).load("@drawable/ic_user").into(holder.image_profile);//Glide.with(mContext).load(user.getImageurl()).into(holder.image_profile);
+        isFollowing(user.getUsername(), holder.btn_follow);
 
-        if (user.getId().equals(firebaseUser.getUid())){
+        if (user.getUsername().equals(firebaseUser.getUid())){
+            System.out.println(user.getUsername() + " " + firebaseUser.getUid() + "----------------------------------------");
             holder.btn_follow.setVisibility(View.GONE);
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener(){
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
                 SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
-                editor.putString("profileid", user.getId());
+                editor.putString("profileid", user.getUsername());
                 editor.apply();
 
-                ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction().replace(R.id.main_map, //DUDA hecho para activity_main_map
+                ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction().replace(R.id.nav_view, //DUDA hecho para activity_main_menu
                         new ProfileFragment()).commit();
             }
         });
@@ -78,13 +79,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             public void onClick(View view){
                 if(holder.btn_follow.getText().toString().equals("follow")){
                     FirebaseDatabase.getInstance().getReference().child("Follow").child(firebaseUser.getUid())
-                            .child("following").child(user.getId()).setValue(true);
-                    FirebaseDatabase.getInstance().getReference().child("Follow").child(user.getId())
+                            .child("following").child(user.getUsername()).setValue(true);
+                    FirebaseDatabase.getInstance().getReference().child("Follow").child(user.getUsername())
                             .child("followers").child(firebaseUser.getUid()).setValue(true);
                 }else{
                     FirebaseDatabase.getInstance().getReference().child("Follow").child(firebaseUser.getUid())
-                            .child("following").child(user.getId()).removeValue();
-                    FirebaseDatabase.getInstance().getReference().child("Follow").child(user.getId())
+                            .child("following").child(user.getUsername()).removeValue();
+                    FirebaseDatabase.getInstance().getReference().child("Follow").child(user.getUsername())
                             .child("followers").child(firebaseUser.getUid()).removeValue();
                 }
             }

@@ -13,15 +13,13 @@ public class User {
     private boolean boost;
     private String boostExpires;
     private String lastFreeAd;
-    private String imageurl;
-    private String id;
 
     public User(){
 
     }
 
 
-    public User(String name, String username, String email, String lastFreeAd, String imageurl, String id) {
+    public User(String name, String username, String email, String lastFreeAd) {
         this.name = name;
         this.email = email;
         this.username = username;
@@ -29,14 +27,7 @@ public class User {
         this.boost = false;
         this.boostExpires = null;
         this.lastFreeAd = lastFreeAd;
-        this.imageurl = imageurl;
-        this.id = id;
-
     }
-
-
-
-
 
     public String getName() {
         return name;
@@ -69,14 +60,6 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public String getImageurl() { return imageurl; }
-
-    public void setImageurl(String imageurl){ this.imageurl = imageurl; }
-
-    public String getId(){ return id;}
-
-    public void setId(String id){ this.id = id; }
 
     public int getPoints() {
         return points;

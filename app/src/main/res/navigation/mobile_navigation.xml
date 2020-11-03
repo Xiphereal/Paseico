@@ -24,6 +24,12 @@
         tools:layout="@layout/fragment_slideshow" />
 
     <fragment
+        android:id="@+id/nav_searchUsers"
+        android:name="app.paseico.ui.searchUsers.SearchUserFragment"
+        android:label="Buscar usuarios"
+        tools:layout="@layout/fragment_user_search" />
+
+    <fragment
         android:id="@+id/nav_marketplace"
         android:name="app.paseico.ui.marketplace.marketplaceFragment"
         android:label="@string/menu_searcher"

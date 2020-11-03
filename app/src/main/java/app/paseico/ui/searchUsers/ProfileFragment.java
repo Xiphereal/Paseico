@@ -1,4 +1,4 @@
-package app.paseico.Fragment;
+package app.paseico.ui.searchUsers;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

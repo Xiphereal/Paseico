@@ -1,26 +1,20 @@
-package app.paseico.Fragment;
+package app.paseico.ui.searchUsers;
 
-import android.app.DownloadManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.EditText;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import app.paseico.R;
-import app.paseico.UserAdapter;
 import app.paseico.data.User;
-
 import java.util.ArrayList;
 import java.util.List;
 import android.view.View;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,7 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-public class SearchFragment extends Fragment {
+public class SearchUserFragment extends Fragment {
     private RecyclerView recyclerView;
     private UserAdapter userAdapter;
     private List<User> mUsers;
@@ -37,7 +31,7 @@ public class SearchFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View view = inflater.inflate(R.layout.fragment_search, container,false);
+        View view = inflater.inflate(R.layout.fragment_user_search, container,false);
 
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -70,9 +64,9 @@ public class SearchFragment extends Fragment {
     }
 
     private void searchUsers(String s){
-        Query query = FirebaseDatabase.getInstance().getReference("Users").orderByChild("username")
+        Query query = FirebaseDatabase.getInstance().getReference("users").orderByChild("username")
                 .startAt(s)
-                .endAt(s+"\uf8ff");
+                .endAt(s+"\uf8ff");//DUDA
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -92,7 +86,7 @@ public class SearchFragment extends Fragment {
     }
 
     private void readUsers(){
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot datasnapshot) {
