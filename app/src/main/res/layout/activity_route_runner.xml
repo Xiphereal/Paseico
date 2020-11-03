@@ -43,8 +43,10 @@
         android:id="@+id/buttonCancelRoute"
         android:layout_width="43dp"
         android:layout_height="39dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:src="@android:drawable/ic_delete"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:src="@android:drawable/ic_delete" />
 </androidx.constraintlayout.widget.ConstraintLayout>

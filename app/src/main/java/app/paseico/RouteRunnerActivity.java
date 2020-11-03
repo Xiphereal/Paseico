@@ -2,6 +2,7 @@
 package app.paseico;
 
         import androidx.annotation.NonNull;
+        import androidx.annotation.Nullable;
         import androidx.core.app.ActivityCompat;
         import androidx.core.content.ContextCompat;
         import androidx.fragment.app.FragmentActivity;
@@ -11,9 +12,11 @@ package app.paseico;
         import android.content.DialogInterface;
         import android.content.Intent;
         import android.content.pm.PackageManager;
+        import android.graphics.Color;
         import android.location.Location;
         import android.os.Bundle;
         import android.view.View;
+        import android.view.ViewGroup;
         import android.widget.AdapterView;
         import android.widget.ArrayAdapter;
         import android.widget.Button;
@@ -142,7 +145,17 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
 
         });
 
-        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, pointsOfInterestNames);
+        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, pointsOfInterestNames){
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                if (isCompleted.get(position)){
+                    view.setBackgroundColor(Color.GREEN);
+                }
+                return view;
+            }
+        };
 
         listView.setAdapter(arrayAdapter);
 
@@ -172,14 +185,6 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
         cancelRoute.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                 CreateConfirmation();
-                System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                /*for(int j = 0; j < locations.size(); j++) {
-                    isCompleted.set(j, false);
-                    poisLeft++;
-                }
-                Intent intent = new Intent(RouteRunnerActivity.this, TemporalRoutesMenu.class);
-                startActivity(intent);
-                finish();*/
             }
 
         });
@@ -189,8 +194,6 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
     }
 
     public void CreateConfirmation() {
-        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("¿Estás seguro de que deseas cancelar?");
         builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
@@ -227,6 +230,10 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
             }
         }
         if(poisLeft == 0) {
+            for(int j = 0; j < locations.size(); j++) {
+                isCompleted.set(j, false);
+                poisLeft++;
+            }
             Intent intent = new Intent(RouteRunnerActivity.this, RouteFinishedActivity.class);
             startActivity(intent);
             finish();
@@ -295,8 +302,12 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
                     if (myLocation.distanceTo(currentDestination) < 50) {
                         System.out.println("HAS COMPLETADO EL POI");
                         currentDestination = null;
+                        if(actualPOI > -1){
                         isCompleted.set(actualPOI,true);
-                        // MARK IT IN GREEN COLOR
+                        //ESTA LINEA NO FUNCIONA. ARREGLARLA SUPONE EL FIN DE 2 DE LAS 3 PAS vvvvvv
+                        listView.getChildAt(actualPOI - listView.getFirstVisiblePosition()).setBackgroundColor(Color.GREEN);
+                        System.out.println(listView.getFirstVisiblePosition() + "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
+                            actualPOI = -1;}
                         poisLeft--;
                         placePOIsFromRoute(pointsOfInterestNames, locations, isCompleted);
                     }
