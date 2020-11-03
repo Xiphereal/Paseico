@@ -69,6 +69,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
     static Location currentDestination;
     static ListView listView;
 
+    private app.paseico.data.Route actualRoute;
 
 
     @Override
@@ -95,17 +96,35 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
             //ASK JOSE IF YOU DONT KNOW HOW TO PASS THE ROUTE HERE
             //JUST UNCOMMENT THIS CODE WHEN U'RE READY TO PASS FROM ANOTHER INTENT (WITH THE STRING "route" on the putextra method) AND IT WILL WORK
             //WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
-    /*
-            app.paseico.data.Route route = (app.paseico.data.Route) b.get("route");
-            List<PointOfInterest> routePois = route.getPointsOfInterest();
+
+            //actualRoute = (app.paseico.data.Route) b.get("route");
+
+            PointOfInterest POI1 = new PointOfInterest(39.4736, -0.3790,"Mercado central");
+            PointOfInterest POI2 = new PointOfInterest( 39.4758, -0.3839,"Torre de Quart");
+            PointOfInterest POI3 = new PointOfInterest(39.479284, -0.376167,"Torres de Serranos");
+            PointOfInterest POI4 = new PointOfInterest( 39.475326, -0.375607,"El Miguelete");
+            PointOfInterest POI5 = new PointOfInterest( 39.47441, -0.378259,"Lonja de la Seda");
+            PointOfInterest POI6 = new PointOfInterest( 39.476391, -0.375277,"Plaza de la virgen");
+
+            List < PointOfInterest > pois = new ArrayList < PointOfInterest> ();
+            pois.add(POI1);
+            pois.add(POI2);
+            pois.add(POI3);
+            pois.add(POI4);
+            pois.add(POI5);
+            pois.add(POI6);
+
+            actualRoute = new app.paseico.data.Route("Descubriendo valencia", "Monumentos", 10, 10, 100, pois);
+
+            List<PointOfInterest> routePois = actualRoute.getPointsOfInterest();
             for(int i = 0; i < routePois.size(); i++){
                 pointsOfInterestNames.add(routePois.get(i).getName());
-                locations.add(routePois.get(i).getGoogleMarker().getPosition());
+                locations.add(new LatLng(routePois.get(i).getLatitude(),routePois.get(i).getLongitude()));
             }
 
             TextView routeTitle = findViewById(R.id.textViewTitleRoutingActivity);
-            routeTitle.setText(route.getName());
-    */
+            routeTitle.setText(actualRoute.getName());
+
             for(int i = 0; i < locations.size(); i++) {
                 isCompleted.add(false);
                 poisLeft++;
