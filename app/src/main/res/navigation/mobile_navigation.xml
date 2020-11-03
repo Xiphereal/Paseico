@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_profile">
+
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="app.paseico.ui.profile.profileFragment"
+        android:label="@string/menu_profile"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/nav_routes"
+        android:name="app.paseico.ui.routes.RoutesFragment"
+        android:label="@string/menu_routes"
+        tools:layout="@layout/fragment_routes" />
+
+    <fragment
+        android:id="@+id/nav_searcher"
+        android:name="app.paseico.ui.searcher.SlideshowFragment"
+        android:label="@string/menu_searcher"
+        tools:layout="@layout/fragment_slideshow" />
+
+    <fragment
+        android:id="@+id/nav_marketplace"
+        android:name="app.paseico.ui.marketplace.marketplaceFragment"
+        android:label="@string/menu_searcher"
+        tools:layout="@layout/fragment_marketplace" >
+        <action
+            android:id="@+id/action_nav_marketplace_to_discountsFragment"
+            app:destination="@id/discountsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/discountsFragment"
+        android:name="app.paseico.ui.marketplace.DiscountsFragment"
+        android:label="fragment_discounts"
+        tools:layout="@layout/fragment_discounts" />
+</navigation>
