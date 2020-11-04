@@ -9,6 +9,7 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
+import app.paseico.data.User;
 import app.paseico.service.FirebaseService;
 import app.paseico.mainMenu.userCreatedRoutes.UserCreatedRoutesFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -70,11 +71,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
                 .setTitle("Finalizar creación de ruta")
                 .setPositiveButton("OK", (dialog, which) -> {
                     TextInputEditText textInputEditText = findViewById(R.id.route_name_textInputEditText);
-                    newRoute = new Route(textInputEditText.getText().toString(), selectedPointsOfInterest);
-                    FirebaseService.saveRoute(newRoute);
 
-                    //We add the created route name to the createdRoutes before returning to the main activity
-                    UserCreatedRoutesFragment.getCreatedRoutes().add(newRoute.getName());
+                    createNewRoute(textInputEditText);
 
                     // Take the user back to the main map activity
                     // TODO: Clean the current activity state to prevent the user retrieve the state when
@@ -85,6 +83,16 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void createNewRoute(TextInputEditText textInputEditText) {
+        // TODO: Get the author reference and pass it to the Route constructor.
+        //User author = FirebaseService.getCurrentUser();
+        newRoute = new Route(textInputEditText.getText().toString(), selectedPointsOfInterest, null);
+        FirebaseService.saveRoute(newRoute);
+
+        //We add the created route name to the createdRoutes before returning to the main activity
+        UserCreatedRoutesFragment.getCreatedRoutes().add(newRoute.getName());
     }
 
     @Override

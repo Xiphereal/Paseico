@@ -14,15 +14,17 @@ public class Route implements Parcelable {
     private double estimatedTime;  // Minutes
     private int rewardPoints;     // Points earned when the route is completed.
     private List<PointOfInterest> pointsOfInterest;
+    private User author;
 
     public Route(Parcel in){
         readFromParcel(in);
     }
 
-    //TODO: Route should have a reference to the author User, in order to know which user created the Route.
-    public Route(String name, List<PointOfInterest> pointOfInterests) {
+    //TODO: Decide whether the database ID for the user or Paseico.User is needed in a Route.
+    public Route(String name, List<PointOfInterest> pointOfInterests, User author) {
         this.name = name;
         this.pointsOfInterest = pointOfInterests;
+        this.author = author;
     }
 
     public Route(String name, String theme, double length, double estimatedTime, int rewardPoints, List<PointOfInterest> pointsOfInterest) {
@@ -32,7 +34,6 @@ public class Route implements Parcelable {
         this.estimatedTime = estimatedTime;
         this.rewardPoints = rewardPoints;
         this.pointsOfInterest = pointsOfInterest;
-
     }
 
     public String getName() {
@@ -42,7 +43,6 @@ public class Route implements Parcelable {
     public void setName(String name) {
         this.name = name;
     }
-
 
     public String getTheme() {
         return theme;
@@ -82,6 +82,14 @@ public class Route implements Parcelable {
 
     public void setPointsOfInterest(List<PointOfInterest> pointsOfInterest) {
         this.pointsOfInterest = pointsOfInterest;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     @Override
