@@ -44,7 +44,9 @@ public class UserDao implements IUserDao {
                 }
             });
 
-        } catch(Exception e){}
+        } catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -60,9 +62,9 @@ public class UserDao implements IUserDao {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
         date.setDate(date.getDate() -1);
-        String strDate = dateFormat.format(date).toString();
-        User newUser = new User(name,username,user.getEmail(),strDate);
-        myUsersRef.child(user.getUid()).setValue(newUser);
+        String strDate = dateFormat.format(date);
+
+        addNewUserToDatabase(user, name, username, strDate);
     }
 
     @Override
@@ -71,11 +73,13 @@ public class UserDao implements IUserDao {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
         date.setDate(date.getDate() -1);
-        String strDate = dateFormat.format(date).toString();
-        User newUser = new User(fullname,username,user.getEmail(),strDate);
-        myUsersRef.child(user.getUid()).setValue(newUser);
+        String strDate = dateFormat.format(date);
+
+        addNewUserToDatabase(user, fullname, username, strDate);
     }
 
-
-
+    private void addNewUserToDatabase(FirebaseUser user, String name, String username, String strDate) {
+        User newUser = new User(name, username, user.getEmail(), strDate);
+        myUsersRef.child(user.getUid()).setValue(newUser);
+    }
 }
