@@ -74,6 +74,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
 
     static Location currentDestination;
     static ListView listView;
+    String nombredeRuta;
 
     private app.paseico.data.Route actualRoute;
 
@@ -105,12 +106,14 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
 
             //actualRoute = (app.paseico.data.Route) b.get("route");
 
+            nombredeRuta = "Descubriendo Valencia";
+
             PointOfInterest POI1 = new PointOfInterest(39.4736, -0.3790,"Mercado central");
             PointOfInterest POI2 = new PointOfInterest( 39.4758, -0.3839,"Torre de Quart");
             PointOfInterest POI3 = new PointOfInterest(39.479284, -0.376167,"Torres de Serranos");
             PointOfInterest POI4 = new PointOfInterest( 39.475326, -0.375607,"El Miguelete");
             PointOfInterest POI5 = new PointOfInterest( 39.47441, -0.378259,"Lonja de la Seda");
-            PointOfInterest POI6 = new PointOfInterest( 39.476391, -0.375277,"Plaza de la virgen");
+            PointOfInterest POI6 = new PointOfInterest( 39.476391, -0.375277,"Plaza de la Virgen");
 
             List < PointOfInterest > pois = new ArrayList < PointOfInterest> ();
             pois.add(POI1);
@@ -205,6 +208,8 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
                     poisLeft++;
                 }
                 Intent intent = new Intent(RouteRunnerActivity.this, TemporalRoutesMenu.class);
+                intent.putExtra("nombreruta", nombredeRuta);
+                intent.putExtra("nombrePOIS",pointsOfInterestNames);
                 startActivity(intent);
                 finish();
             }
@@ -235,6 +240,8 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
                 poisLeft++;
             }
             Intent intent = new Intent(RouteRunnerActivity.this, RouteFinishedActivity.class);
+            intent.putExtra("nombreruta", nombredeRuta);
+            intent.putExtra("nombrePOIS",pointsOfInterestNames);
             startActivity(intent);
             finish();
         }
