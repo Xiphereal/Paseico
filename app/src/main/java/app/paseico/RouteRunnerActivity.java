@@ -8,17 +8,21 @@ package app.paseico;
         import androidx.fragment.app.FragmentActivity;
 
         import android.Manifest;
+        import android.app.Activity;
         import android.app.AlertDialog;
+        import android.content.Context;
         import android.content.DialogInterface;
         import android.content.Intent;
         import android.content.pm.PackageManager;
         import android.graphics.Color;
         import android.location.Location;
         import android.os.Bundle;
+        import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
         import android.widget.AdapterView;
         import android.widget.ArrayAdapter;
+        import android.widget.BaseAdapter;
         import android.widget.Button;
         import android.widget.ImageButton;
         import android.widget.ListView;
@@ -61,6 +65,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
     //to get location permissions.
     private final static int LOCATION_REQUEST_CODE = 23;
     boolean locationPermission = false;
+    int flag;
 
     //polyline object
     private List<Polyline> polylines = null;
@@ -70,7 +75,8 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
     static ArrayList<Boolean> isCompleted = new ArrayList<Boolean>();
     static int actualPOI;
     static int poisLeft = 0;
-    static ArrayAdapter arrayAdapter;
+    static ArrayAdapter arrayAdapter2;
+    ArrayAdapterRutas arrayAdapter;
 
     static Location currentDestination;
     static ListView listView;
@@ -81,6 +87,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        arrayAdapter = new ArrayAdapterRutas(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_runner);
         Intent intent = getIntent();
@@ -95,7 +102,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
 
         ImageButton cancelRoute = findViewById(R.id.buttonCancelRoute);
 
-        listView = findViewById(R.id.ListViewRoute);
+
         if (pointsOfInterestNames.isEmpty() && locations.isEmpty()) {
 
 
@@ -140,7 +147,8 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
             }
         }
 
-
+        listView = findViewById(R.id.ListViewRoute);
+        listView.setAdapter(arrayAdapter);
         cancelRoute.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v){
 
@@ -148,26 +156,15 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
 
         });
 
-        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, pointsOfInterestNames){
-            @NonNull
-            @Override
-            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                if (isCompleted.get(position)){
-                    view.setBackgroundColor(Color.GREEN);
-                }
-                return view;
-            }
-        };
 
-        listView.setAdapter(arrayAdapter);
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //if (isCompleted.get(i) == false) {
 
-
+                flag = i;
                 LatLng destination = new LatLng(locations.get(i).latitude,locations.get(i).longitude);
 
                 start=new LatLng(myLocation.getLatitude(),myLocation.getLongitude());
@@ -182,6 +179,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
                         new LatLng(currentDestination.getLatitude(),currentDestination.getLongitude()), 16f);
                 mMap.animateCamera(cameraUpdate);
                 actualPOI = i;
+                arrayAdapter.notifyDataSetChanged();
             }
         });
 
@@ -311,9 +309,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
                         currentDestination = null;
                         if(actualPOI > -1){
                         isCompleted.set(actualPOI,true);
-                        //ESTA LINEA NO FUNCIONA. ARREGLARLA SUPONE EL FIN DE 2 DE LAS 3 PAS vvvvvv
-                        listView.getChildAt(actualPOI - listView.getFirstVisiblePosition()).setBackgroundColor(Color.GREEN);
-                        System.out.println(listView.getFirstVisiblePosition() + "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
+                        arrayAdapter.notifyDataSetChanged();
                             actualPOI = -1;}
                         poisLeft--;
                         placePOIsFromRoute(pointsOfInterestNames, locations, isCompleted);
@@ -421,6 +417,50 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Findroutes(start,end);
+    }
+
+    public class ArrayAdapterRutas extends BaseAdapter {
+
+        Context context;
+        private Activity activity;
+        private LayoutInflater inflater;
+
+        public ArrayAdapterRutas(Context c){
+                context = c;
+        }
+
+        @Override
+        public int getCount() {
+            return pointsOfInterestNames.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return pointsOfInterestNames.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            View rowview = View.inflate(context, R.layout.activity_runner_textview,null);
+            if (view == null)
+                view = rowview;
+
+
+
+                TextView nom = rowview.findViewById(R.id.textPOI);
+                nom.setText(pointsOfInterestNames.get(i));
+                    if (i == flag) {
+                        if (isCompleted.get(i)) {
+                            nom.setBackgroundColor(Color.GREEN);
+                        }
+                    }
+                return rowview;
+        }
     }
 
 
