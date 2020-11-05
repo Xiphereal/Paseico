@@ -17,6 +17,7 @@ package app.paseico;
         import android.graphics.Color;
         import android.location.Location;
         import android.os.Bundle;
+        import android.text.Html;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
@@ -73,7 +74,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
     static ArrayList<String> pointsOfInterestNames = new ArrayList<String>();
     static ArrayList<LatLng> locations = new ArrayList<LatLng>();
     static ArrayList<Boolean> isCompleted = new ArrayList<Boolean>();
-    static int actualPOI;
+    static int actualPOI = -1;
     static int poisLeft = 0;
     static ArrayAdapter arrayAdapter2;
     ArrayAdapterRutas arrayAdapter;
@@ -162,24 +163,25 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //if (isCompleted.get(i) == false) {
+                if (!isCompleted.get(i)) {
+                    LatLng destination = new LatLng(locations.get(i).latitude, locations.get(i).longitude);
 
-                flag = i;
-                LatLng destination = new LatLng(locations.get(i).latitude,locations.get(i).longitude);
-
-                start=new LatLng(myLocation.getLatitude(),myLocation.getLongitude());
-                //start route finding
-                mMap.clear();
-                placePOIsFromRoute(pointsOfInterestNames, locations, isCompleted);
-                Findroutes(start,destination);
-                currentDestination = new Location(destination.toString());
-                currentDestination.setLatitude(destination.latitude);
-                currentDestination.setLongitude(destination.longitude);
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
-                        new LatLng(currentDestination.getLatitude(),currentDestination.getLongitude()), 16f);
-                mMap.animateCamera(cameraUpdate);
-                actualPOI = i;
-                arrayAdapter.notifyDataSetChanged();
+                    start = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+                    //start route finding
+                    mMap.clear();
+                    placePOIsFromRoute(pointsOfInterestNames, locations, isCompleted);
+                    Findroutes(start, destination);
+                    currentDestination = new Location(destination.toString());
+                    currentDestination.setLatitude(destination.latitude);
+                    currentDestination.setLongitude(destination.longitude);
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
+                            new LatLng(currentDestination.getLatitude(), currentDestination.getLongitude()), 16f);
+                    mMap.animateCamera(cameraUpdate);
+                    actualPOI = i;
+                    arrayAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(getApplicationContext(),"POI ya visitada!",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -295,12 +297,14 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
             @Override
             public void onMyLocationChange(Location location) {
 
-                myLocation=location;
-                LatLng ltlng=new LatLng(location.getLatitude(),location.getLongitude());
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
-                        ltlng, 16f);
+                if (myLocation == null) {
+                    myLocation = location;
+                    LatLng ltlng = new LatLng(location.getLatitude(), location.getLongitude());
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
+                            ltlng, 16f);
 
-                mMap.animateCamera(cameraUpdate);
+                    mMap.animateCamera(cameraUpdate);
+                }
 
                 if (currentDestination != null) {
                     myLocation = location;
@@ -422,8 +426,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
     public class ArrayAdapterRutas extends BaseAdapter {
 
         Context context;
-        private Activity activity;
-        private LayoutInflater inflater;
+
 
         public ArrayAdapterRutas(Context c){
                 context = c;
@@ -447,18 +450,18 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             View rowview = View.inflate(context, R.layout.activity_runner_textview,null);
-            if (view == null)
-                view = rowview;
-
-
-
                 TextView nom = rowview.findViewById(R.id.textPOI);
-                nom.setText(pointsOfInterestNames.get(i));
-                    if (i == flag) {
+
+
                         if (isCompleted.get(i)) {
                             nom.setBackgroundColor(Color.GREEN);
                         }
-                    }
+                        if (actualPOI == i){
+                            nom.setText(Html.fromHtml("<b>"+pointsOfInterestNames.get(i)+"</b>"));
+                        } else {
+                            nom.setText(pointsOfInterestNames.get(i));
+                        }
+
                 return rowview;
         }
     }
