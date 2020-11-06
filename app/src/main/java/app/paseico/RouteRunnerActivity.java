@@ -95,9 +95,10 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
             //ASK JOSE IF YOU DONT KNOW HOW TO PASS THE ROUTE HERE
             //JUST UNCOMMENT THIS CODE WHEN U'RE READY TO PASS FROM ANOTHER INTENT (WITH THE STRING "route" on the putextra method) AND IT WILL WORK
             //WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
-    /*
+
             app.paseico.data.Route route = (app.paseico.data.Route) b.get("route");
             List<PointOfInterest> routePois = route.getPointsOfInterest();
+
             for(int i = 0; i < routePois.size(); i++){
                 pointsOfInterestNames.add(routePois.get(i).getName());
                 locations.add(routePois.get(i).getGoogleMarker().getPosition());
@@ -105,7 +106,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
 
             TextView routeTitle = findViewById(R.id.textViewTitleRoutingActivity);
             routeTitle.setText(route.getName());
-    */
+
             for(int i = 0; i < locations.size(); i++) {
                 isCompleted.add(false);
                 poisLeft++;
