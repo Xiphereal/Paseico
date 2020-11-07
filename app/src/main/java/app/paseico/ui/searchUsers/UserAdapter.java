@@ -1,6 +1,7 @@
 package app.paseico.ui.searchUsers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
+import app.paseico.MainActivity;
 import app.paseico.R;
 import app.paseico.data.User;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -30,12 +32,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     private Context mContext;
     private List<User> mUsers;
+    private boolean isfragment;
     private FirebaseUser firebaseUser;
     private String usernameFirebase;
-    public UserAdapter(Context mContext, List<User> mUsers)
+    User actualUser;
+    public UserAdapter(Context mContext, List<User> mUsers, boolean isfragment)
     {
         this.mContext = mContext;
         this.mUsers = mUsers;
+        this.isfragment = isfragment;
     }
     @NonNull
     @Override
@@ -46,32 +51,44 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
         final User user = mUsers.get(position);
-
         holder.btn_follow.setVisibility(View.VISIBLE);
 
         holder.username.setText(user.getUsername());
         holder.fullname.setText(user.getName());
         //Glide.with(mContext).load("@drawable/ic_user").into(holder.image_profile);
         //Glide.with(mContext).load(user.getImageurl()).into(holder.image_profile);
-        isFollowing(user.getUsername(), holder.btn_follow);
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                actualUser = dataSnapshot.getValue(User.class);
+                isFollowing(user.getUsername(), holder.btn_follow);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         if (user.getUsername().equals(usernameFirebase)){ // HERE
-            System.out.println(user.getUsername() + " " + firebaseUser.getUid() + "Somos iguales----------------------------------------");
             holder.btn_follow.setVisibility(View.GONE);
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
-                editor.putString("profileid", user.getUsername());
-                editor.apply();
-
-                ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction().replace(R.id.nav_view, //DUDA hecho para activity_main_menu
-                        new ProfileFragment()).commit();
+                if (isfragment) {
+                    SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
+                    editor.putString("profileid", user.getUsername());
+                    editor.apply();
+                    ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction().replace(R.id.nav_view, //DUDA hecho para activity_main_menu
+                            new ProfileFragment()).commit();
+                }else{
+                    Intent intent = new Intent(mContext, MainActivity.class);
+                    intent.putExtra("publisherid", user.getUsername());
+                    mContext.startActivity(intent);
+                }
             }
         });
 
@@ -79,15 +96,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             @Override
             public void onClick(View view){
                 if(holder.btn_follow.getText().toString().equals("follow")){
-                    FirebaseDatabase.getInstance().getReference().child("Follow").child(firebaseUser.getUid())
+                    FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername())
                             .child("following").child(user.getUsername()).setValue(true);
                     FirebaseDatabase.getInstance().getReference().child("Follow").child(user.getUsername())
-                            .child("followers").child(firebaseUser.getUid()).setValue(true);
+                            .child("followers").child(actualUser.getUsername()).setValue(true);
                 }else{
-                    FirebaseDatabase.getInstance().getReference().child("Follow").child(firebaseUser.getUid())
+                    FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername())
                             .child("following").child(user.getUsername()).removeValue();
                     FirebaseDatabase.getInstance().getReference().child("Follow").child(user.getUsername())
-                            .child("followers").child(firebaseUser.getUid()).removeValue();
+                            .child("followers").child(actualUser.getUsername()).removeValue();
                 }
             }
         });
@@ -116,7 +133,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     }
 
     private void isFollowing(final String userid, Button button){
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Follow").child(firebaseUser.getUid()).child("following");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername()).child("following");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

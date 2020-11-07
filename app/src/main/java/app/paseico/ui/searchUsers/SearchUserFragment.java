@@ -55,7 +55,7 @@ public class SearchUserFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 actualUser = dataSnapshot.getValue(User.class);
-                userAdapter = new UserAdapter(getContext(),mUsers);
+                userAdapter = new UserAdapter(getContext(),mUsers, true);
                 readUsers();
                 recyclerView.setAdapter(userAdapter);
             }

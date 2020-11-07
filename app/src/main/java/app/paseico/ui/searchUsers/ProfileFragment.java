@@ -12,10 +12,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
 //import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,7 +23,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,19 +30,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.lang.Thread.*;
 import java.util.List;
-
-
+import app.paseico.FollowersActivity;
 import app.paseico.R;
 import app.paseico.data.User;
 import app.paseico.login.LogInActivity;
-
 import static java.lang.Thread.sleep;
 
 public class ProfileFragment extends Fragment {
     ImageView image_profile;
     TextView followers, following, fullname, username;
     FirebaseUser firebaseUser;
-    String profileid;
+    //String profileid;
+    User actualUser;
     Button buttonLogOut;
     private Boolean firstTimeCheckBoost = false;
     private User user = new User();
@@ -61,9 +57,18 @@ public class ProfileFragment extends Fragment {
         //mUsers = new ArrayList<>();
         //userAdapter = new UserAdapter(getContext(),mUsers);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                actualUser = dataSnapshot.getValue(User.class);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-        SharedPreferences prefs = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
-        profileid = prefs.getString("profileid", "none");
+            }
+        });
+        //SharedPreferences prefs = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
+        //profileid = prefs.getString("profileid", "none");
 
         image_profile = view.findViewById(R.id.image_profile);
         followers = view.findViewById(R.id.followers);
@@ -81,12 +86,10 @@ public class ProfileFragment extends Fragment {
                 //mUsers.clear();
                 usernameFirebase = user.getUsername();
                 //userAdapter.notifyDataSetChanged();
-               // System.out.println(profileid + "+++++++++++++" + usernameFirebase + "+++++++++++++++++++++++++++++++++++++++++++++++++");
                 userInfo();
                 getFollowers();
-              //  System.out.println(profileid + "----------" + usernameFirebase + "---------------------------------------------");
                 //if (profileid.equals(usernameFirebase)) { //HERE
-                    buttonLogOut.setText("Cerrar sesion");
+                buttonLogOut.setText("Cerrar sesion");
                 //} else {
                 //    checkFollow();
                 //}
@@ -99,12 +102,27 @@ public class ProfileFragment extends Fragment {
 
             }
         });
-
-
         //getGetUsernameFromFirebase(profileid);
 
+        followers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), FollowersActivity.class);
+                intent.putExtra("id", actualUser.getUsername());
+                intent.putExtra("title", "followers");
+                startActivity(intent);
+            }
+        });
 
-
+        following.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), FollowersActivity.class);
+                intent.putExtra("id", actualUser.getUsername());
+                intent.putExtra("title", "following");
+                startActivity(intent);
+            }
+        });
 
         return view;
     }
@@ -137,7 +155,7 @@ public class ProfileFragment extends Fragment {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.child(profileid).exists()) {
+                if (snapshot.child(actualUser.getUsername()).exists()) {
                     buttonLogOut.setText("following");
                 } else {
                     buttonLogOut.setText("follow");
@@ -153,7 +171,7 @@ public class ProfileFragment extends Fragment {
 
     private void getFollowers() {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                .child("Follow").child(profileid).child("followers");
+                .child("Follow").child(actualUser.getUsername()).child("followers");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -167,7 +185,7 @@ public class ProfileFragment extends Fragment {
         });
 
         DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference()
-                .child("Follow").child(profileid).child("following");
+                .child("Follow").child(actualUser.getUsername()).child("following");
         reference1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -223,23 +241,6 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
-
-    /*private void getGetUsernameFromFirebase(String s){
-            FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        User user = dataSnapshot.getValue(User.class);
-                        mUsers.add(user);
-                        usernameFirebase = user.getUsername();
-                        userAdapter.notifyDataSetChanged();
-                    System.out.println(profileid + "+++++++++++++" + usernameFirebase + "+++++++++++++++++++++++++++++++++++++++++++++++++");
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-    }*/
 
     private void setButtonLogOut(){
         buttonLogOut.setOnClickListener(new View.OnClickListener() {
