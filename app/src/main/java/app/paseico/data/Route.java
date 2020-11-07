@@ -1,6 +1,7 @@
 package app.paseico.data;
 
 
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -18,6 +19,8 @@ public class Route implements Parcelable {
         readFromParcel(in);
     }
 
+    public Route(){}
+
     //TODO: Route should have a reference to the author User, in order to know which user created the Route.
     public Route(String name, List<PointOfInterest> pointOfInterests) {
         this.name = name;
@@ -31,6 +34,7 @@ public class Route implements Parcelable {
         this.estimatedTime = estimatedTime;
         this.rewardPoints = rewardPoints;
         this.pointsOfInterest = pointsOfInterest;
+
     }
 
     public String getName() {
@@ -40,6 +44,7 @@ public class Route implements Parcelable {
     public void setName(String name) {
         this.name = name;
     }
+
 
     public String getTheme() {
         return theme;

@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">Paseico</string>
+
+    <string name="title_activity_routing">Map</string>
+    <string name="title_activity_route_navigator">Map</string>
+    <string name="title_activity_maps">Map</string>
+
     <string name="title_activity_main_map">Map</string>
     <string name="title_activity_route_search">RouteSearch</string>
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAMLXmyf_ai85V6PdlA7jYhjL-nSgHl7mA</string>
@@ -11,7 +16,9 @@
     <!-- Strings used for buttons names-->
     <string name="search">Buscar</string>
     <string name="previous">Volver</string>
+    <string name="start_route">Empezar ruta</string>
 
+    <string name="discounts">DESCUENTOS</string>
 
     <string name="zero">0</string>
     <string name="route_name_hint">Nombre de la ruta</string>
@@ -22,13 +29,13 @@
     <string name="length">Longitud:</string>
     <string name="estimated_time">Duración estimada:</string>
     <string name="number_of_POI">Número de puntos de interés:</string>
-    <string name="minimum_of_points">Mínimo de puntos:</string>
+    <string name="minimum_of_reward_points">Mínimo de puntos:</string>
     <string name="km">km</string>
     <string name="hours">h</string>
+    <string name="reward_points">Puntos:</string>
 
     <string name="default_spinner_choice">Indiferente</string>
     <string name="no_theme_choice">Sin temática</string>
-
 
 
     <string name="lt0.5">&lt; 0,5</string>
@@ -39,7 +46,10 @@
     <string name="between3_4">3-4</string>
     <string name="between4_5">4-5</string>
     <string name="gt5">&gt; 5</string> <!-- &gt; is '>' -->
+
     <!--Strings arrays used to populate searchFragment spinners -->
+    <string name="search_fragment_title">Seleccione el filtro de búsqueda</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string-array name="themes_of_route">
         <item>@string/default_spinner_choice</item>
         <item>@string/no_theme_choice</item>
@@ -49,6 +59,8 @@
         <item>Naturaleza</item>
         <item>Bares</item>
     </string-array>
+
+
     <string-array name="lengths_of_route">
         <item>@string/default_spinner_choice</item>
         <item>@string/lt1</item>
@@ -70,6 +82,21 @@
     </string-array>
 
 
-    <string name="search_fragment_title">Seleccione el filtro de búsqueda</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <string name="title_activity_main_menu">MainMenuActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_profile">Perfil</string>
+    <string name="menu_routes">Rutas</string>
+    <string name="menu_searcher">Buscar rutas</string>
+    <string name="menu_marketplace">Tienda</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
 </resources>

@@ -2,21 +2,43 @@ package app.paseico.data;
 
 import com.google.android.gms.maps.model.Marker;
 
-public class PointOfInterest {
-    private Marker googleMarker;
-    private String name;
+import java.io.Serializable;
+import java.util.Objects;
 
-    public PointOfInterest(Marker googleMarker, String name)
+public class PointOfInterest implements Serializable {
+    private String name;
+    private Double latitude;
+    private Double longitude;
+
+    public PointOfInterest(){}
+
+    public PointOfInterest(Double lat, Double lon, String name)
     {
-        this.googleMarker = googleMarker;
+        latitude = lat;
+        longitude = lon;
         this.name = name;
     }
 
-    public Marker getGoogleMarker() {
-        return googleMarker;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PointOfInterest that = (PointOfInterest) o;
+        return name.equals(that.name) &&
+                latitude.equals(that.latitude) &&
+                longitude.equals(that.longitude);
     }
 
-    public String getName(){
-        return name;
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, latitude, longitude);
     }
+
+    public String getName(){ return name; }
+
+    public double getLatitude() { return latitude; }
+    public double getLongitude() { return longitude; }
+
+    public void setLongitude(Double longitude) { this.longitude = longitude; }
+    public void setLatitude(Double latitude) { this.latitude = latitude; }
 }
