@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RouteInformationActivity">
+
+    <TextView
+        android:id="@+id/textView_routeInfo_themeText3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="52dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="60dp"
+        android:text="@string/length"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_routeInfo_rewardPointsText" />
+
+    <TextView
+        android:id="@+id/textView_routeInfo_length"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_routeInfo_themeText3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.613"
+        app:layout_constraintStart_toEndOf="@+id/textView_routeInfo_themeText3"
+        app:layout_constraintTop_toTopOf="@+id/textView_routeInfo_themeText3" />
+
+    <TextView
+        android:id="@+id/textView_routeInfo_estimatedTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_routeInfo_estimatedTimeText3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.58"
+        app:layout_constraintStart_toEndOf="@+id/textView_routeInfo_estimatedTimeText3"
+        app:layout_constraintTop_toTopOf="@+id/textView_routeInfo_estimatedTimeText3" />
+
+    <TextView
+        android:id="@+id/textView_routeInfo_estimatedTimeText3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="28dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="68dp"
+        android:text="@string/estimated_time"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_routeInfo_themeText3" />
+
+    <TextView
+        android:id="@+id/textView_routeInfo_numberOfPOIText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="60dp"
+        android:text="@string/number_of_POI"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_routeInfo_estimatedTimeText3" />
+
+    <TextView
+        android:id="@+id/textView_routeInfo_numberOfPOI"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_routeInfo_numberOfPOIText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.36"
+        app:layout_constraintStart_toEndOf="@+id/textView_routeInfo_numberOfPOIText"
+        app:layout_constraintTop_toTopOf="@+id/textView_routeInfo_numberOfPOIText" />
+
+    <TextView
+        android:id="@+id/textView_routeInfo_rewardPointsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="64dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="68dp"
+        android:text="@string/reward_points"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_routeInfo_themeText" />
+
+    <TextView
+        android:id="@+id/textView_routeInfo_rewardPoints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="68dp"
+        android:layout_marginStart="68dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_routeInfo_rewardPointsText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toEndOf="@+id/textView_routeInfo_rewardPointsText"
+        app:layout_constraintTop_toTopOf="@+id/textView_routeInfo_rewardPointsText" />
+
+    <TextView
+        android:id="@+id/textView_routeInfo_nameOfRoute"
+        android:layout_width="197dp"
+        android:layout_height="45dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.153" />
+
+    <TextView
+        android:id="@+id/textView_routeInfo_themeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="64dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="60dp"
+        android:text="@string/theme"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_routeInfo_nameOfRoute" />
+
+    <TextView
+        android:id="@+id/textView_routeInfo_theme"
+        android:layout_width="105dp"
+        android:layout_height="24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_routeInfo_themeText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.624"
+        app:layout_constraintStart_toEndOf="@+id/textView_routeInfo_themeText"
+        app:layout_constraintTop_toTopOf="@+id/textView_routeInfo_themeText" />
+
+    <Button
+        android:id="@+id/btn_routeInfo_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/previous"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_routeInfo_startRoute"
+        app:layout_constraintEnd_toStartOf="@+id/btn_routeInfo_startRoute"
+        app:layout_constraintHorizontal_bias="0.479"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btn_routeInfo_startRoute"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/btn_routeInfo_startRoute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="52dp"
+        android:layout_marginRight="52dp"
+        android:layout_marginTop="68dp"
+        android:text="@string/start_route"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_routeInfo_numberOfPOI" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

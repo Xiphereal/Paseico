@@ -2,9 +2,10 @@ package app.paseico.data;
 
 import com.google.android.gms.maps.model.Marker;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class PointOfInterest {
+public class PointOfInterest implements Serializable {
     private String name;
     private Double latitude;
     private Double longitude;

@@ -26,20 +26,20 @@ import java.util.List;
 
 public class SearchFragment extends Fragment {
 
-    EditText et_keyWord;
-    EditText et_numberOfPOI;
-    EditText et_minimumOfPoints;
-    Spinner spinner_theme;
-    Spinner spinner_length;
-    Spinner spinner_estimatedTime;
-    List<String> keyWords;
-    String themeOfRoute;
-    int numberOfPOI;
-    int minimumOfPoints;
-    double minimumOfLength;
-    double maximumOfLength;
-    double minimumTime;
-    double maximumTime;
+    private EditText et_keyWord;
+    private EditText et_numberOfPOI;
+    private EditText et_minimumOfPoints;
+    private Spinner spinner_theme;
+    private Spinner spinner_length;
+    private Spinner spinner_estimatedTime;
+    private List<String> keyWords;
+    private String themeOfRoute;
+    private int numberOfPOI;
+    private int minimumOfPoints;
+    private double minimumOfLength;
+    private double maximumOfLength;
+    private double minimumTime;
+    private double maximumTime;
     List<Route> routeList;
 
     @Override
@@ -65,6 +65,7 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Action performed when a user search routes
         view.findViewById(R.id.btn_search).setOnClickListener(view1 -> {
             assignValueOfFilterVariables();
 
@@ -173,14 +174,15 @@ public class SearchFragment extends Fragment {
 
         for (QueryDocumentSnapshot document : task.getResult()) {
 
-            String name = document.getData().get("name").toString();
-            Object theme_obj = document.getData().get("theme");
-            String theme = theme_obj != null ? theme_obj.toString() : null;
-            double length = Double.parseDouble(document.getData().get("length").toString());
-            double estimatedTime = Double.parseDouble(document.getData().get("estimatedTime").toString());
-            int points = Integer.parseInt(document.getData().get("rewardPoints").toString());
+            Route route = (Route) document.toObject(Route.class);
 
-            ArrayList<PointOfInterest> pointOfInterests = (ArrayList) document.getData().get("pointsOfInterest");
+            String name = route.getName();
+            String theme = route.getTheme();
+            double length = route.getLength();
+            double estimatedTime = route.getEstimatedTime();
+            int points = route.getRewardPoints();
+            List<PointOfInterest> pointOfInterests = route.getPointsOfInterest();
+
 
             Log.d("Ruta3", document.getId() + " => " + document.getData());
 
@@ -192,7 +194,6 @@ public class SearchFragment extends Fragment {
                 Log.d("RutaDentro", document.getId() + "=>" + document.getData(), task.getException());
                 for (String keyword : keyWords) {
                     if (name.contains(keyword)) {
-                        Route route = new Route(name, theme, length, estimatedTime, points, pointOfInterests);
 
                         routeList.add(route);
                         Log.d("bucle", document.getId() + "=>" + document.getData(), task.getException());
