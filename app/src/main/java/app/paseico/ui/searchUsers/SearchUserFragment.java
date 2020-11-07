@@ -15,6 +15,9 @@ import app.paseico.data.User;
 import java.util.ArrayList;
 import java.util.List;
 import android.view.View;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,12 +29,14 @@ public class SearchUserFragment extends Fragment {
     private RecyclerView recyclerView;
     private UserAdapter userAdapter;
     private List<User> mUsers;
-
+    FirebaseUser firebaseUser ;
+    User actualUser;
     EditText search_bar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_user_search, container,false);
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -40,10 +45,23 @@ public class SearchUserFragment extends Fragment {
         search_bar = view.findViewById(R.id.search_bar);
 
         mUsers = new ArrayList<>();
-        userAdapter = new UserAdapter(getContext(),mUsers);
-        recyclerView.setAdapter(userAdapter);
 
-        readUsers();
+        FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                actualUser = dataSnapshot.getValue(User.class);
+                userAdapter = new UserAdapter(getContext(),mUsers);
+                readUsers();
+                recyclerView.setAdapter(userAdapter);
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         search_bar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -60,6 +78,7 @@ public class SearchUserFragment extends Fragment {
 
             }
         });
+
         return view;
     }
 
@@ -73,7 +92,7 @@ public class SearchUserFragment extends Fragment {
                 mUsers.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     User user = snapshot.getValue(User.class);
-                    mUsers.add(user);
+                    if(actualUser.getUsername() != user.getUsername()){mUsers.add(user);}
                 }
                 userAdapter.notifyDataSetChanged();
             }
@@ -94,9 +113,9 @@ public class SearchUserFragment extends Fragment {
                     mUsers.clear();
                     for(DataSnapshot snapshot : datasnapshot.getChildren()){
                         User user = snapshot.getValue(User.class);
-                        mUsers.add(user);
+                        if(actualUser.getUsername() != user.getUsername()){mUsers.add(user);}
                     }
-                    userAdapter.notifyDataSetChanged();
+                   userAdapter.notifyDataSetChanged();
                 }
             }
 
