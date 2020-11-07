@@ -64,15 +64,15 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
     //polyline object
     private List<Polyline> polylines = null;
 
-    static ArrayList<String> pointsOfInterestNames = new ArrayList<String>();
-    static ArrayList<LatLng> locations = new ArrayList<LatLng>();
-    static ArrayList<Boolean> isCompleted = new ArrayList<Boolean>();
-    static int actualPOI;
-    static int poisLeft = 0;
-    static ArrayAdapter arrayAdapter;
+    private ArrayList<String> pointsOfInterestNames = new ArrayList<String>();
+    private ArrayList<LatLng> locations = new ArrayList<LatLng>();
+    private ArrayList<Boolean> isCompleted = new ArrayList<Boolean>();
+    private int actualPOI;
+    private int poisLeft = 0;
+    private ArrayAdapter arrayAdapter;
 
-    static Location currentDestination;
-    static ListView listView;
+    private Location currentDestination;
+    private ListView listView;
 
 
 
@@ -150,8 +150,8 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
                     poisLeft++;
                 }
 
-                Intent intent = new Intent(RouteRunnerActivity.this, TemporalRoutesMenu.class);
-                startActivity(intent);
+//                Intent intent = new Intent(RouteRunnerActivity.this, TemporalRoutesMenu.class);
+//                startActivity(intent);
                 finish();
             }
 
