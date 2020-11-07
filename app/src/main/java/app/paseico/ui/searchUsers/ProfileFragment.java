@@ -58,8 +58,8 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstaanceState) {
 
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        mUsers = new ArrayList<>();
-        userAdapter = new UserAdapter(getContext(),mUsers);
+        //mUsers = new ArrayList<>();
+        //userAdapter = new UserAdapter(getContext(),mUsers);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         SharedPreferences prefs = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE);

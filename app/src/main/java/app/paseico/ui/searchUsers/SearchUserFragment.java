@@ -5,6 +5,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -14,6 +15,8 @@ import app.paseico.R;
 import app.paseico.data.User;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,6 +25,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
@@ -54,7 +58,6 @@ public class SearchUserFragment extends Fragment {
                 userAdapter = new UserAdapter(getContext(),mUsers);
                 readUsers();
                 recyclerView.setAdapter(userAdapter);
-
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -90,10 +93,13 @@ public class SearchUserFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mUsers.clear();
+
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     User user = snapshot.getValue(User.class);
-                    if(actualUser.getUsername() != user.getUsername()){mUsers.add(user);}
+                    if(!user.getUsername().equals(actualUser.getUsername())){mUsers.add(user);}
+                    mUsers.add(user);
                 }
+
                 userAdapter.notifyDataSetChanged();
             }
 
@@ -113,7 +119,8 @@ public class SearchUserFragment extends Fragment {
                     mUsers.clear();
                     for(DataSnapshot snapshot : datasnapshot.getChildren()){
                         User user = snapshot.getValue(User.class);
-                        if(actualUser.getUsername() != user.getUsername()){mUsers.add(user);}
+                       if(!user.getUsername().equals(actualUser.getUsername())){mUsers.add(user);}
+
                     }
                    userAdapter.notifyDataSetChanged();
                 }
