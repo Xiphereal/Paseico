@@ -37,11 +37,12 @@ public class RouteInformationActivity extends AppCompatActivity {
         String name = route.getName();
         String theme = (route.getTheme() == null) ? "Sin temática" : route.getTheme();
         String rewardsPoints = ((Integer) route.getRewardPoints()).toString();
-        double kms = route.getLength() / 1000;
-        String length = ((Double) kms).toString();
+        int kms = (int) route.getLength() / 1000;
+        int meters = (int) route.getLength() % 1000;
+        String length = kms + " km y " + meters + " metros";
         int hours = ((int) route.getEstimatedTime()) / 60;
         int minutes = ((int) route.getEstimatedTime()) % 60;
-        String estimatedTime = hours + "h. y " + minutes + "min." ;
+        String estimatedTime = hours + " horas y " + minutes + " minutos" ;
         String numberOfPOI = route.getPointsOfInterest().size() + "";
 
         textView_name.setText(name);
