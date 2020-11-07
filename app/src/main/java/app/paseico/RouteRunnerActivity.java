@@ -102,17 +102,11 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
         mapFragment.getMapAsync(this);
 
         ImageButton cancelRoute = findViewById(R.id.buttonCancelRoute);
+        if (b != null) {actualRoute = (app.paseico.data.Route) b.get("route");}
 
 
-        if (pointsOfInterestNames.isEmpty() && locations.isEmpty()) {
+        else {
 
-
-            //WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
-            //ASK JOSE IF YOU DONT KNOW HOW TO PASS THE ROUTE HERE
-            //JUST UNCOMMENT THIS CODE WHEN U'RE READY TO PASS FROM ANOTHER INTENT (WITH THE STRING "route" on the putextra method) AND IT WILL WORK
-            //WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
-
-            //actualRoute = (app.paseico.data.Route) b.get("route");
 
             nombredeRuta = "Descubriendo Valencia";
 
@@ -131,8 +125,8 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
             pois.add(POI5);
             pois.add(POI6);
 
-            actualRoute = new app.paseico.data.Route("Descubriendo valencia", "Monumentos", 10, 10, 100, pois);
-
+            actualRoute = new app.paseico.data.Route(nombredeRuta, "Monumentos", 10, 10, 100, pois);
+        }
             List<PointOfInterest> routePois = actualRoute.getPointsOfInterest();
             for(int i = 0; i < routePois.size(); i++){
                 pointsOfInterestNames.add(routePois.get(i).getName());
@@ -146,7 +140,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
                 isCompleted.add(false);
                 poisLeft++;
             }
-        }
+
 
         listView = findViewById(R.id.ListViewRoute);
         listView.setAdapter(arrayAdapter);
