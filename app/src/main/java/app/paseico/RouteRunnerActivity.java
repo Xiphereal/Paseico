@@ -66,7 +66,6 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
     //to get location permissions.
     private final static int LOCATION_REQUEST_CODE = 23;
     boolean locationPermission = false;
-    int flag;
 
     //polyline object
     private List<Polyline> polylines = null;
