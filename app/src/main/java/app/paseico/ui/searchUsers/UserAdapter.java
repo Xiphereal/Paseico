@@ -31,7 +31,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private Context mContext;
     private List<User> mUsers;
     private FirebaseUser firebaseUser;
-
+    private String usernameFirebase;
     public UserAdapter(Context mContext, List<User> mUsers)
     {
         this.mContext = mContext;
@@ -54,11 +54,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         holder.username.setText(user.getUsername());
         holder.fullname.setText(user.getName());
-        Glide.with(mContext).load("@drawable/ic_user").into(holder.image_profile);//Glide.with(mContext).load(user.getImageurl()).into(holder.image_profile);
+        //Glide.with(mContext).load("@drawable/ic_user").into(holder.image_profile);
+        //Glide.with(mContext).load(user.getImageurl()).into(holder.image_profile);
         isFollowing(user.getUsername(), holder.btn_follow);
 
-        if (user.getUsername().equals(firebaseUser.getUid())){
-            System.out.println(user.getUsername() + " " + firebaseUser.getUid() + "----------------------------------------");
+        if (user.getUsername().equals(usernameFirebase)){ // HERE
+            System.out.println(user.getUsername() + " " + firebaseUser.getUid() + "Somos iguales----------------------------------------");
             holder.btn_follow.setVisibility(View.GONE);
         }
 
@@ -124,6 +125,23 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 }else{
                     button.setText("follow");
                 }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void getGetUsernameFromFirebase(String s){
+        FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                mUsers.add(user);
+                usernameFirebase = user.getUsername();
+                notifyDataSetChanged();
             }
 
             @Override
