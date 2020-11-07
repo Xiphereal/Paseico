@@ -33,13 +33,19 @@ public class RouteListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Route[] filteredRoutes = RouteListFragmentArgs.fromBundle(getArguments()).getFilteredList();
-        List<String> filteredRoutesList = new ArrayList<>();
+        List<String> filteredRoutesNames = new ArrayList<>();
+        List<Double> filteredRoutesEstimatedTime = new ArrayList<>();
+        List<Double> filteredRoutesLength = new ArrayList<>();
+        List<Integer> filteredRoutesRewardPoints = new ArrayList<>();
 
         for (Route route : filteredRoutes) {
-            filteredRoutesList.add(route.getName());
+            filteredRoutesNames.add(route.getName());
+            filteredRoutesEstimatedTime.add(route.getEstimatedTime());
+            filteredRoutesLength.add(route.getLength());
+            filteredRoutesRewardPoints.add(route.getRewardPoints());
         }
 
-        ArrayAdapter<String> adapter_filteredRoutes = new ArrayAdapter<>(getActivity(), android.R.layout.simple_expandable_list_item_1, filteredRoutesList);
+        ArrayAdapter<String> adapter_filteredRoutes = new ArrayAdapter<>(getActivity(), android.R.layout.simple_expandable_list_item_1, filteredRoutesNames);
 
         ListView listView_filteredRoutes = (ListView) view.findViewById(R.id.listView_filteredRoutes);
         listView_filteredRoutes.setAdapter(adapter_filteredRoutes);
