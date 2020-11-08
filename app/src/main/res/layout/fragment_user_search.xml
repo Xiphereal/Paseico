@@ -38,6 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/bar"
-        android:id="@+id/recycler_view">
+        android:id="@+id/recycler_view"
+        android:background="#FFFFFF">
     </androidx.recyclerview.widget.RecyclerView>
 </RelativeLayout>

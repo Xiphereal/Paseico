@@ -38,9 +38,17 @@
             android:id="@+id/action_nav_marketplace_to_discountsFragment"
             app:destination="@id/discountsFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/discountsFragment"
         android:name="app.paseico.ui.marketplace.DiscountsFragment"
         android:label="fragment_discounts"
         tools:layout="@layout/fragment_discounts" />
+
+    <fragment
+        android:id="@+id/notMyProfileFragment"
+        android:name="app.paseico.ui.searchUsers.NotMyProfileFragment"
+        android:label="fragment_notmyprofile"
+        tools:layout="@layout/fragment_notmyprofile" />
+
 </navigation>

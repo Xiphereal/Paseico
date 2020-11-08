@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -83,13 +84,6 @@ public class NotMyProfileFragment extends Fragment {
         fullname = view.findViewById(R.id.fullname);
         buttonLogOut = view.findViewById(R.id.buttonLogOut);
 
-        if (buttonLogOut.equals("follow")){
-            FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername()).child("following").child(profileid).setValue(true);
-            FirebaseDatabase.getInstance().getReference().child("Follow").child(profileid).child("followers").child(actualUser.getUsername()).setValue(true);
-        }else if (buttonLogOut.equals("following")){
-            FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername()).child("following").child(profileid).removeValue();
-            FirebaseDatabase.getInstance().getReference().child("Follow").child(profileid).child("followers").child(actualUser.getUsername()).removeValue();
-        }
         FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -102,6 +96,24 @@ public class NotMyProfileFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+        buttonLogOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String btn = buttonLogOut.getText().toString();
+                if (btn.equals("follow")){
+                    FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername())
+                            .child("following").child(profileid).setValue(true);
+                    FirebaseDatabase.getInstance().getReference().child("Follow").child(profileid)
+                            .child("followers").child(actualUser.getUsername()).setValue(true);
+
+                }else if (btn.equals("following")){
+                    FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername())
+                            .child("following").child(profileid).removeValue();
+                    FirebaseDatabase.getInstance().getReference().child("Follow").child(profileid)
+                            .child("followers").child(actualUser.getUsername()).removeValue();
+                }
             }
         });
 
@@ -167,7 +179,7 @@ public class NotMyProfileFragment extends Fragment {
     }
 
     private void getFollowers() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername()).child("followers");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Follow").child(profileid).child("followers");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -180,7 +192,7 @@ public class NotMyProfileFragment extends Fragment {
             }
         });
 
-        DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername()).child("following");
+        DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference().child("Follow").child(profileid).child("following");
         reference1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

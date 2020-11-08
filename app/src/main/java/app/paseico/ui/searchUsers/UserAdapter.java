@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.List;
 
 import app.paseico.MainActivity;
+import app.paseico.MainMenuActivity;
 import app.paseico.R;
 import app.paseico.SearchFragment;
 import app.paseico.SearchFragmentDirections;
@@ -81,14 +83,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                     SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
                     editor.putString("profileid", user.getUsername());
                     editor.apply();
-                    ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction().replace(R.id.recycler_view, //DUDA hecho para activity_main_menu
+                    ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, //DUDA hecho para activity_main_menu
                     new NotMyProfileFragment()).commit();
-                    //NavDirections action = SearchUserFragmentDirections.actionNavSearchUsersToNotMyProfileFragment();
-                    //NavHostFragment.findNavController( )
-                    //        .navigate(action);
+
                 }else{
-                    Intent intent = new Intent(mContext, MainActivity.class);
-                    intent.putExtra("publisherid", user.getUsername());
+                    Intent intent = new Intent(mContext, MainMenuActivity.class);
                     mContext.startActivity(intent);
                 }
             }
