@@ -10,6 +10,8 @@ import android.widget.TextView;
 import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
+import androidx.navigation.NavDirections;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -25,6 +27,8 @@ import java.util.List;
 
 import app.paseico.MainActivity;
 import app.paseico.R;
+import app.paseico.SearchFragment;
+import app.paseico.SearchFragmentDirections;
 import app.paseico.data.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -45,7 +49,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.user_item, parent, false); //Dashboard o mio propio?
+        View view = LayoutInflater.from(mContext).inflate(R.layout.user_item, parent, false);
         return new UserAdapter.ViewHolder(view);
     }
 
@@ -53,7 +57,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final User user = mUsers.get(position);
         holder.btn_follow.setVisibility(View.VISIBLE);
-
         holder.username.setText(user.getUsername());
         holder.fullname.setText(user.getName());
         //Glide.with(mContext).load("@drawable/ic_user").into(holder.image_profile);
@@ -71,10 +74,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             }
         });
 
-        if (user.getUsername().equals(usernameFirebase)){ // HERE
-            holder.btn_follow.setVisibility(View.GONE);
-        }
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
@@ -82,8 +81,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                     SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
                     editor.putString("profileid", user.getUsername());
                     editor.apply();
-                    ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction().replace(R.id.nav_view, //DUDA hecho para activity_main_menu
-                            new ProfileFragment()).commit();
+                    ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction().replace(R.id.recycler_view, //DUDA hecho para activity_main_menu
+                    new NotMyProfileFragment()).commit();
+                    //NavDirections action = SearchUserFragmentDirections.actionNavSearchUsersToNotMyProfileFragment();
+                    //NavHostFragment.findNavController( )
+                    //        .navigate(action);
                 }else{
                     Intent intent = new Intent(mContext, MainActivity.class);
                     intent.putExtra("publisherid", user.getUsername());

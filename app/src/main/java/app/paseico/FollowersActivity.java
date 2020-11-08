@@ -36,7 +36,6 @@ public class FollowersActivity extends AppCompatActivity {
         Intent intent = getIntent();
         id = intent.getStringExtra("id");
         title = intent.getStringExtra("title");
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(title);
@@ -115,7 +114,6 @@ public class FollowersActivity extends AppCompatActivity {
                     User user = snapshot.getValue(User.class);
                     for (String id: idList){
                         if(user.getUsername().equals(id)){
-                            System.out.println(user.getUsername() +" "+id.toString() + "------------------------------------------------------");
                             userList.add(user);
                         }
                     }

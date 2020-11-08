@@ -41,7 +41,6 @@ public class SearchUserFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_user_search, container,false);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -68,7 +67,6 @@ public class SearchUserFragment extends Fragment {
         search_bar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -88,7 +86,7 @@ public class SearchUserFragment extends Fragment {
     private void searchUsers(String s){
         Query query = FirebaseDatabase.getInstance().getReference("users").orderByChild("username")
                 .startAt(s)
-                .endAt(s+"\uf8ff");//DUDA
+                .endAt(s+"\uf8ff");
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -99,7 +97,6 @@ public class SearchUserFragment extends Fragment {
                     if(!user.getUsername().equals(actualUser.getUsername())){mUsers.add(user);}
                     mUsers.add(user);
                 }
-
                 userAdapter.notifyDataSetChanged();
             }
 
@@ -120,7 +117,6 @@ public class SearchUserFragment extends Fragment {
                     for(DataSnapshot snapshot : datasnapshot.getChildren()){
                         User user = snapshot.getValue(User.class);
                        if(!user.getUsername().equals(actualUser.getUsername())){mUsers.add(user);}
-
                     }
                    userAdapter.notifyDataSetChanged();
                 }
