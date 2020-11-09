@@ -17,6 +17,7 @@ import androidx.appcompat.widget.Toolbar;
 import java.util.ArrayList;
 import java.util.List;
 import app.paseico.data.User;
+import app.paseico.ui.searchUsers.NotMyProfileFragment;
 import app.paseico.ui.searchUsers.UserAdapter;
 
 public class FollowersActivity extends AppCompatActivity {
@@ -32,6 +33,12 @@ public class FollowersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_followers);
+
+       /* if (savedInstanceState == null){
+            getSupportFragmentManager().beginTransaction()
+                    .add(android.R.id.content, new NotMyProfileFragment()).commit();
+        }*/
+
 
         Intent intent = getIntent();
         id = intent.getStringExtra("id");
