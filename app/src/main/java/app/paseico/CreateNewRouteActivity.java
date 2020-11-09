@@ -147,19 +147,23 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
         markedPOIs.add(marker.getTitle());
 
-        selectedPointsOfInterest.add(new PointOfInterest(marker, marker.getTitle()));
+        selectedPointsOfInterest.add(new PointOfInterest(marker.getPosition().latitude,marker.getPosition().longitude, marker.getTitle()));
     }
 
     private void updateMarkedPOIsListView() {
-        //add route created to list of routes created
         markedPOIsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, markedPOIs);
         markedPOIsListView.setAdapter(markedPOIsAdapter);
     }
 
     private PointOfInterest findClickedPointOfInterest(@NotNull Marker marker) {
+        LatLng latLangMarker = marker.getPosition();
+        Double lat = latLangMarker.latitude;
+        Double lon = latLangMarker.longitude;
+        PointOfInterest markerPOI = new PointOfInterest(lat,lon,marker.getTitle());
         for (PointOfInterest poi : selectedPointsOfInterest) {
-            if (poi.getGoogleMarker().equals(marker))
+            if (poi.equals(markerPOI)){
                 return poi;
+            }
         }
 
         return null;
