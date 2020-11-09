@@ -34,6 +34,7 @@ public class NotMyProfileFragment extends Fragment {
     FirebaseUser firebaseUser;
     String profileid;
     User actualUser;
+    User foreignUser;
     String searchedUser;
     Button buttonLogOut;
     private Boolean firstTimeCheckBoost = false;
@@ -48,49 +49,53 @@ public class NotMyProfileFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_notmyprofile, container, false);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        SharedPreferences prefs = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
+        profileid = prefs.getString("profileid", "none");
         FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 actualUser = dataSnapshot.getValue(User.class);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                FirebaseDatabase.getInstance().getReference("users").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                            User user = snapshot.getValue(User.class);
+                            if(user.getUsername().equals(profileid)){
+                                searchedUser = snapshot.getKey();
+                                FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        User user = dataSnapshot.getValue(User.class);
+                                        usernameFirebase = user.getUsername();
+                                        userInfo();
+                                        getFollowers();
+                                        checkFollow();
+                                    }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
-
-        SharedPreferences prefs = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
-        profileid = prefs.getString("profileid", "none");
-
-        FirebaseDatabase.getInstance().getReference("users").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    User user = snapshot.getValue(User.class);
-                    if(user.getUsername().equals(profileid)){
-                        searchedUser = snapshot.getKey();
-                        FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                User user = dataSnapshot.getValue(User.class);
-                                usernameFirebase = user.getUsername();
-                                userInfo();
-                                getFollowers();
-                                checkFollow();
+                                    }
+                                });
                             }
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
+                        }
                     }
-                }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
+
+
+
+
+
 
         image_profile = view.findViewById(R.id.image_profile);
         followers = view.findViewById(R.id.followers);
@@ -119,25 +124,7 @@ public class NotMyProfileFragment extends Fragment {
             }
         });
 
-        followers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), FollowersActivity.class);
-                intent.putExtra("id", actualUser.getUsername());
-                intent.putExtra("title", "followers");
-                startActivity(intent);
-            }
-        });
 
-        following.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), FollowersActivity.class);
-                intent.putExtra("id", actualUser.getUsername());
-                intent.putExtra("title", "following");
-                startActivity(intent);
-            }
-        });
 
         return view;
     }
@@ -151,8 +138,10 @@ public class NotMyProfileFragment extends Fragment {
                     return;
                 }
                 User user = snapshot.getValue(User.class);
+                foreignUser = user;
                 username.setText(user.getUsername());
                 fullname.setText(user.getName());
+                activateFollowListeners();
             }
 
             @Override
@@ -204,6 +193,27 @@ public class NotMyProfileFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+    }
+    public void activateFollowListeners(){
+        followers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), FollowersActivity.class);
+                intent.putExtra("id", foreignUser.getUsername());
+                intent.putExtra("title", "followers");
+                startActivity(intent);
+            }
+        });
+
+        following.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), FollowersActivity.class);
+                intent.putExtra("id", foreignUser.getUsername());
+                intent.putExtra("title", "following");
+                startActivity(intent);
             }
         });
     }
