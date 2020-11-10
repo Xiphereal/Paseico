@@ -30,7 +30,7 @@ import app.paseico.login.LogInActivity;
 
 public class NotMyProfileFragment extends Fragment {
     ImageView image_profile;
-    TextView followers, following, fullname, username;
+    TextView followers, textView_followers, textView_following, following, fullname, username;
     FirebaseUser firebaseUser;
     String profileid;
     User actualUser;
@@ -92,17 +92,14 @@ public class NotMyProfileFragment extends Fragment {
             }
         });
 
-
-
-
-
-
         image_profile = view.findViewById(R.id.image_profile);
         followers = view.findViewById(R.id.followers);
         following = view.findViewById(R.id.following);
         username = view.findViewById(R.id.username);
         fullname = view.findViewById(R.id.fullname);
         buttonLogOut = view.findViewById(R.id.buttonLogOut);
+        textView_followers = view.findViewById(R.id.textView_Followers);
+        textView_following = view.findViewById(R.id.textView_Following);
 
 
         buttonLogOut.setOnClickListener(new View.OnClickListener() {
@@ -207,12 +204,32 @@ public class NotMyProfileFragment extends Fragment {
             }
         });
 
+        textView_followers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), FollowersActivity.class);
+                intent.putExtra("id", actualUser.getUsername());
+                intent.putExtra("title", "followers");
+                startActivity(intent);
+            }
+        });
+
         following.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), FollowersActivity.class);
                 intent.putExtra("id", foreignUser.getUsername());
                 intent.putExtra("title", "following");
+                startActivity(intent);
+            }
+        });
+
+        textView_following.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), FollowersActivity.class);
+                intent.putExtra("id", actualUser.getUsername());
+                intent.putExtra("title", "followers");
                 startActivity(intent);
             }
         });

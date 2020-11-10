@@ -38,7 +38,7 @@ import static java.lang.Thread.sleep;
 
 public class ProfileFragment extends Fragment {
     ImageView image_profile;
-    TextView followers, following, fullname, username;
+    TextView followers, textView_followers, following, textView_following, fullname, username;
     FirebaseUser firebaseUser;
     User actualUser;
     Button buttonLogOut;
@@ -70,6 +70,8 @@ public class ProfileFragment extends Fragment {
         username = view.findViewById(R.id.username);
         fullname = view.findViewById(R.id.fullname);
         buttonLogOut = view.findViewById(R.id.buttonLogOut);
+        textView_followers = view.findViewById(R.id.textView_Followers);
+        textView_following = view.findViewById(R.id.textView_Following);
 
         FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
@@ -102,7 +104,27 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        textView_followers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), FollowersActivity.class);
+                intent.putExtra("id", actualUser.getUsername());
+                intent.putExtra("title", "followers");
+                startActivity(intent);
+            }
+        });
+
         following.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), FollowersActivity.class);
+                intent.putExtra("id", actualUser.getUsername());
+                intent.putExtra("title", "following");
+                startActivity(intent);
+            }
+        });
+
+        textView_following.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), FollowersActivity.class);

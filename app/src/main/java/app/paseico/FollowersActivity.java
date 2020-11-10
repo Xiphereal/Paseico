@@ -89,11 +89,7 @@ public class FollowersActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot datasnapshot) {
                 idList.clear();
                 for(DataSnapshot snapshot: datasnapshot.getChildren()){
-
-                    if(!snapshot.getKey().equals(actualUser.getUsername())){
-                        idList.add(snapshot.getKey());
-                    }
-
+                    idList.add(snapshot.getKey());
                 }
                 showUsers();
             }
@@ -112,11 +108,7 @@ public class FollowersActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot datasnapshot) {
                 idList.clear();
                 for(DataSnapshot snapshot: datasnapshot.getChildren()){
-
-                    if(!snapshot.getKey().equals(actualUser.getUsername())){
-                        idList.add(snapshot.getKey());
-                    }
-
+                    idList.add(snapshot.getKey());
                 }
                 showUsers();
             }

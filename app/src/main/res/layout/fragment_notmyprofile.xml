@@ -116,7 +116,8 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="followers"/>
+                                android:text="followers"
+                                android:id="@+id/textView_Followers"/>
 
                         </LinearLayout>
 
@@ -139,7 +140,8 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="following"/>
+                                android:text="following"
+                                android:id="@+id/textView_Following"/>
 
                         </LinearLayout>
                     </LinearLayout>

@@ -119,9 +119,9 @@ public class SearchUserFragment extends Fragment {
                     mUsers.clear();
                     for(DataSnapshot snapshot : datasnapshot.getChildren()){
                         User user = snapshot.getValue(User.class);
-                       if(!user.getUsername().equals(actualUser.getUsername())){
+                       //if(!user.getUsername().equals(actualUser.getUsername())){
                            mUsers.add(user);
-                       }
+                       //}
                     }
                    userAdapter.notifyDataSetChanged();
                 }
@@ -136,6 +136,12 @@ public class SearchUserFragment extends Fragment {
 
     public void navigateToNotMyProfileFragment(){
         NavDirections action = SearchUserFragmentDirections.actionNavSearchUsersToNotMyProfileFragment();
+        NavHostFragment.findNavController(SearchUserFragment.this)
+                .navigate(action);
+    }
+
+    public void navigateToProfileFragment(){
+        NavDirections action = SearchUserFragmentDirections.actionNavSearchUsersToNavProfile();
         NavHostFragment.findNavController(SearchUserFragment.this)
                 .navigate(action);
     }

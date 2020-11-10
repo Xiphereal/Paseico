@@ -79,10 +79,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final User user = mUsers.get(position);
+        final User searchedUser = mUsers.get(position);
         holder.btn_follow.setVisibility(View.VISIBLE);
-        holder.username.setText(user.getUsername());
-        holder.fullname.setText(user.getName());
+        holder.username.setText(searchedUser.getUsername());
+        holder.fullname.setText(searchedUser.getName());
         //Glide.with(mContext).load("@drawable/ic_user").into(holder.image_profile);
         //Glide.with(mContext).load(user.getImageurl()).into(holder.image_profile);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -90,7 +90,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 actualUser = dataSnapshot.getValue(User.class);
-                isFollowing(user.getUsername(), holder.btn_follow);
+                isFollowing(searchedUser.getUsername(), holder.btn_follow);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -102,22 +102,36 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             @Override
             public void onClick(View view){
                 if (isfragment) {
-                    SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
-                    editor.putString("profileid", user.getUsername());
-                    editor.apply();
-
-                    searchUserFragment.navigateToNotMyProfileFragment();
+                    if (!actualUser.getUsername().equals(searchedUser.getUsername())){
+                        SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
+                        editor.putString("profileid", searchedUser.getUsername());
+                        editor.apply();
+                        searchUserFragment.navigateToNotMyProfileFragment();
+                    }else{
+                        searchUserFragment.navigateToProfileFragment();
+                    }
                 } else{
                     //Intent intent = new Intent(mContext, MainMenuActivity.class);
                     //mContext.startActivity(intent);
-                    SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
-                    editor.putString("profileid", user.getUsername());
-                    editor.apply();
-                      Fragment mFragment = null;
-                        mFragment = new NotMyProfileFragment();
-                    ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.frameLayout, mFragment)
-                            .commit();
+                    if (!actualUser.getUsername().equals(searchedUser.getUsername())){
+                        SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
+                        editor.putString("profileid", searchedUser.getUsername());
+                        editor.apply();
+                          Fragment mFragment = null;
+                            mFragment = new NotMyProfileFragment();
+                            ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.frameLayout, mFragment)
+                                .commit();
+                    } else{
+                        SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
+                        editor.putString("profileid", searchedUser.getUsername());
+                        editor.apply();
+                        Fragment mFragment = null;
+                        mFragment = new ProfileFragment();
+                        ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.frameLayout, mFragment)
+                                .commit();
+                    }
                 }
             }
         });
@@ -127,13 +141,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             public void onClick(View view){
                 if(holder.btn_follow.getText().toString().equals("follow")){
                     FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername())
-                            .child("following").child(user.getUsername()).setValue(true);
-                    FirebaseDatabase.getInstance().getReference().child("Follow").child(user.getUsername())
+                            .child("following").child(searchedUser.getUsername()).setValue(true);
+                    FirebaseDatabase.getInstance().getReference().child("Follow").child(searchedUser.getUsername())
                             .child("followers").child(actualUser.getUsername()).setValue(true);
                 }else{
                     FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername())
-                            .child("following").child(user.getUsername()).removeValue();
-                    FirebaseDatabase.getInstance().getReference().child("Follow").child(user.getUsername())
+                            .child("following").child(searchedUser.getUsername()).removeValue();
+                    FirebaseDatabase.getInstance().getReference().child("Follow").child(searchedUser.getUsername())
                             .child("followers").child(actualUser.getUsername()).removeValue();
                 }
             }
@@ -162,15 +176,19 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         }
     }
 
-    private void isFollowing(final String userid, Button button){
+    private void isFollowing(final String searchedUsername, Button button){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername()).child("following");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.child(userid).exists()){
-                    button.setText("following");
-                }else{
-                    button.setText("follow");
+                if (searchedUsername.equals(actualUser.getUsername())){
+                    button.setVisibility(View.GONE);
+                } else {
+                    if (snapshot.child(searchedUsername).exists()) {
+                        button.setText("following");
+                    } else {
+                        button.setText("follow");
+                    }
                 }
             }
 
