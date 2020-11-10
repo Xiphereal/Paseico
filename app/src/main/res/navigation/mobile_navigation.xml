@@ -27,7 +27,11 @@
         android:id="@+id/nav_searchUsers"
         android:name="app.paseico.ui.searchUsers.SearchUserFragment"
         android:label="Buscar usuarios"
-        tools:layout="@layout/fragment_user_search" />
+        tools:layout="@layout/fragment_user_search" >
+        <action
+            android:id="@+id/action_nav_searchUsers_to_notMyProfileFragment"
+            app:destination="@id/notMyProfileFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_marketplace"
