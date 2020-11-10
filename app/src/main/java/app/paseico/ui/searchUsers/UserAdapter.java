@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,13 +49,22 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private FirebaseUser firebaseUser;
     private String usernameFirebase;
     User actualUser;
+    private SearchUserFragment searchUserFragment;
+
     public UserAdapter(Context mContext, List<User> mUsers, boolean isfragment)
     {
         this.mContext = mContext;
         this.mUsers = mUsers;
         this.isfragment = isfragment;
     }
-    @NonNull
+
+    public UserAdapter(Context mContext, List<User> mUsers, SearchUserFragment searchUserFragment)
+    {
+        this.mContext = mContext;
+        this.mUsers = mUsers;
+        this.isfragment = true;
+        this.searchUserFragment = searchUserFragment;
+    }
 
 
 
@@ -92,10 +105,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                     SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
                     editor.putString("profileid", user.getUsername());
                     editor.apply();
-                    ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, //DUDA hecho para activity_main_menu
-                    new NotMyProfileFragment()).commit();
 
-                }else{
+                    searchUserFragment.navigateToNotMyProfileFragment();
+                } else{
                     //Intent intent = new Intent(mContext, MainMenuActivity.class);
                     //mContext.startActivity(intent);
                     SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();

@@ -9,9 +9,12 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import app.paseico.R;
+import app.paseico.SearchFragment;
 import app.paseico.data.User;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +58,7 @@ public class SearchUserFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 actualUser = dataSnapshot.getValue(User.class);
+                userAdapter = new UserAdapter(getContext(),mUsers, SearchUserFragment.this);
                 readUsers();
             }
             @Override
@@ -129,6 +133,12 @@ public class SearchUserFragment extends Fragment {
 
             }
         });
+    }
+
+    public void navigateToNotMyProfileFragment(){
+        NavDirections action = SearchUserFragmentDirections.actionNavSearchUsersToNotMyProfileFragment();
+        NavHostFragment.findNavController(SearchUserFragment.this)
+                .navigate(action);
     }
 
 }
