@@ -2,17 +2,18 @@ package app.paseico.data;
 
 import com.google.android.gms.maps.model.Marker;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class PointOfInterest {
+public class PointOfInterest implements Serializable {
     private String name;
     private Double latitude;
     private Double longitude;
 
-    public PointOfInterest(){}
+    public PointOfInterest() {
+    }
 
-    public PointOfInterest(Double lat, Double lon, String name)
-    {
+    public PointOfInterest(Double lat, Double lon, String name) {
         latitude = lat;
         longitude = lon;
         this.name = name;
@@ -33,11 +34,23 @@ public class PointOfInterest {
         return Objects.hash(name, latitude, longitude);
     }
 
-    public String getName(){ return name; }
+    public String getName() {
+        return name;
+    }
 
-    public double getLatitude() { return latitude; }
-    public double getLongitude() { return longitude; }
+    public double getLatitude() {
+        return latitude;
+    }
 
-    public void setLongitude(Double longitude) { this.longitude = longitude; }
-    public void setLatitude(Double latitude) { this.latitude = latitude; }
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
 }

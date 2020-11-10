@@ -1,7 +1,6 @@
 package app.paseico.data;
 
 
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -16,11 +15,14 @@ public class Route implements Parcelable {
     private List<PointOfInterest> pointsOfInterest;
     private User author;
 
-    public Route(Parcel in){
+    public Route() {
+    }
+
+    public Route(Parcel in) {
         readFromParcel(in);
     }
 
-    //TODO: Decide whether the database ID for the user or Paseico.User is needed in a Route.
+    //TODO: Decide whether the database ID for the user or Paseico. User is needed in a Route.
     public Route(String name, List<PointOfInterest> pointOfInterests, User author) {
         this.name = name;
         this.pointsOfInterest = pointOfInterests;
@@ -104,7 +106,7 @@ public class Route implements Parcelable {
                 '}';
     }
 
-    private void readFromParcel(Parcel in){
+    private void readFromParcel(Parcel in) {
         this.name = in.readString();
         this.theme = in.readString();
         this.length = in.readDouble();
@@ -113,9 +115,9 @@ public class Route implements Parcelable {
         this.pointsOfInterest = in.readArrayList(PointOfInterest.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<Route> CREATOR =  new Parcelable.Creator<Route>(){
+    public static final Parcelable.Creator<Route> CREATOR = new Parcelable.Creator<Route>() {
         @Override
-        public Route createFromParcel(Parcel in){
+        public Route createFromParcel(Parcel in) {
             return new Route(in);
         }
 
