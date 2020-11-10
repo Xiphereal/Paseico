@@ -48,15 +48,14 @@ public class SearchUserFragment extends Fragment {
         search_bar = view.findViewById(R.id.search_bar);
 
         mUsers = new ArrayList<>();
+        userAdapter = new UserAdapter(getContext(),mUsers, true);
+        recyclerView.setAdapter(userAdapter);
 
         FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                 actualUser = dataSnapshot.getValue(User.class);
-                userAdapter = new UserAdapter(getContext(),mUsers, true);
                 readUsers();
-                recyclerView.setAdapter(userAdapter);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -94,8 +93,9 @@ public class SearchUserFragment extends Fragment {
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     User user = snapshot.getValue(User.class);
-                    if(!user.getUsername().equals(actualUser.getUsername())){mUsers.add(user);}
-                    mUsers.add(user);
+                    if(!user.getUsername().equals(actualUser.getUsername())){
+                        mUsers.add(user);
+                    }
                 }
                 userAdapter.notifyDataSetChanged();
             }
@@ -116,7 +116,9 @@ public class SearchUserFragment extends Fragment {
                     mUsers.clear();
                     for(DataSnapshot snapshot : datasnapshot.getChildren()){
                         User user = snapshot.getValue(User.class);
-                       if(!user.getUsername().equals(actualUser.getUsername())){mUsers.add(user);}
+                       if(!user.getUsername().equals(actualUser.getUsername())){
+                           mUsers.add(user);
+                       }
                     }
                    userAdapter.notifyDataSetChanged();
                 }
