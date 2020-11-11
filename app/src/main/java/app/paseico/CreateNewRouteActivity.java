@@ -65,7 +65,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     /**
      * Checks for the User requirements for creating the new Route. If everything is fine, a confirmation dialog
-     * appears, displaying the Route summary. If anything goes wrong, a error dialogs appears.
+     * appears and the Route creation finalizes. If anything goes wrong, a error dialogs appears and keeps the
+     * previous state.
      */
     private void tryFinalizeRouteCreation() {
         // TODO: Retrieve the current from the DB and create its Paseico.User.
@@ -74,8 +75,10 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         String currentUserId = FirebaseService.getCurrentUser().getUid();
         User currentUser = new User();
 
+        // TODO: Serialize the modifications to the User state to the database.
         if (currentUser.hasFreeRouteCreation()) {
             showConfirmationDialog(currentUserId);
+            currentUser.setHasFreeRouteCreation(false);
         } else {
             // TODO: Replace with the real in-creation Route cost.
             int routeCost = Integer.MAX_VALUE;
@@ -102,19 +105,33 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         builder.setMessage("La nueva ruta ha sido guardada satisfactoriamente.")
                 .setTitle("Finalizar creación de ruta")
                 .setPositiveButton("OK", (dialog, which) -> {
-                    TextInputEditText textInputEditText = findViewById(R.id.route_name_textInputEditText);
-
-                    createNewRoute(textInputEditText, authorId);
-
-                    // Take the user back to the main map activity
-                    // TODO: Clean the current activity state to prevent the user retrieve the state when
-                    //  using the backstack.
-                    Intent goToRoutesIntent = new Intent(getApplicationContext(), MainMenuActivity.class);
-                    startActivity(goToRoutesIntent);
+                    finalizeRouteCreation(authorId);
                 });
+
+        // In case the user taps out of the dialog thus dismissing it, the state must be consistent.
+        builder.setOnDismissListener(dialog -> {
+            finalizeRouteCreation(authorId);
+        });
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    /**
+     * Finalizes the route creation by persisting the new Route and takes the User back to the previous activity.
+     *
+     * @param authorId
+     */
+    private void finalizeRouteCreation(String authorId) {
+        TextInputEditText textInputEditText = findViewById(R.id.route_name_textInputEditText);
+
+        createNewRoute(textInputEditText, authorId);
+
+        // Take the user back to the main map activity
+        // TODO: Clean the current activity state to prevent the user retrieve the state when
+        //  using the backstack.
+        Intent goToRoutesIntent = new Intent(getApplicationContext(), MainMenuActivity.class);
+        startActivity(goToRoutesIntent);
     }
 
     /**
@@ -179,8 +196,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         });
     }
 
-    private void registerOnPOIClickListener(){
-        createNewRouteMap.setOnPoiClickListener(poiSelected ->{
+    private void registerOnPOIClickListener() {
+        createNewRouteMap.setOnPoiClickListener(poiSelected -> {
             // TODO: Uncomment. Commented so that the app can compile.
             //PointOfInterest poi = findClickedPointOfInterest(poiSelected.latLng.latitude, poiSelected.latLng.longitude, poiSelected.name);
         });
