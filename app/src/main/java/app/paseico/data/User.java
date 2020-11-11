@@ -9,6 +9,11 @@ public class User {
     private boolean boost;
     private String boostExpires;
 
+    /**
+     * True if the User has the "new User free Route creation" available, false if it has been already spent.
+     */
+    private boolean hasFreeRouteCreation;
+
     public User() {
     }
 
@@ -19,6 +24,7 @@ public class User {
         this.points = 0;
         this.boost = false;
         this.boostExpires = null;
+        this.hasFreeRouteCreation = true;
     }
 
     public String getName() {
@@ -79,6 +85,14 @@ public class User {
 
     public String getBoostExpires() {
         return boostExpires;
+    }
+
+    public boolean hasFreeRouteCreation() {
+        return hasFreeRouteCreation;
+    }
+
+    public void setHasFreeRouteCreation(boolean hasFreeRouteCreation) {
+        this.hasFreeRouteCreation = hasFreeRouteCreation;
     }
 }
 

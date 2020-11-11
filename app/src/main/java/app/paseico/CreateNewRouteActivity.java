@@ -60,10 +60,41 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         ExtendedFloatingActionButton extendedFloatingActionButton = findViewById(R.id.finalize_route_creation_button);
 
         // TODO: When the conditions are not met, we must show an error message and just close the dialog on click OK.
-        extendedFloatingActionButton.setOnClickListener(view -> showConfirmationDialog());
+        extendedFloatingActionButton.setOnClickListener(view -> tryFinalizeRouteCreation());
     }
 
-    private void showConfirmationDialog() {
+    /**
+     * Checks for the User requirements for creating the new Route. If everything is fine, a confirmation dialog
+     * appears, displaying the Route summary. If anything goes wrong, a error dialogs appears.
+     */
+    private void tryFinalizeRouteCreation() {
+        // TODO: Retrieve the current from the DB and create its Paseico.User.
+        //  In one hand, we need the current User ID for assigning it to the new Route.
+        //  In the other hand, we need the Paseico.User is needed for checking the current User points.
+        String currentUserId = FirebaseService.getCurrentUser().getUid();
+        User currentUser = new User();
+
+        if (currentUser.hasFreeRouteCreation()) {
+            showConfirmationDialog(currentUserId);
+        } else {
+            // TODO: Replace with the real in-creation Route cost.
+            int routeCost = Integer.MAX_VALUE;
+            int currentUserPoints = currentUser.getPoints();
+
+            if (currentUserPoints >= routeCost) {
+                currentUser.setPoints(currentUserPoints - routeCost);
+                showConfirmationDialog(currentUserId);
+            } else {
+                // TODO: Show a similar dialog from showConfirmationDialog() but with an error message
+                //  showing that the user doesn't have enough points.
+            }
+        }
+    }
+
+    /**
+     * @param authorId The database ID of the User that is creating the Route.
+     */
+    private void showConfirmationDialog(String authorId) {
         // Where the alert dialog is going to be shown.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -73,7 +104,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
                 .setPositiveButton("OK", (dialog, which) -> {
                     TextInputEditText textInputEditText = findViewById(R.id.route_name_textInputEditText);
 
-                    createNewRoute(textInputEditText);
+                    createNewRoute(textInputEditText, authorId);
 
                     // Take the user back to the main map activity
                     // TODO: Clean the current activity state to prevent the user retrieve the state when
@@ -86,12 +117,14 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         dialog.show();
     }
 
-    private void createNewRoute(TextInputEditText textInputEditText) {
-        String authorId = FirebaseService.getCurrentUser().getUid();
+    /**
+     * @param authorId The database ID of the User that is creating the Route.
+     */
+    private void createNewRoute(TextInputEditText textInputEditText, String authorId) {
         newRoute = new Route(textInputEditText.getText().toString(), selectedPointsOfInterest, authorId);
         FirebaseService.saveRoute(newRoute);
 
-        //We add the created route name to the createdRoutes before returning to the main activity
+        //We add the created route name to the createdRoutes before returning to the main activity.
         UserCreatedRoutesFragment.getCreatedRoutes().add(newRoute.getName());
     }
 
@@ -158,7 +191,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
         markedPOIs.add(marker.getTitle());
 
-        selectedPointsOfInterest.add(new PointOfInterest(marker.getPosition().latitude,marker.getPosition().longitude, marker.getTitle()));
+        selectedPointsOfInterest.add(new PointOfInterest(marker.getPosition().latitude, marker.getPosition().longitude, marker.getTitle()));
     }
 
     private void updateMarkedPOIsListView() {
@@ -170,9 +203,9 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         LatLng latLangMarker = marker.getPosition();
         Double lat = latLangMarker.latitude;
         Double lon = latLangMarker.longitude;
-        PointOfInterest markerPOI = new PointOfInterest(lat,lon,marker.getTitle());
+        PointOfInterest markerPOI = new PointOfInterest(lat, lon, marker.getTitle());
         for (PointOfInterest poi : selectedPointsOfInterest) {
-            if (poi.equals(markerPOI)){
+            if (poi.equals(markerPOI)) {
                 return poi;
             }
         }
