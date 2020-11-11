@@ -181,7 +181,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     private void registerOnPOIClickListener(){
         createNewRouteMap.setOnPoiClickListener(poiSelected ->{
-            PointOfInterest poi = findClickedPointOfInterest(poiSelected.latLng.latitude, poiSelected.latLng.longitude, poiSelected.name);
+            // TODO: Uncomment. Commented so that the app can compile.
+            //PointOfInterest poi = findClickedPointOfInterest(poiSelected.latLng.latitude, poiSelected.latLng.longitude, poiSelected.name);
         });
     }
 
