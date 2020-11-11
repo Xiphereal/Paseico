@@ -143,6 +143,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
 
         registerOnMarkerClickListener();
+        registerOnPOIClickListener();
     }
 
     private void addFakePOIsToMap(GoogleMap googleMap) {
@@ -175,6 +176,12 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
             updateMarkedPOIsListView();
 
             return true;
+        });
+    }
+
+    private void registerOnPOIClickListener(){
+        createNewRouteMap.setOnPoiClickListener(poiSelected ->{
+            PointOfInterest poi = findClickedPointOfInterest(poiSelected.latLng.latitude, poiSelected.latLng.longitude, poiSelected.name);
         });
     }
 
