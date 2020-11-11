@@ -87,9 +87,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     }
 
     private void createNewRoute(TextInputEditText textInputEditText) {
-        // TODO: Get the author reference and pass it to the Route constructor.
-        //User author = FirebaseService.getCurrentUser();
-        newRoute = new Route(textInputEditText.getText().toString(), selectedPointsOfInterest, null);
+        String authorId = FirebaseService.getCurrentUser().getUid();
+        newRoute = new Route(textInputEditText.getText().toString(), selectedPointsOfInterest, authorId);
         FirebaseService.saveRoute(newRoute);
 
         //We add the created route name to the createdRoutes before returning to the main activity

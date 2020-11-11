@@ -8,19 +8,17 @@ public class User {
     private int points;
     private boolean boost;
     private String boostExpires;
-    private String lastFreeAd;
 
     public User() {
     }
 
-    public User(String name, String username, String email, String lastFreeAd) {
+    public User(String name, String username, String email) {
         this.name = name;
         this.email = email;
         this.username = username;
         this.points = 0;
         this.boost = false;
         this.boostExpires = null;
-        this.lastFreeAd = lastFreeAd;
     }
 
     public String getName() {
@@ -77,10 +75,6 @@ public class User {
 
     public void setBoost(boolean boost) {
         this.boost = boost;
-    }
-
-    public String getLastFreeAd() {
-        return lastFreeAd;
     }
 
     public String getBoostExpires() {

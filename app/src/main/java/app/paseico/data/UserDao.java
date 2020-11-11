@@ -1,26 +1,10 @@
 package app.paseico.data;
 
-import android.provider.ContactsContract;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
+import app.paseico.IUserDao;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import app.paseico.IUserDao;
-import app.paseico.data.User;
+import com.google.firebase.database.*;
 
 public class UserDao implements IUserDao {
     private DatabaseReference myUsersRef = FirebaseDatabase.getInstance().getReference("users"); //Node users reference
@@ -44,7 +28,7 @@ public class UserDao implements IUserDao {
                 }
             });
 
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -59,27 +43,19 @@ public class UserDao implements IUserDao {
         String email = user.getEmail();
         String[] parts = email.split("@");
         String username = parts[0];
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = new Date();
-        date.setDate(date.getDate() -1);
-        String strDate = dateFormat.format(date);
 
-        addNewUserToDatabase(user, name, username, strDate);
+        addNewUserToDatabase(user, name, username);
     }
 
     @Override
     public void addUser(FirebaseUser user, String username, String name, String surname) {
         String fullname = name + " " + surname;
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = new Date();
-        date.setDate(date.getDate() -1);
-        String strDate = dateFormat.format(date);
 
-        addNewUserToDatabase(user, fullname, username, strDate);
+        addNewUserToDatabase(user, fullname, username);
     }
 
-    private void addNewUserToDatabase(FirebaseUser user, String name, String username, String strDate) {
-        User newUser = new User(name, username, user.getEmail(), strDate);
+    private void addNewUserToDatabase(FirebaseUser user, String name, String username) {
+        User newUser = new User(name, username, user.getEmail());
         myUsersRef.child(user.getUid()).setValue(newUser);
     }
 }
