@@ -100,10 +100,19 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
             currentUser.setHasFreeRouteCreation(false);
             showConfirmationDialog();
         } else {
-            // TODO: Show an intermediate "Route Creation Resume" dialog with the total cost of the Route.
-            //  (See: https://cliente.tuneupprocess.com/web/#/ut/pam/651/2143/4533 for in depth explanation.).
-            // TODO: Replace with the real in-creation Route cost.
-            int routeCost = Integer.MAX_VALUE;
+            showRouteCreationSummaryDialog();
+        }
+    }
+
+    private void showRouteCreationSummaryDialog() {
+        // TODO: Replace with the real in-creation Route cost.
+        int routeCost = Integer.MAX_VALUE;
+
+        String dialogMessage = getResources().getString(R.string.route_creation_summary_message, routeCost);
+
+        AlertDialog.Builder builder = setUpBuilder(dialogMessage);
+
+        builder.setOnDismissListener(dialog -> {
             int currentUserPoints = currentUser.getPoints();
 
             if (currentUserPoints >= routeCost) {
@@ -112,32 +121,41 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
             } else {
                 showNotEnoughPointsDialog();
             }
-        }
+        });
+
+        showDialog(builder);
+    }
+
+    private void showDialog(AlertDialog.Builder builder) {
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void showConfirmationDialog() {
-        // Where the alert dialog is going to be shown.
-        AlertDialog.Builder builder = setUpBuilder(R.string.route_creation_confirmation_message);
+        String dialogMessage = getResources().getString(R.string.route_creation_confirmation_message);
+        AlertDialog.Builder builder = setUpBuilder(dialogMessage);
 
         // In case the user close the dialog either by tapping outside of the dialog or by pressing any button,
         // it's considered dismissed.
         builder.setOnDismissListener(dialog -> finalizeRouteCreation());
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        showDialog(builder);
     }
 
     /**
      * Sets up a basic builder for an AlertDialog. The caller must ensures the setOnDismissListener is defined
      * with the desired behavior for when closing the dialog.
+     *
+     * @param dialogMessage The String from resources can be retrieved by 'getResources().getString()'. This allows
+     *                      to use formatted Strings for dynamic messages.
      * @return The setted up builder for the AlertDialog.
      */
     @NotNull
-    private AlertDialog.Builder setUpBuilder(int dialogMessageStringResourceId) {
+    private AlertDialog.Builder setUpBuilder(String dialogMessage) {
         // Where the alert dialog is going to be shown.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setMessage(dialogMessageStringResourceId)
+        builder.setMessage(dialogMessage)
                 .setTitle(R.string.route_creation_finalize_title)
                 .setPositiveButton("OK", (dialog, which) -> {
                     // This remains empty because when the dialog is closed by tapping on 'OK' or outside it,
@@ -183,14 +201,14 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     }
 
     private void showNotEnoughPointsDialog() {
-        AlertDialog.Builder builder = setUpBuilder(R.string.route_creation_not_enough_points_message);
+        String dialogMessage = getResources().getString(R.string.route_creation_not_enough_points_message);
+        AlertDialog.Builder builder = setUpBuilder(dialogMessage);
 
         builder.setOnDismissListener(dialog -> {
             // This remains empty because we want the app to do nothing in this case.
         });
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        showDialog(builder);
     }
 
     @Override
