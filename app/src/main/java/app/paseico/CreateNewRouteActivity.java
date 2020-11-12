@@ -106,7 +106,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     private void showRouteCreationSummaryDialog() {
         // TODO: Replace with the real in-creation Route cost.
-        int routeCost = Integer.MAX_VALUE;
+        int routeCost = calculateRouteCost();
 
         String dialogMessage = getResources().getString(R.string.route_creation_summary_message, routeCost);
 
@@ -124,6 +124,12 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         });
 
         showDialog(builder);
+    }
+
+    private int calculateRouteCost() {
+        // TODO: When both Google Maps & User created Points Of Interest are supported, we must calculate the Route
+        //  cost having their different costs in mind.
+        return selectedPointsOfInterest.size() * getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost);
     }
 
     private void showDialog(AlertDialog.Builder builder) {
