@@ -9,8 +9,12 @@ package app.paseico;
         import android.Manifest;
         import android.content.Intent;
         import android.content.pm.PackageManager;
+        import android.icu.text.Transliterator;
+        import android.location.Address;
         import android.location.Location;
         import android.os.Bundle;
+        import android.os.Parcelable;
+        import android.util.Log;
         import android.view.View;
         import android.widget.AdapterView;
         import android.widget.ArrayAdapter;
@@ -33,6 +37,7 @@ package app.paseico;
         import com.google.android.gms.maps.SupportMapFragment;
         import com.google.android.gms.maps.model.BitmapDescriptorFactory;
         import com.google.android.gms.maps.model.LatLng;
+        import com.google.android.gms.maps.model.Marker;
         import com.google.android.gms.maps.model.MarkerOptions;
         import com.google.android.gms.maps.model.PolylineOptions;
         import com.google.android.material.snackbar.Snackbar;
@@ -59,15 +64,15 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
     //polyline object
     private List<Polyline> polylines = null;
 
-    static ArrayList<String> pointsOfInterestNames = new ArrayList<String>();
-    static ArrayList<LatLng> locations = new ArrayList<LatLng>();
-    static ArrayList<Boolean> isCompleted = new ArrayList<Boolean>();
-    static int actualPOI;
-    static int poisLeft = 0;
-    static ArrayAdapter arrayAdapter;
+    private ArrayList<String> pointsOfInterestNames = new ArrayList<String>();
+    private ArrayList<LatLng> locations = new ArrayList<LatLng>();
+    private ArrayList<Boolean> isCompleted = new ArrayList<Boolean>();
+    private int actualPOI;
+    private int poisLeft = 0;
+    private ArrayAdapter arrayAdapter;
 
-    static Location currentDestination;
-    static ListView listView;
+    private Location currentDestination;
+    private ListView listView;
 
 
 
@@ -88,24 +93,22 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
         ImageButton cancelRoute = findViewById(R.id.buttonCancelRoute);
 
         listView = findViewById(R.id.ListViewRoute);
+        Log.d("runnerRoute", "poiIsEmpty: " + pointsOfInterestNames.isEmpty() + "\n locationsIsEmpty: " + locations.isEmpty());
         if (pointsOfInterestNames.isEmpty() && locations.isEmpty()) {
 
-
-            //WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
-            //ASK JOSE IF YOU DONT KNOW HOW TO PASS THE ROUTE HERE
-            //JUST UNCOMMENT THIS CODE WHEN U'RE READY TO PASS FROM ANOTHER INTENT (WITH THE STRING "route" on the putextra method) AND IT WILL WORK
-            //WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
-    /*
             app.paseico.data.Route route = (app.paseico.data.Route) b.get("route");
             List<PointOfInterest> routePois = route.getPointsOfInterest();
+
             for(int i = 0; i < routePois.size(); i++){
                 pointsOfInterestNames.add(routePois.get(i).getName());
-                locations.add(routePois.get(i).getGoogleMarker().getPosition());
+
+               LatLng latlng = new LatLng(routePois.get(i).getLatitude(), routePois.get(i).getLongitude());
+                locations.add(latlng);
             }
 
             TextView routeTitle = findViewById(R.id.textViewTitleRoutingActivity);
             routeTitle.setText(route.getName());
-    */
+
             for(int i = 0; i < locations.size(); i++) {
                 isCompleted.add(false);
                 poisLeft++;
@@ -147,8 +150,8 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
                     poisLeft++;
                 }
 
-                Intent intent = new Intent(RouteRunnerActivity.this, TemporalRoutesMenu.class);
-                startActivity(intent);
+//                Intent intent = new Intent(RouteRunnerActivity.this, TemporalRoutesMenu.class);
+//                startActivity(intent);
                 finish();
             }
 
@@ -343,6 +346,5 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Findroutes(start,end);
     }
-
 
 }
