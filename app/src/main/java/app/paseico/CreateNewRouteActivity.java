@@ -127,12 +127,17 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         dialog.show();
     }
 
+    /**
+     * Sets up a basic builder for an AlertDialog. The caller must ensures the setOnDismissListener is defined
+     * with the desired behavior for when closing the dialog.
+     * @return The setted up builder for the AlertDialog.
+     */
     @NotNull
-    private AlertDialog.Builder setUpBuilder(int p) {
+    private AlertDialog.Builder setUpBuilder(int dialogMessageStringResourceId) {
         // Where the alert dialog is going to be shown.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setMessage(p)
+        builder.setMessage(dialogMessageStringResourceId)
                 .setTitle(R.string.route_creation_finalize_title)
                 .setPositiveButton("OK", (dialog, which) -> {
                     // This remains empty because when the dialog is closed by tapping on 'OK' or outside it,
