@@ -319,6 +319,10 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         return null;
     }
 
+    private boolean isPointOfInterestSelected(PointOfInterest poi) {
+        return poi != null;
+    }
+
     private void registerOnMapLongClick() {
         createNewRouteMap.setOnMapLongClickListener(point -> {
             createNewRouteMap.addMarker(new MarkerOptions().position(point).title("User Marker"));
