@@ -279,6 +279,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
             }
 
             updateMarkedPOIsListView();
+
+            return;
         });
     }
 
@@ -304,10 +306,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     }
 
     private PointOfInterest findClickedPointOfInterest(LatLng latLangMarker, String title) {
-        //LatLng latLangMarker = marker.getPosition();
         Double lat = latLangMarker.latitude;
         Double lon = latLangMarker.longitude;
-        //PointOfInterest markerPOI = new PointOfInterest(lat, lon, marker.getTitle());
         PointOfInterest markerPOI = new PointOfInterest(lat, lon, title);
         for (PointOfInterest poi : selectedPointsOfInterest) {
             if (poi.equals(markerPOI)) {
