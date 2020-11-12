@@ -2,30 +2,29 @@ package app.paseico;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import app.paseico.data.User;
-import app.paseico.service.FirebaseService;
 import app.paseico.mainMenu.userCreatedRoutes.UserCreatedRoutesFragment;
+import app.paseico.service.FirebaseService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MapStyleOptions;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.*;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.database.*;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -42,6 +41,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     private List<String> markedPOIs = new ArrayList<>();
 
     private User currentUser;
+
+    private Marker userMarkerInCreation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -255,7 +256,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     private void registerOnMarkerClickListener() {
         createNewRouteMap.setOnMarkerClickListener(marker -> {
-            PointOfInterest poi = findClickedPointOfInterest(marker.getPosition(),marker.getTitle());
+            PointOfInterest poi = findClickedPointOfInterest(marker.getPosition(), marker.getTitle());
 
             if (isPointOfInterestSelected(poi)) {
                 deselectPointOfInterest(marker, poi);
@@ -273,8 +274,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         createNewRouteMap.setOnPoiClickListener(poiSelected -> {
             PointOfInterest poi = findClickedPointOfInterest(poiSelected.latLng, poiSelected.name);
             Marker markerOfThePoi = createNewRouteMap.addMarker(new MarkerOptions().position(poiSelected.latLng).title(poiSelected.name));
-            if(isPointOfInterestSelected(poi)){
-                deselectPointOfInterest(markerOfThePoi,poi);
+            if (isPointOfInterestSelected(poi)) {
+                deselectPointOfInterest(markerOfThePoi, poi);
             } else {
                 selectPointOfInterest(markerOfThePoi);
             }
@@ -323,9 +324,51 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         return poi != null;
     }
 
+    /**
+     * Registers the listener for letting the user create Points Of Interest.
+     */
     private void registerOnMapLongClick() {
-        createNewRouteMap.setOnMapLongClickListener(point -> {
-            createNewRouteMap.addMarker(new MarkerOptions().position(point).title("User Marker"));
+        BottomSheetBehavior bottomSheetBehavior = initializeUserNewPoiForm();
+
+        registerOnNewPoiButtonClicked(bottomSheetBehavior);
+
+        createNewRouteMap.setOnMapLongClickListener(tapPoint -> {
+            // Opens the creation form.
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
+            userMarkerInCreation = createNewRouteMap
+                    .addMarker(new MarkerOptions().position(tapPoint).title("User Marker"));
+        });
+    }
+
+    /**
+     * Hides the bottom sheet containing the new Point Of Interest creation form.
+     */
+    @NotNull
+    private BottomSheetBehavior initializeUserNewPoiForm() {
+        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior
+                .from(findViewById(R.id.user_created_marker_bottom_sheet));
+
+        bottomSheetBehavior.setHideable(true);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+        return bottomSheetBehavior;
+    }
+
+    /**
+     * Registers the listener for accepting the new Point of Interest creation.
+     *
+     * @param bottomSheetBehavior The reference to the bottom sheet for hiding it.
+     */
+    private void registerOnNewPoiButtonClicked(BottomSheetBehavior bottomSheetBehavior) {
+        Button createNewPointOfInterestButton = findViewById(R.id.user_created_marker_button);
+
+        createNewPointOfInterestButton.setOnClickListener(button -> {
+            TextInputEditText textInputEditText = findViewById(R.id.user_created_marker_name_text_input);
+
+            userMarkerInCreation.setTitle(textInputEditText.getText().toString());
+
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         });
     }
 
