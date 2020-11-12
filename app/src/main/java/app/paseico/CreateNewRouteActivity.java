@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
@@ -23,6 +24,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.database.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -38,6 +40,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     private ArrayAdapter<String> markedPOIsAdapter;
     private List<String> markedPOIs = new ArrayList<>();
 
+    private User currentUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +50,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
         initializeMapFragment();
 
-        registerFinalizeRouteCreationButtonTransition();
+        getCurrentUserFromDatabaseAsync();
     }
 
     private void initializeMapFragment() {
@@ -54,6 +58,29 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.new_route_map);
         mapFragment.getMapAsync(this);
+    }
+
+    /**
+     * Gets the current User from the database asynchronously.
+     */
+    private void getCurrentUserFromDatabaseAsync() {
+        DatabaseReference currentUserReference = FirebaseService.getCurrentUserReference();
+
+        currentUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                currentUser = snapshot.getValue(User.class);
+
+                // Registering this callback here ensures that the button
+                // action is only performed when the User is ready.
+                registerFinalizeRouteCreationButtonTransition();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("The db connection failed: " + error.getMessage());
+            }
+        });
     }
 
     private void registerFinalizeRouteCreationButtonTransition() {
@@ -69,16 +96,9 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
      * previous state.
      */
     private void tryFinalizeRouteCreation() {
-        // TODO: Retrieve the current from the DB and create its Paseico.User.
-        //  In one hand, we need the current User ID for assigning it to the new Route.
-        //  In the other hand, we need the Paseico.User is needed for checking the current User points.
-        String currentUserId = FirebaseService.getCurrentUser().getUid();
-        User currentUser = new User();
-
-        // TODO: Serialize the modifications to the User state to the database.
-        if (currentUser.hasFreeRouteCreation()) {
-            showConfirmationDialog(currentUserId);
+        if (currentUser.getHasFreeRouteCreation()) {
             currentUser.setHasFreeRouteCreation(false);
+            showConfirmationDialog();
         } else {
             // TODO: Replace with the real in-creation Route cost.
             int routeCost = Integer.MAX_VALUE;
@@ -86,7 +106,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
             if (currentUserPoints >= routeCost) {
                 currentUser.setPoints(currentUserPoints - routeCost);
-                showConfirmationDialog(currentUserId);
+                showConfirmationDialog();
             } else {
                 // TODO: Show a similar dialog from showConfirmationDialog() but with an error message
                 //  showing that the user doesn't have enough points.
@@ -94,55 +114,54 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         }
     }
 
-    /**
-     * @param authorId The database ID of the User that is creating the Route.
-     */
-    private void showConfirmationDialog(String authorId) {
+    private void showConfirmationDialog() {
         // Where the alert dialog is going to be shown.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         // TODO: Extract the string to a resources file or similar abstraction.
         builder.setMessage("La nueva ruta ha sido guardada satisfactoriamente.")
                 .setTitle("Finalizar creación de ruta")
-                .setPositiveButton("OK", (dialog, which) -> {
-                    finalizeRouteCreation(authorId);
-                });
+                .setPositiveButton("OK", (dialog, which) -> finalizeRouteCreation());
 
         // In case the user taps out of the dialog thus dismissing it, the state must be consistent.
-        builder.setOnDismissListener(dialog -> {
-            finalizeRouteCreation(authorId);
-        });
+        builder.setOnDismissListener(dialog -> finalizeRouteCreation());
 
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
-    /**
-     * Finalizes the route creation by persisting the new Route and takes the User back to the previous activity.
-     *
-     * @param authorId
-     */
-    private void finalizeRouteCreation(String authorId) {
-        TextInputEditText textInputEditText = findViewById(R.id.route_name_textInputEditText);
+    private void finalizeRouteCreation() {
+        createNewRoute();
+        persistCurrentUserModifications();
 
-        createNewRoute(textInputEditText, authorId);
-
-        // Take the user back to the main map activity
-        // TODO: Clean the current activity state to prevent the user retrieve the state when
-        //  using the backstack.
-        Intent goToRoutesIntent = new Intent(getApplicationContext(), MainMenuActivity.class);
-        startActivity(goToRoutesIntent);
+        goToPreviousActivity();
     }
 
-    /**
-     * @param authorId The database ID of the User that is creating the Route.
-     */
-    private void createNewRoute(TextInputEditText textInputEditText, String authorId) {
+    private void createNewRoute() {
+        TextInputEditText textInputEditText = findViewById(R.id.route_name_textInputEditText);
+        String authorId = FirebaseService.getCurrentUser().getUid();
+
         newRoute = new Route(textInputEditText.getText().toString(), selectedPointsOfInterest, authorId);
+
         FirebaseService.saveRoute(newRoute);
 
         //We add the created route name to the createdRoutes before returning to the main activity.
         UserCreatedRoutesFragment.getCreatedRoutes().add(newRoute.getName());
+    }
+
+    // TODO: Refactor and generalize this into a User instance method.
+    private void persistCurrentUserModifications() {
+        DatabaseReference currentUserReference = FirebaseService.getCurrentUserReference();
+
+        currentUserReference.child("hasFreeRouteCreation").setValue(currentUser.getHasFreeRouteCreation());
+        currentUserReference.child("points").setValue(currentUser.getPoints());
+    }
+
+    // TODO: Clean the current activity state to prevent the user retrieve the state when
+    //  using the backstack.
+    private void goToPreviousActivity() {
+        Intent goToRoutesIntent = new Intent(getApplicationContext(), MainMenuActivity.class);
+        startActivity(goToRoutesIntent);
     }
 
     @Override

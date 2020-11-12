@@ -12,7 +12,7 @@ public class User {
     /**
      * True if the User has the "new User free Route creation" available, false if it has been already spent.
      */
-    private boolean hasFreeRouteCreation = true;
+    private boolean hasFreeRouteCreation;
 
     public User() {
     }
@@ -24,6 +24,7 @@ public class User {
         this.points = 0;
         this.boost = false;
         this.boostExpires = null;
+        this.hasFreeRouteCreation = true;
     }
 
     public String getName() {
@@ -86,7 +87,9 @@ public class User {
         return boostExpires;
     }
 
-    public boolean hasFreeRouteCreation() {
+    // Simply hasFreeRouteCreation would be a better name, but in order to Firebase to properly populate
+    // the new instance from a snapshot, the getters & setters must be get<SameFieldName>.
+    public boolean getHasFreeRouteCreation() {
         return hasFreeRouteCreation;
     }
 
