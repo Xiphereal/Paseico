@@ -105,7 +105,6 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     }
 
     private void showRouteCreationSummaryDialog() {
-        // TODO: Replace with the real in-creation Route cost.
         int routeCost = calculateRouteCost();
 
         String dialogMessage = getResources().getString(R.string.route_creation_summary_message, routeCost);
