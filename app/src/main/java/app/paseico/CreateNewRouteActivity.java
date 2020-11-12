@@ -90,7 +90,6 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     private void registerFinalizeRouteCreationButtonTransition() {
         ExtendedFloatingActionButton extendedFloatingActionButton = findViewById(R.id.finalize_route_creation_button);
 
-        // TODO: When the conditions are not met, we must show an error message and just close the dialog on click OK.
         extendedFloatingActionButton.setOnClickListener(view -> tryFinalizeRouteCreation());
     }
 
