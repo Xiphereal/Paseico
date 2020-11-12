@@ -118,9 +118,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         // Where the alert dialog is going to be shown.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        // TODO: Extract the string to a resources file or similar abstraction.
-        builder.setMessage("La nueva ruta ha sido guardada satisfactoriamente.")
-                .setTitle("Finalizar creación de ruta")
+        builder.setMessage(R.string.route_creation_confirmation_message)
+                .setTitle(R.string.route_creation_finalize_title)
                 .setPositiveButton("OK", (dialog, which) -> {
                     // This remains empty because when the dialog is closed by tapping on 'OK' or outside it,
                     // it's considered to be dismissed in both cases, thus the call to the finalizer method must

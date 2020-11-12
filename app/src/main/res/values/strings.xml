@@ -7,7 +7,9 @@
 
     <string name="title_activity_main_map">Map</string>
     <string name="title_activity_route_search">RouteSearch</string>
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAMLXmyf_ai85V6PdlA7jYhjL-nSgHl7mA</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
+        AIzaSyAMLXmyf_ai85V6PdlA7jYhjL-nSgHl7mA
+    </string>
 
     <!-- Strings used for route search fragments for navigation -->
     <string name="menu_route_search_fragment_label">SearchFragment</string>
@@ -47,7 +49,7 @@
     <string name="between4_5">4-5</string>
     <string name="gt5">&gt; 5</string> <!-- &gt; is '>' -->
 
-    <!--Strings arrays used to populate searchFragment spinners -->
+    <!-- Strings arrays used to populate searchFragment spinners -->
     <string name="search_fragment_title">Seleccione el filtro de búsqueda</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string-array name="themes_of_route">
@@ -82,7 +84,6 @@
     </string-array>
 
 
-
     <string name="title_activity_main_menu">MainMenuActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -95,8 +96,8 @@
     <string name="menu_user_created_routes">Rutas</string>
     <string name="menu_searcher">Buscar rutas</string>
     <string name="menu_marketplace">Tienda</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
-
+    <!-- Messages displayed to the user  -->
+    <string name="route_creation_finalize_title">"Finalizar creación de ruta"</string>
+    <string name="route_creation_confirmation_message">"La nueva ruta ha sido guardada satisfactoriamente."</string>
 </resources>
