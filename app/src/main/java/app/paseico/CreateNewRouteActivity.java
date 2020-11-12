@@ -232,7 +232,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
 
         registerOnMarkerClickListener();
-        registerOnPOIClickListener();
+        registerOnGoogleMapsPoiClickListener();
         registerOnMapLongClick();
     }
 
@@ -252,30 +252,21 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         });
     }
 
-    private void registerOnPOIClickListener() {
-        createNewRouteMap.setOnPoiClickListener(poiSelected -> {
-            PointOfInterest poi = findClickedPointOfInterest(poiSelected.latLng, poiSelected.name);
-
-
-            if (!isPointOfInterestSelected(poi) && markerWasNotCreated(poiSelected.name)) {
-                Marker markerOfThePoi = createNewRouteMap.addMarker(new MarkerOptions().position(poiSelected.latLng).title(poiSelected.name));
-                selectPointOfInterest(markerOfThePoi);
-                createdMarkers.add(poiSelected.name);
-            }
-
-            updateMarkedPOIsListView();
-
-            return;
-        });
-    }
-
-    private boolean markerWasNotCreated(String name) {
-        for (String createdMarkerName : createdMarkers) {
-            if (createdMarkerName.equals(name)) {
-                return false;
+    private PointOfInterest findClickedPointOfInterest(LatLng latLangMarker, String title) {
+        Double lat = latLangMarker.latitude;
+        Double lon = latLangMarker.longitude;
+        PointOfInterest markerPOI = new PointOfInterest(lat, lon, title);
+        for (PointOfInterest poi : selectedPointsOfInterest) {
+            if (poi.equals(markerPOI)) {
+                return poi;
             }
         }
-        return true;
+
+        return null;
+    }
+
+    private boolean isPointOfInterestSelected(PointOfInterest poi) {
+        return poi != null;
     }
 
     private void deselectPointOfInterest(@NotNull Marker marker, @NotNull PointOfInterest poi) {
@@ -299,21 +290,34 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         markedPOIsListView.setAdapter(markedPOIsAdapter);
     }
 
-    private PointOfInterest findClickedPointOfInterest(LatLng latLangMarker, String title) {
-        Double lat = latLangMarker.latitude;
-        Double lon = latLangMarker.longitude;
-        PointOfInterest markerPOI = new PointOfInterest(lat, lon, title);
-        for (PointOfInterest poi : selectedPointsOfInterest) {
-            if (poi.equals(markerPOI)) {
-                return poi;
-            }
-        }
+    /**
+     * Registers the listener for creating a marker when a Google Maps Point of Interest is tapped.
+     */
+    private void registerOnGoogleMapsPoiClickListener() {
+        createNewRouteMap.setOnPoiClickListener(poiSelected -> {
+            PointOfInterest poi = findClickedPointOfInterest(poiSelected.latLng, poiSelected.name);
 
-        return null;
+            if (!isPointOfInterestSelected(poi) && !markerWasCreated(poiSelected.name)) {
+                Marker markerOfThePoi = createNewRouteMap
+                        .addMarker(new MarkerOptions().position(poiSelected.latLng).title(poiSelected.name));
+
+                selectPointOfInterest(markerOfThePoi);
+                createdMarkers.add(poiSelected.name);
+            }
+
+            updateMarkedPOIsListView();
+
+            return;
+        });
     }
 
-    private boolean isPointOfInterestSelected(PointOfInterest poi) {
-        return poi != null;
+    private boolean markerWasCreated(String name) {
+        for (String createdMarkerName : createdMarkers) {
+            if (createdMarkerName.equals(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
