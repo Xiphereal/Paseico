@@ -100,6 +100,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
             currentUser.setHasFreeRouteCreation(false);
             showConfirmationDialog();
         } else {
+            // TODO: Show an intermediate "Route Creation Resume" dialog with the total cost of the Route.
+            //  (See: https://cliente.tuneupprocess.com/web/#/ut/pam/651/2143/4533 for in depth explanation.).
             // TODO: Replace with the real in-creation Route cost.
             int routeCost = Integer.MAX_VALUE;
             int currentUserPoints = currentUser.getPoints();
@@ -108,23 +110,14 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
                 currentUser.setPoints(currentUserPoints - routeCost);
                 showConfirmationDialog();
             } else {
-                // TODO: Show a similar dialog from showConfirmationDialog() but with an error message
-                //  showing that the user doesn't have enough points.
+                showNotEnoughPointsDialog();
             }
         }
     }
 
     private void showConfirmationDialog() {
         // Where the alert dialog is going to be shown.
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setMessage(R.string.route_creation_confirmation_message)
-                .setTitle(R.string.route_creation_finalize_title)
-                .setPositiveButton("OK", (dialog, which) -> {
-                    // This remains empty because when the dialog is closed by tapping on 'OK' or outside it,
-                    // it's considered to be dismissed in both cases, thus the call to the finalizer method must
-                    // be done only on the dismiss listener.
-                });
+        AlertDialog.Builder builder = setUpBuilder(R.string.route_creation_confirmation_message);
 
         // In case the user close the dialog either by tapping outside of the dialog or by pressing any button,
         // it's considered dismissed.
@@ -132,6 +125,22 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    @NotNull
+    private AlertDialog.Builder setUpBuilder(int p) {
+        // Where the alert dialog is going to be shown.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(p)
+                .setTitle(R.string.route_creation_finalize_title)
+                .setPositiveButton("OK", (dialog, which) -> {
+                    // This remains empty because when the dialog is closed by tapping on 'OK' or outside it,
+                    // it's considered to be dismissed in both cases, thus the call to the finalizer method must
+                    // be done only on the dismiss listener.
+                });
+
+        return builder;
     }
 
     private void finalizeRouteCreation() {
@@ -166,6 +175,17 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     private void goToPreviousActivity() {
         Intent goToRoutesIntent = new Intent(getApplicationContext(), MainMenuActivity.class);
         startActivity(goToRoutesIntent);
+    }
+
+    private void showNotEnoughPointsDialog() {
+        AlertDialog.Builder builder = setUpBuilder(R.string.route_creation_not_enough_points_message);
+
+        builder.setOnDismissListener(dialog -> {
+            // This remains empty because we want the app to do nothing in this case.
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override

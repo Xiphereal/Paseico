@@ -100,4 +100,5 @@
     <!-- Messages displayed to the user  -->
     <string name="route_creation_finalize_title">"Finalizar creación de ruta"</string>
     <string name="route_creation_confirmation_message">"La nueva ruta ha sido guardada satisfactoriamente."</string>
+    <string name="route_creation_not_enough_points_message">"No tienes los puntos suficientes para crear la ruta."</string>
 </resources>
