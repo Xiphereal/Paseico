@@ -121,9 +121,14 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         // TODO: Extract the string to a resources file or similar abstraction.
         builder.setMessage("La nueva ruta ha sido guardada satisfactoriamente.")
                 .setTitle("Finalizar creación de ruta")
-                .setPositiveButton("OK", (dialog, which) -> finalizeRouteCreation());
+                .setPositiveButton("OK", (dialog, which) -> {
+                    // This remains empty because when the dialog is closed by tapping on 'OK' or outside it,
+                    // it's considered to be dismissed in both cases, thus the call to the finalizer method must
+                    // be done only on the dismiss listener.
+                });
 
-        // In case the user taps out of the dialog thus dismissing it, the state must be consistent.
+        // In case the user close the dialog either by tapping outside of the dialog or by pressing any button,
+        // it's considered dismissed.
         builder.setOnDismissListener(dialog -> finalizeRouteCreation());
 
         AlertDialog dialog = builder.create();
