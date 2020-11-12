@@ -225,8 +225,6 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
         createNewRouteMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.create_route_style));
 
-        addFakePOIsToMap(createNewRouteMap);
-
         // TODO: Move camera to real user position.
         LatLng fakeUserPosition = new LatLng(39.475, -0.375);
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(fakeUserPosition));
@@ -236,23 +234,6 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         registerOnMarkerClickListener();
         registerOnPOIClickListener();
         registerOnMapLongClick();
-    }
-
-    private void addFakePOIsToMap(GoogleMap googleMap) {
-        LatLng valenciaCathedral = new LatLng(39.475139, -0.375372);
-        googleMap.addMarker(new MarkerOptions().position(valenciaCathedral).title("Cathedral"));
-
-        LatLng albertosBar = new LatLng(39.471958, -0.370947);
-        googleMap.addMarker(new MarkerOptions().position(albertosBar).title("Alberto's bar"));
-
-        LatLng torresSerrano = new LatLng(39.479063, -0.376115);
-        googleMap.addMarker(new MarkerOptions().position(torresSerrano).title("Torres de Serrano"));
-
-        LatLng ayuntamiento = new LatLng(39.469734, -0.376868);
-        googleMap.addMarker(new MarkerOptions().position(ayuntamiento).title("Ayuntamiento"));
-
-        LatLng gulliver = new LatLng(39.462987, -0.359719);
-        googleMap.addMarker(new MarkerOptions().position(gulliver).title("Gulliver"));
     }
 
     private void registerOnMarkerClickListener() {
