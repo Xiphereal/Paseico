@@ -2,6 +2,7 @@ package app.paseico;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -253,7 +254,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     private void registerOnMarkerClickListener() {
         createNewRouteMap.setOnMarkerClickListener(marker -> {
-            PointOfInterest poi = findClickedPointOfInterest(marker);
+            PointOfInterest poi = findClickedPointOfInterest(marker.getPosition(),marker.getTitle());
 
             if (isPointOfInterestSelected(poi)) {
                 deselectPointOfInterest(marker, poi);
@@ -269,8 +270,15 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     private void registerOnPOIClickListener() {
         createNewRouteMap.setOnPoiClickListener(poiSelected -> {
-            // TODO: Uncomment. Commented so that the app can compile.
-            //PointOfInterest poi = findClickedPointOfInterest(poiSelected.latLng.latitude, poiSelected.latLng.longitude, poiSelected.name);
+            PointOfInterest poi = findClickedPointOfInterest(poiSelected.latLng, poiSelected.name);
+            Marker markerOfThePoi = createNewRouteMap.addMarker(new MarkerOptions().position(poiSelected.latLng).title(poiSelected.name));
+            if(isPointOfInterestSelected(poi)){
+                deselectPointOfInterest(markerOfThePoi,poi);
+            } else {
+                selectPointOfInterest(markerOfThePoi);
+            }
+
+            updateMarkedPOIsListView();
         });
     }
 
@@ -295,11 +303,12 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         markedPOIsListView.setAdapter(markedPOIsAdapter);
     }
 
-    private PointOfInterest findClickedPointOfInterest(@NotNull Marker marker) {
-        LatLng latLangMarker = marker.getPosition();
+    private PointOfInterest findClickedPointOfInterest(LatLng latLangMarker, String title) {
+        //LatLng latLangMarker = marker.getPosition();
         Double lat = latLangMarker.latitude;
         Double lon = latLangMarker.longitude;
-        PointOfInterest markerPOI = new PointOfInterest(lat, lon, marker.getTitle());
+        //PointOfInterest markerPOI = new PointOfInterest(lat, lon, marker.getTitle());
+        PointOfInterest markerPOI = new PointOfInterest(lat, lon, title);
         for (PointOfInterest poi : selectedPointsOfInterest) {
             if (poi.equals(markerPOI)) {
                 return poi;
