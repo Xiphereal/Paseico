@@ -40,6 +40,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     private ArrayAdapter<String> markedPOIsAdapter;
     private List<String> markedPOIs = new ArrayList<>();
 
+    private List<String> createdMarkers = new ArrayList<>();
+
     private User currentUser;
 
     private Marker userMarkerInCreation;
@@ -273,17 +275,27 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     private void registerOnPOIClickListener() {
         createNewRouteMap.setOnPoiClickListener(poiSelected -> {
             PointOfInterest poi = findClickedPointOfInterest(poiSelected.latLng, poiSelected.name);
-            Marker markerOfThePoi = createNewRouteMap.addMarker(new MarkerOptions().position(poiSelected.latLng).title(poiSelected.name));
-            if (isPointOfInterestSelected(poi)) {
-                deselectPointOfInterest(markerOfThePoi, poi);
-            } else {
+
+
+            if (!isPointOfInterestSelected(poi) && markerWasNotCreated(poiSelected.name)) {
+                Marker markerOfThePoi = createNewRouteMap.addMarker(new MarkerOptions().position(poiSelected.latLng).title(poiSelected.name));
                 selectPointOfInterest(markerOfThePoi);
+                createdMarkers.add(poiSelected.name);
             }
 
             updateMarkedPOIsListView();
 
             return;
         });
+    }
+
+    private boolean markerWasNotCreated(String name) {
+        for (String createdMarkerName : createdMarkers) {
+            if (createdMarkerName.equals(name)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void deselectPointOfInterest(@NotNull Marker marker, @NotNull PointOfInterest poi) {
