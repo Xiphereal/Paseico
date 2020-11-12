@@ -232,6 +232,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
         registerOnMarkerClickListener();
         registerOnPOIClickListener();
+        registerOnMapLongClick();
     }
 
     private void addFakePOIsToMap(GoogleMap googleMap) {
@@ -267,11 +268,22 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         });
     }
 
-    private void registerOnPOIClickListener() {
-        createNewRouteMap.setOnPoiClickListener(poiSelected -> {
-            // TODO: Uncomment. Commented so that the app can compile.
-            //PointOfInterest poi = findClickedPointOfInterest(poiSelected.latLng.latitude, poiSelected.latLng.longitude, poiSelected.name);
-        });
+    private PointOfInterest findClickedPointOfInterest(@NotNull Marker marker) {
+        LatLng latLangMarker = marker.getPosition();
+        Double lat = latLangMarker.latitude;
+        Double lon = latLangMarker.longitude;
+        PointOfInterest markerPOI = new PointOfInterest(lat, lon, marker.getTitle());
+        for (PointOfInterest poi : selectedPointsOfInterest) {
+            if (poi.equals(markerPOI)) {
+                return poi;
+            }
+        }
+
+        return null;
+    }
+
+    private boolean isPointOfInterestSelected(PointOfInterest poi) {
+        return poi != null;
     }
 
     private void deselectPointOfInterest(@NotNull Marker marker, @NotNull PointOfInterest poi) {
@@ -295,22 +307,17 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         markedPOIsListView.setAdapter(markedPOIsAdapter);
     }
 
-    private PointOfInterest findClickedPointOfInterest(@NotNull Marker marker) {
-        LatLng latLangMarker = marker.getPosition();
-        Double lat = latLangMarker.latitude;
-        Double lon = latLangMarker.longitude;
-        PointOfInterest markerPOI = new PointOfInterest(lat, lon, marker.getTitle());
-        for (PointOfInterest poi : selectedPointsOfInterest) {
-            if (poi.equals(markerPOI)) {
-                return poi;
-            }
-        }
-
-        return null;
+    private void registerOnPOIClickListener() {
+        createNewRouteMap.setOnPoiClickListener(poiSelected -> {
+            // TODO: Uncomment. Commented so that the app can compile.
+            //PointOfInterest poi = findClickedPointOfInterest(poiSelected.latLng.latitude, poiSelected.latLng.longitude, poiSelected.name);
+        });
     }
 
-    private boolean isPointOfInterestSelected(PointOfInterest poi) {
-        return poi != null;
+    private void registerOnMapLongClick() {
+        createNewRouteMap.setOnMapLongClickListener(point -> {
+            createNewRouteMap.addMarker(new MarkerOptions().position(point).title("User Marker"));
+        });
     }
 
     public static Route getRoute() {
