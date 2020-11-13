@@ -129,9 +129,17 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     }
 
     private int calculateRouteCost() {
-        // TODO: When both Google Maps & User created Points Of Interest are supported, we must calculate the Route
-        //  cost having their different costs in mind.
-        return selectedPointsOfInterest.size() * getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost);
+        int totalRouteCost = 0;
+
+        for (PointOfInterest poi : selectedPointsOfInterest) {
+            if (poi.wasCreatedByUser()) {
+                totalRouteCost += getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost);
+            } else {
+                totalRouteCost += getResources().getInteger(R.integer.google_maps_point_of_interest_cost);
+            }
+        }
+
+        return totalRouteCost;
     }
 
     private void showDialog(AlertDialog.Builder builder) {
@@ -243,7 +251,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
             if (isPointOfInterestSelected(poi)) {
                 deselectPointOfInterest(marker, poi);
             } else {
-                selectPointOfInterest(marker);
+                selectPointOfInterest(marker, false);
             }
 
             updateMarkedPOIsListView();
@@ -256,6 +264,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         Double lat = latLangMarker.latitude;
         Double lon = latLangMarker.longitude;
         PointOfInterest markerPOI = new PointOfInterest(lat, lon, title);
+
         for (PointOfInterest poi : selectedPointsOfInterest) {
             if (poi.equals(markerPOI)) {
                 return poi;
@@ -277,12 +286,18 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         selectedPointsOfInterest.remove(poi);
     }
 
-    private void selectPointOfInterest(@NotNull Marker marker) {
+    private void selectPointOfInterest(@NotNull Marker marker, boolean createdByUser) {
         marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
 
         markedPOIs.add(marker.getTitle());
 
-        selectedPointsOfInterest.add(new PointOfInterest(marker.getPosition().latitude, marker.getPosition().longitude, marker.getTitle()));
+        PointOfInterest selectedPoi = new PointOfInterest(
+                marker.getPosition().latitude,
+                marker.getPosition().longitude,
+                marker.getTitle(),
+                createdByUser);
+
+        selectedPointsOfInterest.add(selectedPoi);
     }
 
     private void updateMarkedPOIsListView() {
@@ -301,7 +316,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
                 Marker markerOfThePoi = createNewRouteMap
                         .addMarker(new MarkerOptions().position(poiSelected.latLng).title(poiSelected.name));
 
-                selectPointOfInterest(markerOfThePoi);
+                selectPointOfInterest(markerOfThePoi, false);
                 createdMarkers.add(poiSelected.name);
             }
 
@@ -363,6 +378,9 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
             TextInputEditText textInputEditText = findViewById(R.id.user_created_marker_name_text_input);
 
             userMarkerInCreation.setTitle(textInputEditText.getText().toString());
+            textInputEditText.getText().clear();
+
+            selectPointOfInterest(userMarkerInCreation, true);
 
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         });

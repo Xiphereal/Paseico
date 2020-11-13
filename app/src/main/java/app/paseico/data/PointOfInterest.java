@@ -1,7 +1,5 @@
 package app.paseico.data;
 
-import com.google.android.gms.maps.model.Marker;
-
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -9,6 +7,7 @@ public class PointOfInterest implements Serializable {
     private String name;
     private Double latitude;
     private Double longitude;
+    private boolean createdByUser;
 
     public PointOfInterest() {
     }
@@ -19,10 +18,18 @@ public class PointOfInterest implements Serializable {
         this.name = name;
     }
 
+    public PointOfInterest(Double lat, Double lon, String name, boolean createdByUser) {
+        latitude = lat;
+        longitude = lon;
+        this.name = name;
+        this.createdByUser = createdByUser;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         PointOfInterest that = (PointOfInterest) o;
         return name.equals(that.name) &&
                 latitude.equals(that.latitude) &&
@@ -42,6 +49,10 @@ public class PointOfInterest implements Serializable {
         return latitude;
     }
 
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
     public double getLongitude() {
         return longitude;
     }
@@ -50,7 +61,11 @@ public class PointOfInterest implements Serializable {
         this.longitude = longitude;
     }
 
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
+    public boolean wasCreatedByUser() {
+        return createdByUser;
+    }
+
+    public void setCreatedByUser(boolean createdByUser) {
+        this.createdByUser = createdByUser;
     }
 }
