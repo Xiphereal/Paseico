@@ -13,7 +13,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:layout_gravity="bottom|center"
-            android:text="Finalizar"/>
+            android:text="Finalizar"
+            app:backgroundTint="@color/colorAccent"/>
 
     <fragment
             android:id="@+id/new_route_map"
@@ -51,9 +52,9 @@
             android:id="@+id/user_created_marker_bottom_sheet"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="200dp"
             android:clipToPadding="true"
-            android:background="@android:color/holo_orange_light"
+            android:background="@color/background"
             android:fillViewport="true">
         <LinearLayout
                 android:orientation="vertical"
