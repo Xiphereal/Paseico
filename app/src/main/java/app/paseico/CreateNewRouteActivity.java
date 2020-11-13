@@ -43,7 +43,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     private User currentUser;
 
-    private Marker userMarkerInCreation;
+    private Marker userNewCustomPoiInCreation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -236,13 +236,37 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
         googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
 
+        registerOnMapClick();
         registerOnMarkerClickListener();
         registerOnGoogleMapsPoiClickListener();
         registerOnMapLongClick();
     }
 
+    private void registerOnMapClick() {
+        createNewRouteMap.setOnMapClickListener(tapPoint -> tryDeleteUserNewCustomPoiInCreation());
+    }
+
+    /**
+     * Checks if the User is creating a custom Point Of Interest.
+     * If so, cancels the creation of the new POI.
+     * If not, does nothing.
+     */
+    private void tryDeleteUserNewCustomPoiInCreation() {
+        if (isUserCreatingACustomPoi()) {
+            hideUserNewCustomPoiForm();
+            userNewCustomPoiInCreation.remove();
+            userNewCustomPoiInCreation = null;
+        }
+    }
+
+    private boolean isUserCreatingACustomPoi() {
+        return userNewCustomPoiInCreation != null;
+    }
+
     private void registerOnMarkerClickListener() {
         createNewRouteMap.setOnMarkerClickListener(marker -> {
+            tryDeleteUserNewCustomPoiInCreation();
+
             PointOfInterest poi = findClickedPointOfInterest(marker.getPosition(), marker.getTitle());
 
             if (isPointOfInterestSelected(poi)) {
@@ -309,6 +333,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
      */
     private void registerOnGoogleMapsPoiClickListener() {
         createNewRouteMap.setOnPoiClickListener(poiSelected -> {
+            tryDeleteUserNewCustomPoiInCreation();
+
             PointOfInterest poi = findClickedPointOfInterest(poiSelected.latLng, poiSelected.name);
 
             if (!isPointOfInterestSelected(poi) && !markerWasCreated(poiSelected.name)) {
@@ -336,7 +362,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
      * Registers the listener for letting the user create Points Of Interest.
      */
     private void registerOnMapLongClick() {
-        BottomSheetBehavior bottomSheetBehavior = initializeUserNewPoiForm();
+        BottomSheetBehavior bottomSheetBehavior = hideUserNewCustomPoiForm();
 
         registerOnNewPoiButtonClicked(bottomSheetBehavior);
 
@@ -344,7 +370,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
             // Opens the creation form.
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
-            userMarkerInCreation = createNewRouteMap
+            userNewCustomPoiInCreation = createNewRouteMap
                     .addMarker(new MarkerOptions().position(tapPoint).title("User Marker"));
         });
     }
@@ -353,7 +379,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
      * Hides the bottom sheet containing the new Point Of Interest creation form.
      */
     @NotNull
-    private BottomSheetBehavior initializeUserNewPoiForm() {
+    private BottomSheetBehavior hideUserNewCustomPoiForm() {
         BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior
                 .from(findViewById(R.id.user_created_marker_bottom_sheet));
 
@@ -374,10 +400,12 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         createNewPointOfInterestButton.setOnClickListener(button -> {
             TextInputEditText textInputEditText = findViewById(R.id.user_created_marker_name_text_input);
 
-            userMarkerInCreation.setTitle(textInputEditText.getText().toString());
+            userNewCustomPoiInCreation.setTitle(textInputEditText.getText().toString());
             textInputEditText.getText().clear();
 
-            selectPointOfInterest(userMarkerInCreation, true);
+            selectPointOfInterest(userNewCustomPoiInCreation, true);
+
+            userNewCustomPoiInCreation = null;
 
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         });
