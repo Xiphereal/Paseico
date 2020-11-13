@@ -33,14 +33,13 @@ import java.util.List;
 public class CreateNewRouteActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap createNewRouteMap;
-    private List<PointOfInterest> selectedPointsOfInterest = new ArrayList<>();
+    private final List<PointOfInterest> selectedPointsOfInterest = new ArrayList<>();
     private static Route newRoute;
 
     private ListView markedPOIsListView;
-    private ArrayAdapter<String> markedPOIsAdapter;
-    private List<String> markedPOIs = new ArrayList<>();
+    private final List<String> markedPOIs = new ArrayList<>();
 
-    private List<String> createdMarkers = new ArrayList<>();
+    private final List<String> createdMarkers = new ArrayList<>();
 
     private User currentUser;
 
@@ -209,8 +208,6 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         currentUserReference.child("points").setValue(currentUser.getPoints());
     }
 
-    // TODO: Clean the current activity state to prevent the user retrieve the state when
-    //  using the backstack.
     private void goToPreviousActivity() {
         Intent goToRoutesIntent = new Intent(getApplicationContext(), MainMenuActivity.class);
         startActivity(goToRoutesIntent);
@@ -254,8 +251,6 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
                 selectPointOfInterest(marker, false);
             }
 
-            updateMarkedPOIsListView();
-
             return true;
         });
     }
@@ -284,6 +279,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         markedPOIs.remove(poi.getName());
 
         selectedPointsOfInterest.remove(poi);
+
+        updateMarkedPOIsListView();
     }
 
     private void selectPointOfInterest(@NotNull Marker marker, boolean createdByUser) {
@@ -298,10 +295,12 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
                 createdByUser);
 
         selectedPointsOfInterest.add(selectedPoi);
+
+        updateMarkedPOIsListView();
     }
 
     private void updateMarkedPOIsListView() {
-        markedPOIsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, markedPOIs);
+        ArrayAdapter<String> markedPOIsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, markedPOIs);
         markedPOIsListView.setAdapter(markedPOIsAdapter);
     }
 
@@ -319,8 +318,6 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
                 selectPointOfInterest(markerOfThePoi, false);
                 createdMarkers.add(poiSelected.name);
             }
-
-            updateMarkedPOIsListView();
 
             return;
         });
