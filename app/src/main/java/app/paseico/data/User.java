@@ -68,11 +68,11 @@ public class User {
     }
 
     public void addPoints(int pts) {
-        this.points = this.points + pts;
+        this.points += pts;
     }
 
     public void subtractPoints(int pts) {
-        this.points = this.points - pts;
+        this.points -= - pts;
     }
 
     public boolean isBoost() {

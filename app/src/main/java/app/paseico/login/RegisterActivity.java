@@ -137,7 +137,7 @@ public class RegisterActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
                             UserDao uDao = new UserDao();
-                            uDao.addUser(user,username, name, surname);
+                            uDao.addUser(user,username.toLowerCase(), name, surname);
                             Toast.makeText(RegisterActivity.this, "Registro completado!",
                                     Toast.LENGTH_SHORT).show();
                             Handler handler = new Handler();
