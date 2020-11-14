@@ -1,6 +1,8 @@
-package app.paseico.ui.searchUsers;
+package app.paseico.mainMenu.searchUsers;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,25 +10,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import android.content.Context;
-import java.util.List;
-import android.content.SharedPreferences;
 import app.paseico.FollowersActivity;
 import app.paseico.R;
 import app.paseico.data.User;
-import app.paseico.login.LogInActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.*;
+
+import java.util.List;
 
 public class NotMyProfileFragment extends Fragment {
     ImageView image_profile;
@@ -58,9 +51,9 @@ public class NotMyProfileFragment extends Fragment {
                 FirebaseDatabase.getInstance().getReference("users").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             User user = snapshot.getValue(User.class);
-                            if(user.getUsername().equals(profileid)){
+                            if (user.getUsername().equals(profileid)) {
                                 searchedUser = snapshot.getKey();
                                 FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
                                     @Override
@@ -71,6 +64,7 @@ public class NotMyProfileFragment extends Fragment {
                                         getFollowers();
                                         checkFollow();
                                     }
+
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError error) {
 
@@ -79,6 +73,7 @@ public class NotMyProfileFragment extends Fragment {
                             }
                         }
                     }
+
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
 
@@ -86,6 +81,7 @@ public class NotMyProfileFragment extends Fragment {
                 });
 
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -102,25 +98,21 @@ public class NotMyProfileFragment extends Fragment {
         textView_following = view.findViewById(R.id.textView_Following);
 
 
-        buttonLogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String btn = buttonLogOut.getText().toString();
-                if (btn.equals("follow")){
-                    FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername())
-                            .child("following").child(profileid).setValue(true);
-                    FirebaseDatabase.getInstance().getReference().child("Follow").child(profileid)
-                            .child("followers").child(actualUser.getUsername()).setValue(true);
+        buttonLogOut.setOnClickListener(v -> {
+            String btn = buttonLogOut.getText().toString();
+            if (btn.equals("follow")) {
+                FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername())
+                        .child("following").child(profileid).setValue(true);
+                FirebaseDatabase.getInstance().getReference().child("Follow").child(profileid)
+                        .child("followers").child(actualUser.getUsername()).setValue(true);
 
-                }else if (btn.equals("following")){
-                    FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername())
-                            .child("following").child(profileid).removeValue();
-                    FirebaseDatabase.getInstance().getReference().child("Follow").child(profileid)
-                            .child("followers").child(actualUser.getUsername()).removeValue();
-                }
+            } else if (btn.equals("following")) {
+                FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername())
+                        .child("following").child(profileid).removeValue();
+                FirebaseDatabase.getInstance().getReference().child("Follow").child(profileid)
+                        .child("followers").child(actualUser.getUsername()).removeValue();
             }
         });
-
 
 
         return view;
@@ -193,45 +185,34 @@ public class NotMyProfileFragment extends Fragment {
             }
         });
     }
-    public void activateFollowListeners(){
-        followers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), FollowersActivity.class);
-                intent.putExtra("id", foreignUser.getUsername());
-                intent.putExtra("title", "followers");
-                startActivity(intent);
-            }
+
+    public void activateFollowListeners() {
+        followers.setOnClickListener(view -> {
+            Intent intent = new Intent(getContext(), FollowersActivity.class);
+            intent.putExtra("id", foreignUser.getUsername());
+            intent.putExtra("title", "followers");
+            startActivity(intent);
         });
 
-        textView_followers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), FollowersActivity.class);
-                intent.putExtra("id", actualUser.getUsername());
-                intent.putExtra("title", "followers");
-                startActivity(intent);
-            }
+        textView_followers.setOnClickListener(view -> {
+            Intent intent = new Intent(getContext(), FollowersActivity.class);
+            intent.putExtra("id", actualUser.getUsername());
+            intent.putExtra("title", "followers");
+            startActivity(intent);
         });
 
-        following.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), FollowersActivity.class);
-                intent.putExtra("id", foreignUser.getUsername());
-                intent.putExtra("title", "following");
-                startActivity(intent);
-            }
+        following.setOnClickListener(view -> {
+            Intent intent = new Intent(getContext(), FollowersActivity.class);
+            intent.putExtra("id", foreignUser.getUsername());
+            intent.putExtra("title", "following");
+            startActivity(intent);
         });
 
-        textView_following.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), FollowersActivity.class);
-                intent.putExtra("id", actualUser.getUsername());
-                intent.putExtra("title", "followers");
-                startActivity(intent);
-            }
+        textView_following.setOnClickListener(view -> {
+            Intent intent = new Intent(getContext(), FollowersActivity.class);
+            intent.putExtra("id", actualUser.getUsername());
+            intent.putExtra("title", "followers");
+            startActivity(intent);
         });
     }
 }

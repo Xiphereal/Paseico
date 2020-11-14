@@ -1,4 +1,4 @@
-package app.paseico;
+package app.paseico.mainMenu.searcher;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -11,9 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
+import app.paseico.R;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SearchFragment extends Fragment {
+public class RouteSearchFragment extends Fragment {
 
     private EditText et_keyWord;
     private EditText et_numberOfPOI;
@@ -48,7 +48,7 @@ public class SearchFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         // Inflate the layout for this fragment
-        View fragmentSearchLayout = inflater.inflate(R.layout.fragment_search, container, false);
+        View fragmentSearchLayout = inflater.inflate(R.layout.fragment_route_search, container, false);
 
         et_keyWord = fragmentSearchLayout.findViewById(R.id.editText_keyWord);
         et_numberOfPOI = fragmentSearchLayout.findViewById(R.id.editText_minimumNumberOfPOI);
@@ -85,8 +85,8 @@ public class SearchFragment extends Fragment {
                         Route[] filteredRoutes = new Route[routeList.size()];
                         routeList.toArray(filteredRoutes);
 
-                        NavDirections action = SearchFragmentDirections.actionSearchFragmentToRouteListFragment(filteredRoutes);
-                        NavHostFragment.findNavController(SearchFragment.this)
+                        NavDirections action = RouteSearchFragmentDirections.actionRouteSearchFragmentToRouteSearchResult(filteredRoutes);
+                        NavHostFragment.findNavController(RouteSearchFragment.this)
                                 .navigate(action);
                     } else {
                         Log.d("Ruta error", "Error getting documents: ", task.getException());
@@ -103,8 +103,8 @@ public class SearchFragment extends Fragment {
                         Route[] filteredRoutes = new Route[routeList.size()];
                         routeList.toArray(filteredRoutes);
 
-                        NavDirections action = SearchFragmentDirections.actionSearchFragmentToRouteListFragment(filteredRoutes);
-                        NavHostFragment.findNavController(SearchFragment.this)
+                        NavDirections action = RouteSearchFragmentDirections.actionRouteSearchFragmentToRouteSearchResult(filteredRoutes);
+                        NavHostFragment.findNavController(RouteSearchFragment.this)
                                 .navigate(action);
                     } else {
                         Log.d("Ruta Error", "Error getting documents: ", task.getException());

@@ -1,4 +1,4 @@
-package app.paseico.ui.routes;
+package app.paseico.mainMenu.userCreatedRoutes;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

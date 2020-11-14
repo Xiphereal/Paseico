@@ -1,4 +1,4 @@
-package app.paseico.ui.profile;
+package app.paseico.mainMenu.profile;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

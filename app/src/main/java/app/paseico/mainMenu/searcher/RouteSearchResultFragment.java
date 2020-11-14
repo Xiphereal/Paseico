@@ -1,4 +1,4 @@
-package app.paseico;
+package app.paseico.mainMenu.searcher;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,9 +15,11 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+import app.paseico.R;
+import app.paseico.RouteInformationActivity;
 import app.paseico.data.Route;
 
-public class RouteListFragment extends Fragment {
+public class RouteSearchResultFragment extends Fragment {
 
     @Override
     public View onCreateView(
@@ -25,13 +27,13 @@ public class RouteListFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_route_list, container, false);
+        return inflater.inflate(R.layout.fragment_route_search_result, container, false);
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Route[] filteredRoutes = RouteListFragmentArgs.fromBundle(getArguments()).getFilteredList();
+        Route[] filteredRoutes = RouteSearchResultFragmentArgs.fromBundle(getArguments()).getFilteredList();
         List<String> filteredRoutesList = new ArrayList<>();
 
         for (Route route : filteredRoutes) {
@@ -54,8 +56,8 @@ public class RouteListFragment extends Fragment {
             }
         });
 
-        view.findViewById(R.id.btn_routeList_back).setOnClickListener(view1 -> NavHostFragment.findNavController(RouteListFragment.this)
-                .navigate(R.id.action_RouteListFragment_to_SearchFragment));
+        view.findViewById(R.id.button_second).setOnClickListener(view1 -> NavHostFragment.findNavController(RouteSearchResultFragment.this)
+                .navigate(R.id.action_RouteSearchResult_to_RouteSearchFragment));
 
 
     }
