@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_profile"
-        android:name="app.paseico.ui.profile.profileFragment"
+        android:name="app.paseico.ui.searchUsers.ProfileFragment"
         android:label="@string/menu_profile"
         tools:layout="@layout/fragment_profile" />
 
@@ -24,6 +24,19 @@
         tools:layout="@layout/fragment_slideshow" />
 
     <fragment
+        android:id="@+id/nav_searchUsers"
+        android:name="app.paseico.ui.searchUsers.SearchUserFragment"
+        android:label="Buscar usuarios"
+        tools:layout="@layout/fragment_user_search" >
+        <action
+            android:id="@+id/action_nav_searchUsers_to_notMyProfileFragment"
+            app:destination="@id/notMyProfileFragment" />
+        <action
+            android:id="@+id/action_nav_searchUsers_to_nav_profile"
+            app:destination="@id/nav_profile" />
+    </fragment>
+
+    <fragment
         android:id="@+id/nav_marketplace"
         android:name="app.paseico.ui.marketplace.marketplaceFragment"
         android:label="@string/menu_searcher"
@@ -32,9 +45,17 @@
             android:id="@+id/action_nav_marketplace_to_discountsFragment"
             app:destination="@id/discountsFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/discountsFragment"
         android:name="app.paseico.ui.marketplace.DiscountsFragment"
         android:label="fragment_discounts"
         tools:layout="@layout/fragment_discounts" />
+
+    <fragment
+        android:id="@+id/notMyProfileFragment"
+        android:name="app.paseico.ui.searchUsers.NotMyProfileFragment"
+        android:label="Perfil"
+        tools:layout="@layout/fragment_notmyprofile" />
+
 </navigation>

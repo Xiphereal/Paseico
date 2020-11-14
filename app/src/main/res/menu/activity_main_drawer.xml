@@ -16,6 +16,12 @@
                 android:id="@+id/nav_searcher"
                 android:icon="@drawable/ic_menu_slideshow"
                 android:title="@string/menu_searcher"/>
+
+        <item
+            android:id="@+id/nav_searchUsers"
+            android:icon="@drawable/ic_user"
+            android:title="Buscar usuarios"/>
+
         <item
                 android:id="@+id/nav_marketplace"
                 android:icon="@drawable/ic_menu_slideshow"

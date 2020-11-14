@@ -14,7 +14,6 @@ public class User {
     private String boostExpires;
     private String lastFreeAd;
 
-
     public User(){
 
     }
@@ -28,12 +27,7 @@ public class User {
         this.boost = false;
         this.boostExpires = null;
         this.lastFreeAd = lastFreeAd;
-
     }
-
-
-
-
 
     public String getName() {
         return name;
