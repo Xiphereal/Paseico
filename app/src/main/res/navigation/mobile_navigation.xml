@@ -43,7 +43,7 @@
 
     <fragment
         android:id="@+id/nav_searchUsers"
-        android:name="app.paseico.ui.searchUsers.SearchUserFragment"
+        android:name="app.paseico.mainMenu.searchUsers.SearchUserFragment"
         android:label="Buscar usuarios"
         tools:layout="@layout/fragment_user_search" >
         <action
@@ -51,7 +51,7 @@
             app:destination="@id/notMyProfileFragment" />
         <action
             android:id="@+id/action_nav_searchUsers_to_nav_profile"
-            app:destination="@id/nav_profile" />
+            app:destination="@id/Profile" />
     </fragment>
 
     <fragment
@@ -72,7 +72,7 @@
 
     <fragment
             android:id="@+id/notMyProfileFragment"
-            android:name="app.paseico.ui.searchUsers.NotMyProfileFragment"
+            android:name="app.paseico.mainMenu.searchUsers.NotMyProfileFragment"
             android:label="Perfil"
             tools:layout="@layout/fragment_notmyprofile"/>
 </navigation>

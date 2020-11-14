@@ -1,9 +1,6 @@
-package app.paseico.ui.searchUsers;
+package app.paseico.mainMenu.searchUsers;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,27 +11,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-//import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.lang.Thread.*;
-import java.util.List;
 import app.paseico.FollowersActivity;
 import app.paseico.R;
 import app.paseico.data.User;
 import app.paseico.login.LogInActivity;
-import static java.lang.Thread.sleep;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.*;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 public class ProfileFragment extends Fragment {
     ImageView image_profile;
@@ -59,6 +48,7 @@ public class ProfileFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 actualUser = dataSnapshot.getValue(User.class);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -87,6 +77,7 @@ public class ProfileFragment extends Fragment {
                 buttonLogOut.setText("Cerrar sesion");
                 setButtonLogOut();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -94,44 +85,32 @@ public class ProfileFragment extends Fragment {
         });
         //getGetUsernameFromFirebase(profileid);
 
-        followers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), FollowersActivity.class);
-                intent.putExtra("id", actualUser.getUsername());
-                intent.putExtra("title", "followers");
-                startActivity(intent);
-            }
+        followers.setOnClickListener(followersView -> {
+            Intent intent = new Intent(getContext(), FollowersActivity.class);
+            intent.putExtra("id", actualUser.getUsername());
+            intent.putExtra("title", "followers");
+            startActivity(intent);
         });
 
-        textView_followers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), FollowersActivity.class);
-                intent.putExtra("id", actualUser.getUsername());
-                intent.putExtra("title", "followers");
-                startActivity(intent);
-            }
+        textView_followers.setOnClickListener(followersTextViewView -> {
+            Intent intent = new Intent(getContext(), FollowersActivity.class);
+            intent.putExtra("id", actualUser.getUsername());
+            intent.putExtra("title", "followers");
+            startActivity(intent);
         });
 
-        following.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), FollowersActivity.class);
-                intent.putExtra("id", actualUser.getUsername());
-                intent.putExtra("title", "following");
-                startActivity(intent);
-            }
+        following.setOnClickListener(followingView -> {
+            Intent intent = new Intent(getContext(), FollowersActivity.class);
+            intent.putExtra("id", actualUser.getUsername());
+            intent.putExtra("title", "following");
+            startActivity(intent);
         });
 
-        textView_following.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), FollowersActivity.class);
-                intent.putExtra("id", actualUser.getUsername());
-                intent.putExtra("title", "following");
-                startActivity(intent);
-            }
+        textView_following.setOnClickListener(followingTextViewView -> {
+            Intent intent = new Intent(getContext(), FollowersActivity.class);
+            intent.putExtra("id", actualUser.getUsername());
+            intent.putExtra("title", "following");
+            startActivity(intent);
         });
 
         return view;
@@ -227,29 +206,12 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void setButtonLogOut(){
-        buttonLogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String btn = buttonLogOut.getText().toString();
-
-                    FirebaseAuth.getInstance().signOut();
-                    Intent intent = new Intent(getActivity(), LogInActivity.class);
-                    startActivity(intent);
-                    getActivity().finish();
-                 /*else if (btn.equals("follow")) {
-                    FirebaseDatabase.getInstance().getReference().child("Follow").child(firebaseUser.getUid())
-                            .child("following").child(profileid).setValue(true);
-                    FirebaseDatabase.getInstance().getReference().child("Follow").child(profileid)
-                            .child("followers").child(firebaseUser.getUid()).setValue(true);
-
-                } else if (btn.equals("following")) {
-                    FirebaseDatabase.getInstance().getReference().child("Follow").child(firebaseUser.getUid())
-                            .child("following").child(profileid).removeValue();
-                    FirebaseDatabase.getInstance().getReference().child("Follow").child(profileid)
-                            .child("followers").child(firebaseUser.getUid()).removeValue();
-                }*/
-            }
+    private void setButtonLogOut() {
+        buttonLogOut.setOnClickListener(view -> {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(getActivity(), LogInActivity.class);
+            startActivity(intent);
+            getActivity().finish();
         });
     }
 }

@@ -1,27 +1,21 @@
 package app.paseico;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import app.paseico.data.User;
+import app.paseico.mainMenu.searchUsers.UserAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import androidx.appcompat.widget.Toolbar;
+import com.google.firebase.database.*;
+
 import java.util.ArrayList;
 import java.util.List;
-import app.paseico.data.User;
-import app.paseico.ui.searchUsers.NotMyProfileFragment;
-import app.paseico.ui.searchUsers.UserAdapter;
 
 public class FollowersActivity extends AppCompatActivity {
     String id;

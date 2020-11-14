@@ -1,45 +1,24 @@
-package app.paseico.ui.searchUsers;
+package app.paseico.mainMenu.searchUsers;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Button;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.bumptech.glide.Glide;
+import app.paseico.R;
+import app.paseico.data.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.*;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import java.util.List;
-
-import app.paseico.MainActivity;
-import app.paseico.MainMenuActivity;
-import app.paseico.R;
-import app.paseico.SearchFragment;
-import app.paseico.SearchFragmentDirections;
-import app.paseico.data.User;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
@@ -51,22 +30,18 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     User actualUser;
     private SearchUserFragment searchUserFragment;
 
-    public UserAdapter(Context mContext, List<User> mUsers, boolean isfragment)
-    {
+    public UserAdapter(Context mContext, List<User> mUsers, boolean isfragment) {
         this.mContext = mContext;
         this.mUsers = mUsers;
         this.isfragment = isfragment;
     }
 
-    public UserAdapter(Context mContext, List<User> mUsers, SearchUserFragment searchUserFragment)
-    {
+    public UserAdapter(Context mContext, List<User> mUsers, SearchUserFragment searchUserFragment) {
         this.mContext = mContext;
         this.mUsers = mUsers;
         this.isfragment = true;
         this.searchUserFragment = searchUserFragment;
     }
-
-
 
 
     @Override
@@ -92,74 +67,69 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 actualUser = dataSnapshot.getValue(User.class);
                 isFollowing(searchedUser.getUsername(), holder.btn_follow);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                if (isfragment) {
-                    if (!actualUser.getUsername().equals(searchedUser.getUsername())){
-                        SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
-                        editor.putString("profileid", searchedUser.getUsername());
-                        editor.apply();
-                        searchUserFragment.navigateToNotMyProfileFragment();
-                    }else{
-                        searchUserFragment.navigateToProfileFragment();
-                    }
-                } else{
-                    //Intent intent = new Intent(mContext, MainMenuActivity.class);
-                    //mContext.startActivity(intent);
-                    if (!actualUser.getUsername().equals(searchedUser.getUsername())){
-                        SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
-                        editor.putString("profileid", searchedUser.getUsername());
-                        editor.apply();
-                          Fragment mFragment = null;
-                            mFragment = new NotMyProfileFragment();
-                            ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.frameLayout, mFragment)
-                                .commit();
-                    } else{
-                        SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
-                        editor.putString("profileid", searchedUser.getUsername());
-                        editor.apply();
-                        Fragment mFragment = null;
-                        mFragment = new ProfileFragment();
-                        ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.frameLayout, mFragment)
-                                .commit();
-                    }
+        holder.itemView.setOnClickListener(view -> {
+            if (isfragment) {
+                if (!actualUser.getUsername().equals(searchedUser.getUsername())) {
+                    SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
+                    editor.putString("profileid", searchedUser.getUsername());
+                    editor.apply();
+                    searchUserFragment.navigateToNotMyProfileFragment();
+                } else {
+                    searchUserFragment.navigateToProfileFragment();
+                }
+            } else {
+                //Intent intent = new Intent(mContext, MainMenuActivity.class);
+                //mContext.startActivity(intent);
+                if (!actualUser.getUsername().equals(searchedUser.getUsername())) {
+                    SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
+                    editor.putString("profileid", searchedUser.getUsername());
+                    editor.apply();
+                    Fragment mFragment = null;
+                    mFragment = new NotMyProfileFragment();
+                    ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.frameLayout, mFragment)
+                            .commit();
+                } else {
+                    SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
+                    editor.putString("profileid", searchedUser.getUsername());
+                    editor.apply();
+                    Fragment mFragment = null;
+                    mFragment = new ProfileFragment();
+                    ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.frameLayout, mFragment)
+                            .commit();
                 }
             }
         });
 
-        holder.btn_follow.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                if(holder.btn_follow.getText().toString().equals("follow")){
-                    FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername())
-                            .child("following").child(searchedUser.getUsername()).setValue(true);
-                    FirebaseDatabase.getInstance().getReference().child("Follow").child(searchedUser.getUsername())
-                            .child("followers").child(actualUser.getUsername()).setValue(true);
-                }else{
-                    FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername())
-                            .child("following").child(searchedUser.getUsername()).removeValue();
-                    FirebaseDatabase.getInstance().getReference().child("Follow").child(searchedUser.getUsername())
-                            .child("followers").child(actualUser.getUsername()).removeValue();
-                }
+        holder.btn_follow.setOnClickListener(view -> {
+            if (holder.btn_follow.getText().toString().equals("follow")) {
+                FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername())
+                        .child("following").child(searchedUser.getUsername()).setValue(true);
+                FirebaseDatabase.getInstance().getReference().child("Follow").child(searchedUser.getUsername())
+                        .child("followers").child(actualUser.getUsername()).setValue(true);
+            } else {
+                FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername())
+                        .child("following").child(searchedUser.getUsername()).removeValue();
+                FirebaseDatabase.getInstance().getReference().child("Follow").child(searchedUser.getUsername())
+                        .child("followers").child(actualUser.getUsername()).removeValue();
             }
         });
     }
 
     @Override
-    public int getItemCount(){
+    public int getItemCount() {
         return mUsers.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView username;
         public TextView fullname;
@@ -176,12 +146,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         }
     }
 
-    private void isFollowing(final String searchedUsername, Button button){
+    private void isFollowing(final String searchedUsername, Button button) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername()).child("following");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (searchedUsername.equals(actualUser.getUsername())){
+                if (searchedUsername.equals(actualUser.getUsername())) {
                     button.setVisibility(View.GONE);
                 } else {
                     if (snapshot.child(searchedUsername).exists()) {
@@ -199,7 +169,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         });
     }
 
-    private void getGetUsernameFromFirebase(String s){
+    private void getGetUsernameFromFirebase(String s) {
         FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
