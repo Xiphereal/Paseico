@@ -1,51 +1,31 @@
 
 package app.paseico;
 
-        import androidx.annotation.NonNull;
-        import androidx.core.app.ActivityCompat;
-        import androidx.core.content.ContextCompat;
-        import androidx.fragment.app.FragmentActivity;
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.*;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
+import app.paseico.data.PointOfInterest;
+import com.directions.route.*;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.maps.*;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.snackbar.Snackbar;
 
-        import android.Manifest;
-        import android.content.Intent;
-        import android.content.pm.PackageManager;
-        import android.icu.text.Transliterator;
-        import android.location.Address;
-        import android.location.Location;
-        import android.os.Bundle;
-        import android.os.Parcelable;
-        import android.util.Log;
-        import android.view.View;
-        import android.widget.AdapterView;
-        import android.widget.ArrayAdapter;
-        import android.widget.ImageButton;
-        import android.widget.ListView;
-        import android.widget.TextView;
-        import android.widget.Toast;
-
-        import com.directions.route.AbstractRouting;
-        import com.directions.route.Route;
-        import com.directions.route.RouteException;
-        import com.directions.route.Routing;
-        import com.directions.route.RoutingListener;
-        import com.google.android.gms.common.ConnectionResult;
-        import com.google.android.gms.common.api.GoogleApiClient;
-        import com.google.android.gms.maps.CameraUpdate;
-        import com.google.android.gms.maps.CameraUpdateFactory;
-        import com.google.android.gms.maps.GoogleMap;
-        import com.google.android.gms.maps.OnMapReadyCallback;
-        import com.google.android.gms.maps.SupportMapFragment;
-        import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-        import com.google.android.gms.maps.model.LatLng;
-        import com.google.android.gms.maps.model.Marker;
-        import com.google.android.gms.maps.model.MarkerOptions;
-        import com.google.android.gms.maps.model.PolylineOptions;
-        import com.google.android.material.snackbar.Snackbar;
-
-        import java.util.ArrayList;
-        import java.util.List;
-
-        import app.paseico.data.PointOfInterest;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RouteRunnerActivity<Polyline> extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener, RoutingListener {
@@ -75,7 +55,6 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
     private ListView listView;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,17 +78,17 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
             app.paseico.data.Route route = (app.paseico.data.Route) b.get("route");
             List<PointOfInterest> routePois = route.getPointsOfInterest();
 
-            for(int i = 0; i < routePois.size(); i++){
+            for (int i = 0; i < routePois.size(); i++) {
                 pointsOfInterestNames.add(routePois.get(i).getName());
 
-               LatLng latlng = new LatLng(routePois.get(i).getLatitude(), routePois.get(i).getLongitude());
+                LatLng latlng = new LatLng(routePois.get(i).getLatitude(), routePois.get(i).getLongitude());
                 locations.add(latlng);
             }
 
             TextView routeTitle = findViewById(R.id.textViewTitleRoutingActivity);
             routeTitle.setText(route.getName());
 
-            for(int i = 0; i < locations.size(); i++) {
+            for (int i = 0; i < locations.size(); i++) {
                 isCompleted.add(false);
                 poisLeft++;
             }
@@ -125,27 +104,27 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
                 //if (isCompleted.get(i) == false) {
 
 
-                LatLng destination = new LatLng(locations.get(i).latitude,locations.get(i).longitude);
+                LatLng destination = new LatLng(locations.get(i).latitude, locations.get(i).longitude);
 
-                start=new LatLng(myLocation.getLatitude(),myLocation.getLongitude());
+                start = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
                 //start route finding
                 mMap.clear();
                 placePOIsFromRoute(pointsOfInterestNames, locations, isCompleted);
-                Findroutes(start,destination);
+                Findroutes(start, destination);
                 currentDestination = new Location(destination.toString());
                 currentDestination.setLatitude(destination.latitude);
                 currentDestination.setLongitude(destination.longitude);
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
-                        new LatLng(currentDestination.getLatitude(),currentDestination.getLongitude()), 16f);
+                        new LatLng(currentDestination.getLatitude(), currentDestination.getLongitude()), 16f);
                 mMap.animateCamera(cameraUpdate);
                 actualPOI = i;
             }
         });
 
         cancelRoute.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view){
+            public void onClick(View view) {
                 poisLeft = 0;
-                for(int i = 0; i < locations.size(); i++) {
+                for (int i = 0; i < locations.size(); i++) {
                     isCompleted.set(i, false);
                     poisLeft++;
                 }
@@ -158,10 +137,9 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
         });
 
 
-
     }
 
-    public void placePOIsFromRoute(ArrayList<String> POIsNames, ArrayList<LatLng> POIsLocations, ArrayList<Boolean> POIsCompleted){
+    public void placePOIsFromRoute(ArrayList<String> POIsNames, ArrayList<LatLng> POIsLocations, ArrayList<Boolean> POIsCompleted) {
         mMap.clear();
 
         for (int i = 0; i < POIsNames.size(); i++) {
@@ -171,7 +149,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
                 mMap.addMarker(new MarkerOptions().position(POIsLocations.get(i)).title(POIsNames.get(i)));
             }
         }
-        if(poisLeft == 0) {
+        if (poisLeft == 0) {
             Intent intent = new Intent(RouteRunnerActivity.this, RouteFinishedActivity.class);
             startActivity(intent);
             finish();
@@ -227,8 +205,8 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
             @Override
             public void onMyLocationChange(Location location) {
 
-                myLocation=location;
-                LatLng ltlng=new LatLng(location.getLatitude(),location.getLongitude());
+                myLocation = location;
+                LatLng ltlng = new LatLng(location.getLatitude(), location.getLongitude());
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
                         ltlng, 16f);
 
@@ -239,7 +217,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
                     if (myLocation.distanceTo(currentDestination) < 50) {
                         System.out.println("HAS COMPLETADO EL POI");
                         currentDestination = null;
-                        isCompleted.set(actualPOI,true);
+                        isCompleted.set(actualPOI, true);
                         // MARK IT IN GREEN COLOR
                         poisLeft--;
                         placePOIsFromRoute(pointsOfInterestNames, locations, isCompleted);
@@ -270,11 +248,9 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
 
     // function to find Routes.
     public void Findroutes(LatLng Start, LatLng End) {
-        if(Start==null || End==null) {
-            Toast.makeText(RouteRunnerActivity.this,"Unable to get location",Toast.LENGTH_LONG).show();
-        }
-        else
-        {
+        if (Start == null || End == null) {
+            Toast.makeText(RouteRunnerActivity.this, "Unable to get location", Toast.LENGTH_LONG).show();
+        } else {
 
             Routing routing = new Routing.Builder()
                     .travelMode(AbstractRouting.TravelMode.WALKING)
@@ -291,7 +267,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
     @Override
     public void onRoutingFailure(RouteException e) {
         View parentLayout = findViewById(android.R.id.content);
-        Snackbar snackbar= Snackbar.make(parentLayout, e.toString(), Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(parentLayout, e.toString(), Snackbar.LENGTH_LONG);
         snackbar.show();
 //    Findroutes(start,end);
     }
@@ -307,31 +283,29 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
 
         CameraUpdate center = CameraUpdateFactory.newLatLng(start);
         CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);
-        if(polylines!=null) {
+        if (polylines != null) {
             polylines.clear();
         }
         PolylineOptions polyOptions = new PolylineOptions();
-        LatLng polylineStartLatLng=null;
-        LatLng polylineEndLatLng=null;
+        LatLng polylineStartLatLng = null;
+        LatLng polylineEndLatLng = null;
 
 
         polylines = new ArrayList<>();
         //add route(s) to the map using polyline
-        for (int i = 0; i <route.size(); i++) {
+        for (int i = 0; i < route.size(); i++) {
 
-            if(i==shortestRouteIndex)
-            {
+            if (i == shortestRouteIndex) {
                 polyOptions.color(getResources().getColor(R.color.colorPrimary));
                 polyOptions.width(7);
                 polyOptions.addAll(route.get(shortestRouteIndex).getPoints());
                 Polyline polyline = (Polyline) mMap.addPolyline(polyOptions);
-                polylineStartLatLng= ((com.google.android.gms.maps.model.Polyline) polyline).getPoints().get(0);
-                int k= ((com.google.android.gms.maps.model.Polyline) polyline).getPoints().size();
-                polylineEndLatLng= ((com.google.android.gms.maps.model.Polyline) polyline).getPoints().get(k-1);
+                polylineStartLatLng = ((com.google.android.gms.maps.model.Polyline) polyline).getPoints().get(0);
+                int k = ((com.google.android.gms.maps.model.Polyline) polyline).getPoints().size();
+                polylineEndLatLng = ((com.google.android.gms.maps.model.Polyline) polyline).getPoints().get(k - 1);
                 polylines.add(polyline);
 
-            }
-            else {
+            } else {
 
             }
         }
@@ -339,12 +313,12 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
 
     @Override
     public void onRoutingCancelled() {
-        Findroutes(start,end);
+        Findroutes(start, end);
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Findroutes(start,end);
+        Findroutes(start, end);
     }
 
 }
