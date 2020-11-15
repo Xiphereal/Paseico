@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -25,6 +26,35 @@ public class RouteInformationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_information);
 
+        Route route = setFilteredInformation();
+
+        clickedBack();
+
+        clickedStartRoute(route);
+    }
+
+    protected void clickedStartRoute(Route route) {
+        findViewById(R.id.btn_routeInfo_startRoute).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent startRouteIntent = new Intent(RouteInformationActivity.this, RouteRunnerActivity.class);
+                startRouteIntent.putExtra("route", route);
+                startActivity(startRouteIntent);
+            }
+        });
+    }
+
+    protected void clickedBack() {
+        findViewById(R.id.btn_routeInfo_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+
+    @NotNull
+    protected Route setFilteredInformation() {
         textView_name = findViewById(R.id.textView_routeInfo_nameOfRoute);
         textView_theme = findViewById(R.id.textView_routeInfo_theme);
         textView_rewardsPoints = findViewById(R.id.textView_routeInfo_rewardPoints);
@@ -51,22 +81,8 @@ public class RouteInformationActivity extends AppCompatActivity {
         textView_length.setText(length);
         textView_estimatedTime.setText(estimatedTime);
         textView_numberOfPOI.setText(numberOfPOI);
-
-        findViewById(R.id.btn_routeInfo_back).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        findViewById(R.id.btn_routeInfo_startRoute).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent startRouteIntent = new Intent(RouteInformationActivity.this, RouteRunnerActivity.class);
-                startRouteIntent.putExtra("route", route);
-                startActivity(startRouteIntent);
-            }
-        });
-
+        return route;
     }
+
+
 }
