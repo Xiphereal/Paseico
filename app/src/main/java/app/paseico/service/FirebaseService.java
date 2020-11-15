@@ -6,6 +6,7 @@ import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -30,12 +31,19 @@ public class FirebaseService {
     }
 
     public static String saveRoute(Route route) {
-        firebaseFirestore.collection("route").add(route);
+        firebaseFirestore.collection("route").add(route).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                String createdRouteID = documentReference.getId();
+                updateRoute(createdRouteID, "id", createdRouteID);
+            }
+        });
+
         return "Route " + route.getName() + " succesfully added to Firebase.";
     }
 
-    public static String updateRoute(String attribute, String newValue) {
-        return FirebaseService.updateRoute(attribute,newValue);
+    public static String updateRoute(String routeId, String attribute, String newValue) {
+        return FirebaseService.updateRouteObject(routeId, attribute,newValue);
     }
     public static String updateRoute(String attribute, Double newValue) {
         return FirebaseService.updateRoute(attribute,newValue);
@@ -47,9 +55,9 @@ public class FirebaseService {
         return FirebaseService.updateRoute(attribute,newValue);
     }
 
-    //TODO: add reference to the Route we want to update, changed for "XX"
-    private static String updateRoute(String attribute, Object newValue) {
-        DocumentReference reference = firebaseFirestore.collection("routes").document("XX");
+
+    private static String updateRouteObject(String routeId, String attribute, Object newValue) {
+        DocumentReference reference = firebaseFirestore.collection("route").document(routeId);
 
         reference
                 .update(attribute, newValue)
