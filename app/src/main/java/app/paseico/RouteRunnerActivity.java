@@ -77,10 +77,11 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
     static int poisLeft = 0;
     static ArrayAdapter arrayAdapter2;
     ArrayAdapterRutas arrayAdapter;
+    static int rewpoints;
 
     static Location currentDestination;
     static ListView listView;
-    String nombredeRuta;
+    String nombredeRuta = "Descubriendo Valencia";
 
     private app.paseico.data.Route actualRoute;
 
@@ -99,15 +100,19 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        TextView routeTitle = findViewById(R.id.textViewTitleRoutingActivity);
+
 
         ImageButton cancelRoute = findViewById(R.id.buttonCancelRoute);
-        if (b != null && actualRoute == null) {actualRoute = (app.paseico.data.Route) b.get("route");}
+        if (b != null && actualRoute == null) {actualRoute = (app.paseico.data.Route) b.get("route");
+        nombredeRuta = actualRoute.getName();
+        rewpoints = actualRoute.getRewardPoints();}
 
 
         else { if (pointsOfInterestNames.isEmpty()){
 
 
-            nombredeRuta = "Descubriendo Valencia";
+            //nombredeRuta = "Descubriendo Valencia";
 
             PointOfInterest POI1 = new PointOfInterest(39.4736, -0.3790, "Mercado central");
             PointOfInterest POI2 = new PointOfInterest(39.4758, -0.3839, "Torre de Quart");
@@ -125,21 +130,20 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
             pois.add(POI6);
 
             actualRoute = new app.paseico.data.Route(nombredeRuta, "Monumentos", 10, 10, 100, pois);
-
             List<PointOfInterest> routePois = actualRoute.getPointsOfInterest();
+            rewpoints = 100;
             for (int i = 0; i < routePois.size(); i++) {
                 pointsOfInterestNames.add(routePois.get(i).getName());
                 locations.add(new LatLng(routePois.get(i).getLatitude(), routePois.get(i).getLongitude()));
             }
 
-            TextView routeTitle = findViewById(R.id.textViewTitleRoutingActivity);
-            routeTitle.setText(actualRoute.getName());
-
             for (int i = 0; i < locations.size(); i++) {
                 isCompleted.add(false);
                 poisLeft++;
             }
-        }}
+        }
+        }
+        routeTitle.setText(nombredeRuta);
 
         listView = findViewById(R.id.ListViewRoute);
         listView.setAdapter(arrayAdapter);
@@ -203,6 +207,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
                 Intent intent = new Intent(RouteRunnerActivity.this, TemporalRoutesMenu.class);
                 intent.putExtra("nombreruta", nombredeRuta);
                 intent.putExtra("nombrePOIS",pointsOfInterestNames);
+                intent.putExtra("points",rewpoints);
                 startActivity(intent);
                 finish();
             }
@@ -235,6 +240,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
             Intent intent = new Intent(RouteRunnerActivity.this, RouteFinishedActivity.class);
             intent.putExtra("nombreruta", nombredeRuta);
             intent.putExtra("nombrePOIS",pointsOfInterestNames);
+            intent.putExtra("points",rewpoints);
             startActivity(intent);
             finish();
         }

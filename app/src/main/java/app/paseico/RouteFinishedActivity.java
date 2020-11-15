@@ -15,6 +15,7 @@ public class RouteFinishedActivity extends AppCompatActivity {
     Intent intent;
     String nombreRuta;
     ArrayList<String> nombrePOIs;
+    int rewpoints;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +25,13 @@ public class RouteFinishedActivity extends AppCompatActivity {
 
         TextView nombreRutaTV = findViewById(R.id.textViewTemporalMenuName);
         TextView listaPOISTV = findViewById(R.id.textViewTemporalMenuPOIS);
+        TextView cantPuntos = findViewById(R.id.textViewRouteFinishedPoints);
 
         nombreRuta = intent.getStringExtra("nombreruta");
         if (nombreRuta != null){nombreRutaTV.setText(nombreRuta);}
+
+        rewpoints = intent.getIntExtra("points", 0);
+        cantPuntos.setText("Puntos: " + rewpoints);
 
         nombrePOIs = intent.getStringArrayListExtra("nombrePOIS");
         String listado = "";
