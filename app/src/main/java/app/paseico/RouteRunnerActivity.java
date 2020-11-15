@@ -70,17 +70,16 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
     //polyline object
     private List<Polyline> polylines = null;
 
-    static ArrayList<String> pointsOfInterestNames = new ArrayList<String>();
-    static ArrayList<LatLng> locations = new ArrayList<LatLng>();
-    static ArrayList<Boolean> isCompleted = new ArrayList<Boolean>();
-    static int actualPOI = -1;
-    static int poisLeft = 0;
-    static ArrayAdapter arrayAdapter2;
+    ArrayList<String> pointsOfInterestNames = new ArrayList<String>();
+    ArrayList<LatLng> locations = new ArrayList<LatLng>();
+    ArrayList<Boolean> isCompleted = new ArrayList<Boolean>();
+    int actualPOI = -1;
+    int poisLeft = 0;
     ArrayAdapterRutas arrayAdapter;
-    static int rewpoints;
+    int rewpoints;
 
-    static Location currentDestination;
-    static ListView listView;
+    Location currentDestination;
+    ListView listView;
     String nombredeRuta = "Descubriendo Valencia";
 
     private app.paseico.data.Route actualRoute;
@@ -108,8 +107,19 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
         nombredeRuta = actualRoute.getName();
         rewpoints = actualRoute.getRewardPoints();}
 
+        List<PointOfInterest> routePois = actualRoute.getPointsOfInterest();
+        for (int i = 0; i < routePois.size(); i++) {
+            pointsOfInterestNames.add(routePois.get(i).getName());
+            locations.add(new LatLng(routePois.get(i).getLatitude(), routePois.get(i).getLongitude()));
+        }
 
-        else { if (pointsOfInterestNames.isEmpty()){
+        for (int i = 0; i < locations.size(); i++) {
+            isCompleted.add(false);
+            poisLeft++;
+        }
+
+
+        /*else { if (pointsOfInterestNames.isEmpty()){
 
 
             //nombredeRuta = "Descubriendo Valencia";
@@ -142,7 +152,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
                 poisLeft++;
             }
         }
-        }
+        }*/
         routeTitle.setText(nombredeRuta);
 
         listView = findViewById(R.id.ListViewRoute);
@@ -204,10 +214,8 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
                     isCompleted.set(j, false);
                     poisLeft++;
                 }
-                Intent intent = new Intent(RouteRunnerActivity.this, TemporalRoutesMenu.class);
-                intent.putExtra("nombreruta", nombredeRuta);
-                intent.putExtra("nombrePOIS",pointsOfInterestNames);
-                intent.putExtra("points",rewpoints);
+                Intent intent = new Intent(RouteRunnerActivity.this, RouteInformationActivity.class);
+                intent.putExtra("route", actualRoute);
                 startActivity(intent);
                 finish();
             }
@@ -238,9 +246,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
                 poisLeft++;
             }
             Intent intent = new Intent(RouteRunnerActivity.this, RouteFinishedActivity.class);
-            intent.putExtra("nombreruta", nombredeRuta);
-            intent.putExtra("nombrePOIS",pointsOfInterestNames);
-            intent.putExtra("points",rewpoints);
+            intent.putExtra("route", actualRoute);
             startActivity(intent);
             finish();
         }

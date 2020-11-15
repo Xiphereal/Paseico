@@ -9,16 +9,22 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import app.paseico.data.PointOfInterest;
+import app.paseico.data.Route;
+import app.paseico.login.OpeningActivity;
 
 public class RouteFinishedActivity extends AppCompatActivity {
 
     Intent intent;
     String nombreRuta;
-    ArrayList<String> nombrePOIs;
+    List<PointOfInterest> nombrePOIs;
     int rewpoints;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Route route = (Route) getIntent().getExtras().get("route");
         intent = getIntent();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_finished);
@@ -27,16 +33,16 @@ public class RouteFinishedActivity extends AppCompatActivity {
         TextView listaPOISTV = findViewById(R.id.textViewTemporalMenuPOIS);
         TextView cantPuntos = findViewById(R.id.textViewRouteFinishedPoints);
 
-        nombreRuta = intent.getStringExtra("nombreruta");
+        nombreRuta = route.getName();
         if (nombreRuta != null){nombreRutaTV.setText(nombreRuta);}
 
-        rewpoints = intent.getIntExtra("points", 0);
+        rewpoints = route.getRewardPoints();
         cantPuntos.setText("Puntos: " + rewpoints);
 
-        nombrePOIs = intent.getStringArrayListExtra("nombrePOIS");
+        nombrePOIs = route.getPointsOfInterest();
         String listado = "";
         for (int i = 0; i < nombrePOIs.size(); i++) {
-            listado+="- "+nombrePOIs.get(i) + "\n";
+            listado+="- "+nombrePOIs.get(i).getName() + "\n";
         }
 
         listaPOISTV.setText(listado);
@@ -51,7 +57,8 @@ public class RouteFinishedActivity extends AppCompatActivity {
         goToMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(RouteFinishedActivity.this, TemporalRoutesMenu.class);
+                Intent intent = new Intent(RouteFinishedActivity.this, RouteInformationActivity.class);
+                intent.putExtra("route",route);
                 startActivity(intent);
                 finish();
             }

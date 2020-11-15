@@ -65,6 +65,7 @@ public class RouteInformationActivity extends AppCompatActivity {
                 Intent startRouteIntent = new Intent(RouteInformationActivity.this, RouteRunnerActivity.class);
                 startRouteIntent.putExtra("route", route);
                 startActivity(startRouteIntent);
+                finish();
             }
         });
 
