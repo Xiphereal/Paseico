@@ -4,22 +4,27 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
-
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
+import app.paseico.data.User;
+import app.paseico.mainMenu.userCreatedRoutes.UserCreatedRoutesFragment;
 import app.paseico.service.FirebaseService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.*;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -28,12 +33,17 @@ import java.util.List;
 public class CreateNewRouteActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap createNewRouteMap;
-    private List<PointOfInterest> selectedPointsOfInterest = new ArrayList<>();
+    private final List<PointOfInterest> selectedPointsOfInterest = new ArrayList<>();
     private static Route newRoute;
 
     private ListView markedPOIsListView;
-    private ArrayAdapter<String> markedPOIsAdapter;
-    private List<String> markedPOIs = new ArrayList<>();
+    private final List<String> markedPOIs = new ArrayList<>();
+
+    private final List<String> createdMarkers = new ArrayList<>();
+
+    private User currentUser;
+
+    private Marker userNewCustomPoiInCreation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +53,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
         initializeMapFragment();
 
-        registerFinalizeRouteCreationButtonTransition();
+        getCurrentUserFromDatabaseAsync();
     }
 
     private void initializeMapFragment() {
@@ -53,44 +63,172 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         mapFragment.getMapAsync(this);
     }
 
+    /**
+     * Gets the current User from the database asynchronously.
+     */
+    private void getCurrentUserFromDatabaseAsync() {
+        DatabaseReference currentUserReference = FirebaseService.getCurrentUserReference();
+
+        currentUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                currentUser = snapshot.getValue(User.class);
+
+                // Registering this callback here ensures that the button
+                // action is only performed when the User is ready.
+                registerFinalizeRouteCreationButtonTransition();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("The db connection failed: " + error.getMessage());
+            }
+        });
+    }
+
     private void registerFinalizeRouteCreationButtonTransition() {
         ExtendedFloatingActionButton extendedFloatingActionButton = findViewById(R.id.finalize_route_creation_button);
 
-        // TODO: When the conditions are not met, we must show an error message and just close the dialog on click OK.
-        extendedFloatingActionButton.setOnClickListener(view -> showConfirmationDialog());
+        extendedFloatingActionButton.setOnClickListener(view -> tryFinalizeRouteCreation());
+    }
+
+    /**
+     * Checks for the User requirements for creating the new Route. If everything is fine, a confirmation dialog
+     * appears and the Route creation finalizes. If anything goes wrong, a error dialogs appears and keeps the
+     * previous state.
+     */
+    private void tryFinalizeRouteCreation() {
+        if (currentUser.getHasFreeRouteCreation()) {
+            currentUser.setHasFreeRouteCreation(false);
+            showConfirmationDialog();
+        } else {
+            showRouteCreationSummaryDialog();
+        }
+    }
+
+    private void showRouteCreationSummaryDialog() {
+        int routeCost = calculateRouteCost();
+
+        String dialogMessage = getResources().getString(R.string.route_creation_summary_message, routeCost);
+
+        AlertDialog.Builder builder = setUpBuilder(dialogMessage);
+
+        builder.setOnDismissListener(dialog -> {
+            int currentUserPoints = currentUser.getPoints();
+
+            if (currentUserPoints >= routeCost) {
+                currentUser.setPoints(currentUserPoints - routeCost);
+                showConfirmationDialog();
+            } else {
+                showNotEnoughPointsDialog();
+            }
+        });
+
+        showDialog(builder);
+    }
+
+    private int calculateRouteCost() {
+        int totalRouteCost = 0;
+
+        for (PointOfInterest poi : selectedPointsOfInterest) {
+            if (poi.wasCreatedByUser()) {
+                totalRouteCost += getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost);
+            } else {
+                totalRouteCost += getResources().getInteger(R.integer.google_maps_point_of_interest_cost);
+            }
+        }
+
+        return totalRouteCost;
+    }
+
+    private void showDialog(AlertDialog.Builder builder) {
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void showConfirmationDialog() {
+        String dialogMessage = getResources().getString(R.string.route_creation_confirmation_message);
+        AlertDialog.Builder builder = setUpBuilder(dialogMessage);
+
+        // In case the user close the dialog either by tapping outside of the dialog or by pressing any button,
+        // it's considered dismissed.
+        builder.setOnDismissListener(dialog -> finalizeRouteCreation());
+
+        showDialog(builder);
+    }
+
+    /**
+     * Sets up a basic builder for an AlertDialog. The caller must ensures the setOnDismissListener is defined
+     * with the desired behavior for when closing the dialog.
+     *
+     * @param dialogMessage The String from resources can be retrieved by 'getResources().getString()'. This allows
+     *                      to use formatted Strings for dynamic messages.
+     * @return The setted up builder for the AlertDialog.
+     */
+    @NotNull
+    private AlertDialog.Builder setUpBuilder(String dialogMessage) {
         // Where the alert dialog is going to be shown.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        // TODO: Extract the string to a resources file or similar abstraction.
-        builder.setMessage("La nueva ruta ha sido guardada satisfactoriamente.")
-                .setTitle("Finalizar creación de ruta")
+        builder.setMessage(dialogMessage)
+                .setTitle(R.string.route_creation_finalize_title)
                 .setPositiveButton("OK", (dialog, which) -> {
-                    TextInputEditText textInputEditText = findViewById(R.id.route_name_textInputEditText);
-                    newRoute = new Route(textInputEditText.getText().toString(), selectedPointsOfInterest);
-                    FirebaseService.saveRoute(newRoute);
-
-                    //We add the created route name to the createdRoutes before returning to the main activity
-                    MainMapActivity.getCreatedRoutes().add(newRoute.getName());
-
-                    // Take the user back to the main map activity
-                    // TODO: Clean the current activity state to prevent the user retrieve the state when
-                    //  using the backstack.
-                    Intent goToMainMapIntent = new Intent(getApplicationContext(), MainMapActivity.class);
-                    startActivity(goToMainMapIntent);
+                    // This remains empty because when the dialog is closed by tapping on 'OK' or outside it,
+                    // it's considered to be dismissed in both cases, thus the call to the finalizer method must
+                    // be done only on the dismiss listener.
                 });
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        return builder;
+    }
+
+    private void finalizeRouteCreation() {
+        createNewRoute();
+        persistCurrentUserModifications();
+
+        goToPreviousActivity();
+    }
+
+    private void createNewRoute() {
+        TextInputEditText textInputEditText = findViewById(R.id.route_name_textInputEditText);
+        String authorId = FirebaseService.getCurrentUser().getUid();
+
+        newRoute = new Route(textInputEditText.getText().toString(), selectedPointsOfInterest, authorId);
+
+        FirebaseService.saveRoute(newRoute);
+
+        //We add the created route name to the createdRoutes before returning to the main activity.
+        UserCreatedRoutesFragment.getCreatedRoutes().add(newRoute.getName());
+    }
+
+    // TODO: Refactor and generalize this into a User instance method.
+    private void persistCurrentUserModifications() {
+        DatabaseReference currentUserReference = FirebaseService.getCurrentUserReference();
+
+        currentUserReference.child("hasFreeRouteCreation").setValue(currentUser.getHasFreeRouteCreation());
+        currentUserReference.child("points").setValue(currentUser.getPoints());
+    }
+
+    private void goToPreviousActivity() {
+        Intent goToRoutesIntent = new Intent(getApplicationContext(), MainMenuActivity.class);
+        startActivity(goToRoutesIntent);
+    }
+
+    private void showNotEnoughPointsDialog() {
+        String dialogMessage = getResources().getString(R.string.route_creation_not_enough_points_message);
+        AlertDialog.Builder builder = setUpBuilder(dialogMessage);
+
+        builder.setOnDismissListener(dialog -> {
+            // This remains empty because we want the app to do nothing in this case.
+        });
+
+        showDialog(builder);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         createNewRouteMap = googleMap;
 
-        addFakePOIsToMap(createNewRouteMap);
+        createNewRouteMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.create_route_style));
 
         // TODO: Move camera to real user position.
         LatLng fakeUserPosition = new LatLng(39.475, -0.375);
@@ -98,70 +236,56 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
         googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
 
+        registerOnMapClick();
         registerOnMarkerClickListener();
+        registerOnGoogleMapsPoiClickListener();
+        registerOnMapLongClick();
     }
 
-    private void addFakePOIsToMap(GoogleMap googleMap) {
-        LatLng valenciaCathedral = new LatLng(39.475139, -0.375372);
-        googleMap.addMarker(new MarkerOptions().position(valenciaCathedral).title("Cathedral"));
+    private void registerOnMapClick() {
+        createNewRouteMap.setOnMapClickListener(tapPoint -> tryDeleteUserNewCustomPoiInCreation());
+    }
 
-        LatLng albertosBar = new LatLng(39.471958, -0.370947);
-        googleMap.addMarker(new MarkerOptions().position(albertosBar).title("Alberto's bar"));
+    /**
+     * Checks if the User is creating a custom Point Of Interest.
+     * If so, cancels the creation of the new POI.
+     * If not, does nothing.
+     */
+    private void tryDeleteUserNewCustomPoiInCreation() {
+        if (isUserCreatingACustomPoi()) {
+            hideUserNewCustomPoiForm();
+            userNewCustomPoiInCreation.remove();
+            userNewCustomPoiInCreation = null;
+        }
+    }
 
-        LatLng torresSerrano = new LatLng(39.479063, -0.376115);
-        googleMap.addMarker(new MarkerOptions().position(torresSerrano).title("Torres de Serrano"));
-
-        LatLng ayuntamiento = new LatLng(39.469734, -0.376868);
-        googleMap.addMarker(new MarkerOptions().position(ayuntamiento).title("Ayuntamiento"));
-
-        LatLng gulliver = new LatLng(39.462987, -0.359719);
-        googleMap.addMarker(new MarkerOptions().position(gulliver).title("Gulliver"));
+    private boolean isUserCreatingACustomPoi() {
+        return userNewCustomPoiInCreation != null;
     }
 
     private void registerOnMarkerClickListener() {
         createNewRouteMap.setOnMarkerClickListener(marker -> {
-            PointOfInterest poi = findClickedPointOfInterest(marker);
+            tryDeleteUserNewCustomPoiInCreation();
+
+            PointOfInterest poi = findClickedPointOfInterest(marker.getPosition(), marker.getTitle());
 
             if (isPointOfInterestSelected(poi)) {
                 deselectPointOfInterest(marker, poi);
             } else {
-                selectPointOfInterest(marker);
+                selectPointOfInterest(marker, false);
             }
-
-            updateMarkedPOIsListView();
 
             return true;
         });
     }
 
-    private void deselectPointOfInterest(@NotNull Marker marker, @NotNull PointOfInterest poi) {
-        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-
-        markedPOIs.remove(poi.getName());
-
-        selectedPointsOfInterest.remove(poi);
-    }
-
-    private void selectPointOfInterest(@NotNull Marker marker) {
-        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-
-        markedPOIs.add(marker.getTitle());
-
-        selectedPointsOfInterest.add(new PointOfInterest(marker.getPosition().latitude,marker.getPosition().longitude, marker.getTitle()));
-    }
-
-    private void updateMarkedPOIsListView() {
-        markedPOIsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, markedPOIs);
-        markedPOIsListView.setAdapter(markedPOIsAdapter);
-    }
-
-    private PointOfInterest findClickedPointOfInterest(@NotNull Marker marker) {
-        LatLng latLangMarker = marker.getPosition();
+    private PointOfInterest findClickedPointOfInterest(LatLng latLangMarker, String title) {
         Double lat = latLangMarker.latitude;
         Double lon = latLangMarker.longitude;
-        PointOfInterest markerPOI = new PointOfInterest(lat,lon,marker.getTitle());
+        PointOfInterest markerPOI = new PointOfInterest(lat, lon, title);
+
         for (PointOfInterest poi : selectedPointsOfInterest) {
-            if (poi.equals(markerPOI)){
+            if (poi.equals(markerPOI)) {
                 return poi;
             }
         }
@@ -171,6 +295,120 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     private boolean isPointOfInterestSelected(PointOfInterest poi) {
         return poi != null;
+    }
+
+    private void deselectPointOfInterest(@NotNull Marker marker, @NotNull PointOfInterest poi) {
+        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+
+        markedPOIs.remove(poi.getName());
+
+        selectedPointsOfInterest.remove(poi);
+
+        updateMarkedPOIsListView();
+    }
+
+    private void selectPointOfInterest(@NotNull Marker marker, boolean createdByUser) {
+        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+
+        markedPOIs.add(marker.getTitle());
+
+        PointOfInterest selectedPoi = new PointOfInterest(
+                marker.getPosition().latitude,
+                marker.getPosition().longitude,
+                marker.getTitle(),
+                createdByUser);
+
+        selectedPointsOfInterest.add(selectedPoi);
+
+        updateMarkedPOIsListView();
+    }
+
+    private void updateMarkedPOIsListView() {
+        ArrayAdapter<String> markedPOIsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, markedPOIs);
+        markedPOIsListView.setAdapter(markedPOIsAdapter);
+    }
+
+    /**
+     * Registers the listener for creating a marker when a Google Maps Point of Interest is tapped.
+     */
+    private void registerOnGoogleMapsPoiClickListener() {
+        createNewRouteMap.setOnPoiClickListener(poiSelected -> {
+            tryDeleteUserNewCustomPoiInCreation();
+
+            PointOfInterest poi = findClickedPointOfInterest(poiSelected.latLng, poiSelected.name);
+
+            if (!isPointOfInterestSelected(poi) && !markerWasCreated(poiSelected.name)) {
+                Marker markerOfThePoi = createNewRouteMap
+                        .addMarker(new MarkerOptions().position(poiSelected.latLng).title(poiSelected.name));
+
+                selectPointOfInterest(markerOfThePoi, false);
+                createdMarkers.add(poiSelected.name);
+            }
+
+            return;
+        });
+    }
+
+    private boolean markerWasCreated(String name) {
+        for (String createdMarkerName : createdMarkers) {
+            if (createdMarkerName.equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Registers the listener for letting the user create Points Of Interest.
+     */
+    private void registerOnMapLongClick() {
+        BottomSheetBehavior bottomSheetBehavior = hideUserNewCustomPoiForm();
+
+        registerOnNewPoiButtonClicked(bottomSheetBehavior);
+
+        createNewRouteMap.setOnMapLongClickListener(tapPoint -> {
+            // Opens the creation form.
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
+            userNewCustomPoiInCreation = createNewRouteMap
+                    .addMarker(new MarkerOptions().position(tapPoint).title("User Marker"));
+        });
+    }
+
+    /**
+     * Hides the bottom sheet containing the new Point Of Interest creation form.
+     */
+    @NotNull
+    private BottomSheetBehavior hideUserNewCustomPoiForm() {
+        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior
+                .from(findViewById(R.id.user_created_marker_bottom_sheet));
+
+        bottomSheetBehavior.setHideable(true);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+        return bottomSheetBehavior;
+    }
+
+    /**
+     * Registers the listener for accepting the new Point of Interest creation.
+     *
+     * @param bottomSheetBehavior The reference to the bottom sheet for hiding it.
+     */
+    private void registerOnNewPoiButtonClicked(BottomSheetBehavior bottomSheetBehavior) {
+        Button createNewPointOfInterestButton = findViewById(R.id.user_created_marker_button);
+
+        createNewPointOfInterestButton.setOnClickListener(button -> {
+            TextInputEditText textInputEditText = findViewById(R.id.user_created_marker_name_text_input);
+
+            userNewCustomPoiInCreation.setTitle(textInputEditText.getText().toString());
+            textInputEditText.getText().clear();
+
+            selectPointOfInterest(userNewCustomPoiInCreation, true);
+
+            userNewCustomPoiInCreation = null;
+
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        });
     }
 
     public static Route getRoute() {
