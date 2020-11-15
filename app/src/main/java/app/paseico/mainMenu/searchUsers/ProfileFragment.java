@@ -15,9 +15,16 @@ import app.paseico.FollowersActivity;
 import app.paseico.R;
 import app.paseico.data.User;
 import app.paseico.login.LogInActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -27,7 +34,7 @@ import java.util.List;
 
 public class ProfileFragment extends Fragment {
     ImageView image_profile;
-    TextView followers, textView_followers, following, textView_following, fullname, username;
+    TextView followers, textView_followers, following, textView_following, fullname, username, userPointsText, numberOfUserRoutes;
     FirebaseUser firebaseUser;
     User actualUser;
     Button buttonLogOut;
@@ -36,17 +43,24 @@ public class ProfileFragment extends Fragment {
     private String usernameFirebase;
     private UserAdapter userAdapter;
     private List<User> mUsers;
+    private int numberOfRoutes = 0;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstaanceState) {
 
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+
+
+
+
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 actualUser = dataSnapshot.getValue(User.class);
+
             }
 
             @Override
@@ -62,6 +76,9 @@ public class ProfileFragment extends Fragment {
         buttonLogOut = view.findViewById(R.id.buttonLogOut);
         textView_followers = view.findViewById(R.id.textView_Followers);
         textView_following = view.findViewById(R.id.textView_Following);
+        userPointsText = view.findViewById(R.id.userPointsProfileText);
+        numberOfUserRoutes = view.findViewById(R.id.numberOfRoutesText);
+
 
         FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
@@ -128,12 +145,40 @@ public class ProfileFragment extends Fragment {
                 //Glide.with(getContext()).load("@drawable/defaultProfilePic").into(image_profile);
                 username.setText(user.getUsername());
                 fullname.setText(user.getName());
+                userPointsText.setText(Integer.toString(user.getPoints()));
+
+                getNumberOfRouter(firebaseUser.getUid());
+
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+    }
+
+    private void getNumberOfRouter(String userUid) {
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+        CollectionReference routesReference = database.collection("route");
+
+        routesReference.whereEqualTo("authorId", userUid)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                numberOfRoutes++;
+                                System.out.println(numberOfRoutes +  " jasdhfjkashdkjfhasdjhfkajhfkajdhkas");
+                            }
+                            numberOfUserRoutes.setText(Integer.toString(numberOfRoutes));
+                        }
+                    }
+
+                });
+        System.out.println(userUid +  " userUID");
+        System.out.println(numberOfRoutes +  " jasdhfjkashdkjfhasdjhfkajhfkajdhkas");
+
     }
 
     private void getFollowers() {
