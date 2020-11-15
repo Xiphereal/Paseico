@@ -1,9 +1,9 @@
 package app.paseico.data;
 
 
-
 import android.os.Parcel;
 import android.os.Parcelable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -12,19 +12,28 @@ public class Route implements Parcelable {
     private String theme;   // TODO: The value of theme should be a constant.
     private double length;  // Meters.
     private double estimatedTime;  // Minutes
-    private int rewardPoints;     // Points earned when the route is completed.
+
+    // Points earned when the route is completed.
+    private int rewardPoints;
     private List<PointOfInterest> pointsOfInterest;
 
-    public Route(Parcel in){
+    // It was decided that the reference to the Route author must be its database ID, rather than a Paseico.User.
+    private String authorId;
+
+    public Route() {
+    }
+
+    public Route(Parcel in) {
         readFromParcel(in);
     }
 
-    //TODO: Route should have a reference to the author User, in order to know which user created the Route.
-    public Route(String name, List<PointOfInterest> pointOfInterests) {
+    public Route(String name, List<PointOfInterest> pointOfInterests, String authorId) {
         this.name = name;
         this.pointsOfInterest = pointOfInterests;
+        this.authorId = authorId;
     }
 
+    // TODO: Add the userId and pass it wherever this constructor is used.
     public Route(String name, String theme, double length, double estimatedTime, int rewardPoints, List<PointOfInterest> pointsOfInterest) {
         this.name = name;
         this.theme = theme;
@@ -32,7 +41,6 @@ public class Route implements Parcelable {
         this.estimatedTime = estimatedTime;
         this.rewardPoints = rewardPoints;
         this.pointsOfInterest = pointsOfInterest;
-
     }
 
     public String getName() {
@@ -42,7 +50,6 @@ public class Route implements Parcelable {
     public void setName(String name) {
         this.name = name;
     }
-
 
     public String getTheme() {
         return theme;
@@ -84,10 +91,19 @@ public class Route implements Parcelable {
         this.pointsOfInterest = pointsOfInterest;
     }
 
+    public String getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(String authorId) {
+        this.authorId = authorId;
+    }
+
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return "Route{" +
                 "name='" + name + '\'' +
+                "authorId=" + authorId + '\'' +
                 ", theme='" + theme + '\'' +
                 ", length=" + length +
                 ", estimatedTime=" + estimatedTime +
@@ -96,7 +112,7 @@ public class Route implements Parcelable {
                 '}';
     }
 
-    private void readFromParcel(Parcel in){
+    private void readFromParcel(Parcel in) {
         this.name = in.readString();
         this.theme = in.readString();
         this.length = in.readDouble();
@@ -105,9 +121,9 @@ public class Route implements Parcelable {
         this.pointsOfInterest = in.readArrayList(PointOfInterest.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<Route> CREATOR =  new Parcelable.Creator<Route>(){
+    public static final Parcelable.Creator<Route> CREATOR = new Parcelable.Creator<Route>() {
         @Override
-        public Route createFromParcel(Parcel in){
+        public Route createFromParcel(Parcel in) {
             return new Route(in);
         }
 

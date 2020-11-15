@@ -7,15 +7,20 @@
 
     <string name="title_activity_main_map">Map</string>
     <string name="title_activity_route_search">RouteSearch</string>
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAMLXmyf_ai85V6PdlA7jYhjL-nSgHl7mA</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
+        AIzaSyAMLXmyf_ai85V6PdlA7jYhjL-nSgHl7mA
+    </string>
 
     <!-- Strings used for route search fragments for navigation -->
-    <string name="search_fragment_label">First Fragment</string>
-    <string name="route_list_fragment_label">Second Fragment</string>
+    <string name="menu_route_search_fragment_label">SearchFragment</string>
+    <string name="route_search_result_fragment_label">RouteSearchResult</string>
 
     <!-- Strings used for buttons names-->
     <string name="search">Buscar</string>
     <string name="previous">Volver</string>
+    <string name="start_route">Empezar ruta</string>
+    <string name="create_new_point_of_interest_button">Crear nuevo Punto de Interés</string>
+
     <string name="discounts">DESCUENTOS</string>
 
     <string name="zero">0</string>
@@ -27,9 +32,10 @@
     <string name="length">Longitud:</string>
     <string name="estimated_time">Duración estimada:</string>
     <string name="number_of_POI">Número de puntos de interés:</string>
-    <string name="minimum_of_points">Mínimo de puntos:</string>
+    <string name="minimum_of_reward_points">Mínimo de puntos:</string>
     <string name="km">km</string>
     <string name="hours">h</string>
+    <string name="reward_points">Puntos:</string>
 
     <string name="default_spinner_choice">Indiferente</string>
     <string name="no_theme_choice">Sin temática</string>
@@ -43,7 +49,10 @@
     <string name="between3_4">3-4</string>
     <string name="between4_5">4-5</string>
     <string name="gt5">&gt; 5</string> <!-- &gt; is '>' -->
-    <!--Strings arrays used to populate searchFragment spinners -->
+
+    <!-- Strings arrays used to populate searchFragment spinners -->
+    <string name="search_fragment_title">Seleccione el filtro de búsqueda</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string-array name="themes_of_route">
         <item>@string/default_spinner_choice</item>
         <item>@string/no_theme_choice</item>
@@ -53,6 +62,8 @@
         <item>Naturaleza</item>
         <item>Bares</item>
     </string-array>
+
+
     <string-array name="lengths_of_route">
         <item>@string/default_spinner_choice</item>
         <item>@string/lt1</item>
@@ -74,8 +85,6 @@
     </string-array>
 
 
-    <string name="search_fragment_title">Seleccione el filtro de búsqueda</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_main_menu">MainMenuActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -85,11 +94,20 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu_profile">Perfil</string>
-    <string name="menu_routes">Rutas</string>
+    <string name="menu_user_created_routes">Rutas</string>
     <string name="menu_searcher">Buscar rutas</string>
     <string name="menu_marketplace">Tienda</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!-- Messages displayed to the user. -->
+    <string name="route_creation_finalize_title">"Finalizar creación de ruta"</string>
+    <string name="route_creation_confirmation_message">"La nueva ruta ha sido guardada satisfactoriamente."</string>
+    <string name="route_creation_not_enough_points_message">"No tienes los puntos suficientes para crear la ruta."
+    </string>
 
+    <!-- The %1$d represents a String format argument.
+    (See: https://stackoverflow.com/questions/3656371/is-it-possible-dynamically-to-add-string-to-string-xml-in-android -->
+    <string name="route_creation_summary_message">"El coste de la ruta en creación es de: %1$d puntos"</string>
+
+    <!-- TextInput related. -->
+    <string name="new_point_of_interest_name_text_input_hint">Nombre del nuevo Punto de Interés</string>
 </resources>

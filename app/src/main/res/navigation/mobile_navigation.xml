@@ -1,40 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_profile">
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/mobile_navigation"
+            app:startDestination="@id/UserCreatedRoutes">
 
     <fragment
-        android:id="@+id/nav_profile"
-        android:name="app.paseico.ui.profile.profileFragment"
-        android:label="@string/menu_profile"
-        tools:layout="@layout/fragment_profile" />
+            android:id="@+id/Profile"
+            android:name="app.paseico.mainMenu.searchUsers.ProfileFragment"
+            android:label="@string/menu_profile"
+            tools:layout="@layout/fragment_profile"/>
 
     <fragment
-        android:id="@+id/nav_routes"
-        android:name="app.paseico.ui.routes.RoutesFragment"
-        android:label="@string/menu_routes"
-        tools:layout="@layout/fragment_routes" />
+            android:id="@+id/UserCreatedRoutes"
+            android:name="app.paseico.mainMenu.userCreatedRoutes.UserCreatedRoutesFragment"
+            android:label="@string/menu_user_created_routes"
+            tools:layout="@layout/fragment_user_created_routes"/>
 
     <fragment
-        android:id="@+id/nav_searcher"
-        android:name="app.paseico.ui.searcher.SlideshowFragment"
-        android:label="@string/menu_searcher"
-        tools:layout="@layout/fragment_slideshow" />
-
-    <fragment
-        android:id="@+id/nav_marketplace"
-        android:name="app.paseico.ui.marketplace.marketplaceFragment"
-        android:label="@string/menu_searcher"
-        tools:layout="@layout/fragment_marketplace" >
+            android:id="@+id/RouteSearchFragment"
+            android:name="app.paseico.mainMenu.searcher.RouteSearchFragment"
+            android:label="@string/menu_route_search_fragment_label"
+            tools:layout="@layout/fragment_route_search">
         <action
-            android:id="@+id/action_nav_marketplace_to_discountsFragment"
-            app:destination="@id/discountsFragment" />
+                android:id="@+id/action_RouteSearchFragment_to_RouteSearchResult"
+                app:destination="@id/RouteSearchResult"/>
     </fragment>
+
     <fragment
-        android:id="@+id/discountsFragment"
-        android:name="app.paseico.ui.marketplace.DiscountsFragment"
-        android:label="fragment_discounts"
-        tools:layout="@layout/fragment_discounts" />
+            android:id="@+id/RouteSearchResult"
+            android:name="app.paseico.mainMenu.searcher.RouteSearchResultFragment"
+            android:label="@string/route_search_result_fragment_label"
+            tools:layout="@layout/fragment_route_search_result">
+
+        <action
+                android:id="@+id/action_RouteSearchResult_to_RouteSearchFragment"
+                app:destination="@id/RouteSearchFragment"/>
+        <argument
+                android:name="filteredList"
+                app:argType="app.paseico.data.Route[]"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_searchUsers"
+        android:name="app.paseico.mainMenu.searchUsers.SearchUserFragment"
+        android:label="Buscar usuarios"
+        tools:layout="@layout/fragment_user_search" >
+        <action
+            android:id="@+id/action_nav_searchUsers_to_notMyProfileFragment"
+            app:destination="@id/notMyProfileFragment" />
+        <action
+            android:id="@+id/action_nav_searchUsers_to_nav_profile"
+            app:destination="@id/Profile" />
+    </fragment>
+
+    <fragment
+            android:id="@+id/nav_marketplace"
+            android:name="app.paseico.mainMenu.marketplace.marketplaceFragment"
+            android:label="@string/menu_searcher"
+            tools:layout="@layout/fragment_marketplace">
+        <action
+                android:id="@+id/action_nav_marketplace_to_discountsFragment"
+                app:destination="@id/discountsFragment"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/discountsFragment"
+            android:name="app.paseico.mainMenu.marketplace.DiscountsFragment"
+            android:label="fragment_discounts"
+            tools:layout="@layout/fragment_discounts"/>
+
+    <fragment
+            android:id="@+id/notMyProfileFragment"
+            android:name="app.paseico.mainMenu.searchUsers.NotMyProfileFragment"
+            android:label="Perfil"
+            tools:layout="@layout/fragment_notmyprofile"/>
 </navigation>

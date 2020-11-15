@@ -217,7 +217,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
         builder.show();
     }
 
-    public void placePOIsFromRoute(ArrayList<String> POIsNames, ArrayList<LatLng> POIsLocations, ArrayList<Boolean> POIsCompleted){
+    public void placePOIsFromRoute(ArrayList<String> POIsNames, ArrayList<LatLng> POIsLocations, ArrayList<Boolean> POIsCompleted) {
         mMap.clear();
 
         for (int i = 0; i < POIsNames.size(); i++) {
@@ -339,11 +339,9 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
 
     // function to find Routes.
     public void Findroutes(LatLng Start, LatLng End) {
-        if(Start==null || End==null) {
-            Toast.makeText(RouteRunnerActivity.this,"Unable to get location",Toast.LENGTH_LONG).show();
-        }
-        else
-        {
+        if (Start == null || End == null) {
+            Toast.makeText(RouteRunnerActivity.this, "Unable to get location", Toast.LENGTH_LONG).show();
+        } else {
 
             Routing routing = new Routing.Builder()
                     .travelMode(AbstractRouting.TravelMode.WALKING)
@@ -360,7 +358,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
     @Override
     public void onRoutingFailure(RouteException e) {
         View parentLayout = findViewById(android.R.id.content);
-        Snackbar snackbar= Snackbar.make(parentLayout, e.toString(), Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(parentLayout, e.toString(), Snackbar.LENGTH_LONG);
         snackbar.show();
 //    Findroutes(start,end);
     }
@@ -376,31 +374,29 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
 
         CameraUpdate center = CameraUpdateFactory.newLatLng(start);
         CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);
-        if(polylines!=null) {
+        if (polylines != null) {
             polylines.clear();
         }
         PolylineOptions polyOptions = new PolylineOptions();
-        LatLng polylineStartLatLng=null;
-        LatLng polylineEndLatLng=null;
+        LatLng polylineStartLatLng = null;
+        LatLng polylineEndLatLng = null;
 
 
         polylines = new ArrayList<>();
         //add route(s) to the map using polyline
-        for (int i = 0; i <route.size(); i++) {
+        for (int i = 0; i < route.size(); i++) {
 
-            if(i==shortestRouteIndex)
-            {
+            if (i == shortestRouteIndex) {
                 polyOptions.color(getResources().getColor(R.color.colorPrimary));
                 polyOptions.width(7);
                 polyOptions.addAll(route.get(shortestRouteIndex).getPoints());
                 Polyline polyline = (Polyline) mMap.addPolyline(polyOptions);
-                polylineStartLatLng= ((com.google.android.gms.maps.model.Polyline) polyline).getPoints().get(0);
-                int k= ((com.google.android.gms.maps.model.Polyline) polyline).getPoints().size();
-                polylineEndLatLng= ((com.google.android.gms.maps.model.Polyline) polyline).getPoints().get(k-1);
+                polylineStartLatLng = ((com.google.android.gms.maps.model.Polyline) polyline).getPoints().get(0);
+                int k = ((com.google.android.gms.maps.model.Polyline) polyline).getPoints().size();
+                polylineEndLatLng = ((com.google.android.gms.maps.model.Polyline) polyline).getPoints().get(k - 1);
                 polylines.add(polyline);
 
-            }
-            else {
+            } else {
 
             }
         }
@@ -408,12 +404,12 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
 
     @Override
     public void onRoutingCancelled() {
-        Findroutes(start,end);
+        Findroutes(start, end);
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Findroutes(start,end);
+        Findroutes(start, end);
     }
 
     public class ArrayAdapterRutas extends BaseAdapter {

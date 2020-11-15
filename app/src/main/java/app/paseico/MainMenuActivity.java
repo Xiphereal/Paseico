@@ -23,11 +23,6 @@ public class MainMenuActivity extends AppCompatActivity {
 
         setSupportActionBar(findViewById(R.id.toolbar));
 
-        // What's the purpose of this?
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
-
         setDrawerLayout();
 
         setUpNavigationUi();
@@ -38,7 +33,7 @@ public class MainMenuActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_profile, R.id.nav_routes, R.id.nav_searcher, R.id.nav_marketplace)
+                R.id.Profile, R.id.UserCreatedRoutes, R.id.RouteSearchFragment, R.id.nav_searchUsers, R.id.nav_marketplace)
                 .setDrawerLayout(drawer)
                 .build();
     }
