@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import app.paseico.data.Route;
 
-public class ModifyRouteActivity extends RouteInformationActivity {
+public class RouteInfModifyActivity extends RouteInformationActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
