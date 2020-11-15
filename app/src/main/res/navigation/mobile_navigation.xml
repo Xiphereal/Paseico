@@ -9,7 +9,11 @@
             android:id="@+id/Profile"
             android:name="app.paseico.mainMenu.searchUsers.ProfileFragment"
             android:label="@string/menu_profile"
-            tools:layout="@layout/fragment_profile"/>
+            tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_Profile_to_userRoutesFragment"
+            app:destination="@id/userRoutesFragment" />
+    </fragment>
 
     <fragment
             android:id="@+id/UserCreatedRoutes"
@@ -75,4 +79,9 @@
             android:name="app.paseico.mainMenu.searchUsers.NotMyProfileFragment"
             android:label="Perfil"
             tools:layout="@layout/fragment_notmyprofile"/>
+    <fragment
+        android:id="@+id/userRoutesFragment"
+        android:name="app.paseico.UserRoutesFragment"
+        android:label="fragment_user_routes_list"
+        tools:layout="@layout/fragment_user_routes_list" />
 </navigation>

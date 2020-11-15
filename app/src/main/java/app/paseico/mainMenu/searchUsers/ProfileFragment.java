@@ -6,15 +6,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.fragment.NavHostFragment;
+
 import app.paseico.FollowersActivity;
 import app.paseico.R;
+import app.paseico.UserRoutesFragment;
 import app.paseico.data.User;
 import app.paseico.login.LogInActivity;
+import app.paseico.mainMenu.marketplace.marketplaceFragment;
+import app.paseico.mainMenu.marketplace.marketplaceFragmentDirections;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -38,6 +46,7 @@ public class ProfileFragment extends Fragment {
     FirebaseUser firebaseUser;
     User actualUser;
     Button buttonLogOut;
+    ImageButton userRoutes;
     private Boolean firstTimeCheckBoost = false;
     private User user = new User();
     private String usernameFirebase;
@@ -78,6 +87,7 @@ public class ProfileFragment extends Fragment {
         textView_following = view.findViewById(R.id.textView_Following);
         userPointsText = view.findViewById(R.id.userPointsProfileText);
         numberOfUserRoutes = view.findViewById(R.id.numberOfRoutesText);
+        userRoutes = view.findViewById(R.id.my_routes);
 
 
         FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
@@ -130,6 +140,13 @@ public class ProfileFragment extends Fragment {
             startActivity(intent);
         });
 
+
+        userRoutes.setOnClickListener(v -> {
+           NavDirections action = ProfileFragmentDirections.actionProfileToUserRoutesFragment();
+            NavHostFragment.findNavController(ProfileFragment.this)
+                    .navigate(action);
+        });
+
         return view;
     }
 
@@ -158,9 +175,9 @@ public class ProfileFragment extends Fragment {
     }
 
     private void getNumberOfRouter(String userUid) {
+        numberOfRoutes = 0;
         FirebaseFirestore database = FirebaseFirestore.getInstance();
         CollectionReference routesReference = database.collection("route");
-
         routesReference.whereEqualTo("authorId", userUid)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -169,16 +186,13 @@ public class ProfileFragment extends Fragment {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 numberOfRoutes++;
-                                System.out.println(numberOfRoutes +  " jasdhfjkashdkjfhasdjhfkajhfkajdhkas");
                             }
                             numberOfUserRoutes.setText(Integer.toString(numberOfRoutes));
                         }
                     }
-
                 });
         System.out.println(userUid +  " userUID");
         System.out.println(numberOfRoutes +  " jasdhfjkashdkjfhasdjhfkajhfkajdhkas");
-
     }
 
     private void getFollowers() {
