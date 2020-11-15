@@ -6,7 +6,6 @@ import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -45,14 +44,14 @@ public class FirebaseService {
     public static String updateRoute(String routeId, String attribute, String newValue) {
         return FirebaseService.updateRouteObject(routeId, attribute,newValue);
     }
-    public static String updateRoute(String attribute, Double newValue) {
-        return FirebaseService.updateRoute(attribute,newValue);
+    public static String updateRoute(String routeId, String attribute, Double newValue) {
+        return FirebaseService.updateRouteObject(routeId, attribute,newValue);
     }
-    public static String updateRoute(String attribute, int newValue) {
-        return FirebaseService.updateRoute(attribute,newValue);
+    public static String updateRoute(String routeId, String attribute, int newValue) {
+        return FirebaseService.updateRouteObject(routeId, attribute,newValue);
     }
-    public static String updateRoute(String attribute, List<PointOfInterest> newValue) {
-        return FirebaseService.updateRoute(attribute,newValue);
+    public static String updateRoute(String routeId, String attribute, List<PointOfInterest> newValue) {
+        return FirebaseService.updateRouteObject(routeId, attribute,newValue);
     }
 
 
