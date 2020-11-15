@@ -5,7 +5,7 @@
                                                    android:layout_width="match_parent"
                                                    android:layout_height="match_parent"
                                                    tools:context=".mainMenu.searchUsers.ProfileFragment"
-                                                   android:background="#FFFFFF">
+                                                   android:background="@drawable/geometrics_cut">
 
     <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -202,4 +202,60 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:layout_width="333dp"
+        android:layout_height="300dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="300dp"
+        android:layout_marginRight="40dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/POINTSProfileText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="PUNTOS"
+            android:textColor="#A6ACAF"
+            android:textSize="22dp" />
+
+        <TextView
+            android:id="@+id/userPointsProfileText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="XX"
+            android:textColor="#4E2D9E"
+            android:textSize="26dp" />
+
+        <TextView
+            android:id="@+id/RUTASProfileText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="RUTAS"
+            android:textColor="#A6ACAF"
+            android:textSize="22dp" />
+
+        <TextView
+            android:id="@+id/numberOfRoutesText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="XXX"
+            android:textColor="#4E2D9E"
+            android:textSize="26dp" />
+
+
+    </LinearLayout>
+
+
 </RelativeLayout>
