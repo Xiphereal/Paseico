@@ -1,10 +1,12 @@
 package app.paseico.mainMenu.searcher;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -49,6 +51,19 @@ public class RouteSearchResultFragment extends Fragment {
 
         FilteredListAdapter adapter = new FilteredListAdapter(this.getContext(), filteredRoutesNames, filteredRoutesEstimatedTime, filteredRoutesLength, filteredRoutesRewardPoints);
         listView_filteredRoutes.setAdapter(adapter);
+
+        // Open RouteInfo screen.
+        listView_filteredRoutes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Route selectedRoute = filteredRoutes[position];
+
+                Intent selectedRouteIntent = new Intent(getActivity(), RouteInformationActivity.class);
+                selectedRouteIntent.putExtra("route", selectedRoute);
+                startActivity(selectedRouteIntent);
+            }
+        });
+
     }
 
     class FilteredListAdapter extends ArrayAdapter<String> {
