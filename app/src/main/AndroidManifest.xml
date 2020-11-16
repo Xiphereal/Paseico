@@ -32,12 +32,14 @@
                 android:name="com.google.android.geo.API_KEY"
                 android:value="@string/google_maps_key"/>
 
-        <activity android:name=".FollowersActivity"/>
-        <activity android:name=".CreateNewRouteActivity"/>
-        <activity android:name=".RouteRunnerActivity" />
+
+        <activity android:name=".CreateNewRouteActivity"></activity>
+        <activity android:name=".RouteRunnerActivity" >
+        </activity>
+        <activity android:name=".TemporalRoutesMenu"></activity>
+        <activity android:name=".RouteFinishedActivity"></activity>
+        <activity android:name=".FollowersActivity" />
         <activity android:name=".RouteInformationActivity" />
-        <activity android:name=".TemporalRoutesMenu"/>
-        <activity android:name=".RouteFinishedActivity" />
         <activity android:name=".login.RegisterActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".login.LogInActivity" />
