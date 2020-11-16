@@ -1,31 +1,57 @@
 
 package app.paseico;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.*;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
-import app.paseico.data.PointOfInterest;
-import com.directions.route.*;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.maps.*;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.material.snackbar.Snackbar;
+        import androidx.annotation.NonNull;
+        import androidx.annotation.Nullable;
+        import androidx.core.app.ActivityCompat;
+        import androidx.core.content.ContextCompat;
+        import androidx.fragment.app.FragmentActivity;
 
-import java.util.ArrayList;
-import java.util.List;
+        import android.Manifest;
+        import android.app.Activity;
+        import android.app.AlertDialog;
+        import android.content.Context;
+        import android.content.DialogInterface;
+        import android.content.Intent;
+        import android.content.pm.PackageManager;
+        import android.graphics.Color;
+        import android.location.Location;
+        import android.os.Bundle;
+        import android.text.Html;
+        import android.view.LayoutInflater;
+        import android.view.View;
+        import android.view.ViewGroup;
+        import android.widget.AdapterView;
+        import android.widget.ArrayAdapter;
+        import android.widget.BaseAdapter;
+        import android.widget.Button;
+        import android.widget.ImageButton;
+        import android.widget.ListView;
+        import android.widget.TextView;
+        import android.widget.Toast;
+
+        import com.directions.route.AbstractRouting;
+        import com.directions.route.Route;
+        import com.directions.route.RouteException;
+        import com.directions.route.Routing;
+        import com.directions.route.RoutingListener;
+        import com.google.android.gms.common.ConnectionResult;
+        import com.google.android.gms.common.api.GoogleApiClient;
+        import com.google.android.gms.maps.CameraUpdate;
+        import com.google.android.gms.maps.CameraUpdateFactory;
+        import com.google.android.gms.maps.GoogleMap;
+        import com.google.android.gms.maps.OnMapReadyCallback;
+        import com.google.android.gms.maps.SupportMapFragment;
+        import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+        import com.google.android.gms.maps.model.LatLng;
+        import com.google.android.gms.maps.model.MarkerOptions;
+        import com.google.android.gms.maps.model.PolylineOptions;
+        import com.google.android.material.snackbar.Snackbar;
+
+        import java.util.ArrayList;
+        import java.util.List;
+
+        import app.paseico.data.PointOfInterest;
 
 public class RouteRunnerActivity<Polyline> extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener, RoutingListener {
@@ -44,19 +70,24 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
     //polyline object
     private List<Polyline> polylines = null;
 
-    private ArrayList<String> pointsOfInterestNames = new ArrayList<String>();
-    private ArrayList<LatLng> locations = new ArrayList<LatLng>();
-    private ArrayList<Boolean> isCompleted = new ArrayList<Boolean>();
-    private int actualPOI;
-    private int poisLeft = 0;
-    private ArrayAdapter arrayAdapter;
+    ArrayList<String> pointsOfInterestNames = new ArrayList<String>();
+    ArrayList<LatLng> locations = new ArrayList<LatLng>();
+    ArrayList<Boolean> isCompleted = new ArrayList<Boolean>();
+    int actualPOI = -1;
+    int poisLeft = 0;
+    ArrayAdapterRutas arrayAdapter;
+    int rewpoints;
 
-    private Location currentDestination;
-    private ListView listView;
+    Location currentDestination;
+    ListView listView;
+    String nombredeRuta = "Descubriendo Valencia";
+
+    private app.paseico.data.Route actualRoute;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        arrayAdapter = new ArrayAdapterRutas(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_runner);
         Intent intent = getIntent();
@@ -68,75 +99,135 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        TextView routeTitle = findViewById(R.id.textViewTitleRoutingActivity);
+
 
         ImageButton cancelRoute = findViewById(R.id.buttonCancelRoute);
+        if (b != null && actualRoute == null) {actualRoute = (app.paseico.data.Route) b.get("route");
+        nombredeRuta = actualRoute.getName();
+        rewpoints = actualRoute.getRewardPoints();}
 
-        listView = findViewById(R.id.ListViewRoute);
-        Log.d("runnerRoute", "poiIsEmpty: " + pointsOfInterestNames.isEmpty() + "\n locationsIsEmpty: " + locations.isEmpty());
-        if (pointsOfInterestNames.isEmpty() && locations.isEmpty()) {
+        List<PointOfInterest> routePois = actualRoute.getPointsOfInterest();
+        for (int i = 0; i < routePois.size(); i++) {
+            pointsOfInterestNames.add(routePois.get(i).getName());
+            locations.add(new LatLng(routePois.get(i).getLatitude(), routePois.get(i).getLongitude()));
+        }
 
-            app.paseico.data.Route route = (app.paseico.data.Route) b.get("route");
-            List<PointOfInterest> routePois = route.getPointsOfInterest();
+        for (int i = 0; i < locations.size(); i++) {
+            isCompleted.add(false);
+            poisLeft++;
+        }
 
+
+        /*else { if (pointsOfInterestNames.isEmpty()){
+
+
+            //nombredeRuta = "Descubriendo Valencia";
+
+            PointOfInterest POI1 = new PointOfInterest(39.4736, -0.3790, "Mercado central");
+            PointOfInterest POI2 = new PointOfInterest(39.4758, -0.3839, "Torre de Quart");
+            PointOfInterest POI3 = new PointOfInterest(39.479284, -0.376167, "Torres de Serranos");
+            PointOfInterest POI4 = new PointOfInterest(39.475326, -0.375607, "El Miguelete");
+            PointOfInterest POI5 = new PointOfInterest(39.47441, -0.378259, "Lonja de la Seda");
+            PointOfInterest POI6 = new PointOfInterest(39.476391, -0.375277, "Plaza de la Virgen");
+
+            List<PointOfInterest> pois = new ArrayList<PointOfInterest>();
+            pois.add(POI1);
+            pois.add(POI2);
+            pois.add(POI3);
+            pois.add(POI4);
+            pois.add(POI5);
+            pois.add(POI6);
+
+            actualRoute = new app.paseico.data.Route(nombredeRuta, "Monumentos", 10, 10, 100, pois);
+            List<PointOfInterest> routePois = actualRoute.getPointsOfInterest();
+            rewpoints = 100;
             for (int i = 0; i < routePois.size(); i++) {
                 pointsOfInterestNames.add(routePois.get(i).getName());
-
-                LatLng latlng = new LatLng(routePois.get(i).getLatitude(), routePois.get(i).getLongitude());
-                locations.add(latlng);
+                locations.add(new LatLng(routePois.get(i).getLatitude(), routePois.get(i).getLongitude()));
             }
-
-            TextView routeTitle = findViewById(R.id.textViewTitleRoutingActivity);
-            routeTitle.setText(route.getName());
 
             for (int i = 0; i < locations.size(); i++) {
                 isCompleted.add(false);
                 poisLeft++;
             }
         }
+        }*/
+        routeTitle.setText(nombredeRuta);
 
-        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, pointsOfInterestNames);
-
+        listView = findViewById(R.id.ListViewRoute);
         listView.setAdapter(arrayAdapter);
+        cancelRoute.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v){
+
+            }
+
+        });
+
+
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //if (isCompleted.get(i) == false) {
+                if (!isCompleted.get(i)) {
+                    LatLng destination = new LatLng(locations.get(i).latitude, locations.get(i).longitude);
 
-
-                LatLng destination = new LatLng(locations.get(i).latitude, locations.get(i).longitude);
-
-                start = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
-                //start route finding
-                mMap.clear();
-                placePOIsFromRoute(pointsOfInterestNames, locations, isCompleted);
-                Findroutes(start, destination);
-                currentDestination = new Location(destination.toString());
-                currentDestination.setLatitude(destination.latitude);
-                currentDestination.setLongitude(destination.longitude);
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
-                        new LatLng(currentDestination.getLatitude(), currentDestination.getLongitude()), 16f);
-                mMap.animateCamera(cameraUpdate);
-                actualPOI = i;
+                    start = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+                    //start route finding
+                    mMap.clear();
+                    placePOIsFromRoute(pointsOfInterestNames, locations, isCompleted);
+                    Findroutes(start, destination);
+                    currentDestination = new Location(destination.toString());
+                    currentDestination.setLatitude(destination.latitude);
+                    currentDestination.setLongitude(destination.longitude);
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
+                            new LatLng(currentDestination.getLatitude(), currentDestination.getLongitude()), 16f);
+                    mMap.animateCamera(cameraUpdate);
+                    actualPOI = i;
+                    arrayAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(getApplicationContext(),"POI ya visitada!",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         cancelRoute.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                poisLeft = 0;
-                for (int i = 0; i < locations.size(); i++) {
-                    isCompleted.set(i, false);
-                    poisLeft++;
-                }
-
-//                Intent intent = new Intent(RouteRunnerActivity.this, TemporalRoutesMenu.class);
-//                startActivity(intent);
-                finish();
+            public void onClick(View view){
+                CreateConfirmation();
             }
 
         });
 
 
+
+    }
+
+    public void CreateConfirmation() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("¿Estás seguro de que deseas cancelar?");
+        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                poisLeft = 0;
+                for(int j = 0; j < locations.size(); j++) {
+                    isCompleted.set(j, false);
+                    poisLeft++;
+                }
+                Intent intent = new Intent(RouteRunnerActivity.this, RouteInformationActivity.class);
+                intent.putExtra("route", actualRoute);
+                startActivity(intent);
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        builder.create();
+        builder.show();
     }
 
     public void placePOIsFromRoute(ArrayList<String> POIsNames, ArrayList<LatLng> POIsLocations, ArrayList<Boolean> POIsCompleted) {
@@ -149,8 +240,13 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
                 mMap.addMarker(new MarkerOptions().position(POIsLocations.get(i)).title(POIsNames.get(i)));
             }
         }
-        if (poisLeft == 0) {
+        if(poisLeft == 0) {
+            for(int j = 0; j < locations.size(); j++) {
+                isCompleted.set(j, false);
+                poisLeft++;
+            }
             Intent intent = new Intent(RouteRunnerActivity.this, RouteFinishedActivity.class);
+            intent.putExtra("route", actualRoute);
             startActivity(intent);
             finish();
         }
@@ -188,6 +284,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
         }
     }
 
+
     //to get user location
     private void getMyLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -205,20 +302,24 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
             @Override
             public void onMyLocationChange(Location location) {
 
-                myLocation = location;
-                LatLng ltlng = new LatLng(location.getLatitude(), location.getLongitude());
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
-                        ltlng, 16f);
+                if (myLocation == null) {
+                    myLocation = location;
+                    LatLng ltlng = new LatLng(location.getLatitude(), location.getLongitude());
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
+                            ltlng, 16f);
 
-                mMap.animateCamera(cameraUpdate);
+                    mMap.animateCamera(cameraUpdate);
+                }
 
                 if (currentDestination != null) {
                     myLocation = location;
                     if (myLocation.distanceTo(currentDestination) < 50) {
                         System.out.println("HAS COMPLETADO EL POI");
                         currentDestination = null;
-                        isCompleted.set(actualPOI, true);
-                        // MARK IT IN GREEN COLOR
+                        if(actualPOI > -1){
+                        isCompleted.set(actualPOI,true);
+                        arrayAdapter.notifyDataSetChanged();
+                            actualPOI = -1;}
                         poisLeft--;
                         placePOIsFromRoute(pointsOfInterestNames, locations, isCompleted);
                     }
@@ -244,6 +345,8 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
         placePOIsFromRoute(pointsOfInterestNames, locations, isCompleted);
 
     }
+
+
 
 
     // function to find Routes.
@@ -320,5 +423,49 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Findroutes(start, end);
     }
+
+    public class ArrayAdapterRutas extends BaseAdapter {
+
+        Context context;
+
+
+        public ArrayAdapterRutas(Context c){
+                context = c;
+        }
+
+        @Override
+        public int getCount() {
+            return pointsOfInterestNames.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return pointsOfInterestNames.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            View rowview = View.inflate(context, R.layout.activity_runner_textview,null);
+                TextView nom = rowview.findViewById(R.id.textPOI);
+
+
+                        if (isCompleted.get(i)) {
+                            nom.setBackgroundColor(Color.GREEN);
+                        }
+                        if (actualPOI == i){
+                            nom.setText(Html.fromHtml("<b>"+pointsOfInterestNames.get(i)+"</b>"));
+                        } else {
+                            nom.setText(pointsOfInterestNames.get(i));
+                        }
+
+                return rowview;
+        }
+    }
+
 
 }
