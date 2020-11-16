@@ -1,4 +1,4 @@
-package app.paseico.mainMenu.searchUsers;
+package app.paseico.mainMenu.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,17 +12,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 
 import app.paseico.FollowersActivity;
 import app.paseico.R;
-import app.paseico.UserRoutesFragment;
 import app.paseico.data.User;
 import app.paseico.login.LogInActivity;
-import app.paseico.mainMenu.marketplace.marketplaceFragment;
-import app.paseico.mainMenu.marketplace.marketplaceFragmentDirections;
+//import app.paseico.mainMenu.searchUsers.ProfileFragmentDirections;
+import app.paseico.mainMenu.profile.ProfileFragmentDirections;
+import app.paseico.mainMenu.searchUsers.UserAdapter;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

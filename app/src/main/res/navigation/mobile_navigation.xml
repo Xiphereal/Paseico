@@ -7,7 +7,7 @@
 
     <fragment
             android:id="@+id/Profile"
-            android:name="app.paseico.mainMenu.searchUsers.ProfileFragment"
+            android:name="app.paseico.mainMenu.profile.ProfileFragment"
             android:label="@string/menu_profile"
             tools:layout="@layout/fragment_profile">
         <action

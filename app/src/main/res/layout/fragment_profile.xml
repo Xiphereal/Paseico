@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/geometrics_cut"
-    tools:context=".mainMenu.searchUsers.ProfileFragment">
+    tools:context=".mainMenu.profile.ProfileFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/bar"
