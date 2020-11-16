@@ -20,12 +20,10 @@ public class RouteInfModifyActivity extends RouteInformationActivity {
 
         clickedStartRoute(route);
 
-        findViewById(R.id.btn_routeInfo_modify).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent goToModifyRoutesIntent = new Intent(getApplicationContext(), ModifyRouteActivity.class);
-                startActivity(goToModifyRoutesIntent);
-            }
+        findViewById(R.id.btn_routeInfo_modify).setOnClickListener(v -> {
+            Intent goToModifyRoutesIntent = new Intent(getApplicationContext(), ModifyRouteActivity.class);
+            goToModifyRoutesIntent.putExtra("selectedRoute", route);
+            startActivity(goToModifyRoutesIntent);
         });
     }
 }
