@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import app.paseico.R;
+import app.paseico.RouteInfModifyActivity;
 import app.paseico.RouteInformationActivity;
 import app.paseico.data.Route;
 
@@ -50,7 +51,7 @@ public class RouteSearchResultFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Route selectedRoute = filteredRoutes[position];
 
-                Intent selectedRouteIntent = new Intent(getActivity(), RouteInformationActivity.class);
+                Intent selectedRouteIntent = new Intent(getActivity(), RouteInfModifyActivity.class);
                 selectedRouteIntent.putExtra("route", selectedRoute);
                 startActivity(selectedRouteIntent);
             }

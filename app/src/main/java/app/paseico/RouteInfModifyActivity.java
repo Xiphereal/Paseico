@@ -23,7 +23,8 @@ public class RouteInfModifyActivity extends RouteInformationActivity {
         findViewById(R.id.btn_routeInfo_modify).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent goToModifyRoutesIntent = new Intent(getApplicationContext(), ModifyRouteActivity.class);
+                startActivity(goToModifyRoutesIntent);
             }
         });
     }
