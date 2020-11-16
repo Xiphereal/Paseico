@@ -69,3 +69,4 @@ public class PointOfInterest implements Serializable {
         this.createdByUser = createdByUser;
     }
 }
+//
