@@ -1,5 +1,6 @@
 package app.paseico.mainMenu.searcher;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,17 +9,17 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import app.paseico.R;
 import app.paseico.RouteInformationActivity;
-import app.paseico.data.Route;
 
+import app.paseico.data.Route;
+import java.util.ArrayList;
+import java.util.List;
 public class RouteSearchResultFragment extends Fragment {
 
     @Override
@@ -34,17 +35,24 @@ public class RouteSearchResultFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Route[] filteredRoutes = RouteSearchResultFragmentArgs.fromBundle(getArguments()).getFilteredList();
-        List<String> filteredRoutesList = new ArrayList<>();
+        List<String> filteredRoutesNames = new ArrayList<>();
+        List<String> filteredRoutesEstimatedTime = new ArrayList<>();
+        List<String> filteredRoutesLength = new ArrayList<>();
+        List<String> filteredRoutesRewardPoints = new ArrayList<>();
 
         for (Route route : filteredRoutes) {
-            filteredRoutesList.add(route.getName());
+            filteredRoutesNames.add(route.getName());
+            filteredRoutesEstimatedTime.add(String.valueOf(route.getEstimatedTime()));
+            filteredRoutesLength.add(String.valueOf(route.getLength()));
+            filteredRoutesRewardPoints.add(String.valueOf(route.getRewardPoints()));
         }
 
-        ArrayAdapter<String> adapter_filteredRoutes = new ArrayAdapter<>(getActivity(), android.R.layout.simple_expandable_list_item_1, filteredRoutesList);
-
         ListView listView_filteredRoutes = (ListView) view.findViewById(R.id.listView_filteredRoutes);
-        listView_filteredRoutes.setAdapter(adapter_filteredRoutes);
 
+        FilteredListAdapter adapter = new FilteredListAdapter(this.getContext(), filteredRoutesNames, filteredRoutesEstimatedTime, filteredRoutesLength, filteredRoutesRewardPoints);
+        listView_filteredRoutes.setAdapter(adapter);
+
+        // Open RouteInfo screen.
         listView_filteredRoutes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -56,9 +64,43 @@ public class RouteSearchResultFragment extends Fragment {
             }
         });
 
-        view.findViewById(R.id.button_second).setOnClickListener(view1 -> NavHostFragment.findNavController(RouteSearchResultFragment.this)
-                .navigate(R.id.action_RouteSearchResult_to_RouteSearchFragment));
+    }
 
+    class FilteredListAdapter extends ArrayAdapter<String> {
 
+        Context context;
+        List<String> names;
+        List<String> estimatedTimes;
+        List<String> lengths;
+        List<String> points;
+
+        FilteredListAdapter(Context context, List<String> names, List<String> estimatedTimes, List<String> lengths, List<String> points) {
+            super(context, R.layout.item_route_search, R.id.routeName, names);
+
+            this.context = context;
+            this.names = names;
+            this.estimatedTimes = estimatedTimes;
+            this.lengths = lengths;
+            this.points = points;
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View row = layoutInflater.inflate(R.layout.item_route_search, parent, false);
+
+            TextView myNames = row.findViewById(R.id.routeName);
+            TextView myEstimatedTimes = row.findViewById(R.id.routeDuration);
+            TextView myLengths = row.findViewById(R.id.routeLenght);
+            TextView myPoints = row.findViewById(R.id.routeReward);
+
+            myNames.setText(names.get(position));
+            myEstimatedTimes.setText(estimatedTimes.get(position));
+            myLengths.setText(lengths.get(position));
+            myPoints.setText(points.get(position));
+
+            return row;
+        }
     }
 }
