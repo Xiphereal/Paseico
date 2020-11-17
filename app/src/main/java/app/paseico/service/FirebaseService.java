@@ -44,16 +44,18 @@ public class FirebaseService {
     public static String updateRoute(String routeId, String attribute, String newValue) {
         return FirebaseService.updateRouteObject(routeId, attribute,newValue);
     }
+
     public static String updateRoute(String routeId, String attribute, Double newValue) {
         return FirebaseService.updateRouteObject(routeId, attribute,newValue);
     }
+
     public static String updateRoute(String routeId, String attribute, int newValue) {
         return FirebaseService.updateRouteObject(routeId, attribute,newValue);
     }
+
     public static String updateRoute(String routeId, String attribute, List<PointOfInterest> newValue) {
         return FirebaseService.updateRouteObject(routeId, attribute,newValue);
     }
-
 
     private static String updateRouteObject(String routeId, String attribute, Object newValue) {
         DocumentReference reference = firebaseFirestore.collection("route").document(routeId);
@@ -72,6 +74,7 @@ public class FirebaseService {
                         Log.w("Failure", "Error updating document", e);
                     }
                 });
+
         return "Updated " + attribute + " as " + newValue.toString() ;
     }
 }

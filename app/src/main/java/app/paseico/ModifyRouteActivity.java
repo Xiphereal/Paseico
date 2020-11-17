@@ -2,15 +2,14 @@ package app.paseico;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import app.paseico.data.User;
-import app.paseico.mainMenu.userCreatedRoutes.UserCreatedRoutesFragment;
 import app.paseico.service.FirebaseService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -123,6 +122,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
             return;
         });
     }
+
     /**
      * Checks if the User is creating a custom Point Of Interest.
      * If so, cancels the creation of the new POI.
@@ -135,6 +135,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
             userNewCustomPoiInCreation = null;
         }
     }
+
     private boolean isUserCreatingACustomPoi() {
         return userNewCustomPoiInCreation != null;
     }
@@ -149,6 +150,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
 
         return bottomSheetBehavior;
     }
+
     private PointOfInterest findClickedPointOfInterest(LatLng latLangMarker, String title) {
         Double lat = latLangMarker.latitude;
         Double lon = latLangMarker.longitude;
@@ -162,6 +164,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
 
         return null;
     }
+
     private boolean isPointOfInterestSelected(PointOfInterest poi) {
         return poi != null;
     }
@@ -174,6 +177,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
         }
         return false;
     }
+
     private void deselectPointOfInterest(@NotNull Marker marker, @NotNull PointOfInterest poi) {
         marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
@@ -205,13 +209,16 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
 
         updateMarkedPOIsListView();
     }
+
     private void updateMarkedPOIsListView() {
         ArrayAdapter<String> markedPOIsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, markedPOIs);
         markedPOIsListView.setAdapter(markedPOIsAdapter);
     }
+
     private void registerOnMapClick() {
         map.setOnMapClickListener(tapPoint -> tryDeleteUserNewCustomPoiInCreation());
     }
+
     private void registerOnMarkerClickListener() {
         map.setOnMarkerClickListener(marker -> {
             tryDeleteUserNewCustomPoiInCreation();
@@ -229,6 +236,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
             return true;
         });
     }
+
     private void getCurrentUserFromDatabaseAsync() {
         DatabaseReference currentUserReference = FirebaseService.getCurrentUserReference();
 
@@ -255,6 +263,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
         extendedFloatingActionButton.setOnClickListener(view -> tryFinalizeRouteCreation());
 
     }
+
     private void tryFinalizeRouteCreation() {
         if (currentUser.getHasFreeRouteCreation()) {
             currentUser.setHasFreeRouteCreation(false);
@@ -331,22 +340,19 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
         showDialog(builder);
     }
 
-
     private void finalizeRouteCreation() {
         modifyRoute();
         persistCurrentUserModifications();
 
         goToPreviousActivity();
     }
+
     private void modifyRoute() {
         TextInputEditText textInputEditText = findViewById(R.id.route_name_textInputEditText);
         String authorId = FirebaseService.getCurrentUser().getUid();
 
 
         FirebaseService.updateRoute(retrievedRouteId, "pointsOfInterest", pointsOfInterest );
-
-        //We add the created route name to the createdRoutes before returning to the main activity.
-        //UserCreatedRoutesFragment.getCreatedRoutes().add(newRoute.getName());
     }
 
     // TODO: Refactor and generalize this into a User instance method.

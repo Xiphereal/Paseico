@@ -1,29 +1,22 @@
 package app.paseico;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import android.widget.AdapterView;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import app.paseico.data.Route;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -31,13 +24,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import app.paseico.data.Discount;
-import app.paseico.data.DiscountObj;
-import app.paseico.data.Route;
-import app.paseico.data.User;
-import app.paseico.dummy.DummyContent;
 
 /**
  * A fragment representing a list of Items.
@@ -52,14 +38,11 @@ public class UserRoutesFragment extends Fragment {
     private DatabaseReference myUsersRef = FirebaseDatabase.getInstance().getReference("users"); //Node users reference
     private DatabaseReference myActualUserRef;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    private FirebaseUser fbusr = firebaseAuth.getCurrentUser();
+    private FirebaseUser fireBaseUser = firebaseAuth.getCurrentUser();
     FirebaseFirestore database = FirebaseFirestore.getInstance();
     CollectionReference routesReference = database.collection("route");
-    private List<Route> routes = new ArrayList<Route>();
-    private List<String> routeNames = new ArrayList<String>();
-
-
-
+    private List<Route> routes = new ArrayList<>();
+    private List<String> routeNames = new ArrayList<>();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -93,62 +76,34 @@ public class UserRoutesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_user_routes_list, container, false);
         ListView userRoutesList = view.findViewById(R.id.UserRoutesList);
 
+        myActualUserRef = myUsersRef.child(fireBaseUser.getUid());
 
-        myActualUserRef = myUsersRef.child(fbusr.getUid());
-
-        routesReference.whereEqualTo("authorId", fbusr.getUid())
+        routesReference.whereEqualTo("authorId", fireBaseUser.getUid())
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                routes.add(document.toObject(Route.class));
-                            };
-                            for (int i = 0; i < routes.size(); i++ ) {
-                                routeNames.add(routes.get(i).getName());
-                            }
-                           // MyItemRecyclerViewAdapter adapter = new MyItemRecyclerViewAdapter(this, routeNames);
-                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, routeNames);
-                            userRoutesList.setAdapter(adapter);
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            routes.add(document.toObject(Route.class));
                         }
-
-
-
-
+                        for (int i = 0; i < routes.size(); i++ ) {
+                            routeNames.add(routes.get(i).getName());
+                        }
+                       // MyItemRecyclerViewAdapter adapter = new MyItemRecyclerViewAdapter(this, routeNames);
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, routeNames);
+                        userRoutesList.setAdapter(adapter);
                     }
                 });
 
-        userRoutesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Route selectedRoute = routes.get(position);
+        userRoutesList.setOnItemClickListener((parent, view1, position, id) -> {
+            Route selectedRoute = routes.get(position);
 
-                String routeID = selectedRoute.getId();
+            String routeID = selectedRoute.getId();
 
-                Intent selectedRouteIntent = new Intent(getActivity(), RouteInfModifyActivity.class);
-                selectedRouteIntent.putExtra("route", selectedRoute);
-                selectedRouteIntent.putExtra("routeID", routeID);
-                startActivity(selectedRouteIntent);
-            }
+            Intent selectedRouteIntent = new Intent(getActivity(), RouteInfModifyActivity.class);
+            selectedRouteIntent.putExtra("route", selectedRoute);
+            selectedRouteIntent.putExtra("routeID", routeID);
+            startActivity(selectedRouteIntent);
         });
-
-        // Set the adapter
-        /*
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS));
-        }
-
-         */
-
-
         return view;
     }
 }
