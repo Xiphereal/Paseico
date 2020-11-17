@@ -51,7 +51,7 @@ public class RouteSearchResultFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Route selectedRoute = filteredRoutes[position];
 
-                Intent selectedRouteIntent = new Intent(getActivity(), RouteInfModifyActivity.class);
+                Intent selectedRouteIntent = new Intent(getActivity(), RouteInformationActivity.class);
                 selectedRouteIntent.putExtra("route", selectedRoute);
                 startActivity(selectedRouteIntent);
             }
