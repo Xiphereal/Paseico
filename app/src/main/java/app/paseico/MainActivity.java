@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
 //        FirebaseUser user = mAuth.getCurrentUser();
 //        TextView prueba = findViewById(R.id.textView);
 //        prueba.setText("Bienvenido a paseico!");
-
 //        Button btnLogOut = findViewById(R.id.buttonLogOut);
 //        btnLogOut.setOnClickListener(new View.OnClickListener() {
 //           @Override
