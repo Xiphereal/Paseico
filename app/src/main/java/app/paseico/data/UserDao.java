@@ -1,7 +1,11 @@
 package app.paseico.data;
 
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import app.paseico.IUserDao;
+import app.paseico.login.RegisterActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
@@ -43,7 +47,21 @@ public class UserDao implements IUserDao {
         String email = user.getEmail();
         String[] parts = email.split("@");
         String username = parts[0];
-
+        if(username.contains(".")){
+            username = username.replace(".","");
+        }
+        if(username.contains("#")){
+            username = username.replace("#","");
+        }
+        if(username.contains("$")){
+            username = username.replace("$","");
+        }
+        if(username.contains("[")){
+            username = username.replace("[","");
+        }
+        if(username.contains("]")){
+            username = username.replace("]","");
+        }
         addNewUserToDatabase(user, name, username);
     }
 
