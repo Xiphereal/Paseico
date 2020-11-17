@@ -15,6 +15,7 @@ public class RouteInfModifyActivity extends RouteInformationActivity {
         setContentView(R.layout.activity_inf_modify_route);
 
         Route route = setFilteredInformation();
+        String routeID = getIntent().getStringExtra("routeID");
 
         clickedBack();
 
@@ -22,7 +23,8 @@ public class RouteInfModifyActivity extends RouteInformationActivity {
 
         findViewById(R.id.btn_routeInfo_modify).setOnClickListener(v -> {
             Intent goToModifyRoutesIntent = new Intent(getApplicationContext(), ModifyRouteActivity.class);
-            goToModifyRoutesIntent.putExtra("selectedRoute", route);
+            goToModifyRoutesIntent.putExtra("route", route);
+            goToModifyRoutesIntent.putExtra("routeID", routeID);
             startActivity(goToModifyRoutesIntent);
         });
     }

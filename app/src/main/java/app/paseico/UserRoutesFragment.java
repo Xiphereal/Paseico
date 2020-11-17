@@ -1,8 +1,10 @@
 package app.paseico;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
+import android.widget.AdapterView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -89,7 +91,7 @@ public class UserRoutesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_routes_list, container, false);
-        ListView UserRoutesList = view.findViewById(R.id.UserRoutesList);
+        ListView userRoutesList = view.findViewById(R.id.UserRoutesList);
 
 
         myActualUserRef = myUsersRef.child(fbusr.getUid());
@@ -108,7 +110,7 @@ public class UserRoutesFragment extends Fragment {
                             }
                            // MyItemRecyclerViewAdapter adapter = new MyItemRecyclerViewAdapter(this, routeNames);
                             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, routeNames);
-                            UserRoutesList.setAdapter(adapter);
+                            userRoutesList.setAdapter(adapter);
                         }
 
 
@@ -116,6 +118,20 @@ public class UserRoutesFragment extends Fragment {
 
                     }
                 });
+
+        userRoutesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Route selectedRoute = routes.get(position);
+
+                String routeID = selectedRoute.getId();
+
+                Intent selectedRouteIntent = new Intent(getActivity(), RouteInfModifyActivity.class);
+                selectedRouteIntent.putExtra("route", selectedRoute);
+                selectedRouteIntent.putExtra("routeID", routeID);
+                startActivity(selectedRouteIntent);
+            }
+        });
 
         // Set the adapter
         /*

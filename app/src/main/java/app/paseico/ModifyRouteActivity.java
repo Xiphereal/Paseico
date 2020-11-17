@@ -50,6 +50,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
 
     private User currentUser;
     private Route retrievedRoute;
+    private String retrievedRouteId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
         Intent retrievedIntent = this.getIntent();
         Bundle retrievedData = retrievedIntent.getExtras();
 
-        retrievedRoute = (Route) retrievedData.get("selectedRoute");
+        retrievedRoute = (Route) retrievedData.get("route");
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.new_route_map);
@@ -72,6 +73,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
         routeName.setEnabled(false);
 
         pointsOfInterest = retrievedRoute.getPointsOfInterest();
+        retrievedRouteId = getIntent().getStringExtra("routeID");
 
         getCurrentUserFromDatabaseAsync();
     }
@@ -340,8 +342,8 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
         TextInputEditText textInputEditText = findViewById(R.id.route_name_textInputEditText);
         String authorId = FirebaseService.getCurrentUser().getUid();
 
-        String id = retrievedRoute.getId();
-        FirebaseService.updateRoute(id, "pointsOfInterest", pointsOfInterest );
+
+        FirebaseService.updateRoute(retrievedRouteId, "pointsOfInterest", pointsOfInterest );
 
         //We add the created route name to the createdRoutes before returning to the main activity.
         //UserCreatedRoutesFragment.getCreatedRoutes().add(newRoute.getName());
