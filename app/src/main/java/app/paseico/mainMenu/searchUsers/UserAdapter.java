@@ -16,6 +16,8 @@ import app.paseico.data.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
+
+import app.paseico.mainMenu.profile.ProfileFragment;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import java.util.List;

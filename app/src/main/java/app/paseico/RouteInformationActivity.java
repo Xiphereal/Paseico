@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -81,8 +80,23 @@ public class RouteInformationActivity extends AppCompatActivity {
         textView_length.setText(length);
         textView_estimatedTime.setText(estimatedTime);
         textView_numberOfPOI.setText(numberOfPOI);
-        return route;
+
+        findViewById(R.id.btn_routeInfo_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        findViewById(R.id.btn_routeInfo_startRoute).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent startRouteIntent = new Intent(RouteInformationActivity.this, RouteRunnerActivity.class);
+                startRouteIntent.putExtra("route", route);
+                startActivity(startRouteIntent);
+                finish();
+            }
+        });
+
     }
-
-
 }
