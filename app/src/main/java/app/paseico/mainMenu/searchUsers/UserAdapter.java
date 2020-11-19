@@ -72,19 +72,21 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         holder.itemView.setOnClickListener(view -> {
             if (isFragment) {
-                if (!actualUser.getUsername().equals(searchedUser.getUsername())) {
+                if (!isClickedUserTheCurrentUser(searchedUser)) {
                     SharedPreferences.Editor editor = context.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
                     editor.putString("profileid", searchedUser.getUsername());
                     editor.apply();
+
                     searchUserFragment.navigateToNotMyProfileFragment();
                 } else {
                     searchUserFragment.navigateToProfileFragment();
                 }
             } else {
-                if (!actualUser.getUsername().equals(searchedUser.getUsername())) {
+                if (!isClickedUserTheCurrentUser(searchedUser)) {
                     SharedPreferences.Editor editor = context.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
                     editor.putString("profileid", searchedUser.getUsername());
                     editor.apply();
+
                     Fragment mFragment = new NotMyProfileFragment();
                     ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
                             .replace(R.id.frameLayout, mFragment)
@@ -93,6 +95,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                     SharedPreferences.Editor editor = context.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
                     editor.putString("profileid", searchedUser.getUsername());
                     editor.apply();
+
                     Fragment mFragment = new ProfileFragment();
                     ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
                             .replace(R.id.frameLayout, mFragment)
@@ -114,6 +117,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                         .child("followers").child(actualUser.getUsername()).removeValue();
             }
         });
+    }
+
+    /**
+     * @return True if the User that has been clicked on is the same as the logged User, false if not.
+     */
+    private boolean isClickedUserTheCurrentUser(User searchedUser) {
+        return actualUser.getUsername().equals(searchedUser.getUsername());
     }
 
     @Override
