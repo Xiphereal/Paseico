@@ -39,7 +39,7 @@ public class RegisterOrganizationActivity extends AppCompatActivity {
     String email = null;
     String password = null;
     String passwordConf = null;
-    private DatabaseReference myOrganizationsRef = FirebaseDatabase.getInstance().getReference("organizations"); //Node users reference
+    private DatabaseReference myOrganizationsRef = FirebaseDatabase.getInstance().getReference("organizations"); //Node organizations reference
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import app.paseico.MainMenuActivity;
+import app.paseico.MainMenuOrganizationActivity;
 import app.paseico.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -27,6 +28,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import app.paseico.data.UserDao;
 
@@ -117,7 +123,45 @@ public class LogInActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d("TAG", "signInWithEmail:success");
-                        goToMainScreen();
+
+
+
+                        FirebaseUser user = task.getResult().getUser();
+                        DatabaseReference mUsersReference = FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
+                        DatabaseReference mOrganizationsReference = FirebaseDatabase.getInstance().getReference("organizations").child(user.getUid());
+
+                        ValueEventListener eventListener = new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if(!dataSnapshot.exists()) {
+                                    if(!routerBtn.isEnabled()) {
+                                        Toast.makeText(LogInActivity.this, "ERROR :Estas intentando acceder como Organización desde el apartado de Rutero",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                    else{
+                                        Toast.makeText(LogInActivity.this, "ERROR :Estas intentando acceder como  Rutero desde el apartado de Organización",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    FirebaseAuth.getInstance().signOut();
+                                }
+                                else{
+                                    goToMainScreen();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        };
+                        if(!routerBtn.isEnabled()) {
+                            mUsersReference.addListenerForSingleValueEvent(eventListener);
+                        }
+                        else{
+                            mOrganizationsReference.addListenerForSingleValueEvent(eventListener);
+                        }
+
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w("TAG", "signInWithEmail:failure", task.getException());
@@ -188,7 +232,13 @@ public class LogInActivity extends AppCompatActivity {
 
 
     private void goToMainScreen() {
-        Intent intent = new Intent(LogInActivity.this, MainMenuActivity.class);
+        Intent intent = new Intent();
+        if(!routerBtn.isEnabled()) {
+            intent = new Intent(LogInActivity.this, MainMenuActivity.class);
+        }
+        else{
+            intent = new Intent(LogInActivity.this, MainMenuOrganizationActivity.class);
+        }
         startActivity(intent);
         finish();
     }
