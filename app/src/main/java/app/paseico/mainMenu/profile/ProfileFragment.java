@@ -38,23 +38,24 @@ public class ProfileFragment extends Fragment {
     private int numberOfRoutes = 0;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstaanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+
+        FirebaseDatabase.getInstance().getReference("users")
+                .child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 actualUser = dataSnapshot.getValue(User.class);
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
+
         image_profile = view.findViewById(R.id.image_profile);
         followers = view.findViewById(R.id.followers);
         following = view.findViewById(R.id.following);
@@ -66,7 +67,6 @@ public class ProfileFragment extends Fragment {
         userPointsText = view.findViewById(R.id.userPointsProfileText);
         numberOfUserRoutes = view.findViewById(R.id.numberOfRoutesText);
         userRoutes = view.findViewById(R.id.my_routes);
-
 
         FirebaseDatabase.getInstance().getReference("users")
                 .child(firebaseUser.getUid())
@@ -82,7 +82,6 @@ public class ProfileFragment extends Fragment {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
                     }
                 });
 
@@ -132,7 +131,6 @@ public class ProfileFragment extends Fragment {
                     return;
                 }
                 User user = snapshot.getValue(User.class);
-                //Glide.with(getContext()).load("@drawable/defaultProfilePic").into(image_profile);
                 username.setText(user.getUsername());
                 fullname.setText(user.getName());
                 userPointsText.setText(Integer.toString(user.getPoints()));
