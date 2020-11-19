@@ -8,7 +8,7 @@ public class Organization extends User{
     }
 
     public Organization(String name, String email, String username, String nif){
-        super(name,email,username);
+        super(name,username,email);
         this.nif = nif;
     }
 

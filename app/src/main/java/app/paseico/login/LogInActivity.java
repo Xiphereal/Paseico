@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -37,11 +38,15 @@ public class LogInActivity extends AppCompatActivity {
     private EditText etEmail, etPassword;
     private GoogleSignInClient googleSignInClient;
     private UserDao userDao = new UserDao();
+    private Button routerBtn, organiBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
+
+
+
 
         etEmail = findViewById(R.id.editTextEmail);
         etPassword = findViewById(R.id.editTextPassword);
@@ -56,7 +61,13 @@ public class LogInActivity extends AppCompatActivity {
 
         //On click you go to the register form
         register.setOnClickListener(view -> {
-            Intent intent = new Intent(LogInActivity.this, RegisterActivity.class);
+            Intent intent = new Intent();
+            if(!routerBtn.isEnabled()) {
+                 intent = new Intent(LogInActivity.this, RegisterActivity.class);
+            }
+            else{
+                 intent = new Intent(LogInActivity.this, RegisterOrganizationActivity.class);
+            }
             startActivity(intent);
             finish();
         });
@@ -70,6 +81,29 @@ public class LogInActivity extends AppCompatActivity {
                 .build();
 
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
+
+        routerBtn = findViewById(R.id.buttonLoginRouter);
+        organiBtn = findViewById(R.id.buttonLoginOrganization);
+        routerBtn.setEnabled(false);
+        organiBtn.setEnabled(true);
+
+        routerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                googleSignInButton.setVisibility(View.VISIBLE);
+                routerBtn.setEnabled(false);
+                organiBtn.setEnabled(true);
+            }
+        });
+
+        organiBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                googleSignInButton.setVisibility(View.GONE);
+                routerBtn.setEnabled(true);
+                organiBtn.setEnabled(false);
+            }
+        });
     }
 
     private void SignInGoogle() {
