@@ -24,44 +24,38 @@ import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
-    private Context mContext;
-    private List<User> mUsers;
-    private boolean isfragment;
+    private Context context;
+    private List<User> users;
+    private boolean isFragment;
     private FirebaseUser firebaseUser;
-    private String usernameFirebase;
     User actualUser;
     private SearchUserFragment searchUserFragment;
 
-    public UserAdapter(Context mContext, List<User> mUsers, boolean isfragment) {
-        this.mContext = mContext;
-        this.mUsers = mUsers;
-        this.isfragment = isfragment;
+    public UserAdapter(Context context, List<User> users, boolean isFragment) {
+        this.context = context;
+        this.users = users;
+        this.isFragment = isFragment;
     }
 
-    public UserAdapter(Context mContext, List<User> mUsers, SearchUserFragment searchUserFragment) {
-        this.mContext = mContext;
-        this.mUsers = mUsers;
-        this.isfragment = true;
+    public UserAdapter(Context context, List<User> users, SearchUserFragment searchUserFragment) {
+        this.context = context;
+        this.users = users;
+        this.isFragment = true;
         this.searchUserFragment = searchUserFragment;
     }
 
-
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.user_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.user_item, parent, false);
         return new UserAdapter.ViewHolder(view);
-
-
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final User searchedUser = mUsers.get(position);
+        final User searchedUser = users.get(position);
         holder.btn_follow.setVisibility(View.VISIBLE);
         holder.username.setText(searchedUser.getUsername());
         holder.fullname.setText(searchedUser.getName());
-        //Glide.with(mContext).load("@drawable/ic_user").into(holder.image_profile);
-        //Glide.with(mContext).load(user.getImageurl()).into(holder.image_profile);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
@@ -72,14 +66,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
 
         holder.itemView.setOnClickListener(view -> {
-            if (isfragment) {
+            if (isFragment) {
                 if (!actualUser.getUsername().equals(searchedUser.getUsername())) {
-                    SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
+                    SharedPreferences.Editor editor = context.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
                     editor.putString("profileid", searchedUser.getUsername());
                     editor.apply();
                     searchUserFragment.navigateToNotMyProfileFragment();
@@ -87,24 +80,20 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                     searchUserFragment.navigateToProfileFragment();
                 }
             } else {
-                //Intent intent = new Intent(mContext, MainMenuActivity.class);
-                //mContext.startActivity(intent);
                 if (!actualUser.getUsername().equals(searchedUser.getUsername())) {
-                    SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
+                    SharedPreferences.Editor editor = context.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
                     editor.putString("profileid", searchedUser.getUsername());
                     editor.apply();
-                    Fragment mFragment = null;
-                    mFragment = new NotMyProfileFragment();
-                    ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction()
+                    Fragment mFragment = new NotMyProfileFragment();
+                    ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
                             .replace(R.id.frameLayout, mFragment)
                             .commit();
                 } else {
-                    SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
+                    SharedPreferences.Editor editor = context.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
                     editor.putString("profileid", searchedUser.getUsername());
                     editor.apply();
-                    Fragment mFragment = null;
-                    mFragment = new ProfileFragment();
-                    ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction()
+                    Fragment mFragment = new ProfileFragment();
+                    ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
                             .replace(R.id.frameLayout, mFragment)
                             .commit();
                 }
@@ -128,7 +117,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mUsers.size();
+        return users.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -166,7 +155,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }
@@ -176,14 +164,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                mUsers.add(user);
-                usernameFirebase = user.getUsername();
+                users.add(user);
                 notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }
