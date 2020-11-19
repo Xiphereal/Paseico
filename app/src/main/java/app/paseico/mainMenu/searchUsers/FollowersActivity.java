@@ -34,11 +34,12 @@ public class FollowersActivity extends AppCompatActivity {
         id = intent.getStringExtra("id");
         title = intent.getStringExtra("title");
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         getSupportActionBar().setTitle(title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(view -> finish());
 
         FirebaseService.getCurrentUserReference().addValueEventListener(new ValueEventListener() {
