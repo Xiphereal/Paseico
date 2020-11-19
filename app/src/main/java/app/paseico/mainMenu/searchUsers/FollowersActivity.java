@@ -2,7 +2,6 @@ package app.paseico.mainMenu.searchUsers;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -10,9 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import app.paseico.R;
 import app.paseico.data.User;
-import app.paseico.mainMenu.searchUsers.UserAdapter;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import app.paseico.service.FirebaseService;
 import com.google.firebase.database.*;
 
 import java.util.ArrayList;
@@ -25,32 +22,31 @@ public class FollowersActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     UserAdapter userAdapter;
     List<User> userList = new ArrayList<>();
-    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-    User actualUser;
+    User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_followers);
+
         Intent intent = getIntent();
         id = intent.getStringExtra("id");
         title = intent.getStringExtra("title");
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
         getSupportActionBar().setTitle(title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
-        FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(view -> finish());
+
+        FirebaseService.getCurrentUserReference().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                actualUser = dataSnapshot.getValue(User.class);
-                switch (title){
+                currentUser = dataSnapshot.getValue(User.class);
+
+                switch (title) {
                     case "following":
                         getFollowing();
                         break;
@@ -59,9 +55,9 @@ public class FollowersActivity extends AppCompatActivity {
                         break;
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
 
@@ -73,17 +69,16 @@ public class FollowersActivity extends AppCompatActivity {
         recyclerView.setAdapter(userAdapter);
 
         idList = new ArrayList<>();
-
-
     }
 
-    private void getFollowing(){
+    private void getFollowing() {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Follow").child(id).child("following");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot datasnapshot) {
                 idList.clear();
-                for(DataSnapshot snapshot: datasnapshot.getChildren()){
+
+                for (DataSnapshot snapshot : datasnapshot.getChildren()) {
                     idList.add(snapshot.getKey());
                 }
                 showUsers();
@@ -91,18 +86,18 @@ public class FollowersActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }
 
-    private void getFollowers(){
+    private void getFollowers() {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Follow").child(id).child("followers");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot datasnapshot) {
                 idList.clear();
-                for(DataSnapshot snapshot: datasnapshot.getChildren()){
+
+                for (DataSnapshot snapshot : datasnapshot.getChildren()) {
                     idList.add(snapshot.getKey());
                 }
                 showUsers();
@@ -110,31 +105,33 @@ public class FollowersActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }
 
-    private void showUsers(){
+    private void showUsers() {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot datesnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 userList.clear();
-                for(DataSnapshot snapshot:datesnapshot.getChildren()) {
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     User user = snapshot.getValue(User.class);
-                    for (String id: idList){
-                        if(user.getUsername().equals(id)){
+
+                    for (String id : idList) {
+                        if (user.getUsername().equals(id)) {
                             userList.add(user);
                         }
                     }
+
                 }
+
                 userAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }
