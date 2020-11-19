@@ -1,4 +1,4 @@
-package app.paseico;
+package app.paseico.mainMenu.searchUsers;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import app.paseico.R;
 import app.paseico.data.User;
 import app.paseico.mainMenu.searchUsers.UserAdapter;
 import com.google.firebase.auth.FirebaseAuth;

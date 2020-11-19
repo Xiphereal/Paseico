@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import app.paseico.FollowersActivity;
 import app.paseico.R;
 import app.paseico.data.User;
 import com.google.firebase.auth.FirebaseAuth;
