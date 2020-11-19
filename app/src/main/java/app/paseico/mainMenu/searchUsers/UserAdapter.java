@@ -13,11 +13,10 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import app.paseico.R;
 import app.paseico.data.User;
-import com.google.firebase.auth.FirebaseAuth;
+import app.paseico.mainMenu.profile.ProfileFragment;
+import app.paseico.service.FirebaseService;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
-
-import app.paseico.mainMenu.profile.ProfileFragment;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import java.util.List;
@@ -56,8 +55,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         holder.btn_follow.setVisibility(View.VISIBLE);
         holder.username.setText(searchedUser.getUsername());
         holder.fullname.setText(searchedUser.getName());
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+
+        FirebaseService.getCurrentUserReference().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 actualUser = dataSnapshot.getValue(User.class);
@@ -68,6 +67,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+
+        firebaseUser = FirebaseService.getCurrentUser();
 
         holder.itemView.setOnClickListener(view -> {
             if (isFragment) {
