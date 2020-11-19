@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 import app.paseico.R;
+import app.paseico.data.Router;
 import app.paseico.data.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,7 +30,7 @@ public class marketplaceFragment extends Fragment {
     private View root;
 
     private DatabaseReference myUsersRef = FirebaseDatabase.getInstance().getReference("users"); //Node users reference
-    private User user = new User();
+    private Router user = new Router();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseUser fbusr = firebaseAuth.getCurrentUser();
     private DatabaseReference myActualUserRef;
@@ -90,7 +91,7 @@ public class marketplaceFragment extends Fragment {
         myActualUserRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                user = snapshot.getValue(User.class);
+                user = snapshot.getValue(Router.class);
                 pointsView.setText("Tus puntos: " + user.getPoints());
                 elementsVisible();
             }

@@ -32,6 +32,7 @@ import java.util.Map;
 import app.paseico.R;
 import app.paseico.data.Discount;
 import app.paseico.data.DiscountObj;
+import app.paseico.data.Router;
 import app.paseico.data.User;
 
 
@@ -44,7 +45,7 @@ public class DiscountsFragment extends Fragment {
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseUser fbusr = firebaseAuth.getCurrentUser();
 
-    private User user = new User();
+    private Router user = new Router();
 
     private List<Discount> discounts;
     private List<DiscountObj> listDiscounts = new ArrayList<DiscountObj>();
@@ -63,7 +64,7 @@ public class DiscountsFragment extends Fragment {
         myActualUserRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                user = snapshot.getValue(User.class);
+                user = snapshot.getValue(Router.class);
                 myUserPoints.setText("Tus puntos: " + user.getPoints());
             }
 

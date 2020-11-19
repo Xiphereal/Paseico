@@ -17,6 +17,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import app.paseico.FollowersActivity;
 import app.paseico.R;
+import app.paseico.data.Router;
 import app.paseico.data.User;
 import app.paseico.login.LogInActivity;
 //import app.paseico.mainMenu.searchUsers.ProfileFragmentDirections;
@@ -47,7 +48,7 @@ public class ProfileFragment extends Fragment {
     Button buttonLogOut;
     ImageButton userRoutes;
     private Boolean firstTimeCheckBoost = false;
-    private User user = new User();
+    private Router user = new Router();
     private String usernameFirebase;
     private UserAdapter userAdapter;
     private List<User> mUsers;
@@ -157,7 +158,7 @@ public class ProfileFragment extends Fragment {
                 if (getContext() == null) {
                     return;
                 }
-                User user = snapshot.getValue(User.class);
+                Router user = snapshot.getValue(Router.class);
                 //Glide.with(getContext()).load("@drawable/defaultProfilePic").into(image_profile);
                 username.setText(user.getUsername());
                 fullname.setText(user.getName());
@@ -250,7 +251,7 @@ public class ProfileFragment extends Fragment {
         myActualUserRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                user = snapshot.getValue(User.class);
+                user = snapshot.getValue(Router.class);
                 if (user.isBoost() && !firstTimeCheckBoost) {
                     checkBoost();
                     firstTimeCheckBoost = true;

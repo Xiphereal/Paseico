@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
+import app.paseico.data.Router;
 import app.paseico.data.User;
 import app.paseico.service.FirebaseService;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -47,7 +48,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
 
     private List<PointOfInterest> newPointsOfInterest = new ArrayList<>();
 
-    private User currentUser;
+    private Router currentUser;
     private Route retrievedRoute;
     private String retrievedRouteId;
 
@@ -243,7 +244,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
         currentUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                currentUser = snapshot.getValue(User.class);
+                currentUser = snapshot.getValue(Router.class);
 
                 // Registering this callback here ensures that the button
                 // action is only performed when the User is ready.
