@@ -11,10 +11,6 @@
         AIzaSyAMLXmyf_ai85V6PdlA7jYhjL-nSgHl7mA
     </string>
 
-    <!-- Strings used for route search fragments for navigation -->
-    <string name="menu_route_search_fragment_label">SearchFragment</string>
-    <string name="route_search_result_fragment_label">RouteSearchResult</string>
-
     <!-- Strings used for buttons names-->
     <string name="search">Buscar</string>
     <string name="previous">Volver</string>
@@ -93,10 +89,20 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <!--Resources used in the menu's labels. -->
     <string name="menu_profile">Perfil</string>
+    <string name="profile_userRoutesList">Rutas del usuario</string>
+
+    <string name="menu_userSearch">Buscar usuarios</string>
+
     <string name="menu_user_created_routes">Rutas</string>
-    <string name="menu_searcher">Buscar rutas</string>
+
     <string name="menu_marketplace">Tienda</string>
+    <string name="marketplace_discounts">Descuentos</string>
+
+    <string name="menu_route_search_fragment_label">Buscar rutas</string>
+    <string name="route_search_result_fragment_label">Resultado busqueda</string>
+
 
     <!-- Messages displayed to the user. -->
     <string name="route_creation_finalize_title">"Finalizar creación de ruta"</string>
