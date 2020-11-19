@@ -14,6 +14,7 @@ import app.paseico.FollowersActivity;
 import app.paseico.R;
 import app.paseico.data.User;
 import app.paseico.login.LogInActivity;
+import app.paseico.service.FirebaseService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
@@ -28,7 +29,7 @@ import java.util.Date;
 
 public class ProfileFragment extends Fragment {
     ImageView image_profile;
-    TextView followers, textView_followers, following, textView_following, fullname, username, userPointsText, numberOfUserRoutes;
+    TextView followers, textView_followers, following, textView_following, fullnameLabel, usernameLabel, userPointsLabel, numberOfUserRoutes;
     FirebaseUser firebaseUser;
     User actualUser;
     Button buttonLogOut;
@@ -59,12 +60,12 @@ public class ProfileFragment extends Fragment {
         image_profile = view.findViewById(R.id.image_profile);
         followers = view.findViewById(R.id.followers);
         following = view.findViewById(R.id.following);
-        username = view.findViewById(R.id.username);
-        fullname = view.findViewById(R.id.fullname);
+        usernameLabel = view.findViewById(R.id.username);
+        fullnameLabel = view.findViewById(R.id.fullname);
         buttonLogOut = view.findViewById(R.id.buttonLogOut);
         textView_followers = view.findViewById(R.id.textView_Followers);
         textView_following = view.findViewById(R.id.textView_Following);
-        userPointsText = view.findViewById(R.id.userPointsProfileText);
+        userPointsLabel = view.findViewById(R.id.userPointsProfileText);
         numberOfUserRoutes = view.findViewById(R.id.numberOfRoutesText);
         userRoutes = view.findViewById(R.id.my_routes);
 
@@ -73,8 +74,7 @@ public class ProfileFragment extends Fragment {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        User user = dataSnapshot.getValue(User.class);
-                        userInfo();
+                        setUserInfoOnGetCurrentUserReady();
                         getFollowers();
                         buttonLogOut.setText("Cerrar sesion");
                         setButtonLogOut();
@@ -122,20 +122,23 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    private void userInfo() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid());
-        reference.addValueEventListener(new ValueEventListener() {
+    private void setUserInfoOnGetCurrentUserReady() {
+        DatabaseReference currentUser = FirebaseService.getCurrentUserReference();
+
+        currentUser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                 if (getContext() == null) {
                     return;
                 }
-                User user = snapshot.getValue(User.class);
-                username.setText(user.getUsername());
-                fullname.setText(user.getName());
-                userPointsText.setText(Integer.toString(user.getPoints()));
 
-                getNumberOfRouter(firebaseUser.getUid());
+                User user = snapshot.getValue(User.class);
+                usernameLabel.setText(user.getUsername());
+                fullnameLabel.setText(user.getName());
+                userPointsLabel.setText(Integer.toString(user.getPoints()));
+
+                setNumberOfAuthoredRoutes(firebaseUser.getUid());
             }
 
             @Override
@@ -144,7 +147,7 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void getNumberOfRouter(String userUid) {
+    private void setNumberOfAuthoredRoutes(String userUid) {
         numberOfRoutes = 0;
         FirebaseFirestore database = FirebaseFirestore.getInstance();
         CollectionReference routesReference = database.collection("route");
