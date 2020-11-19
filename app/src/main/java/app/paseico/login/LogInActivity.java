@@ -118,57 +118,61 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void SignInPaseico() {
-        firebaseAuth.signInWithEmailAndPassword(etEmail.getText().toString(), etPassword.getText().toString())
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d("TAG", "signInWithEmail:success");
+        String email =etEmail.getText().toString();
+        String pass =etPassword.getText().toString();
+        if(email.matches("") || pass.matches("")){
+            Toast.makeText(LogInActivity.this, "Faltan campos por rellenar!",
+                Toast.LENGTH_SHORT).show();
+        }
+        else {
+            firebaseAuth.signInWithEmailAndPassword(etEmail.getText().toString(), etPassword.getText().toString())
+                    .addOnCompleteListener(this, task -> {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("TAG", "signInWithEmail:success");
 
 
+                            FirebaseUser user = task.getResult().getUser();
+                            DatabaseReference mUsersReference = FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
+                            DatabaseReference mOrganizationsReference = FirebaseDatabase.getInstance().getReference("organizations").child(user.getUid());
 
-                        FirebaseUser user = task.getResult().getUser();
-                        DatabaseReference mUsersReference = FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
-                        DatabaseReference mOrganizationsReference = FirebaseDatabase.getInstance().getReference("organizations").child(user.getUid());
+                            ValueEventListener eventListener = new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (!dataSnapshot.exists()) {
+                                        if (!routerBtn.isEnabled()) {
+                                            Toast.makeText(LogInActivity.this, "ERROR :Estas intentando acceder como Organización desde el apartado de Rutero",
+                                                    Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(LogInActivity.this, "ERROR :Estas intentando acceder como  Rutero desde el apartado de Organización",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
 
-                        ValueEventListener eventListener = new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if(!dataSnapshot.exists()) {
-                                    if(!routerBtn.isEnabled()) {
-                                        Toast.makeText(LogInActivity.this, "ERROR :Estas intentando acceder como Organización desde el apartado de Rutero",
-                                                Toast.LENGTH_SHORT).show();
+                                        FirebaseAuth.getInstance().signOut();
+                                    } else {
+                                        goToMainScreen();
                                     }
-                                    else{
-                                        Toast.makeText(LogInActivity.this, "ERROR :Estas intentando acceder como  Rutero desde el apartado de Organización",
-                                                Toast.LENGTH_SHORT).show();
-                                    }
+                                }
 
-                                    FirebaseAuth.getInstance().signOut();
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
                                 }
-                                else{
-                                    goToMainScreen();
-                                }
+                            };
+                            if (!routerBtn.isEnabled()) {
+                                mUsersReference.addListenerForSingleValueEvent(eventListener);
+                            } else {
+                                mOrganizationsReference.addListenerForSingleValueEvent(eventListener);
                             }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        };
-                        if(!routerBtn.isEnabled()) {
-                            mUsersReference.addListenerForSingleValueEvent(eventListener);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("TAG", "signInWithEmail:failure", task.getException());
+                            Toast.makeText(LogInActivity.this, "Correo electronico o contraseña incorrectos!",
+                                    Toast.LENGTH_SHORT).show();
                         }
-                        else{
-                            mOrganizationsReference.addListenerForSingleValueEvent(eventListener);
-                        }
-
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w("TAG", "signInWithEmail:failure", task.getException());
-                        Toast.makeText(LogInActivity.this, "Correo electronico o contraseña incorrectos!",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
+                    });
+        }
     }
 
     @Override
