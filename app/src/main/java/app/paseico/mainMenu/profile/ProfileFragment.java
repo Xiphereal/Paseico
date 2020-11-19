@@ -5,39 +5,26 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
-
 import app.paseico.FollowersActivity;
 import app.paseico.R;
 import app.paseico.data.User;
 import app.paseico.login.LogInActivity;
-//import app.paseico.mainMenu.searchUsers.ProfileFragmentDirections;
-import app.paseico.mainMenu.profile.ProfileFragmentDirections;
-import app.paseico.mainMenu.searchUsers.UserAdapter;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 public class ProfileFragment extends Fragment {
     ImageView image_profile;
@@ -48,20 +35,12 @@ public class ProfileFragment extends Fragment {
     ImageButton userRoutes;
     private Boolean firstTimeCheckBoost = false;
     private User user = new User();
-    private String usernameFirebase;
-    private UserAdapter userAdapter;
-    private List<User> mUsers;
     private int numberOfRoutes = 0;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstaanceState) {
 
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-
-
-
-
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
@@ -89,27 +68,23 @@ public class ProfileFragment extends Fragment {
         userRoutes = view.findViewById(R.id.my_routes);
 
 
-        FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                //mUsers.add(user);
-                //mUsers.clear();
-                usernameFirebase = user.getUsername();
-                //userAdapter.notifyDataSetChanged();
-                userInfo();
-                getFollowers();
-                //if (profileid.equals(usernameFirebase)) { //HERE
-                buttonLogOut.setText("Cerrar sesion");
-                setButtonLogOut();
-            }
+        FirebaseDatabase.getInstance().getReference("users")
+                .child(firebaseUser.getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        User user = dataSnapshot.getValue(User.class);
+                        userInfo();
+                        getFollowers();
+                        buttonLogOut.setText("Cerrar sesion");
+                        setButtonLogOut();
+                    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
-        //getGetUsernameFromFirebase(profileid);
+                    }
+                });
 
         followers.setOnClickListener(followersView -> {
             Intent intent = new Intent(getContext(), FollowersActivity.class);
@@ -139,9 +114,8 @@ public class ProfileFragment extends Fragment {
             startActivity(intent);
         });
 
-
         userRoutes.setOnClickListener(v -> {
-           NavDirections action = ProfileFragmentDirections.actionProfileToUserRoutesFragment();
+            NavDirections action = ProfileFragmentDirections.actionProfileToUserRoutesFragment();
             NavHostFragment.findNavController(ProfileFragment.this)
                     .navigate(action);
         });
@@ -164,7 +138,6 @@ public class ProfileFragment extends Fragment {
                 userPointsText.setText(Integer.toString(user.getPoints()));
 
                 getNumberOfRouter(firebaseUser.getUid());
-
             }
 
             @Override
@@ -179,19 +152,16 @@ public class ProfileFragment extends Fragment {
         CollectionReference routesReference = database.collection("route");
         routesReference.whereEqualTo("authorId", userUid)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                numberOfRoutes++;
-                            }
-                            numberOfUserRoutes.setText(Integer.toString(numberOfRoutes));
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot ignored : task.getResult()) {
+                            numberOfRoutes++;
                         }
+                        numberOfUserRoutes.setText(Integer.toString(numberOfRoutes));
                     }
                 });
-        System.out.println(userUid +  " userUID");
-        System.out.println(numberOfRoutes +  " jasdhfjkashdkjfhasdjhfkajhfkajdhkas");
+        System.out.println(userUid + " userUID");
+        System.out.println(numberOfRoutes + " jasdhfjkashdkjfhasdjhfkajhfkajdhkas");
     }
 
     private void getFollowers() {
