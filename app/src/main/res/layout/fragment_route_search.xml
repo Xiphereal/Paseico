@@ -64,7 +64,7 @@
             android:layout_marginLeft="72dp"
             android:layout_marginStart="72dp"
             android:layout_marginTop="72dp"
-            android:text="@string/theme"
+            android:text="@string/category"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_keyWord"/>
 
@@ -73,7 +73,7 @@
             android:layout_width="149dp"
             android:layout_height="34dp"
             android:layout_marginTop="24dp"
-            android:entries="@array/themes_of_route"
+            android:entries="@array/route_category"
             android:spinnerMode="dropdown"
             app:layout_constraintBottom_toBottomOf="@+id/textView_theme"
             app:layout_constraintEnd_toEndOf="parent"
