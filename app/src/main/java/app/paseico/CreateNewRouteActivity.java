@@ -44,6 +44,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     private User currentUser;
 
     private Marker userNewCustomPoiInCreation;
+    //Make PR
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
