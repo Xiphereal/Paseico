@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -22,6 +23,8 @@ import app.paseico.data.Route;
 import java.util.ArrayList;
 import java.util.List;
 public class RouteSearchResultFragment extends Fragment {
+
+    Integer ImageName = R.drawable.notheme_icon;
 
     @Override
     public View onCreateView(
@@ -50,7 +53,7 @@ public class RouteSearchResultFragment extends Fragment {
 
         ListView listView_filteredRoutes = (ListView) view.findViewById(R.id.listView_filteredRoutes);
 
-        FilteredListAdapter adapter = new FilteredListAdapter(this.getContext(), filteredRoutesNames, filteredRoutesEstimatedTime, filteredRoutesLength, filteredRoutesRewardPoints);
+        FilteredListAdapter adapter = new FilteredListAdapter(this.getContext(), filteredRoutesNames, filteredRoutesEstimatedTime, filteredRoutesLength, filteredRoutesRewardPoints, ImageName);
         listView_filteredRoutes.setAdapter(adapter);
 
         // Open RouteInfo screen.
@@ -74,8 +77,9 @@ public class RouteSearchResultFragment extends Fragment {
         List<String> estimatedTimes;
         List<String> lengths;
         List<String> points;
+        Integer imageName;
 
-        FilteredListAdapter(Context context, List<String> names, List<String> estimatedTimes, List<String> lengths, List<String> points) {
+        FilteredListAdapter(Context context, List<String> names, List<String> estimatedTimes, List<String> lengths, List<String> points, Integer imageName) {
             super(context, R.layout.item_route_search, R.id.routeName, names);
 
             this.context = context;
@@ -83,6 +87,7 @@ public class RouteSearchResultFragment extends Fragment {
             this.estimatedTimes = estimatedTimes;
             this.lengths = lengths;
             this.points = points;
+            this.imageName = imageName;
         }
 
         @NonNull
@@ -96,10 +101,17 @@ public class RouteSearchResultFragment extends Fragment {
             TextView myLengths = row.findViewById(R.id.routeLenght);
             TextView myPoints = row.findViewById(R.id.routeReward);
 
+            //ImageView ListViewImage = (ImageView) row.findViewById(R.id.imageView1);
+            ImageView ListViewImage = (ImageView) row.findViewById(R.id.imageViewIcon);
+
+            System.out.println(ListViewImage + "listbiew imageeeeeeeeeeeeeeeeeeee");
+
             myNames.setText(names.get(position));
             myEstimatedTimes.setText(estimatedTimes.get(position));
             myLengths.setText(lengths.get(position));
             myPoints.setText(points.get(position));
+
+           ListViewImage.setImageResource(imageName);
 
             return row;
         }
