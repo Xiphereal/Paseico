@@ -44,7 +44,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     private User currentUser;
 
     private Marker userNewCustomPoiInCreation;
-    //Make PR
+
+    boolean userIsCreatingPOI = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -370,9 +371,14 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         createNewRouteMap.setOnMapLongClickListener(tapPoint -> {
             // Opens the creation form.
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            if(userIsCreatingPOI){
+                userNewCustomPoiInCreation.remove();
+            }
+            userIsCreatingPOI = true;
 
             userNewCustomPoiInCreation = createNewRouteMap
                     .addMarker(new MarkerOptions().position(tapPoint).title("User Marker"));
+
         });
     }
 
@@ -407,6 +413,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
             selectPointOfInterest(userNewCustomPoiInCreation, true);
 
             userNewCustomPoiInCreation = null;
+
+            userIsCreatingPOI = false;
 
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         });
