@@ -21,15 +21,14 @@ public class UserCreatedRoutesFragment extends Fragment {
     private ListView createdRoutesListView;
     private ArrayAdapter<String> createdRoutesListViewAdapter;
     private static List<String> createdRoutes = new ArrayList<>();
-    private RoutesViewModel routesViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        routesViewModel = new ViewModelProvider(this).get(RoutesViewModel.class);
 
         View root = inflater.inflate(R.layout.fragment_user_created_routes, container, false);
 
         createdRoutesListView = root.findViewById(R.id.created_routes_list_view);
+
         //TODO: the created routes list should display only routes created by the user,
         // currently it shown routes created independent of current user.
         updateCreatedRoutesListView();
