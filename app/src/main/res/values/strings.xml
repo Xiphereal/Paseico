@@ -15,6 +15,7 @@
     <string name="search">Buscar</string>
     <string name="previous">Volver</string>
     <string name="start_route">Empezar ruta</string>
+    <string name="finalize">Finalizar</string>
     <string name="create_new_point_of_interest_button">Crear nuevo Punto de Interés</string>
 
     <string name="discounts">DESCUENTOS</string>
@@ -37,14 +38,13 @@
     <string name="default_spinner_choice">Indiferente</string>
     <string name="no_theme_choice">Sin temática</string>
 
-
     <string name="lt0.5">&lt; 0,5</string>
-    <string name="between0.5_1">0.5-1</string>
+    <string name="between0.5_1">0.5–1</string>
     <string name="lt1">&lt; 1</string> <!-- &lt; is '<' -->
-    <string name="between1_2">1-2</string>
-    <string name="between2_3">2-3</string>
-    <string name="between3_4">3-4</string>
-    <string name="between4_5">4-5</string>
+    <string name="between1_2">1–2</string>
+    <string name="between2_3">2–3</string>
+    <string name="between3_4">3–4</string>
+    <string name="between4_5">4–5</string>
     <string name="gt5">&gt; 5</string> <!-- &gt; is '>' -->
 
     <!-- Strings arrays used to populate searchFragment spinners -->
@@ -59,7 +59,6 @@
         <item>Naturaleza</item>
         <item>Bares</item>
     </string-array>
-
 
     <string-array name="lengths_of_route">
         <item>@string/default_spinner_choice</item>
@@ -80,7 +79,6 @@
         <item>@string/between4_5</item>
         <item>@string/gt5</item>
     </string-array>
-
 
     <string name="title_activity_main_menu">MainMenuActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -104,7 +102,6 @@
     <string name="menu_route_search_fragment_label">Buscar rutas</string>
     <string name="route_search_result_fragment_label">Resultado busqueda</string>
 
-
     <!-- Messages displayed to the user. -->
     <string name="route_creation_finalize_title">"Finalizar creación de ruta"</string>
     <string name="route_creation_confirmation_message">"La nueva ruta ha sido guardada satisfactoriamente."</string>
@@ -117,4 +114,6 @@
 
     <!-- TextInput related. -->
     <string name="new_point_of_interest_name_text_input_hint">Nombre del nuevo Punto de Interés</string>
+    <string name="finalize_route_creation_toolbar_title">Finalizar creación de ruta</string>
+    <string name="route_name">Nombre de la ruta</string>
 </resources>
