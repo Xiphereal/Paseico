@@ -9,8 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import app.paseico.CreateNewRouteActivity;
 import app.paseico.R;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 

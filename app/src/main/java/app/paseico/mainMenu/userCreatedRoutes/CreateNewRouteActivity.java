@@ -1,4 +1,4 @@
-package app.paseico;
+package app.paseico.mainMenu.userCreatedRoutes;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -8,10 +8,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import app.paseico.MainMenuActivity;
+import app.paseico.R;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import app.paseico.data.User;
-import app.paseico.mainMenu.userCreatedRoutes.UserCreatedRoutesFragment;
 import app.paseico.service.FirebaseService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;

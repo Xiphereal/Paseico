@@ -46,7 +46,7 @@
                 android:value="@string/google_maps_key"/>
 
 
-        <activity android:name=".CreateNewRouteActivity"/>
+        <activity android:name=".mainMenu.userCreatedRoutes.CreateNewRouteActivity"/>
         <activity android:name=".RouteRunnerActivity"/>
         <activity android:name=".TemporalRoutesMenu"/>
         <activity android:name=".RouteFinishedActivity"/>
