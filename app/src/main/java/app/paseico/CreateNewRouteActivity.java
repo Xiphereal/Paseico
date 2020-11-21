@@ -374,6 +374,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
             userNewCustomPoiInCreation = createNewRouteMap
                     .addMarker(new MarkerOptions().position(tapPoint).title("User Marker"));
+            userNewCustomPoiInCreation.setClickable(false);
         });
     }
 
