@@ -266,9 +266,9 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     private void registerOnMarkerClickListener() {
         createNewRouteMap.setOnMarkerClickListener(marker -> {
 
-            /*Check if the marker selected is asociated with the POI in creation
+            /*Check if the marker selected is associated with the POI in creation
             * If it not, we continue as planned.
-            * If it is we do nothing.
+            * If it is, we do nothing.
             * */
             if (!marker.equals(userNewCustomPoiInCreation)) {
                 tryDeleteUserNewCustomPoiInCreation();
