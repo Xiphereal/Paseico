@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -12,7 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.graphics.Color;
 import app.paseico.MainMenuActivity;
 import app.paseico.MainMenuOrganizationActivity;
 import app.paseico.R;
@@ -45,6 +46,7 @@ public class LogInActivity extends AppCompatActivity {
     private GoogleSignInClient googleSignInClient;
     private UserDao userDao = new UserDao();
     private Button routerBtn, organiBtn;
+    int purple = Color.parseColor("#653cd4");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,14 +93,18 @@ public class LogInActivity extends AppCompatActivity {
         routerBtn = findViewById(R.id.buttonLoginRouter);
         organiBtn = findViewById(R.id.buttonLoginOrganization);
         routerBtn.setEnabled(false);
+        routerBtn.setBackgroundColor(purple);
         organiBtn.setEnabled(true);
+        organiBtn.setBackgroundColor(Color.DKGRAY);
 
         routerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 googleSignInButton.setVisibility(View.VISIBLE);
                 routerBtn.setEnabled(false);
+                routerBtn.setBackgroundColor(purple);
                 organiBtn.setEnabled(true);
+                organiBtn.setBackgroundColor(Color.DKGRAY);
             }
         });
 
@@ -107,7 +113,9 @@ public class LogInActivity extends AppCompatActivity {
             public void onClick(View view) {
                 googleSignInButton.setVisibility(View.GONE);
                 routerBtn.setEnabled(true);
+                routerBtn.setBackgroundColor(Color.DKGRAY);
                 organiBtn.setEnabled(false);
+                organiBtn.setBackgroundColor(purple);
             }
         });
     }

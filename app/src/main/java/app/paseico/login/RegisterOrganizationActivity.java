@@ -95,7 +95,7 @@ public class RegisterOrganizationActivity extends AppCompatActivity {
                                     submitRegister(name, nif, email, password);
                                 } else {
                                     Context context = getApplicationContext();
-                                    CharSequence text = "ERROR: La organización ya existe";
+                                    CharSequence text = "El nombre de organización ya existe!";
                                     int duration = Toast.LENGTH_SHORT;
 
                                     Toast toast = Toast.makeText(context, text, duration);
