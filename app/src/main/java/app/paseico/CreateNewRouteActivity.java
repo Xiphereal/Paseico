@@ -265,14 +265,21 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     private void registerOnMarkerClickListener() {
         createNewRouteMap.setOnMarkerClickListener(marker -> {
-            tryDeleteUserNewCustomPoiInCreation();
 
-            PointOfInterest poi = findClickedPointOfInterest(marker.getPosition(), marker.getTitle());
+            /*Check if the marker selected is asociated with the POI in creation
+            * If it not, we continue as planned.
+            * If it is we do nothing.
+            * */
+            if (!marker.equals(userNewCustomPoiInCreation)) {
+                tryDeleteUserNewCustomPoiInCreation();
 
-            if (isPointOfInterestSelected(poi)) {
-                deselectPointOfInterest(marker, poi);
-            } else {
-                selectPointOfInterest(marker, false);
+                PointOfInterest poi = findClickedPointOfInterest(marker.getPosition(), marker.getTitle());
+
+                if (isPointOfInterestSelected(poi)) {
+                    deselectPointOfInterest(marker, poi);
+                } else {
+                    selectPointOfInterest(marker, false);
+                }
             }
 
             return true;
@@ -374,7 +381,6 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
             userNewCustomPoiInCreation = createNewRouteMap
                     .addMarker(new MarkerOptions().position(tapPoint).title("User Marker"));
-            userNewCustomPoiInCreation.setClickable(false);
         });
     }
 
