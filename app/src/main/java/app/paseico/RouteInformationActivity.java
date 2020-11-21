@@ -54,12 +54,11 @@ public class RouteInformationActivity extends AppCompatActivity {
         textView_numberOfPOI = findViewById(R.id.textView_routeInfo_numberOfPOI);
 
         themeIcon = (ImageView) findViewById(R.id.imageViewIconRouteInformation);
-        themeIcon.setImageResource(R.drawable.notheme_icon);
+
 
         Route route = (Route) getIntent().getExtras().get("route");
 
         String name = route.getName();
-        String theme = (route.getTheme() == null) ? "Sin temática" : route.getTheme();
         String rewardsPoints = ((Integer) route.getRewardPoints()).toString();
         int kms = (int) route.getLength() / 1000;
         int meters = (int) route.getLength() % 1000;
@@ -68,6 +67,19 @@ public class RouteInformationActivity extends AppCompatActivity {
         int minutes = ((int) route.getEstimatedTime()) % 60;
         String estimatedTime = hours + " horas y " + minutes + " minutos" ;
         String numberOfPOI = route.getPointsOfInterest().size() + "";
+        String theme = (route.getTheme() == null) ? "Sin temática" : route.getTheme();
+
+        int iconIdex = R.drawable.notheme_icon;;
+        switch (theme) {
+            case "Sin temática":
+                iconIdex  = R.drawable.shopping_icon;
+                break;
+            case "Naturaleza":
+                iconIdex = R.drawable.nature_icon;
+                break;
+        }
+
+
 
         textView_name.setText(name);
         textView_theme.setText(theme);
@@ -75,6 +87,8 @@ public class RouteInformationActivity extends AppCompatActivity {
         textView_length.setText(length);
         textView_estimatedTime.setText(estimatedTime);
         textView_numberOfPOI.setText(numberOfPOI);
+
+        themeIcon.setImageResource(iconIdex);
 
         findViewById(R.id.btn_routeInfo_back).setOnClickListener(v -> finish());
 
