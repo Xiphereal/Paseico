@@ -2,6 +2,7 @@ package app.paseico;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.data.Route;
@@ -15,6 +16,8 @@ public class RouteInformationActivity extends AppCompatActivity {
     private TextView textView_length;
     private TextView textView_estimatedTime;
     private TextView textView_numberOfPOI;
+
+    private ImageView themeIcon;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +28,8 @@ public class RouteInformationActivity extends AppCompatActivity {
         registerOnBackButtonClickedListener();
 
         registerOnStartRouteButtonClickedListener(route);
+
+
     }
 
     protected void registerOnStartRouteButtonClickedListener(Route route) {
@@ -47,6 +52,9 @@ public class RouteInformationActivity extends AppCompatActivity {
         textView_length = findViewById(R.id.textView_routeInfo_length);
         textView_estimatedTime = findViewById(R.id.textView_routeInfo_estimatedTime);
         textView_numberOfPOI = findViewById(R.id.textView_routeInfo_numberOfPOI);
+
+        themeIcon = (ImageView) findViewById(R.id.imageViewIconRouteInformation);
+        themeIcon.setImageResource(R.drawable.notheme_icon);
 
         Route route = (Route) getIntent().getExtras().get("route");
 
