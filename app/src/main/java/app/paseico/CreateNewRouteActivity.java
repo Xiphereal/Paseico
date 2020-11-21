@@ -367,14 +367,13 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         registerOnNewPoiButtonClicked(bottomSheetBehavior);
 
         createNewRouteMap.setOnMapLongClickListener(tapPoint -> {
+            tryDeleteUserNewCustomPoiInCreation();
+
             // Opens the creation form.
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            if(isUserCreatingACustomPoi()){
-                userNewCustomPoiInCreation.remove();
-            }
+
             userNewCustomPoiInCreation = createNewRouteMap
                     .addMarker(new MarkerOptions().position(tapPoint).title("User Marker"));
-
         });
     }
 
