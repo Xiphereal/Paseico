@@ -22,7 +22,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainMenuOrganizationActivity"></activity>
+        <activity android:name=".MainMenuOrganizationActivity"/>
         <activity android:name=".login.RegisterOrganizationActivity" />
         <activity android:name=".ModifyRouteActivity" />
         <activity android:name=".RouteInfModifyActivity" />

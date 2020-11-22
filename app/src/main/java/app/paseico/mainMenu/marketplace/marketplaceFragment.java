@@ -30,7 +30,7 @@ public class marketplaceFragment extends Fragment {
     private View root;
 
     private DatabaseReference myUsersRef = FirebaseDatabase.getInstance().getReference("users"); //Node users reference
-    private Router user = new Router();
+    private Router currentRouter = new Router();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseUser fbusr = firebaseAuth.getCurrentUser();
     private DatabaseReference myActualUserRef;
@@ -91,8 +91,8 @@ public class marketplaceFragment extends Fragment {
         myActualUserRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                user = snapshot.getValue(Router.class);
-                pointsView.setText("Tus puntos: " + user.getPoints());
+                currentRouter = snapshot.getValue(Router.class);
+                pointsView.setText("Tus puntos: " + currentRouter.getPoints());
                 elementsVisible();
             }
 
@@ -161,7 +161,7 @@ public class marketplaceFragment extends Fragment {
 
     private void buyPoints(int option) {
         final int points = option;
-        int actualPoints = user.getPoints();
+        int actualPoints = currentRouter.getPoints();
         int updatedPoints = points + actualPoints;
         final DatabaseReference myPointsReference = myActualUserRef.child("points");
         myPointsReference.setValue(updatedPoints);
@@ -175,14 +175,14 @@ public class marketplaceFragment extends Fragment {
         final DatabaseReference myPointsReference = myActualUserRef.child("points");
         final DatabaseReference myBoostReference = myActualUserRef.child("boost");
         final DatabaseReference myBoostDateReference = myActualUserRef.child("boostExpires");
-        if (!user.isBoost()) {
+        if (!currentRouter.isBoost()) {
             Date actualDate = new Date();
-            if (option == 2 && user.getPoints() >= 2000 || option == 5 && user.getPoints() >= 6000) {
+            if (option == 2 && currentRouter.getPoints() >= 2000 || option == 5 && currentRouter.getPoints() >= 6000) {
                 actualDate.setDate((int) (actualDate.getDate() + (7 * option)));
                 myBoostReference.setValue(true);
                 String strActualDate = dateFormat.format(actualDate).toString();
                 myBoostDateReference.setValue(strActualDate);
-                int actualPoints = user.getPoints();
+                int actualPoints = currentRouter.getPoints();
                 int pointsToSubtract;
                 if (option == 2) {
                     pointsToSubtract = -2000;

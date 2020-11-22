@@ -48,7 +48,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
 
     private List<PointOfInterest> newPointsOfInterest = new ArrayList<>();
 
-    private Router currentUser;
+    private Router currentRouter;
     private Route retrievedRoute;
     private String retrievedRouteId;
 
@@ -244,7 +244,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
         currentUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                currentUser = snapshot.getValue(Router.class);
+                currentRouter = snapshot.getValue(Router.class);
 
                 // Registering this callback here ensures that the button
                 // action is only performed when the User is ready.
@@ -266,8 +266,8 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
     }
 
     private void tryFinalizeRouteCreation() {
-        if (currentUser.getHasFreeRouteCreation()) {
-            currentUser.setHasFreeRouteCreation(false);
+        if (currentRouter.getHasFreeRouteCreation()) {
+            currentRouter.setHasFreeRouteCreation(false);
             showConfirmationDialog();
         } else {
             showRouteCreationSummaryDialog();
@@ -282,10 +282,10 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
         AlertDialog.Builder builder = setUpBuilder(dialogMessage);
 
         builder.setOnDismissListener(dialog -> {
-            int currentUserPoints = currentUser.getPoints();
+            int currentUserPoints = currentRouter.getPoints();
 
             if (currentUserPoints >= routeCost) {
-                currentUser.setPoints(currentUserPoints - routeCost);
+                currentRouter.setPoints(currentUserPoints - routeCost);
                 showConfirmationDialog();
             } else {
                 showNotEnoughPointsDialog();
@@ -360,8 +360,8 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
     private void persistCurrentUserModifications() {
         DatabaseReference currentUserReference = FirebaseService.getCurrentUserReference();
 
-        currentUserReference.child("hasFreeRouteCreation").setValue(currentUser.getHasFreeRouteCreation());
-        currentUserReference.child("points").setValue(currentUser.getPoints());
+        currentUserReference.child("hasFreeRouteCreation").setValue(currentRouter.getHasFreeRouteCreation());
+        currentUserReference.child("points").setValue(currentRouter.getPoints());
     }
 
     private void goToPreviousActivity() {

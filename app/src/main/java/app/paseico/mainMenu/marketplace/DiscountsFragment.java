@@ -45,7 +45,7 @@ public class DiscountsFragment extends Fragment {
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseUser fbusr = firebaseAuth.getCurrentUser();
 
-    private Router user = new Router();
+    private Router currentRouter = new Router();
 
     private List<Discount> discounts;
     private List<DiscountObj> listDiscounts = new ArrayList<DiscountObj>();
@@ -64,8 +64,8 @@ public class DiscountsFragment extends Fragment {
         myActualUserRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                user = snapshot.getValue(Router.class);
-                myUserPoints.setText("Tus puntos: " + user.getPoints());
+                currentRouter = snapshot.getValue(Router.class);
+                myUserPoints.setText("Tus puntos: " + currentRouter.getPoints());
             }
 
             @Override
@@ -105,8 +105,8 @@ public class DiscountsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 final DatabaseReference myPointsReference = myActualUserRef.child("points");
-                if (discounts.get(i).getPoints() <= user.getPoints()) {
-                    int updatedPoints = user.getPoints() - discounts.get(i).getPoints();
+                if (discounts.get(i).getPoints() <= currentRouter.getPoints()) {
+                    int updatedPoints = currentRouter.getPoints() - discounts.get(i).getPoints();
                     myPointsReference.setValue(updatedPoints);
                     Toast.makeText(getActivity(), "Enhorabuena! Acabas de canjear un descuento de " + discounts.get(i).getName(), Toast.LENGTH_SHORT).show();
                 } else {

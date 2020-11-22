@@ -12,7 +12,7 @@ import com.google.firebase.database.*;
 
 public class UserDao implements IUserDao {
     private DatabaseReference myUsersRef = FirebaseDatabase.getInstance().getReference("users"); //Node users reference
-    private Router user = new Router();
+    private Router currentRouter = new Router();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseUser fbusr = firebaseAuth.getCurrentUser();
     private DatabaseReference myActualUserRef;
@@ -23,7 +23,7 @@ public class UserDao implements IUserDao {
             myActualUserRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    user = snapshot.getValue(Router.class);
+                    currentRouter = snapshot.getValue(Router.class);
                 }
 
                 @Override
@@ -39,7 +39,7 @@ public class UserDao implements IUserDao {
 
     @Override
     public Router getUser() {
-        return user;
+        return currentRouter;
     }
 
     @Override

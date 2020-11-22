@@ -46,7 +46,7 @@ public class LogInActivity extends AppCompatActivity {
     private GoogleSignInClient googleSignInClient;
     private UserDao userDao = new UserDao();
     private Button routerBtn, organiBtn;
-    int purple = Color.parseColor("#653cd4");
+    int purple = R.color.purple;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +93,7 @@ public class LogInActivity extends AppCompatActivity {
         routerBtn = findViewById(R.id.buttonLoginRouter);
         organiBtn = findViewById(R.id.buttonLoginOrganization);
         routerBtn.setEnabled(false);
-        routerBtn.setBackgroundColor(purple);
+        routerBtn.setBackgroundColor(getResources().getColor(purple));
         organiBtn.setEnabled(true);
         organiBtn.setBackgroundColor(Color.DKGRAY);
 
@@ -102,7 +102,7 @@ public class LogInActivity extends AppCompatActivity {
             public void onClick(View view) {
                 googleSignInButton.setVisibility(View.VISIBLE);
                 routerBtn.setEnabled(false);
-                routerBtn.setBackgroundColor(purple);
+                routerBtn.setBackgroundColor(getResources().getColor(purple));
                 organiBtn.setEnabled(true);
                 organiBtn.setBackgroundColor(Color.DKGRAY);
             }
@@ -115,7 +115,7 @@ public class LogInActivity extends AppCompatActivity {
                 routerBtn.setEnabled(true);
                 routerBtn.setBackgroundColor(Color.DKGRAY);
                 organiBtn.setEnabled(false);
-                organiBtn.setBackgroundColor(purple);
+                organiBtn.setBackgroundColor(getResources().getColor(purple));
             }
         });
     }

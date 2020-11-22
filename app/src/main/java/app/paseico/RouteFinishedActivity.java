@@ -34,7 +34,7 @@ public class RouteFinishedActivity extends AppCompatActivity {
     List<PointOfInterest> nombrePOIs;
     int rewpoints;
     private DatabaseReference myUsersRef = FirebaseDatabase.getInstance().getReference("users"); //Node users reference
-    private Router user = new Router();
+    private Router currentRouter = new Router();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseUser fbusr = firebaseAuth.getCurrentUser();
     private DatabaseReference myActualUserRef;
@@ -47,9 +47,9 @@ public class RouteFinishedActivity extends AppCompatActivity {
         myActualUserRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                user = snapshot.getValue(Router.class);
+                currentRouter = snapshot.getValue(Router.class);
                 int points = route.getRewardPoints();
-                int actualpoints = user.getPoints();
+                int actualpoints = currentRouter.getPoints();
                 int updatedpoints = points + actualpoints;
                 final DatabaseReference mypointsreference = myActualUserRef.child("points");
                 mypointsreference.setValue(updatedpoints);
