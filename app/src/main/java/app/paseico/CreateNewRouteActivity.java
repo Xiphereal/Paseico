@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
+import app.paseico.data.Router;
 import app.paseico.data.User;
 import app.paseico.mainMenu.userCreatedRoutes.UserCreatedRoutesFragment;
 import app.paseico.service.FirebaseService;
@@ -41,7 +42,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     private final List<String> createdMarkers = new ArrayList<>();
 
-    private User currentUser;
+    private Router currentUser;
 
     private Marker userNewCustomPoiInCreation;
 
@@ -72,7 +73,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         currentUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                currentUser = snapshot.getValue(User.class);
+                currentUser = snapshot.getValue(Router.class);
 
                 // Registering this callback here ensures that the button
                 // action is only performed when the User is ready.
