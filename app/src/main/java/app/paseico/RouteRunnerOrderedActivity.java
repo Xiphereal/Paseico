@@ -1,59 +1,54 @@
 
 package app.paseico;
 
-        import androidx.annotation.NonNull;
-        import androidx.annotation.Nullable;
-        import androidx.core.app.ActivityCompat;
-        import androidx.core.content.ContextCompat;
-        import androidx.fragment.app.FragmentActivity;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 
-        import android.Manifest;
-        import android.app.Activity;
-        import android.app.AlertDialog;
-        import android.content.Context;
-        import android.content.DialogInterface;
-        import android.content.Intent;
-        import android.content.pm.PackageManager;
-        import android.graphics.Color;
-        import android.location.Location;
-        import android.os.Bundle;
-        import android.text.Html;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.widget.AdapterView;
-        import android.widget.ArrayAdapter;
-        import android.widget.BaseAdapter;
-        import android.widget.Button;
-        import android.widget.ImageButton;
-        import android.widget.ListView;
-        import android.widget.TextView;
-        import android.widget.Toast;
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.location.Location;
+import android.os.Bundle;
+import android.text.Html;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-        import com.directions.route.AbstractRouting;
-        import com.directions.route.Route;
-        import com.directions.route.RouteException;
-        import com.directions.route.Routing;
-        import com.directions.route.RoutingListener;
-        import com.google.android.gms.common.ConnectionResult;
-        import com.google.android.gms.common.api.GoogleApiClient;
-        import com.google.android.gms.maps.CameraUpdate;
-        import com.google.android.gms.maps.CameraUpdateFactory;
-        import com.google.android.gms.maps.GoogleMap;
-        import com.google.android.gms.maps.OnMapReadyCallback;
-        import com.google.android.gms.maps.SupportMapFragment;
-        import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-        import com.google.android.gms.maps.model.LatLng;
-        import com.google.android.gms.maps.model.MarkerOptions;
-        import com.google.android.gms.maps.model.PolylineOptions;
-        import com.google.android.material.snackbar.Snackbar;
+import com.directions.route.AbstractRouting;
+import com.directions.route.Route;
+import com.directions.route.RouteException;
+import com.directions.route.Routing;
+import com.directions.route.RoutingListener;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.snackbar.Snackbar;
 
-        import java.util.ArrayList;
-        import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
 
-        import app.paseico.data.PointOfInterest;
+import app.paseico.data.PointOfInterest;
 
-public class RouteRunnerActivity<Polyline> extends FragmentActivity implements OnMapReadyCallback,
+public class RouteRunnerOrderedActivity<Polyline> extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener, RoutingListener {
 
     //google map object
@@ -73,13 +68,12 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
     ArrayList<String> pointsOfInterestNames = new ArrayList<String>();
     ArrayList<LatLng> locations = new ArrayList<LatLng>();
     ArrayList<Boolean> isCompleted = new ArrayList<Boolean>();
-    int actualPOI = -1;
+    int actualPOI = 0;
     int poisLeft = 0;
-    ArrayAdapterRutas arrayAdapter;
     int rewpoints;
 
     Location currentDestination;
-    ListView listView;
+    TextView routeDisplay;
     String nombredeRuta = "Descubriendo Valencia";
 
     private app.paseico.data.Route actualRoute;
@@ -87,9 +81,8 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        arrayAdapter = new ArrayAdapterRutas(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_route_runner);
+        setContentView(R.layout.activity_route_runner_ordered);
         Intent intent = getIntent();
         Bundle b = intent.getExtras();
         //request location permission.
@@ -103,26 +96,28 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
 
 
         ImageButton cancelRoute = findViewById(R.id.buttonCancelRoute);
-        if (b != null && actualRoute == null) {actualRoute = (app.paseico.data.Route) b.get("route");
-        nombredeRuta = actualRoute.getName();
-        rewpoints = actualRoute.getRewardPoints();}
+        routeDisplay = findViewById(R.id.TextNextRoute);
+        if (b != null && actualRoute == null) {
+            actualRoute = (app.paseico.data.Route) b.get("route");
+            nombredeRuta = actualRoute.getName();
+            rewpoints = actualRoute.getRewardPoints();
 
-        List<PointOfInterest> routePois = actualRoute.getPointsOfInterest();
-        for (int i = 0; i < routePois.size(); i++) {
-            pointsOfInterestNames.add(routePois.get(i).getName());
-            locations.add(new LatLng(routePois.get(i).getLatitude(), routePois.get(i).getLongitude()));
+            List<PointOfInterest> routePois = actualRoute.getPointsOfInterest();
+            for (int i = 0; i < routePois.size(); i++) {
+                pointsOfInterestNames.add(routePois.get(i).getName());
+                locations.add(new LatLng(routePois.get(i).getLatitude(), routePois.get(i).getLongitude()));
+            }
+
+            for (int i = 0; i < locations.size(); i++) {
+                isCompleted.add(false);
+                poisLeft++;
+            }
+
         }
-
-        for (int i = 0; i < locations.size(); i++) {
-            isCompleted.add(false);
-            poisLeft++;
-        }
+        else {
 
 
-        /*else { if (pointsOfInterestNames.isEmpty()){
-
-
-            //nombredeRuta = "Descubriendo Valencia";
+            nombredeRuta = "Descubriendo Valencia";
 
             PointOfInterest POI1 = new PointOfInterest(39.4736, -0.3790, "Mercado central");
             PointOfInterest POI2 = new PointOfInterest(39.4758, -0.3839, "Torre de Quart");
@@ -139,7 +134,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
             pois.add(POI5);
             pois.add(POI6);
 
-            actualRoute = new app.paseico.data.Route(nombredeRuta, "Monumentos", 10, 10, 100, pois);
+            actualRoute = new app.paseico.data.Route(nombredeRuta, "Monumentos", 10, 10, 100, pois, true);
             List<PointOfInterest> routePois = actualRoute.getPointsOfInterest();
             rewpoints = 100;
             for (int i = 0; i < routePois.size(); i++) {
@@ -152,45 +147,8 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
                 poisLeft++;
             }
         }
-        }*/
+
         routeTitle.setText(nombredeRuta);
-
-        listView = findViewById(R.id.ListViewRoute);
-        listView.setAdapter(arrayAdapter);
-        cancelRoute.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v){
-
-            }
-
-        });
-
-
-
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (!isCompleted.get(i)) {
-                    LatLng destination = new LatLng(locations.get(i).latitude, locations.get(i).longitude);
-
-                    start = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
-                    //start route finding
-                    mMap.clear();
-                    placePOIsFromRoute(pointsOfInterestNames, locations, isCompleted);
-                    Findroutes(start, destination);
-                    currentDestination = new Location(destination.toString());
-                    currentDestination.setLatitude(destination.latitude);
-                    currentDestination.setLongitude(destination.longitude);
-                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
-                            new LatLng(currentDestination.getLatitude(), currentDestination.getLongitude()), 16f);
-                    mMap.animateCamera(cameraUpdate);
-                    actualPOI = i;
-                    arrayAdapter.notifyDataSetChanged();
-                } else {
-                    Toast.makeText(getApplicationContext(),"POI ya visitada!",Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
         cancelRoute.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
@@ -198,8 +156,6 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
             }
 
         });
-
-
 
     }
 
@@ -214,7 +170,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
                     isCompleted.set(j, false);
                     poisLeft++;
                 }
-                Intent intent = new Intent(RouteRunnerActivity.this, RouteInformationActivity.class);
+                Intent intent = new Intent(RouteRunnerOrderedActivity.this, RouteInformationActivity.class);
                 intent.putExtra("route", actualRoute);
                 startActivity(intent);
                 finish();
@@ -237,7 +193,11 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
             if (POIsCompleted.get(i)) {
                 mMap.addMarker(new MarkerOptions().position(POIsLocations.get(i)).title(POIsNames.get(i)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
             } else {
-                mMap.addMarker(new MarkerOptions().position(POIsLocations.get(i)).title(POIsNames.get(i)));
+                if (i == actualPOI) {
+                    mMap.addMarker(new MarkerOptions().position(POIsLocations.get(i)).title(POIsNames.get(i)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                } else {
+                    mMap.addMarker(new MarkerOptions().position(POIsLocations.get(i)).title(POIsNames.get(i)));
+                }
             }
         }
         if(poisLeft == 0) {
@@ -245,7 +205,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
                 isCompleted.set(j, false);
                 poisLeft++;
             }
-            Intent intent = new Intent(RouteRunnerActivity.this, RouteFinishedActivity.class);
+            Intent intent = new Intent(RouteRunnerOrderedActivity.this, RouteFinishedActivity.class);
             intent.putExtra("route", actualRoute);
             startActivity(intent);
             finish();
@@ -284,6 +244,21 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
         }
     }
 
+    void setNextOrderedPoint(int i){
+        if (poisLeft > 0) {
+            start = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+            LatLng destination = new LatLng(locations.get(i).latitude, locations.get(i).longitude);
+            routeDisplay.setText(pointsOfInterestNames.get(i));
+            currentDestination = new Location(destination.toString());
+            currentDestination.setLatitude(destination.latitude);
+            currentDestination.setLongitude(destination.longitude);
+            Findroutes(start, destination);
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
+                    new LatLng(currentDestination.getLatitude(), currentDestination.getLongitude()), 16f);
+            mMap.animateCamera(cameraUpdate);
+        }
+        placePOIsFromRoute(pointsOfInterestNames, locations, isCompleted);
+    }
 
     //to get user location
     private void getMyLocation() {
@@ -309,6 +284,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
                             ltlng, 16f);
 
                     mMap.animateCamera(cameraUpdate);
+                    setNextOrderedPoint(0);
                 }
 
                 if (currentDestination != null) {
@@ -316,12 +292,11 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
                     if (myLocation.distanceTo(currentDestination) < 50) {
                         System.out.println("HAS COMPLETADO EL POI");
                         currentDestination = null;
-                        if(actualPOI > -1){
-                        isCompleted.set(actualPOI,true);
-                        arrayAdapter.notifyDataSetChanged();
-                            actualPOI = -1;}
-                        poisLeft--;
-                        placePOIsFromRoute(pointsOfInterestNames, locations, isCompleted);
+                            isCompleted.set(actualPOI,true);
+                            actualPOI++;
+                            poisLeft--;
+                        System.out.println("WWWWWWWWWWWWWWWWWW "+ poisLeft);
+                            setNextOrderedPoint(actualPOI);
                     }
                 }
             }
@@ -343,7 +318,6 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
         mMap = googleMap;
         getMyLocation();
         placePOIsFromRoute(pointsOfInterestNames, locations, isCompleted);
-
     }
 
 
@@ -352,7 +326,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
     // function to find Routes.
     public void Findroutes(LatLng Start, LatLng End) {
         if (Start == null || End == null) {
-            Toast.makeText(RouteRunnerActivity.this, "Unable to get location", Toast.LENGTH_LONG).show();
+            Toast.makeText(RouteRunnerOrderedActivity.this, "Unable to get location", Toast.LENGTH_LONG).show();
         } else {
 
             Routing routing = new Routing.Builder()
@@ -408,6 +382,7 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
                 polylineEndLatLng = ((com.google.android.gms.maps.model.Polyline) polyline).getPoints().get(k - 1);
                 polylines.add(polyline);
 
+
             } else {
 
             }
@@ -422,49 +397,6 @@ public class RouteRunnerActivity<Polyline> extends FragmentActivity implements O
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Findroutes(start, end);
-    }
-
-    public class ArrayAdapterRutas extends BaseAdapter {
-
-        Context context;
-
-
-        public ArrayAdapterRutas(Context c){
-                context = c;
-        }
-
-        @Override
-        public int getCount() {
-            return pointsOfInterestNames.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return pointsOfInterestNames.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            View rowview = View.inflate(context, R.layout.activity_runner_textview,null);
-                TextView nom = rowview.findViewById(R.id.textPOI);
-
-
-                        if (isCompleted.get(i)) {
-                            nom.setBackgroundColor(Color.GREEN);
-                        }
-                        if (actualPOI == i){
-                            nom.setText(Html.fromHtml("<b>"+pointsOfInterestNames.get(i)+"</b>"));
-                        } else {
-                            nom.setText(pointsOfInterestNames.get(i));
-                        }
-
-                return rowview;
-        }
     }
 
 

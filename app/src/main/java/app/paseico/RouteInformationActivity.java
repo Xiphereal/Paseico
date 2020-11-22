@@ -6,11 +6,7 @@ import app.paseico.data.Route;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
-
-import java.util.List;
 
 public class RouteInformationActivity extends AppCompatActivity {
 
@@ -62,7 +58,8 @@ public class RouteInformationActivity extends AppCompatActivity {
         findViewById(R.id.btn_routeInfo_startRoute).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent startRouteIntent = new Intent(RouteInformationActivity.this, RouteRunnerActivity.class);
+                Intent startRouteIntent = new Intent(RouteInformationActivity.this,
+                        !route.getOrdered() ? RouteRunnerNotOrderedActivity.class : RouteRunnerOrderedActivity.class);
                 startRouteIntent.putExtra("route", route);
                 startActivity(startRouteIntent);
                 finish();

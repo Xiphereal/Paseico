@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RouteRunnerNotOrderedActivity">
+    tools:context=".RouteRunnerOrderedActivity">
 
     <fragment
         android:id="@+id/map"
@@ -18,15 +18,17 @@
         tools:context=".MainActivity" />
 
 
-
-    <ListView
+    <TextView
         android:id="@+id/TextNextRoute"
         android:layout_width="0dp"
         android:layout_height="150dp"
+        android:gravity="center"
+        android:text="TEXTO RUTA"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/map" />
 
     <TextView
         android:id="@+id/textViewTitleRoutingActivity"
