@@ -35,7 +35,7 @@ public class Router extends User {
     }
 
     public void subtractPoints(int pts) {
-        this.points -= - pts;
+        this.points -=  pts;
     }
 
     public boolean isBoost() {
