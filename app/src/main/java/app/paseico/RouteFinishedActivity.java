@@ -23,6 +23,7 @@ import java.util.List;
 
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
+import app.paseico.data.Router;
 import app.paseico.data.User;
 import app.paseico.login.OpeningActivity;
 
@@ -33,7 +34,7 @@ public class RouteFinishedActivity extends AppCompatActivity {
     List<PointOfInterest> nombrePOIs;
     int rewpoints;
     private DatabaseReference myUsersRef = FirebaseDatabase.getInstance().getReference("users"); //Node users reference
-    private User user = new User();
+    private Router currentRouter = new Router();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseUser fbusr = firebaseAuth.getCurrentUser();
     private DatabaseReference myActualUserRef;
@@ -46,9 +47,9 @@ public class RouteFinishedActivity extends AppCompatActivity {
         myActualUserRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                user = snapshot.getValue(User.class);
+                currentRouter = snapshot.getValue(Router.class);
                 int points = route.getRewardPoints();
-                int actualpoints = user.getPoints();
+                int actualpoints = currentRouter.getPoints();
                 int updatedpoints = points + actualpoints;
                 final DatabaseReference mypointsreference = myActualUserRef.child("points");
                 mypointsreference.setValue(updatedpoints);
