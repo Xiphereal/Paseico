@@ -92,6 +92,7 @@ public class FollowersActivity extends AppCompatActivity {
     }
 
     private void getFollowers() {
+        // Gets all the followers of the user named "id" and add them to idList.
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Follow").child(id).child("followers");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -111,12 +112,14 @@ public class FollowersActivity extends AppCompatActivity {
     }
 
     private void showUsers() {
+        // Gets all the routers.
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 userList.clear();
 
+                // Add to userList the users that are contained into idList.
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     User user = snapshot.getValue(User.class);
 
