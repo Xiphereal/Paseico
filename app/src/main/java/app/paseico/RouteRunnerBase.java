@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -32,7 +31,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -258,8 +256,9 @@ public abstract class RouteRunnerBase<Polyline> extends FragmentActivity impleme
             pois.add(POI5);
             pois.add(POI6);
 
-            actualRoute = new app.paseico.data.Route(nombredeRuta, "Monumentos", 10, 10, 100, pois, true);
+            actualRoute = new app.paseico.data.Route(nombredeRuta, "Monumentos", 10, 10, 100, pois, 1);
             List<PointOfInterest> routePois = actualRoute.getPointsOfInterest();
+            System.out.println("WWWWWWWWWWWWWWWWW "+actualRoute.isOrdered());
             rewpoints = 100;
             for (int i = 0; i < routePois.size(); i++) {
                 pointsOfInterestNames.add(routePois.get(i).getName());

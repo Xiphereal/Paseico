@@ -16,6 +16,7 @@ public class RouteInformationActivity extends AppCompatActivity {
     private TextView textView_length;
     private TextView textView_estimatedTime;
     private TextView textView_numberOfPOI;
+    private TextView textView_isOrdered;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,9 +28,13 @@ public class RouteInformationActivity extends AppCompatActivity {
         textView_length = findViewById(R.id.textView_routeInfo_length);
         textView_estimatedTime = findViewById(R.id.textView_routeInfo_estimatedTime);
         textView_numberOfPOI = findViewById(R.id.textView_routeInfo_numberOfPOI);
+        textView_isOrdered = findViewById(R.id.textViewIsOrdered);
 
         Route route = (Route) getIntent().getExtras().get("route");
 
+        textView_isOrdered.setVisibility(View.GONE);
+        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXX "+route.isOrdered());
+        if (route.isOrdered()) {textView_isOrdered.setVisibility(View.VISIBLE);}
         String name = route.getName();
         String theme = (route.getTheme() == null) ? "Sin temática" : route.getTheme();
         String rewardsPoints = ((Integer) route.getRewardPoints()).toString();
@@ -59,7 +64,7 @@ public class RouteInformationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent startRouteIntent = new Intent(RouteInformationActivity.this,
-                        !route.getOrdered() ? RouteRunnerOrderedActivity.class : RouteRunnerNotOrderedActivity.class);
+                        route.isOrdered() ? RouteRunnerOrderedActivity.class : RouteRunnerNotOrderedActivity.class);
                 startRouteIntent.putExtra("route", route);
                 startActivity(startRouteIntent);
                 finish();

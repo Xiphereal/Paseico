@@ -19,11 +19,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
+import app.paseico.data.Route;
+
 public class RouteRunnerOrderedActivity extends RouteRunnerBase {
 
     protected ArrayList<String> pointsOfInterestNames = (ArrayList<String>) super.pointsOfInterestNames;
     public ArrayList<LatLng> locations = (ArrayList<LatLng>) super.locations;
     public ArrayList<Boolean> isCompleted = (ArrayList<Boolean>) super.isCompleted;
+    Route actualRoute;
     /*
         //google map object
         private GoogleMap mMap;
@@ -62,6 +65,7 @@ public class RouteRunnerOrderedActivity extends RouteRunnerBase {
         //request location permission.
         requestPermision();
         InitiateAllVars();
+        this.actualRoute = super.actualRoute;
         routeDisplay = findViewById(R.id.TextNextRoute);
 
         routeTitle.setText(nombredeRuta);
@@ -96,6 +100,7 @@ public class RouteRunnerOrderedActivity extends RouteRunnerBase {
             }
             Intent intent = new Intent(RouteRunnerOrderedActivity.this, RouteFinishedActivity.class);
             intent.putExtra("route", actualRoute);
+            System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ "+actualRoute.isOrdered());
             startActivity(intent);
             finish();
         }
@@ -155,7 +160,6 @@ public class RouteRunnerOrderedActivity extends RouteRunnerBase {
                             isCompleted.set(actualPOI,true);
                             actualPOI++;
                             poisLeft--;
-                        System.out.println("WWWWWWWWWWWWWWWWWW "+ poisLeft);
                             setNextOrderedPoint(actualPOI);
                     }
                 }

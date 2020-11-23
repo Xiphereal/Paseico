@@ -146,4 +146,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_routeInfo_numberOfPOI" />
 
+    <TextView
+        android:id="@+id/textViewIsOrdered"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="¡Ordenada!"
+        android:textColor="#35C13A"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_routeInfo_nameOfRoute" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
