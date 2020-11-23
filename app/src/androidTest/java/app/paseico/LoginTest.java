@@ -34,9 +34,9 @@ public class LoginTest {
     @Test
     public void loginSuccessful(){
         onView(withId(R.id.editTextEmail))
-                .perform(typeText("miguelmoreno99@gmail.com"), closeSoftKeyboard());
+                .perform(typeText("metralleta123@gmail.com"), closeSoftKeyboard());
         onView(withId(R.id.editTextPassword))
-                .perform(typeText("contraseña111"), closeSoftKeyboard());
+                .perform(typeText("password11"), closeSoftKeyboard());
         onView(withId(R.id.buttonLogIn))
                 .perform(click());
 
