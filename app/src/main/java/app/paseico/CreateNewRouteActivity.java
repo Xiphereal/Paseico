@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
+import app.paseico.data.Router;
 import app.paseico.data.User;
 import app.paseico.mainMenu.userCreatedRoutes.UserCreatedRoutesFragment;
 import app.paseico.service.FirebaseService;
@@ -41,7 +42,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     private final List<String> createdMarkers = new ArrayList<>();
 
-    private User currentUser;
+    private Router currentUser;
 
     private Marker userNewCustomPoiInCreation;
 
@@ -72,7 +73,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         currentUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                currentUser = snapshot.getValue(User.class);
+                currentUser = snapshot.getValue(Router.class);
 
                 // Registering this callback here ensures that the button
                 // action is only performed when the User is ready.
@@ -265,14 +266,21 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     private void registerOnMarkerClickListener() {
         createNewRouteMap.setOnMarkerClickListener(marker -> {
-            tryDeleteUserNewCustomPoiInCreation();
 
-            PointOfInterest poi = findClickedPointOfInterest(marker.getPosition(), marker.getTitle());
+            /*Check if the marker selected is associated with the POI in creation
+            * If it not, we continue as planned.
+            * If it is, we do nothing.
+            * */
+            if (!marker.equals(userNewCustomPoiInCreation)) {
+                tryDeleteUserNewCustomPoiInCreation();
 
-            if (isPointOfInterestSelected(poi)) {
-                deselectPointOfInterest(marker, poi);
-            } else {
-                selectPointOfInterest(marker, false);
+                PointOfInterest poi = findClickedPointOfInterest(marker.getPosition(), marker.getTitle());
+
+                if (isPointOfInterestSelected(poi)) {
+                    deselectPointOfInterest(marker, poi);
+                } else {
+                    selectPointOfInterest(marker, false);
+                }
             }
 
             return true;
@@ -367,6 +375,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         registerOnNewPoiButtonClicked(bottomSheetBehavior);
 
         createNewRouteMap.setOnMapLongClickListener(tapPoint -> {
+            tryDeleteUserNewCustomPoiInCreation();
+
             // Opens the creation form.
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
