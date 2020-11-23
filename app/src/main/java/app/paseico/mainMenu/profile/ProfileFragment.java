@@ -58,13 +58,13 @@ public class ProfileFragment extends Fragment {
         });
 
         image_profile = view.findViewById(R.id.image_profile);
-        followers = view.findViewById(R.id.followers);
-        following = view.findViewById(R.id.following);
+        followers = view.findViewById(R.id.textView_followersNumber);
+        following = view.findViewById(R.id.textView_followingNumber);
         usernameLabel = view.findViewById(R.id.username);
         fullnameLabel = view.findViewById(R.id.fullname);
         buttonLogOut = view.findViewById(R.id.buttonLogOut);
-        textView_followers = view.findViewById(R.id.textView_Followers);
-        textView_following = view.findViewById(R.id.textView_Following);
+        textView_followers = view.findViewById(R.id.textView_FollowersText);
+        textView_following = view.findViewById(R.id.textView_FollowingText);
         userPointsLabel = view.findViewById(R.id.userPointsProfileText);
         numberOfUserRoutes = view.findViewById(R.id.numberOfRoutesText);
         userRoutes = view.findViewById(R.id.my_routes);

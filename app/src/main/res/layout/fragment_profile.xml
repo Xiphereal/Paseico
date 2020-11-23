@@ -103,7 +103,7 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/followers"
+                                android:id="@+id/textView_followersNumber"
                                 android:layout_width="60dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -113,7 +113,7 @@
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/textView_Followers"
+                                android:id="@+id/textView_FollowersText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="followers" />
@@ -127,7 +127,7 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/following"
+                                android:id="@+id/textView_followingNumber"
                                 android:layout_width="60dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -137,7 +137,7 @@
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/textView_Following"
+                                android:id="@+id/textView_FollowingText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="following" />
