@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class Route implements Parcelable {
+    private String id = "Esto es una ID";
     private String name;
     private String theme;   // TODO: The value of theme should be a constant.
     private double length;  // Meters.
@@ -156,4 +157,8 @@ public class Route implements Parcelable {
         dest.writeList(pointsOfInterest);
         dest.writeInt(ordered);
     }
+
+    public void setId(String id) { this.id = id; }
+
+    public String getId() { return id; }
 }

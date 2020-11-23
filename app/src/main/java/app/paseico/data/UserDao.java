@@ -1,14 +1,18 @@
 package app.paseico.data;
 
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import app.paseico.IUserDao;
+import app.paseico.login.RegisterActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
 
 public class UserDao implements IUserDao {
     private DatabaseReference myUsersRef = FirebaseDatabase.getInstance().getReference("users"); //Node users reference
-    private User user = new User();
+    private Router currentRouter = new Router();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseUser fbusr = firebaseAuth.getCurrentUser();
     private DatabaseReference myActualUserRef;
@@ -19,7 +23,7 @@ public class UserDao implements IUserDao {
             myActualUserRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    user = snapshot.getValue(User.class);
+                    currentRouter = snapshot.getValue(Router.class);
                 }
 
                 @Override
@@ -34,8 +38,8 @@ public class UserDao implements IUserDao {
     }
 
     @Override
-    public User getUser() {
-        return user;
+    public Router getUser() {
+        return currentRouter;
     }
 
     @Override
@@ -43,7 +47,21 @@ public class UserDao implements IUserDao {
         String email = user.getEmail();
         String[] parts = email.split("@");
         String username = parts[0];
-
+        if(username.contains(".")){
+            username = username.replace(".","");
+        }
+        if(username.contains("#")){
+            username = username.replace("#","");
+        }
+        if(username.contains("$")){
+            username = username.replace("$","");
+        }
+        if(username.contains("[")){
+            username = username.replace("[","");
+        }
+        if(username.contains("]")){
+            username = username.replace("]","");
+        }
         addNewUserToDatabase(user, name, username);
     }
 
@@ -55,7 +73,7 @@ public class UserDao implements IUserDao {
     }
 
     private void addNewUserToDatabase(FirebaseUser user, String name, String username) {
-        User newUser = new User(name, username, user.getEmail());
+        Router newUser = new Router(name, username, user.getEmail());
         myUsersRef.child(user.getUid()).setValue(newUser);
     }
 }

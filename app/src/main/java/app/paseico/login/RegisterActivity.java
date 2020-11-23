@@ -85,16 +85,21 @@ public class RegisterActivity extends AppCompatActivity {
                     ValueEventListener eventListener = new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            if(!dataSnapshot.exists()) {
-                                //create new user
-                                submitRegister(name, surname, email, username, password);
-                            } else {
-                                Context context = getApplicationContext();
-                                CharSequence text = "Ese nombre de usuario ya existe";
-                                int duration = Toast.LENGTH_SHORT;
+                            if(username.contains(".") || username.contains("#") || username.contains("$") || username.contains("[") || username.contains(".]") ){
+                                Toast.makeText(RegisterActivity.this, "Error: No puedes usar en el nombre de usuario los siguientes caracteres: '.'  '# ' '$'  '['  ']' ",
+                                        Toast.LENGTH_SHORT).show();
+                            }else {
+                                if (!dataSnapshot.exists()) {
+                                    //create new user
+                                    submitRegister(name, surname, email, username, password);
+                                } else {
+                                    Context context = getApplicationContext();
+                                    CharSequence text = "Ese nombre de usuario ya existe";
+                                    int duration = Toast.LENGTH_SHORT;
 
-                                Toast toast = Toast.makeText(context, text, duration);
-                                toast.show();
+                                    Toast toast = Toast.makeText(context, text, duration);
+                                    toast.show();
+                                }
                             }
                         }
 
@@ -133,32 +138,35 @@ public class RegisterActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            UserDao uDao = new UserDao();
-                            uDao.addUser(user,username.toLowerCase(), name, surname);
-                            Toast.makeText(RegisterActivity.this, "Registro completado!",
-                                    Toast.LENGTH_SHORT).show();
-                            Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() { //Wait 2 secs to load the next activity (LoginScreen)
-                                @Override
-                                public void run() {
-                                    try {
-                                        FirebaseAuth.getInstance().signOut();
-                                        Intent intent = new Intent(RegisterActivity.this, LogInActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }catch (Exception e){}
-                                }
-                            },2000);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(RegisterActivity.this, "Error: El correo electrónico ya existe",
-                                    Toast.LENGTH_SHORT).show();
+
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                UserDao uDao = new UserDao();
+                                uDao.addUser(user, username.toLowerCase(), name, surname);
+                                Toast.makeText(RegisterActivity.this, "Registro completado!",
+                                        Toast.LENGTH_SHORT).show();
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() { //Wait 2 secs to load the next activity (LoginScreen)
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            FirebaseAuth.getInstance().signOut();
+                                            Intent intent = new Intent(RegisterActivity.this, LogInActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        } catch (Exception e) {
+                                        }
+                                    }
+                                }, 2000);
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Toast.makeText(RegisterActivity.this, "Error: El correo electrónico ya existe",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
 
-                    }
+
                 });
     }
 }

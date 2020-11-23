@@ -13,14 +13,14 @@
                 android:icon="@drawable/ic_menu_gallery"
                 android:title="@string/menu_user_created_routes"/>
         <item
-                android:id="@+id/RouteSearchFragment"
-                android:icon="@drawable/ic_menu_slideshow"
-                android:title="@string/menu_searcher"/>
+            android:id="@+id/RouteSearchFragment"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/menu_route_search_fragment_label" />
 
         <item
             android:id="@+id/nav_searchUsers"
             android:icon="@drawable/ic_user"
-            android:title="Buscar usuarios"/>
+            android:title="@string/menu_userSearch" />
 
         <item
                 android:id="@+id/nav_marketplace"
