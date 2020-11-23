@@ -46,15 +46,17 @@
         <activity android:name=".RouteFinishedActivity" />
         <activity android:name=".FollowersActivity" />
         <activity android:name=".RouteInformationActivity" />
-        <activity android:name=".login.RegisterActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".login.LogInActivity" />
-        <activity android:name=".login.OpeningActivity">
+        <activity android:name=".login.RegisterActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".login.LogInActivity" />
+        <activity android:name=".login.OpeningActivity">
+
         </activity>
     </application>
 
