@@ -48,41 +48,17 @@ package app.paseico;
 
         import app.paseico.data.PointOfInterest;
 
-public class RouteRunnerNotOrderedActivity<Polyline> extends /*RouteRunnerBase*/FragmentActivity implements OnMapReadyCallback,
-        GoogleApiClient.OnConnectionFailedListener, RoutingListener {
-
-//google map object
-    protected GoogleMap mMap;
-    //current and destination location objects
-    Location myLocation = null;
-    Location destinationLocation = null;
-    protected LatLng start = null;
-    protected LatLng end = null;
-    //to get location permissions.
-    protected final static int LOCATION_REQUEST_CODE = 23;
-    boolean locationPermission = false;
-
-    //polyline object
-    protected List<Polyline> polylines = null;
+public class RouteRunnerNotOrderedActivity<Polyline> extends RouteRunnerBase implements OnMapReadyCallback/*,
+        GoogleApiClient.OnConnectionFailedListener, RoutingListener*/ {
 
     protected ArrayList<String> pointsOfInterestNames = new ArrayList<String>();
-    protected ArrayList<LatLng> locations = new ArrayList<LatLng>();
-    protected ArrayList<Boolean> isCompleted = new ArrayList<Boolean>();
-    int actualPOI = -1;
-    int poisLeft = 0;
-    RouteRunnerNotOrderedActivity.ArrayAdapterRutas arrayAdapter;
-    int rewpoints;
-
-    Location currentDestination;
-    ListView listView;
-    String nombredeRuta = "Descubriendo Valencia";
-
-    protected app.paseico.data.Route actualRoute;
-
+    public ArrayList<LatLng> locations = new ArrayList<LatLng>();
+    public ArrayList<Boolean> isCompleted = new ArrayList<Boolean>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        actualPOI = -1;
         arrayAdapter = new ArrayAdapterRutas(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_runner);
@@ -225,7 +201,6 @@ public class RouteRunnerNotOrderedActivity<Polyline> extends /*RouteRunnerBase*/
         builder.create();
         builder.show();
     }
-
     public void placePOIsFromRoute(ArrayList<String> POIsNames, ArrayList<LatLng> POIsLocations, ArrayList<Boolean> POIsCompleted) {
         mMap.clear();
 
@@ -249,17 +224,6 @@ public class RouteRunnerNotOrderedActivity<Polyline> extends /*RouteRunnerBase*/
 
     }
 
-    private void requestPermision() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    LOCATION_REQUEST_CODE);
-        } else {
-            locationPermission = true;
-        }
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -339,85 +303,6 @@ public class RouteRunnerNotOrderedActivity<Polyline> extends /*RouteRunnerBase*/
         mMap = googleMap;
         getMyLocation();
         placePOIsFromRoute(pointsOfInterestNames, locations, isCompleted);
-
-    }
-
-
-
-
-    // function to find Routes.
-    public void Findroutes(LatLng Start, LatLng End) {
-        if (Start == null || End == null) {
-            Toast.makeText(RouteRunnerNotOrderedActivity.this, "Unable to get location", Toast.LENGTH_LONG).show();
-        } else {
-
-            Routing routing = new Routing.Builder()
-                    .travelMode(AbstractRouting.TravelMode.WALKING)
-                    .withListener(this)
-                    .alternativeRoutes(true)
-                    .waypoints(Start, End)
-                    .key("AIzaSyAMLXmyf_ai85V6PdlA7jYhjL-nSgHl7mA")  //also define your api key here.
-                    .build();
-            routing.execute();
-        }
-    }
-
-    //Routing call back functions.
-    @Override
-    public void onRoutingFailure(RouteException e) {
-        View parentLayout = findViewById(android.R.id.content);
-        Snackbar snackbar = Snackbar.make(parentLayout, e.toString(), Snackbar.LENGTH_LONG);
-        snackbar.show();
-//    Findroutes(start,end);
-    }
-
-    @Override
-    public void onRoutingStart() {
-
-    }
-
-    //If Route finding success..
-    @Override
-    public void onRoutingSuccess(ArrayList<Route> route, int shortestRouteIndex) {
-
-        CameraUpdate center = CameraUpdateFactory.newLatLng(start);
-        CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);
-        if (polylines != null) {
-            polylines.clear();
-        }
-        PolylineOptions polyOptions = new PolylineOptions();
-        LatLng polylineStartLatLng = null;
-        LatLng polylineEndLatLng = null;
-
-
-        polylines = new ArrayList<>();
-        //add route(s) to the map using polyline
-        for (int i = 0; i < route.size(); i++) {
-
-            if (i == shortestRouteIndex) {
-                polyOptions.color(getResources().getColor(R.color.colorPrimary));
-                polyOptions.width(7);
-                polyOptions.addAll(route.get(shortestRouteIndex).getPoints());
-                Polyline polyline = (Polyline) mMap.addPolyline(polyOptions);
-                polylineStartLatLng = ((com.google.android.gms.maps.model.Polyline) polyline).getPoints().get(0);
-                int k = ((com.google.android.gms.maps.model.Polyline) polyline).getPoints().size();
-                polylineEndLatLng = ((com.google.android.gms.maps.model.Polyline) polyline).getPoints().get(k - 1);
-                polylines.add(polyline);
-
-            } else {
-
-            }
-        }
-    }
-
-    @Override
-    public void onRoutingCancelled() {
-        Findroutes(start, end);
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Findroutes(start, end);
     }
 
     public class ArrayAdapterRutas extends BaseAdapter {

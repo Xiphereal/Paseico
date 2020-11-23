@@ -3,35 +3,20 @@ package app.paseico;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.directions.route.AbstractRouting;
 import com.directions.route.Route;
 import com.directions.route.RouteException;
-import com.directions.route.Routing;
 import com.directions.route.RoutingListener;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -48,10 +33,14 @@ import java.util.List;
 
 import app.paseico.data.PointOfInterest;
 
-public class RouteRunnerOrderedActivity<Polyline> extends FragmentActivity implements OnMapReadyCallback,
-        GoogleApiClient.OnConnectionFailedListener, RoutingListener {
+public class RouteRunnerOrderedActivity<Polyline> extends RouteRunnerBase implements OnMapReadyCallback
+        /*GoogleApiClient.OnConnectionFailedListener,OnMapReadyCallback,*/ {
 
-    //google map object
+    protected ArrayList<String> pointsOfInterestNames = new ArrayList<String>();
+    public ArrayList<LatLng> locations = new ArrayList<LatLng>();
+    public ArrayList<Boolean> isCompleted = new ArrayList<Boolean>();
+
+    /*//google map object
     private GoogleMap mMap;
     //current and destination location objects
     Location myLocation = null;
@@ -78,7 +67,7 @@ public class RouteRunnerOrderedActivity<Polyline> extends FragmentActivity imple
 
     private app.paseico.data.Route actualRoute;
 
-
+*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,32 +148,6 @@ public class RouteRunnerOrderedActivity<Polyline> extends FragmentActivity imple
 
     }
 
-    public void CreateConfirmation() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("¿Estás seguro de que deseas cancelar?");
-        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                poisLeft = 0;
-                for(int j = 0; j < locations.size(); j++) {
-                    isCompleted.set(j, false);
-                    poisLeft++;
-                }
-                Intent intent = new Intent(RouteRunnerOrderedActivity.this, RouteInformationActivity.class);
-                intent.putExtra("route", actualRoute);
-                startActivity(intent);
-                finish();
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.cancel();
-            }
-        });
-        builder.create();
-        builder.show();
-    }
 
     public void placePOIsFromRoute(ArrayList<String> POIsNames, ArrayList<LatLng> POIsLocations, ArrayList<Boolean> POIsCompleted) {
         mMap.clear();
@@ -213,36 +176,6 @@ public class RouteRunnerOrderedActivity<Polyline> extends FragmentActivity imple
 
     }
 
-    private void requestPermision() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    LOCATION_REQUEST_CODE);
-        } else {
-            locationPermission = true;
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case LOCATION_REQUEST_CODE: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //if permission granted.
-                    locationPermission = true;
-                    getMyLocation();
-
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-        }
-    }
 
     void setNextOrderedPoint(int i){
         if (poisLeft > 0) {
@@ -261,7 +194,7 @@ public class RouteRunnerOrderedActivity<Polyline> extends FragmentActivity imple
     }
 
     //to get user location
-    private void getMyLocation() {
+    public void getMyLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -284,6 +217,7 @@ public class RouteRunnerOrderedActivity<Polyline> extends FragmentActivity imple
                             ltlng, 16f);
 
                     mMap.animateCamera(cameraUpdate);
+                    actualPOI = 0;
                     setNextOrderedPoint(0);
                 }
 
@@ -319,85 +253,4 @@ public class RouteRunnerOrderedActivity<Polyline> extends FragmentActivity imple
         getMyLocation();
         placePOIsFromRoute(pointsOfInterestNames, locations, isCompleted);
     }
-
-
-
-
-    // function to find Routes.
-    public void Findroutes(LatLng Start, LatLng End) {
-        if (Start == null || End == null) {
-            Toast.makeText(RouteRunnerOrderedActivity.this, "Unable to get location", Toast.LENGTH_LONG).show();
-        } else {
-
-            Routing routing = new Routing.Builder()
-                    .travelMode(AbstractRouting.TravelMode.WALKING)
-                    .withListener(this)
-                    .alternativeRoutes(true)
-                    .waypoints(Start, End)
-                    .key("AIzaSyAMLXmyf_ai85V6PdlA7jYhjL-nSgHl7mA")  //also define your api key here.
-                    .build();
-            routing.execute();
-        }
-    }
-
-    //Routing call back functions.
-    @Override
-    public void onRoutingFailure(RouteException e) {
-        View parentLayout = findViewById(android.R.id.content);
-        Snackbar snackbar = Snackbar.make(parentLayout, e.toString(), Snackbar.LENGTH_LONG);
-        snackbar.show();
-//    Findroutes(start,end);
-    }
-
-    @Override
-    public void onRoutingStart() {
-
-    }
-
-    //If Route finding success..
-    @Override
-    public void onRoutingSuccess(ArrayList<Route> route, int shortestRouteIndex) {
-
-        CameraUpdate center = CameraUpdateFactory.newLatLng(start);
-        CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);
-        if (polylines != null) {
-            polylines.clear();
-        }
-        PolylineOptions polyOptions = new PolylineOptions();
-        LatLng polylineStartLatLng = null;
-        LatLng polylineEndLatLng = null;
-
-
-        polylines = new ArrayList<>();
-        //add route(s) to the map using polyline
-        for (int i = 0; i < route.size(); i++) {
-
-            if (i == shortestRouteIndex) {
-                polyOptions.color(getResources().getColor(R.color.colorPrimary));
-                polyOptions.width(7);
-                polyOptions.addAll(route.get(shortestRouteIndex).getPoints());
-                Polyline polyline = (Polyline) mMap.addPolyline(polyOptions);
-                polylineStartLatLng = ((com.google.android.gms.maps.model.Polyline) polyline).getPoints().get(0);
-                int k = ((com.google.android.gms.maps.model.Polyline) polyline).getPoints().size();
-                polylineEndLatLng = ((com.google.android.gms.maps.model.Polyline) polyline).getPoints().get(k - 1);
-                polylines.add(polyline);
-
-
-            } else {
-
-            }
-        }
-    }
-
-    @Override
-    public void onRoutingCancelled() {
-        Findroutes(start, end);
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Findroutes(start, end);
-    }
-
-
 }
