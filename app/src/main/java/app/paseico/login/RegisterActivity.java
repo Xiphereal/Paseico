@@ -135,6 +135,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void submitRegister(String name, String surname, String email, String username, String password){
+        Toast.makeText(RegisterActivity.this, R.string.toast_EmailExist,
+                Toast.LENGTH_LONG).show();
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -163,7 +165,7 @@ public class RegisterActivity extends AppCompatActivity {
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Toast.makeText(RegisterActivity.this, "Error: El correo electrónico ya existe",
-                                        Toast.LENGTH_SHORT).show();
+                                        Toast.LENGTH_LONG).show();
                             }
                         }
 
