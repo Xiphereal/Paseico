@@ -6,7 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,16 +30,20 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import app.paseico.data.PointOfInterest;
+
 public abstract class RouteRunnerBase<Polyline> extends FragmentActivity implements
-        GoogleApiClient.OnConnectionFailedListener, RoutingListener {
+        GoogleApiClient.OnConnectionFailedListener, RoutingListener, OnMapReadyCallback, Serializable {
     //google map object
     protected GoogleMap mMap;
     //current and destination location objects
@@ -49,6 +55,8 @@ public abstract class RouteRunnerBase<Polyline> extends FragmentActivity impleme
     protected final static int LOCATION_REQUEST_CODE = 23;
     boolean locationPermission = false;
     TextView routeDisplay;
+    ImageButton cancelRoute;
+    TextView routeTitle;
 
     protected ArrayList<String> pointsOfInterestNames = new ArrayList<String>();
     public ArrayList<LatLng> locations = new ArrayList<LatLng>();
@@ -61,6 +69,7 @@ public abstract class RouteRunnerBase<Polyline> extends FragmentActivity impleme
     int poisLeft = 0;
     RouteRunnerNotOrderedActivity.ArrayAdapterRutas arrayAdapter;
     int rewpoints;
+    Bundle b;
 
     Location currentDestination;
     ListView listView;
@@ -200,8 +209,80 @@ public abstract class RouteRunnerBase<Polyline> extends FragmentActivity impleme
         }
     }
 
-    abstract void getMyLocation();
 
+    void InitiateAllVars() {
+        //init google map fragment to show map.
+        Intent intent = getIntent();
+        Bundle b = intent.getExtras();
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+        routeTitle = findViewById(R.id.textViewTitleRoutingActivity);
+
+
+        cancelRoute = findViewById(R.id.buttonCancelRoute);
+        if (b != null && actualRoute == null) {
+            actualRoute = (app.paseico.data.Route) b.get("route");
+            nombredeRuta = actualRoute.getName();
+            rewpoints = actualRoute.getRewardPoints();
+
+            List<PointOfInterest> routePois = actualRoute.getPointsOfInterest();
+            for (int i = 0; i < routePois.size(); i++) {
+                pointsOfInterestNames.add(routePois.get(i).getName());
+                locations.add(new LatLng(routePois.get(i).getLatitude(), routePois.get(i).getLongitude()));
+            }
+
+            for (int i = 0; i < locations.size(); i++) {
+                isCompleted.add(false);
+                poisLeft++;
+            }
+
+        }
+        else {
+
+
+            nombredeRuta = "Descubriendo Valencia";
+
+            PointOfInterest POI1 = new PointOfInterest(39.4736, -0.3790, "Mercado central");
+            PointOfInterest POI2 = new PointOfInterest(39.4758, -0.3839, "Torre de Quart");
+            PointOfInterest POI3 = new PointOfInterest(39.479284, -0.376167, "Torres de Serranos");
+            PointOfInterest POI4 = new PointOfInterest(39.475326, -0.375607, "El Miguelete");
+            PointOfInterest POI5 = new PointOfInterest(39.47441, -0.378259, "Lonja de la Seda");
+            PointOfInterest POI6 = new PointOfInterest(39.476391, -0.375277, "Plaza de la Virgen");
+
+            List<PointOfInterest> pois = new ArrayList<PointOfInterest>();
+            pois.add(POI1);
+            pois.add(POI2);
+            pois.add(POI3);
+            pois.add(POI4);
+            pois.add(POI5);
+            pois.add(POI6);
+
+            actualRoute = new app.paseico.data.Route(nombredeRuta, "Monumentos", 10, 10, 100, pois, true);
+            List<PointOfInterest> routePois = actualRoute.getPointsOfInterest();
+            rewpoints = 100;
+            for (int i = 0; i < routePois.size(); i++) {
+                pointsOfInterestNames.add(routePois.get(i).getName());
+                locations.add(new LatLng(routePois.get(i).getLatitude(), routePois.get(i).getLongitude()));
+            }
+
+            for (int i = 0; i < locations.size(); i++) {
+                isCompleted.add(false);
+                poisLeft++;
+            }
+        }
+
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        getMyLocation();
+        placePOIsFromRoute();
+    }
+
+    public abstract void getMyLocation();
+    public abstract void placePOIsFromRoute();
 }
 
 

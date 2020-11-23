@@ -48,8 +48,7 @@ package app.paseico;
 
         import app.paseico.data.PointOfInterest;
 
-public class RouteRunnerNotOrderedActivity<Polyline> extends RouteRunnerBase implements OnMapReadyCallback/*,
-        GoogleApiClient.OnConnectionFailedListener, RoutingListener*/ {
+public class RouteRunnerNotOrderedActivity extends RouteRunnerBase  {
 
     protected ArrayList<String> pointsOfInterestNames = new ArrayList<String>();
     public ArrayList<LatLng> locations = new ArrayList<LatLng>();
@@ -62,10 +61,9 @@ public class RouteRunnerNotOrderedActivity<Polyline> extends RouteRunnerBase imp
         arrayAdapter = new ArrayAdapterRutas(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_runner);
-        Intent intent = getIntent();
-        Bundle b = intent.getExtras();
         //request location permission.
         requestPermision();
+        InitiateAllVars();
 
         //init google map fragment to show map.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -148,7 +146,7 @@ public class RouteRunnerNotOrderedActivity<Polyline> extends RouteRunnerBase imp
                     start = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
                     //start route finding
                     mMap.clear();
-                    placePOIsFromRoute(pointsOfInterestNames, locations, isCompleted);
+                    placePOIsFromRoute();
                     Findroutes(start, destination);
                     currentDestination = new Location(destination.toString());
                     currentDestination.setLatitude(destination.latitude);
@@ -175,40 +173,14 @@ public class RouteRunnerNotOrderedActivity<Polyline> extends RouteRunnerBase imp
 
     }
 
-    public void CreateConfirmation() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("¿Estás seguro de que deseas cancelar?");
-        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                poisLeft = 0;
-                for(int j = 0; j < locations.size(); j++) {
-                    isCompleted.set(j, false);
-                    poisLeft++;
-                }
-                Intent intent = new Intent(RouteRunnerNotOrderedActivity.this, RouteInformationActivity.class);
-                intent.putExtra("route", actualRoute);
-                startActivity(intent);
-                finish();
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.cancel();
-            }
-        });
-        builder.create();
-        builder.show();
-    }
-    public void placePOIsFromRoute(ArrayList<String> POIsNames, ArrayList<LatLng> POIsLocations, ArrayList<Boolean> POIsCompleted) {
+    public void placePOIsFromRoute() {
         mMap.clear();
 
-        for (int i = 0; i < POIsNames.size(); i++) {
-            if (POIsCompleted.get(i)) {
-                mMap.addMarker(new MarkerOptions().position(POIsLocations.get(i)).title(POIsNames.get(i)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        for (int i = 0; i < pointsOfInterestNames.size(); i++) {
+            if (isCompleted.get(i)) {
+                mMap.addMarker(new MarkerOptions().position(locations.get(i)).title(pointsOfInterestNames.get(i)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
             } else {
-                mMap.addMarker(new MarkerOptions().position(POIsLocations.get(i)).title(POIsNames.get(i)));
+                mMap.addMarker(new MarkerOptions().position(locations.get(i)).title(pointsOfInterestNames.get(i)));
             }
         }
         if(poisLeft == 0) {
@@ -225,28 +197,8 @@ public class RouteRunnerNotOrderedActivity<Polyline> extends RouteRunnerBase imp
     }
 
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case LOCATION_REQUEST_CODE: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //if permission granted.
-                    locationPermission = true;
-                    getMyLocation();
-
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-        }
-    }
-
-
     //to get user location
-    private void getMyLocation() {
+    public void getMyLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -281,7 +233,7 @@ public class RouteRunnerNotOrderedActivity<Polyline> extends RouteRunnerBase imp
                         arrayAdapter.notifyDataSetChanged();
                             actualPOI = -1;}
                         poisLeft--;
-                        placePOIsFromRoute(pointsOfInterestNames, locations, isCompleted);
+                        placePOIsFromRoute();
                     }
                 }
             }
@@ -296,14 +248,7 @@ public class RouteRunnerNotOrderedActivity<Polyline> extends RouteRunnerBase imp
         });
 
     }
-
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        getMyLocation();
-        placePOIsFromRoute(pointsOfInterestNames, locations, isCompleted);
-    }
+    
 
     public class ArrayAdapterRutas extends BaseAdapter {
 

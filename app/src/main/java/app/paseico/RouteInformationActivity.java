@@ -59,7 +59,7 @@ public class RouteInformationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent startRouteIntent = new Intent(RouteInformationActivity.this,
-                        route.getOrdered() ? RouteRunnerOrderedActivity.class : RouteRunnerNotOrderedActivity.class);
+                        !route.getOrdered() ? RouteRunnerOrderedActivity.class : RouteRunnerNotOrderedActivity.class);
                 startRouteIntent.putExtra("route", route);
                 startActivity(startRouteIntent);
                 finish();
