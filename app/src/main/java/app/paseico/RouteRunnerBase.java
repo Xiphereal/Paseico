@@ -74,6 +74,8 @@ public abstract class RouteRunnerBase<Polyline> extends FragmentActivity impleme
     String nombredeRuta = "Descubriendo Valencia";
 
     protected app.paseico.data.Route actualRoute;
+    private Intent intent;
+
     protected void requestPermision() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -210,8 +212,8 @@ public abstract class RouteRunnerBase<Polyline> extends FragmentActivity impleme
 
     void InitiateAllVars() {
         //init google map fragment to show map.
-        Intent intent = getIntent();
-        Bundle b = intent.getExtras();
+        intent = getIntent();
+        b = intent.getExtras();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -256,9 +258,8 @@ public abstract class RouteRunnerBase<Polyline> extends FragmentActivity impleme
             pois.add(POI5);
             pois.add(POI6);
 
-            actualRoute = new app.paseico.data.Route(nombredeRuta, "Monumentos", 10, 10, 100, pois, 1);
+            actualRoute = new app.paseico.data.Route(nombredeRuta, "Monumentos", 10, 10, 100, pois, 0);
             List<PointOfInterest> routePois = actualRoute.getPointsOfInterest();
-            System.out.println("WWWWWWWWWWWWWWWWW "+actualRoute.isOrdered());
             rewpoints = 100;
             for (int i = 0; i < routePois.size(); i++) {
                 pointsOfInterestNames.add(routePois.get(i).getName());
