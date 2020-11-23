@@ -199,6 +199,7 @@ public class LogInActivity extends AppCompatActivity {
         else {
             intent = new Intent(LogInActivity.this, MainMenuOrganizationActivity.class);
         }
+        Toast.makeText(LogInActivity.this, "¡Bienvenido de nuevo!", Toast.LENGTH_SHORT).show();
         startActivity(intent);
         finish();
     }
