@@ -135,8 +135,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void submitRegister(String name, String surname, String email, String username, String password){
-        Toast.makeText(RegisterActivity.this, R.string.toast_EmailExist,
-                Toast.LENGTH_LONG).show();
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
