@@ -31,7 +31,8 @@ public class RouteInformationActivity extends AppCompatActivity {
 
     protected void registerOnStartRouteButtonClickedListener(Route route) {
         findViewById(R.id.btn_routeInfo_startRoute).setOnClickListener(v -> {
-            Intent startRouteIntent = new Intent(RouteInformationActivity.this, RouteRunnerActivity.class);
+            Intent startRouteIntent = new Intent(RouteInformationActivity.this,
+                    route.isOrdered() == 1 ? RouteRunnerOrderedActivity.class : RouteRunnerNotOrderedActivity.class);
             startRouteIntent.putExtra("route", route);
             startActivity(startRouteIntent);
         });
