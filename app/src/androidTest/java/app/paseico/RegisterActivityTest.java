@@ -2,6 +2,7 @@ package app.paseico;
 
 
 import android.content.ComponentName;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -64,8 +65,38 @@ public class RegisterActivityTest {
     public ActivityTestRule<RegisterActivity> mActivityRule =
             new ActivityTestRule<>(RegisterActivity.class);
 
+
+
+
+    @Test
+    public void submitRegisterCorrectly() {
+
+        onView(withId(R.id.editTextUsername))
+                .perform(typeText(randomName), closeSoftKeyboard());
+        onView(withId(R.id.editTextPassword))
+                .perform(typeText("password123"), closeSoftKeyboard());
+        onView(withId(R.id.editTextPasswordConf))
+                .perform(typeText("password123"),closeSoftKeyboard());
+        onView(withId(R.id.editTextName))
+                .perform(typeText("Jose"),closeSoftKeyboard());
+        onView(withId(R.id.editTextSurname))
+                .perform(typeText("romero mohedano"),closeSoftKeyboard());
+        onView(withId(R.id.editTextEmail))
+                .perform(typeText(randomName + "@gmail.com"), closeSoftKeyboard());
+        onView(withId(R.id.buttonRegister))
+                .perform(click());
+
+        onView(withText("Registro completado!")).inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+        mActivityRule.finishActivity();
+
+    }
+
+
     @Test
     public void submitRegisterPassTooShort() throws InterruptedException {
+        Thread.sleep(4500);
+        mActivityRule.launchActivity(new Intent());
+
         onView(withId(R.id.editTextUsername))
                 .perform(typeText("Joselito420hd"), closeSoftKeyboard());
         onView(withId(R.id.editTextPassword))
@@ -83,29 +114,9 @@ public class RegisterActivityTest {
 
         onView(withText("La contraseña debe contener mínimo 6 caracteres")).inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
 
-    }
-
-    @Test
-    public void submitRegisterCorrectly() throws InterruptedException {
-       onView(withId(R.id.editTextUsername))
-               .perform(typeText(randomName), closeSoftKeyboard());
-       onView(withId(R.id.editTextPassword))
-               .perform(typeText("password123"), closeSoftKeyboard());
-       onView(withId(R.id.editTextPasswordConf))
-               .perform(typeText("password123"),closeSoftKeyboard());
-       onView(withId(R.id.editTextName))
-               .perform(typeText("Jose"),closeSoftKeyboard());
-       onView(withId(R.id.editTextSurname))
-               .perform(typeText("romero mohedano"),closeSoftKeyboard());
-       onView(withId(R.id.editTextEmail))
-               .perform(typeText(randomName + "@gmail.com"), closeSoftKeyboard());
-       onView(withId(R.id.buttonRegister))
-               .perform(click());
-
-        onView(withText("Registro completado!")).inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+}
 
 
-    }
 
 
 
