@@ -32,6 +32,7 @@
     <string name="km">km</string>
     <string name="hours">h</string>
     <string name="reward_points">Puntos:</string>
+    <string name="ordered_route">Ruta ordenada</string>
 
     <string name="default_spinner_choice">Indiferente</string>
     <string name="no_theme_choice">Sin temática</string>

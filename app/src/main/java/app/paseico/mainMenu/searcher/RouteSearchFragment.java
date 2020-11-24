@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import androidx.annotation.NonNull;
@@ -32,6 +33,7 @@ public class RouteSearchFragment extends Fragment {
     private Spinner spinner_theme;
     private Spinner spinner_length;
     private Spinner spinner_estimatedTime;
+    private CheckBox checkBox_orderedRoute;
     private List<String> keyWords;
     private String themeOfRoute;
     private int numberOfPOI;
@@ -41,6 +43,7 @@ public class RouteSearchFragment extends Fragment {
     private double minimumTime;
     private double maximumTime;
     List<Route> routeList;
+    private String isOrdered;
 
     @Override
     public View onCreateView(
@@ -56,6 +59,7 @@ public class RouteSearchFragment extends Fragment {
         spinner_theme = fragmentSearchLayout.findViewById(R.id.spinner_route_theme);
         spinner_length = fragmentSearchLayout.findViewById(R.id.spinner_route_length);
         spinner_estimatedTime = fragmentSearchLayout.findViewById(R.id.spinner_route_estimated_time);
+        checkBox_orderedRoute = fragmentSearchLayout.findViewById(R.id.checkBox_orderedRoutes);
 
         routeList = new ArrayList<>();
 
