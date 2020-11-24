@@ -159,7 +159,7 @@ public class RegisterActivity extends AppCompatActivity {
                                         } catch (Exception e) {
                                         }
                                     }
-                                }, 20000);
+                                }, 2000);
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Toast.makeText(RegisterActivity.this, "Error: El correo electrónico ya existe",
