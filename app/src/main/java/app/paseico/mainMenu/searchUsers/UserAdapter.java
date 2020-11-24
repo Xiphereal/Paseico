@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import app.paseico.R;
 import app.paseico.data.User;
 import app.paseico.mainMenu.profile.ProfileFragment;
+import app.paseico.mainMenu.profile.ProfileFragmentFromList;
+import app.paseico.mainMenu.searcher.RouteSearchFragment;
 import app.paseico.service.FirebaseService;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
@@ -82,25 +84,20 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                     searchUserFragment.navigateToProfileFragment();
                 }
             } else {
-                if (!isClickedUserTheCurrentUser(searchedUser)) {
+
                     SharedPreferences.Editor editor = context.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
                     editor.putString("profileid", searchedUser.getUsername());
                     editor.apply();
-
-                    Fragment mFragment = new NotMyProfileFragment();
+                    Fragment mFragment;
+                    if (!isClickedUserTheCurrentUser(searchedUser)) {
+                        mFragment = new NotMyProfileFragment();
+                    } else {
+                        mFragment = new ProfileFragment();
+                    }
                     ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
                             .replace(R.id.frameLayout, mFragment)
                             .commit();
-                } else {
-                    SharedPreferences.Editor editor = context.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
-                    editor.putString("profileid", searchedUser.getUsername());
-                    editor.apply();
 
-                    Fragment mFragment = new ProfileFragment();
-                    ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.frameLayout, mFragment)
-                            .commit();
-                }
             }
         });
 
