@@ -14,8 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import app.paseico.R;
 import app.paseico.data.User;
 import app.paseico.mainMenu.profile.ProfileFragment;
-import app.paseico.mainMenu.profile.ProfileFragmentFromList;
-import app.paseico.mainMenu.searcher.RouteSearchFragment;
 import app.paseico.service.FirebaseService;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
@@ -95,7 +93,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                         mFragment = new ProfileFragment();
                     }
                     ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.frameLayout, mFragment)
+                            .replace(R.id.followerActivity_frameLayout, mFragment)
                             .commit();
 
             }
