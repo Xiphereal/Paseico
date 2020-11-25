@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".login.LogInActivity"
-    android:background="@drawable/geometrics_cut">
+    android:background="@drawable/geometrics_cut"
+    tools:context=".login.LogInActivity">
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
-        android:layout_width="258dp"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,18 +20,20 @@
         android:id="@+id/textViewRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="212dp"
         android:text="No tienes una cuenta? \n      Regístrate aqui"
         android:textColor="#2196F3"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.511"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/buttonLogIn"
-        android:layout_width="250dp"
+        android:background="@drawable/custom_button"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:text="Iniciar Sesión"
@@ -39,29 +41,54 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
 
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        android:fontFamily="@font/righteous"
+        android:gravity="center"
+        android:letterSpacing="0.25"
+        android:text="PASEICO"
+        android:textColor="#000000"
+        android:textSize="42sp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/editTextEmail"
-        android:layout_width="wrap_content"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="250dp"
+        android:layout_marginTop="220dp"
+        android:background="@drawable/custom_input_login"
+        android:drawableStart="@drawable/ic_email"
+        android:drawablePadding="12dp"
         android:ems="10"
         android:hint="Correo Electrónico"
         android:inputType="textPersonName"
+        android:paddingStart="12dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editTextPassword"
-        android:layout_width="wrap_content"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/custom_input_login"
+        android:drawableStart="@drawable/ic_lock"
+        android:drawablePadding="12dp"
         android:ems="10"
         android:hint="Contraseña"
         android:inputType="textPassword"
+        android:paddingStart="12dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmail"/>
 
     <Button
         android:id="@+id/buttonLoginRouter"
@@ -73,7 +100,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <Button
         android:id="@+id/buttonLoginOrganization"
