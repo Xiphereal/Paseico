@@ -4,11 +4,12 @@ package app.paseico;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import app.paseico.login.LogInActivity;
+import app.paseico.data.Router;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -29,6 +30,19 @@ public class CreateNewRouteRouterTest {
     public ActivityTestRule<CreateNewRouteActivity> mActivityRule =
             new ActivityTestRule<>(CreateNewRouteActivity.class);
 
+    @Before
+    public void logInAndPrepareRoute(){
+        Router routerForTesting = new Router("Test","xXTesterXx","testing@test.ts");
+        routerForTesting.setPoints(1000);
+        //Log in with the local user?
+        onView(withId(R.id.editTextEmail))
+                .perform(typeText("userForTesting@gmail.com"), closeSoftKeyboard());
+        onView(withId(R.id.editTextPassword))
+                .perform(typeText("123456"), closeSoftKeyboard());
+        onView(withId(R.id.buttonLogIn))
+                .perform(click());
+    }
+
     @Test
     public void createRouteSuccessfullyTest(){
 
@@ -41,7 +55,7 @@ public class CreateNewRouteRouterTest {
 
     @Test
     public void routeNumberIncrementedTest(){
-        
+
     }
 
 }
