@@ -43,7 +43,7 @@ public class RouteSearchFragment extends Fragment {
     private double minimumTime;
     private double maximumTime;
     List<Route> routeList;
-    private String isOrdered;
+    private int isOrdered;
 
     @Override
     public View onCreateView(
@@ -76,6 +76,7 @@ public class RouteSearchFragment extends Fragment {
             FirebaseFirestore database = FirebaseFirestore.getInstance();
             CollectionReference routesReference = database.collection("route");
 
+            // Filter routes by category.
             if (themeOfRoute == null || themeOfRoute != getString(R.string.default_spinner_choice)) {
                 routesReference.whereEqualTo("theme", themeOfRoute)
                         .whereGreaterThanOrEqualTo("rewardPoints", minimumOfPoints)
@@ -170,6 +171,12 @@ public class RouteSearchFragment extends Fragment {
             minimumOfLength = -Double.MAX_VALUE;
             maximumOfLength = Double.MAX_VALUE;
         }
+
+        if (checkBox_orderedRoute.isChecked()){
+            isOrdered = 1;
+        } else {
+            isOrdered = 0;
+        }
     }
 
     private void filterByLengthEstimatedTimePointsPOIAndKeyWords(Task<QuerySnapshot> task) {
@@ -186,6 +193,7 @@ public class RouteSearchFragment extends Fragment {
             double estimatedTime = route.getEstimatedTime();
             int points = route.getRewardPoints();
             List<PointOfInterest> pointOfInterests = route.getPointsOfInterest();
+            int ordered = route.isOrdered();
 
 
             Log.d("Ruta3", document.getId() + " => " + document.getData());
@@ -194,6 +202,7 @@ public class RouteSearchFragment extends Fragment {
                     && length >= minimumOfLength
                     && estimatedTime <= maximumTime
                     && estimatedTime >= minimumTime
+                    && ordered == isOrdered
                     && pointOfInterests.size() >= numberOfPOI) {
                 Log.d("RutaDentro", document.getId() + "=>" + document.getData(), task.getException());
                 for (String keyword : keyWords) {
