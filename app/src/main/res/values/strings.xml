@@ -36,6 +36,8 @@
 
     <string name="default_spinner_choice">Indiferente</string>
     <string name="no_theme_choice">Sin temática</string>
+    <string name="yes">Sí</string>
+    <string name="no">No</string>
 
 
     <string name="lt0.5">&lt; 0,5</string>
@@ -50,7 +52,7 @@
     <!-- Strings arrays used to populate searchFragment spinners -->
     <string name="search_fragment_title">Seleccione el filtro de búsqueda</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string-array name="themes_of_route">
+    <string-array name="themes_of_route_choices">
         <item>@string/default_spinner_choice</item>
         <item>@string/no_theme_choice</item>
         <item>Museos</item>
@@ -61,7 +63,7 @@
     </string-array>
 
 
-    <string-array name="lengths_of_route">
+    <string-array name="lengths_of_route_choices">
         <item>@string/default_spinner_choice</item>
         <item>@string/lt1</item>
         <item>@string/between1_2</item>
@@ -70,7 +72,7 @@
         <item>@string/between4_5</item>
         <item>@string/gt5</item>
     </string-array>
-    <string-array name="estimated_times_of_route">
+    <string-array name="estimated_times_of_route_choices">
         <item>@string/default_spinner_choice</item>
         <item>@string/lt0.5</item>
         <item>@string/between0.5_1</item>
@@ -79,6 +81,11 @@
         <item>@string/between3_4</item>
         <item>@string/between4_5</item>
         <item>@string/gt5</item>
+    </string-array>
+    <string-array name="ordered_route_choices">
+        <item>@string/default_spinner_choice</item>
+        <item>@string/yes</item>
+        <item>@string/no</item>
     </string-array>
 
 
@@ -122,4 +129,7 @@
     <string name="organizationName">Nombre de la organización</string>
     <string name="password">Contraseña</string>
     <string name="passwordRepeat">Repita la contraseña</string>
+    <string name="nif">NIF</string>
+    <string name="email">Correo electrónico</string>
+    <string name="register">Registrarse</string>
 </resources>

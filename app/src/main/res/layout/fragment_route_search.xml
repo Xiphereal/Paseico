@@ -72,7 +72,7 @@
             android:layout_width="149dp"
             android:layout_height="34dp"
             android:layout_marginTop="24dp"
-            android:entries="@array/themes_of_route"
+            android:entries="@array/themes_of_route_choices"
             android:spinnerMode="dropdown"
             app:layout_constraintBottom_toBottomOf="@+id/textView_theme"
             app:layout_constraintEnd_toEndOf="parent"
@@ -108,7 +108,7 @@
             android:layout_width="140dp"
             android:layout_height="30dp"
             android:layout_marginTop="52dp"
-            android:entries="@array/lengths_of_route"
+            android:entries="@array/lengths_of_route_choices"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.375"
             app:layout_constraintStart_toEndOf="@+id/textView_length"
@@ -121,7 +121,7 @@
             android:layout_marginLeft="50dp"
             android:layout_marginStart="50dp"
             android:layout_marginTop="44dp"
-            android:entries="@array/estimated_times_of_route"
+            android:entries="@array/estimated_times_of_route_choices"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/textView_estimatedTime"
@@ -203,24 +203,26 @@
             app:layout_constraintTop_toTopOf="@+id/spinner_route_estimated_time"
             app:layout_constraintVertical_bias="1.0"/>
 
-    <CheckBox
-        android:id="@+id/checkBox_orderedRoutes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/ordered_route"
-        app:layout_constraintBottom_toTopOf="@+id/btn_search"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.618"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_minimumOfPoints"
-        app:layout_constraintVertical_bias="0.473" />
-
     <TextView
         android:id="@+id/textView_orderedRoute"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="44dp"
         android:text="@string/ordered_route"
-        tools:layout_editor_absoluteX="64dp"
-        tools:layout_editor_absoluteY="583dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_pointsEarnedCompletingRoute" />
+
+    <Spinner
+        android:id="@+id/spinner_orderedRoute"
+        android:layout_width="107dp"
+        android:layout_height="23dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="28dp"
+        android:entries="@array/ordered_route_choices"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.179"
+        app:layout_constraintStart_toEndOf="@+id/textView_orderedRoute"
+        app:layout_constraintTop_toBottomOf="@+id/editText_minimumOfPoints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import androidx.annotation.NonNull;
@@ -33,7 +32,7 @@ public class RouteSearchFragment extends Fragment {
     private Spinner spinner_theme;
     private Spinner spinner_length;
     private Spinner spinner_estimatedTime;
-    private CheckBox checkBox_orderedRoute;
+    private Spinner spinner_orderedRoute;
     private List<String> keyWords;
     private String themeOfRoute;
     private int numberOfPOI;
@@ -43,7 +42,9 @@ public class RouteSearchFragment extends Fragment {
     private double minimumTime;
     private double maximumTime;
     List<Route> routeList;
-    private int isOrdered;
+    private int isOrderedRoute; // 1 if is ordered. 0 If is not.
+    private boolean noFilterOrderedRoutes; // Check if the user wants to filter by ordered or not ordered routes.
+                                        // If is true, the program will not filter by this attribute.
 
     @Override
     public View onCreateView(
@@ -59,7 +60,7 @@ public class RouteSearchFragment extends Fragment {
         spinner_theme = fragmentSearchLayout.findViewById(R.id.spinner_route_theme);
         spinner_length = fragmentSearchLayout.findViewById(R.id.spinner_route_length);
         spinner_estimatedTime = fragmentSearchLayout.findViewById(R.id.spinner_route_estimated_time);
-        checkBox_orderedRoute = fragmentSearchLayout.findViewById(R.id.checkBox_orderedRoutes);
+        spinner_orderedRoute = fragmentSearchLayout.findViewById(R.id.spinner_orderedRoute);
 
         routeList = new ArrayList<>();
 
@@ -172,11 +173,19 @@ public class RouteSearchFragment extends Fragment {
             maximumOfLength = Double.MAX_VALUE;
         }
 
-        if (checkBox_orderedRoute.isChecked()){
-            isOrdered = 1;
-        } else {
-            isOrdered = 0;
+        String orderedRoute = spinner_orderedRoute.getSelectedItem().toString();
+        if(orderedRoute.equals(getString(R.string.default_spinner_choice))){
+            this.isOrderedRoute = -1;
+            this.noFilterOrderedRoutes = true;
+        } else if (orderedRoute.equals(getString(R.string.yes))){
+            this.isOrderedRoute = 1;
+            this.noFilterOrderedRoutes = false;
+        } else { // Answer is NO
+            this.isOrderedRoute = 0;
+            this.noFilterOrderedRoutes = false;
         }
+
+
     }
 
     private void filterByLengthEstimatedTimePointsPOIAndKeyWords(Task<QuerySnapshot> task) {
@@ -202,7 +211,7 @@ public class RouteSearchFragment extends Fragment {
                     && length >= minimumOfLength
                     && estimatedTime <= maximumTime
                     && estimatedTime >= minimumTime
-                    && ordered == isOrdered
+                    && (noFilterOrderedRoutes || ordered == isOrderedRoute)
                     && pointOfInterests.size() >= numberOfPOI) {
                 Log.d("RutaDentro", document.getId() + "=>" + document.getData(), task.getException());
                 for (String keyword : keyWords) {
