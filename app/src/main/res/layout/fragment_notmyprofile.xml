@@ -60,7 +60,7 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:id="@+id/image_profile"
-                    android:src="@drawable/defaultprofilepic"/>
+                    android:src="@drawable/defaultprofile"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
