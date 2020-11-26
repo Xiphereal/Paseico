@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+
+import app.paseico.CategoryManager;
 import app.paseico.R;
 import app.paseico.RouteInfModifyActivity;
 import app.paseico.RouteInformationActivity;
@@ -55,8 +57,11 @@ public class RouteSearchResultFragment extends Fragment {
             filteredRoutesRewardPoints.add(String.valueOf(route.getRewardPoints()));
 
             //Obtain route theme
-            //voy a obtener el tema y, a través de un metodo, transformo en el int del R.id
-            //filteredRoutesIcons.add(Integer.valueOf(route.getTheme()));
+            String RouteCategory = route.getTheme();
+            System.out.println("categoria " + RouteCategory);
+            int index = CategoryManager.ConvertCategoryToIntDrawable(RouteCategory);
+            System.out.println("indice " + index);
+            filteredRoutesIcons.add(index);
             //
         }
 

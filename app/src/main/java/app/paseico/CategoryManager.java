@@ -7,6 +7,7 @@ public class CategoryManager {
         //This is to test the method while there is no category defined in create new route
         if (category == null) {
             category ="Sin temática";
+            System.out.println("categoriaEnConvert " + category);
         }
         ////////
 
