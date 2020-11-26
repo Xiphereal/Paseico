@@ -25,22 +25,24 @@
             style="@style/TitleTextView"
             android:id="@+id/username"
             android:text="username"
+            android:textSize="15sp"
             android:maxLines="1" />
 
         <TextView
             style="@style/NotTitleTextView"
             android:id="@+id/fullname"
             android:text="Full Name"
-            android:textSize="17sp"
+            android:textSize="15sp"
             android:maxLines="1"/>
     </LinearLayout>
 
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:background="@drawable/custom_button"
+        android:layout_height="35dp"
+        android:background="@drawable/custom_button3"
         android:id="@+id/btn_follow"
-        style="@style/TitleButtonText"
+        style="@style/MediumButtonText"
+        android:textColor="#FFFFFF"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:visibility="gone"/>
