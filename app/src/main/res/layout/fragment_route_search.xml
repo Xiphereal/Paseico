@@ -215,4 +215,12 @@
         app:layout_constraintTop_toBottomOf="@+id/editText_minimumOfPoints"
         app:layout_constraintVertical_bias="0.473" />
 
+    <TextView
+        android:id="@+id/textView_orderedRoute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ordered_route"
+        tools:layout_editor_absoluteX="64dp"
+        tools:layout_editor_absoluteY="583dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
