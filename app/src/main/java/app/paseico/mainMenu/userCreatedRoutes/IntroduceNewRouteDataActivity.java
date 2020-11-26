@@ -9,7 +9,7 @@ import app.paseico.MainMenuActivity;
 import app.paseico.R;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
-import app.paseico.data.User;
+import app.paseico.data.Router;
 import app.paseico.service.FirebaseService;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -24,7 +24,7 @@ import java.util.List;
 
 public class IntroduceNewRouteDataActivity extends AppCompatActivity {
 
-    private User currentUser;
+    private Router currentRouter;
     private Route newRoute;
 
     private List<PointOfInterest> selectedPointsOfInterest = new ArrayList<>();
@@ -48,7 +48,7 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
         currentUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                currentUser = snapshot.getValue(User.class);
+                currentRouter = snapshot.getValue(Router.class);
 
                 // Registering this callback here ensures that the button
                 // action is only performed when the User is ready.
@@ -74,8 +74,8 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
      * previous state.
      */
     private void tryFinalizeRouteCreation() {
-        if (currentUser.getHasFreeRouteCreation()) {
-            currentUser.setHasFreeRouteCreation(false);
+        if (currentRouter.getHasFreeRouteCreation()) {
+            currentRouter.setHasFreeRouteCreation(false);
             showConfirmationDialog();
         } else {
             showRouteCreationSummaryDialog();
@@ -90,10 +90,10 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
         AlertDialog.Builder builder = setUpBuilder(dialogMessage);
 
         builder.setOnDismissListener(dialog -> {
-            int currentUserPoints = currentUser.getPoints();
+            int currentUserPoints = currentRouter.getPoints();
 
             if (currentUserPoints >= routeCost) {
-                currentUser.setPoints(currentUserPoints - routeCost);
+                currentRouter.setPoints(currentUserPoints - routeCost);
                 showConfirmationDialog();
             } else {
                 showNotEnoughPointsDialog();
@@ -175,8 +175,8 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
     private void persistCurrentUserModifications() {
         DatabaseReference currentUserReference = FirebaseService.getCurrentUserReference();
 
-        currentUserReference.child("hasFreeRouteCreation").setValue(currentUser.getHasFreeRouteCreation());
-        currentUserReference.child("points").setValue(currentUser.getPoints());
+        currentUserReference.child("hasFreeRouteCreation").setValue(currentRouter.getHasFreeRouteCreation());
+        currentUserReference.child("points").setValue(currentRouter.getPoints());
     }
 
     private void goToMainMenuActivity() {
