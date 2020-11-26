@@ -17,7 +17,7 @@
     <string name="start_route">Empezar ruta</string>
     <string name="create_new_point_of_interest_button">Crear nuevo Punto de Interés</string>
 
-    <string name="discounts">DESCUENTOS</string>
+    <string name="discounts">Descuentos</string>
 
     <string name="zero">0</string>
     <string name="route_name_hint">Nombre de la ruta</string>

@@ -89,7 +89,7 @@ public class DiscountsFragment extends Fragment {
                     listDiscounts.add(new DiscountObj(n, p, pts));
                 }
 
-                ArrayAdapter<DiscountObj> adapter = new ArrayAdapter<DiscountObj>(getActivity(), android.R.layout.simple_list_item_1, listDiscounts);
+                ArrayAdapter<DiscountObj> adapter = new ArrayAdapter<DiscountObj>(getActivity(), R.layout.cupon_item, listDiscounts);
                 discountsList.setAdapter(adapter);
 
 

@@ -230,13 +230,13 @@ public class marketplaceFragment extends Fragment {
     private void successAnimation() {
         int red = Color.parseColor("#e33630");
         int green = Color.parseColor("#32d959");
-        int gray = Color.parseColor("#BDBDBD");
+        int white = Color.parseColor("#FFFFFF");
         root.setBackgroundColor(green);
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                root.setBackgroundColor(gray);
+                root.setBackgroundColor(white);
             }
         }, 450);
     }
