@@ -22,7 +22,6 @@
                 android:textAlignment="center" app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
         />
 
-
         <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/route_name_textField"
                 android:layout_width="match_parent"
@@ -68,9 +67,6 @@
                         android:layout_marginStart="0dp"
                         android:layout_marginBottom="8dp"/>
             </RelativeLayout>
-
-
-
 
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
