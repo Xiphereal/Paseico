@@ -28,6 +28,7 @@
                 android:label="@string/title_activity_main_menu"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity android:name=".MainMenuOrganizationActivity"/>
         <activity android:name=".mainMenu.userCreatedRoutes.IntroduceNewRouteDataActivity"/>
         <activity android:name=".ModifyRouteActivity"/>
         <activity android:name=".RouteInfModifyActivity"/>
@@ -37,8 +38,9 @@
         <activity android:name=".RouteFinishedActivity"/>
         <activity android:name=".FollowersActivity"/>
         <activity android:name=".RouteInformationActivity"/>
-        <activity android:name=".login.RegisterActivity"/>
         <activity android:name=".MainActivity"/>
+        <activity android:name=".login.RegisterActivity"/>
+        <activity android:name=".login.RegisterOrganizationActivity" />
         <activity android:name=".login.LogInActivity"/>
         <activity android:name=".login.OpeningActivity">
             <intent-filter>
