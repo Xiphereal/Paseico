@@ -8,12 +8,14 @@
         tools:context=".ModifyRouteActivity">
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/finalize_route_creation_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="200dp"
+            android:layout_height="45dp"
             android:layout_margin="16dp"
             android:layout_gravity="bottom|center"
             android:text="Finalizar"
-            app:backgroundTint="@color/colorAccent"/>
+            app:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/white"
+            style="@style/LargeButtonText"/>
 
     <fragment
             android:id="@+id/new_route_map"
@@ -27,6 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
             android:hint="Nombre de la ruta" android:gravity="center">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -71,9 +74,12 @@
                 <Button
                         android:id="@+id/user_created_marker_button"
                         android:text="@string/create_new_point_of_interest_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="300dp"
+                        android:layout_height="42dp"
                         android:layout_gravity="center"
+                        style="@style/LargeButtonText"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:background="@drawable/custom_button2"
                 />
             </com.google.android.material.textfield.TextInputLayout>
 
