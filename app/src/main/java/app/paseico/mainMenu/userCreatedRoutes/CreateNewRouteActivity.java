@@ -2,6 +2,7 @@ package app.paseico.mainMenu.userCreatedRoutes;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -59,6 +60,10 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     private void goToIntroduceNewRouteDataActivity() {
         Intent goToIntroduceNewRouteDataIntent = new Intent(getApplicationContext(), IntroduceNewRouteDataActivity.class);
+
+        goToIntroduceNewRouteDataIntent.putParcelableArrayListExtra("selectedPointsOfInterest",
+                (ArrayList<? extends Parcelable>) selectedPointsOfInterest);
+
         startActivity(goToIntroduceNewRouteDataIntent);
     }
 

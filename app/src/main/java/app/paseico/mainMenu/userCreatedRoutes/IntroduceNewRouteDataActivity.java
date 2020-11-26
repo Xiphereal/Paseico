@@ -27,12 +27,14 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
     private User currentUser;
     private Route newRoute;
 
-    private final List<PointOfInterest> selectedPointsOfInterest = new ArrayList<>();
+    private List<PointOfInterest> selectedPointsOfInterest = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_introduce_new_route_data);
+
+        selectedPointsOfInterest = getIntent().getParcelableArrayListExtra("selectedPointsOfInterest");
 
         getCurrentUserFromDatabaseAsync();
     }
