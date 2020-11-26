@@ -47,7 +47,7 @@
     <string name="gt5">&gt; 5</string> <!-- &gt; is '>' -->
 
     <!-- Strings arrays used to populate searchFragment spinners -->
-    <string name="search_fragment_title">Seleccione el filtro de búsqueda</string>
+    <string name="search_fragment_title">Seleccione el filtro de búsqueda...</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string-array name="themes_of_route">
         <item>@string/default_spinner_choice</item>

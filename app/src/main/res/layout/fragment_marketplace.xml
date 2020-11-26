@@ -9,12 +9,9 @@ tools:context=".ui.marketplace.marketplaceFragment">
 
     <TextView
         android:id="@+id/textViewMarketplaceName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/LargeTextView"
         android:layout_marginTop="20dp"
         android:text="Marketplace"
-        android:textSize="30sp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

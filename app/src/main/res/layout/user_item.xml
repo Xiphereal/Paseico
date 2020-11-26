@@ -22,14 +22,14 @@
         android:layout_marginLeft="5dp">
 
         <TextView
-            style="@style/TitleTextView"
+            style="@style/LargeTextView"
             android:id="@+id/username"
             android:text="username"
             android:textSize="15sp"
             android:maxLines="1" />
 
         <TextView
-            style="@style/NotTitleTextView"
+            style="@style/MediumTextView"
             android:id="@+id/fullname"
             android:text="Full Name"
             android:textSize="15sp"

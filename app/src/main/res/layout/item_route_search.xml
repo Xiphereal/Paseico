@@ -12,7 +12,7 @@
         <TextView
                 android:text="Nombre Ruta"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:id="@+id/routeName" android:textSize="20sp"
+                android:layout_height="35dp" android:id="@+id/routeName" android:textSize="17sp"
                 android:textStyle="bold" android:textColor="#000000"/>
         <TableLayout
                 android:layout_width="match_parent"
@@ -21,13 +21,13 @@
             <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
                 <TextView
                         android:text="Duración:"
-                        android:layout_width="wrap_content"
+                        android:layout_width="wrap_content" android:textColor="@color/colorPrimaryDark" android:textStyle="bold"
                         android:layout_height="wrap_content" android:id="@+id/textView9" android:paddingLeft="160dp"/>
                 <TextView
                         android:text="TextView"
                         android:layout_width="90dp"
                         android:layout_height="wrap_content" android:id="@+id/routeDuration" android:paddingLeft="30dp"
-                        android:textColor="#000000" android:paddingRight="0dp"/>
+                        android:textColor="@color/colorPrimaryDark" android:paddingRight="0dp"/>
                 <TextView
                         android:text="minutos"
                         android:layout_width="wrap_content"
@@ -35,14 +35,14 @@
             </TableRow>
             <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
                 <TextView
-                        android:text="Longitud:"
+                        android:text="Longitud:" android:textColor="@color/colorPrimaryDark" android:textStyle="bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" android:id="@+id/textView11" android:paddingLeft="160dp"/>
                 <TextView
                         android:text="TextView"
                         android:layout_width="90dp"
                         android:layout_height="match_parent" android:id="@+id/routeLenght" android:paddingLeft="30dp"
-                        android:textColor="#000000" android:paddingRight="0dp"/>
+                        android:textColor="@color/colorPrimaryDark" android:paddingRight="0dp"/>
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" android:id="@+id/textView6" android:text="metros"
@@ -53,9 +53,9 @@
                         android:text="300"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" android:id="@+id/routeReward" android:paddingLeft="190dp"
-                        android:textColor="#000000" android:paddingTop="5dp" android:paddingBottom="5dp"/>
+                        android:textColor="@color/colorPrimaryDark" android:paddingTop="5dp" android:paddingBottom="5dp"/>
                 <TextView
-                        android:text="Puntos"
+                        android:text="Puntos" android:textColor="@color/colorPrimaryDark" android:textStyle="bold"
                         android:layout_width="90dp"
                         android:layout_height="match_parent" android:id="@+id/textView14" android:paddingTop="5dp"
                         android:paddingBottom="5dp"/>

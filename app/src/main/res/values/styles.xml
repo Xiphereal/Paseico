@@ -7,17 +7,24 @@
         <item name="colorAccent">#039BE5</item>
     </style>
 
-    <style name="TitleTextView">
+    <style name="LargeTextView">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:textColor">#000000</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:textSize">30sp</item>
     </style>
 
-    <style name="NotTitleTextView">
+    <style name="MediumTextView">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="SmallTextView">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="LargeButtonText">
