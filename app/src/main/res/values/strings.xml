@@ -117,9 +117,9 @@
 
     <!-- TextInput related. -->
     <string name="new_point_of_interest_name_text_input_hint">Nombre del nuevo Punto de Interés</string>
-    <string name="rutero">Rutero</string>
-    <string name="organizaci_n">Organización</string>
-    <string name="nombre_de_la_organizaci_n">Nombre de la organización</string>
-    <string name="contrase_a">Contraseña</string>
-    <string name="repita_la_contrase_a">Repita la contraseña</string>
+    <string name="router">Rutero</string>
+    <string name="organization">Organización</string>
+    <string name="organizationName">Nombre de la organización</string>
+    <string name="password">Contraseña</string>
+    <string name="passwordRepeat">Repita la contraseña</string>
 </resources>
