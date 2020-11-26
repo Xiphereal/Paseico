@@ -16,7 +16,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/introduce_new_route_data_toolbar"
-                android:background="@color/emphasizedBackground"/>
+                android:background="@color/emphasizedBackground"
+                app:title="@string/finalize_route_creation_toolbar_title"
+                android:textAlignment="center" app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"/>
+
 
         <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/route_name_textField"
@@ -43,6 +46,13 @@
                     android:layout_marginTop="50dp"
                     android:layout_marginEnd="80dp"
                     android:layout_marginStart="25dp"/>
+            <Spinner
+                    android:id="@+id/route_category_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15sp"
+                    android:entries="@array/route_category"
+                    android:spinnerMode="dropdown"/>
 
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
@@ -55,6 +65,7 @@
             android:layout_gravity="bottom|center"
             android:text="@string/finalize"
             android:textColor="@color/white"
-            app:backgroundTint="@color/colorAccent"/>
+            app:backgroundTint="@color/colorAccent"
+            android:textAlignment="center"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
