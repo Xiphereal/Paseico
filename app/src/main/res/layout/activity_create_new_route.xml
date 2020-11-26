@@ -23,20 +23,6 @@
             android:layout_height="match_parent"
             tools:context=".MainMapActivity"/>
 
-    <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/route_name_textField"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:hint="Nombre de la ruta" android:gravity="center">
-
-        <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/route_name_textInputEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-        />
-    </com.google.android.material.textfield.TextInputLayout>
-
     <ListView
             android:id="@+id/marked_pois_list_view"
             android:layout_width="wrap_content"
