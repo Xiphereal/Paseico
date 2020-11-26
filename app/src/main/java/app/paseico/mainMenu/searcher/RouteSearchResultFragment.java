@@ -44,11 +44,20 @@ public class RouteSearchResultFragment extends Fragment {
         List<String> filteredRoutesLength = new ArrayList<>();
         List<String> filteredRoutesRewardPoints = new ArrayList<>();
 
+        //
+        List<Integer> filteredRoutesIcons = new ArrayList<>();
+        //
+
         for (Route route : filteredRoutes) {
             filteredRoutesNames.add(route.getName());
             filteredRoutesEstimatedTime.add(String.valueOf(route.getEstimatedTime()));
             filteredRoutesLength.add(String.valueOf(route.getLength()));
             filteredRoutesRewardPoints.add(String.valueOf(route.getRewardPoints()));
+
+            //Obtain route theme
+            //voy a obtener el tema y, a través de un metodo, transformo en el int del R.id
+            //filteredRoutesIcons.add(Integer.valueOf(route.getTheme()));
+            //
         }
 
         ListView listView_filteredRoutes = (ListView) view.findViewById(R.id.listView_filteredRoutes);
@@ -115,5 +124,8 @@ public class RouteSearchResultFragment extends Fragment {
 
             return row;
         }
+
+
     }
+
 }

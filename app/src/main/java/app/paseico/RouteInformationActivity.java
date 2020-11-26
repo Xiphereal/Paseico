@@ -70,14 +70,7 @@ public class RouteInformationActivity extends AppCompatActivity {
         String theme = (route.getTheme() == null) ? "Sin temática" : route.getTheme();
 
         int iconIdex = R.drawable.notheme_icon;;
-        switch (theme) {
-            case "Sin temática":
-                iconIdex  = R.drawable.shopping_icon;
-                break;
-            case "Naturaleza":
-                iconIdex = R.drawable.nature_icon;
-                break;
-        }
+
 
 
 
