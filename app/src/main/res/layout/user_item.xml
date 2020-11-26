@@ -22,28 +22,25 @@
         android:layout_marginLeft="5dp">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/TitleTextView"
             android:id="@+id/username"
             android:text="username"
-            android:maxLines="1"
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimaryDark"/>
+            android:maxLines="1" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/NotTitleTextView"
             android:id="@+id/fullname"
             android:text="Full Name"
+            android:textSize="17sp"
             android:maxLines="1"/>
     </LinearLayout>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:backgroundTint="@color/colorAccent"
+        android:background="@drawable/custom_button"
         android:id="@+id/btn_follow"
-        android:textColor="@color/colorPrimary"
+        style="@style/TitleButtonText"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:visibility="gone"/>

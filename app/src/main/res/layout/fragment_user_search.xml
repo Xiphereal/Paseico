@@ -28,7 +28,7 @@
         android:id="@+id/search_bar"
         android:background="@android:color/transparent"
         android:hint="Buscar usuario..."
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
         android:layout_marginLeft="10dp"/>
 
     </androidx.appcompat.widget.Toolbar>
