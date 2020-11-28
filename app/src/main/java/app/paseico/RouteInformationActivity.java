@@ -3,10 +3,14 @@ package app.paseico;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
-import app.paseico.data.Route;
+
 import com.google.firebase.database.annotations.NotNull;
+
+import app.paseico.data.Route;
 
 public class RouteInformationActivity extends AppCompatActivity {
 
@@ -17,6 +21,8 @@ public class RouteInformationActivity extends AppCompatActivity {
     private TextView textView_estimatedTime;
     private TextView textView_numberOfPOI;
     private TextView textView_isOrdered;
+
+    private ImageView themeIcon;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +33,8 @@ public class RouteInformationActivity extends AppCompatActivity {
         registerOnBackButtonClickedListener();
 
         registerOnStartRouteButtonClickedListener(route);
+
+
     }
 
     protected void registerOnStartRouteButtonClickedListener(Route route) {
@@ -52,12 +60,14 @@ public class RouteInformationActivity extends AppCompatActivity {
         textView_numberOfPOI = findViewById(R.id.textView_routeInfo_numberOfPOI);
         textView_isOrdered = findViewById(R.id.textViewIsOrdered);
 
+        themeIcon = (ImageView) findViewById(R.id.imageViewIconRouteInformation);
+
+
         Route route = (Route) getIntent().getExtras().get("route");
 
         textView_isOrdered.setVisibility(View.GONE);
         if (route.isOrdered() == 1) {textView_isOrdered.setVisibility(View.VISIBLE);}
         String name = route.getName();
-        String theme = (route.getTheme() == null) ? "Sin temática" : route.getTheme();
         String rewardsPoints = ((Integer) route.getRewardPoints()).toString();
         int kms = (int) route.getLength() / 1000;
         int meters = (int) route.getLength() % 1000;
@@ -66,6 +76,12 @@ public class RouteInformationActivity extends AppCompatActivity {
         int minutes = ((int) route.getEstimatedTime()) % 60;
         String estimatedTime = hours + " horas y " + minutes + " minutos" ;
         String numberOfPOI = route.getPointsOfInterest().size() + "";
+        String theme = (route.getTheme() == null) ? "Sin temática" : route.getTheme();
+
+        int iconIdex = CategoryManager.ConvertCategoryToIntDrawable(theme);
+
+
+
 
         textView_name.setText(name);
         textView_theme.setText(theme);
@@ -73,6 +89,8 @@ public class RouteInformationActivity extends AppCompatActivity {
         textView_length.setText(length);
         textView_estimatedTime.setText(estimatedTime);
         textView_numberOfPOI.setText(numberOfPOI);
+
+        themeIcon.setImageResource(iconIdex);
 
         findViewById(R.id.btn_routeInfo_back).setOnClickListener(v -> finish());
 
