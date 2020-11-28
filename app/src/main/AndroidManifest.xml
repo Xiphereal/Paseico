@@ -22,7 +22,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainMenuOrganizationActivity"/>
+        <activity android:name=".TestFragmentActivity"></activity>
+        <activity android:name=".MainMenuOrganizationActivity" />
         <activity android:name=".login.RegisterOrganizationActivity" />
         <activity android:name=".ModifyRouteActivity" />
         <activity android:name=".RouteInfModifyActivity" />
@@ -46,9 +47,7 @@
         <activity android:name=".RouteFinishedActivity" />
         <activity android:name=".FollowersActivity" />
         <activity android:name=".RouteInformationActivity" />
-        <activity android:name=".login.RegisterActivity" >
-
-        </activity>
+        <activity android:name=".login.RegisterActivity"></activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".login.LogInActivity" />
         <activity android:name=".login.OpeningActivity">
