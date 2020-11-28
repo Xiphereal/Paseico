@@ -1,6 +1,8 @@
 package app.paseico;
 
 
+import androidx.test.core.app.ActivityScenario;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
@@ -9,6 +11,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import app.paseico.data.PointOfInterest;
+import app.paseico.data.Route;
 import app.paseico.data.Router;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -27,25 +34,29 @@ import static org.hamcrest.CoreMatchers.not;
 public class CreateNewRouteRouterTest {
 
     @Rule
-    public ActivityTestRule<CreateNewRouteActivity> mActivityRule =
-            new ActivityTestRule<>(CreateNewRouteActivity.class);
+    public ActivityScenarioRule<CreateNewRouteActivity> mActivityRule =
+            new ActivityScenarioRule<>(CreateNewRouteActivity.class);
 
     @Before
     public void logInAndPrepareRoute(){
         Router routerForTesting = new Router("Test","xXTesterXx","testing@test.ts");
         routerForTesting.setPoints(1000);
+        List<PointOfInterest> pois4Testing = new ArrayList<>();
+        //pois4Testing.
+        //Route routeToCreate = new Route("route4Testing",,routerForTesting);
         //Log in with the local user?
-        onView(withId(R.id.editTextEmail))
-                .perform(typeText("userForTesting@gmail.com"), closeSoftKeyboard());
-        onView(withId(R.id.editTextPassword))
-                .perform(typeText("123456"), closeSoftKeyboard());
-        onView(withId(R.id.buttonLogIn))
-                .perform(click());
+//        onView(withId(R.id.editTextEmail))
+//                .perform(typeText("userForTesting@gmail.com"), closeSoftKeyboard());
+//        onView(withId(R.id.editTextPassword))
+//                .perform(typeText("123456"), closeSoftKeyboard());
+//        onView(withId(R.id.buttonLogIn))
+//                .perform(click());
     }
 
     @Test
     public void createRouteSuccessfullyTest(){
-
+        onView(withId(R.id.route_name_textInputEditText)).perform(typeText("myRoute"),closeSoftKeyboard());
+        onView(withId(R.id.finalize_route_creation_button)).perform(click());
     }
 
     @Test
@@ -54,7 +65,7 @@ public class CreateNewRouteRouterTest {
     }
 
     @Test
-    public void routeNumberIncrementedTest(){
+    public void numberOfRoutesCreatedIncrementedTest(){
 
     }
 
