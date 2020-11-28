@@ -45,6 +45,7 @@ public class RouteSearchResultFragment extends Fragment {
         List<String> filteredRoutesEstimatedTime = new ArrayList<>();
         List<String> filteredRoutesLength = new ArrayList<>();
         List<String> filteredRoutesRewardPoints = new ArrayList<>();
+        List<String> filteredRoutesAreOrdered = new ArrayList<>();
 
         List<Integer> filteredRoutesIcons = new ArrayList<>();
 
@@ -54,6 +55,7 @@ public class RouteSearchResultFragment extends Fragment {
             filteredRoutesEstimatedTime.add(String.valueOf(route.getEstimatedTime()));
             filteredRoutesLength.add(String.valueOf(route.getLength()));
             filteredRoutesRewardPoints.add(String.valueOf(route.getRewardPoints()));
+            filteredRoutesAreOrdered.add(String.valueOf(route.isOrdered()));
 
             //Obtain route theme
             String RouteCategory = route.getTheme();
@@ -66,7 +68,8 @@ public class RouteSearchResultFragment extends Fragment {
 
         ListView listView_filteredRoutes = (ListView) view.findViewById(R.id.listView_filteredRoutes);
 
-        FilteredListAdapter adapter = new FilteredListAdapter(this.getContext(), filteredRoutesNames, filteredRoutesEstimatedTime, filteredRoutesLength, filteredRoutesRewardPoints, filteredRoutesIcons);
+        FilteredListAdapter adapter = new FilteredListAdapter(this.getContext(), filteredRoutesNames, filteredRoutesEstimatedTime, filteredRoutesLength,
+                filteredRoutesRewardPoints, filteredRoutesIcons, filteredRoutesAreOrdered);
         listView_filteredRoutes.setAdapter(adapter);
 
         // Open RouteInfo screen.
@@ -91,9 +94,10 @@ public class RouteSearchResultFragment extends Fragment {
         List<String> lengths;
         List<String> points;
         List<Integer> icons;
+        List<String> areOrdered;
 
 
-        FilteredListAdapter(Context context, List<String> names, List<String> estimatedTimes, List<String> lengths, List<String> points, List<Integer> icons) {
+        FilteredListAdapter(Context context, List<String> names, List<String> estimatedTimes, List<String> lengths, List<String> points, List<Integer> icons, List<String> areOrdered) {
             super(context, R.layout.item_route_search, R.id.routeName, names);
 
             this.context = context;
@@ -102,6 +106,7 @@ public class RouteSearchResultFragment extends Fragment {
             this.lengths = lengths;
             this.points = points;
             this.icons = icons;
+            this.areOrdered = areOrdered;
         }
 
         @NonNull
@@ -114,6 +119,8 @@ public class RouteSearchResultFragment extends Fragment {
             TextView myEstimatedTimes = row.findViewById(R.id.routeDuration);
             TextView myLengths = row.findViewById(R.id.routeLenght);
             TextView myPoints = row.findViewById(R.id.routeReward);
+            TextView orderedRoute = row.findViewById(R.id.textView_orderedRouteResult);
+
 
             ImageView ListViewImage = (ImageView) row.findViewById(R.id.imageViewIcon);
 
@@ -121,6 +128,15 @@ public class RouteSearchResultFragment extends Fragment {
             myEstimatedTimes.setText(estimatedTimes.get(position));
             myLengths.setText(lengths.get(position));
             myPoints.setText(points.get(position));
+
+            String isOrdered = areOrdered.get(position);
+            if (isOrdered.equals("0")){
+                isOrdered = "No";
+            } else {
+                isOrdered = "Sí";
+            }
+
+            orderedRoute.setText(isOrdered);
 
            ListViewImage.setImageResource(icons.get(position));
 
