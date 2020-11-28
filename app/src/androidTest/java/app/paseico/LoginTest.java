@@ -57,5 +57,18 @@ public class LoginTest {
 
     }
 
+    @Test
+    public void emptyLogIn(){
+        onView(withId(R.id.editTextEmail))
+                .perform(typeText(""), closeSoftKeyboard());
+        onView(withId(R.id.editTextPassword))
+                .perform(typeText(""), closeSoftKeyboard());
+        onView(withId(R.id.buttonLogIn))
+                .perform(click());
+
+        onView(withText("Faltan campos por rellenar!")).inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+
+    }
+
 }
 

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.After;
@@ -36,6 +37,8 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -50,6 +53,7 @@ public class RegisterActivityTest {
 
     @Before
     public void setRandomName(){
+        Intents.init();
         char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
         StringBuilder sb = new StringBuilder(20);
         Random random = new Random();
@@ -58,6 +62,10 @@ public class RegisterActivityTest {
             sb.append(c);
         }
         randomName = sb.toString();
+    }
+    @After
+    public void release(){
+        Intents.release();
     }
 
 
@@ -69,7 +77,7 @@ public class RegisterActivityTest {
 
 
     @Test
-    public void submitRegisterCorrectly() {
+    public void submitRegisterCorrectly() throws InterruptedException {
 
         onView(withId(R.id.editTextUsername))
                 .perform(typeText(randomName), closeSoftKeyboard());
@@ -85,18 +93,15 @@ public class RegisterActivityTest {
                 .perform(typeText(randomName + "@gmail.com"), closeSoftKeyboard());
         onView(withId(R.id.buttonRegister))
                 .perform(click());
-
         onView(withText("Registro completado!")).inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
-        mActivityRule.finishActivity();
+        intended(hasComponent(LogInActivity.class.getName()));
+
 
     }
 
 
     @Test
     public void submitRegisterPassTooShort() throws InterruptedException {
-        Thread.sleep(4500);
-        mActivityRule.launchActivity(new Intent());
-
         onView(withId(R.id.editTextUsername))
                 .perform(typeText("Joselito420hd"), closeSoftKeyboard());
         onView(withId(R.id.editTextPassword))
@@ -115,6 +120,56 @@ public class RegisterActivityTest {
         onView(withText("La contraseña debe contener mínimo 6 caracteres")).inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
 
 }
+
+    @Test
+    public void submitEmptyRegister(){
+    onView(withId(R.id.buttonRegister))
+            .perform(click());
+
+    onView(withText("Por favor, rellene todos los campos para poder registrarse")).inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+
+}
+    @Test
+    public void submitRegisterExistingUsername(){
+        onView(withId(R.id.editTextUsername))
+                .perform(typeText("miguelmoreno"), closeSoftKeyboard());
+        onView(withId(R.id.editTextPassword))
+                .perform(typeText("password123"), closeSoftKeyboard());
+        onView(withId(R.id.editTextPasswordConf))
+                .perform(typeText("password123"),closeSoftKeyboard());
+        onView(withId(R.id.editTextName))
+                .perform(typeText("miguel"),closeSoftKeyboard());
+        onView(withId(R.id.editTextSurname))
+                .perform(typeText("moreno"),closeSoftKeyboard());
+        onView(withId(R.id.editTextEmail))
+                .perform(typeText("random@gmail.com"), closeSoftKeyboard());
+        onView(withId(R.id.buttonRegister))
+                .perform(click());
+
+        onView(withText("Ese nombre de usuario ya existe")).inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+
+    }
+
+    @Test
+    public void submitRegisterPassNotMatch(){
+        onView(withId(R.id.editTextUsername))
+                .perform(typeText("miguelmoreno"), closeSoftKeyboard());
+        onView(withId(R.id.editTextPassword))
+                .perform(typeText("password123"), closeSoftKeyboard());
+        onView(withId(R.id.editTextPasswordConf))
+                .perform(typeText("password127"),closeSoftKeyboard());
+        onView(withId(R.id.editTextName))
+                .perform(typeText("miguel"),closeSoftKeyboard());
+        onView(withId(R.id.editTextSurname))
+                .perform(typeText("moreno"),closeSoftKeyboard());
+        onView(withId(R.id.editTextEmail))
+                .perform(typeText("random@gmail.com"), closeSoftKeyboard());
+        onView(withId(R.id.buttonRegister))
+                .perform(click());
+
+        onView(withText("Las contraseñas no coinciden")).inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+
+    }
 
 
 
