@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
-import app.paseico.data.Route;
+
 import com.google.firebase.database.annotations.NotNull;
+
+import app.paseico.data.Route;
 
 public class RouteInformationActivity extends AppCompatActivity {
 
@@ -69,7 +72,7 @@ public class RouteInformationActivity extends AppCompatActivity {
         String numberOfPOI = route.getPointsOfInterest().size() + "";
         String theme = (route.getTheme() == null) ? "Sin temática" : route.getTheme();
 
-        int iconIdex = R.drawable.notheme_icon;;
+        int iconIdex = CategoryManager.ConvertCategoryToIntDrawable(theme);
 
 
 
