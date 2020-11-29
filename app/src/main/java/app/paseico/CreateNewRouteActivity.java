@@ -67,7 +67,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     String selectedPOIinList = "";
     int positionOfPOIinList = 0;
-
+    int nextPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,8 +135,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     private void goUpPointSelectedInList(){
         System.out.println(positionOfPOIinList);
-        if(positionOfPOIinList != 0 && selectedPOIinList!=""){
-            int nextPosition = positionOfPOIinList-1;
+        if (selectedPOIinList!="" && positionOfPOIinList != 0) {
+            nextPosition = positionOfPOIinList-1;
 
             markedPOIs.set(positionOfPOIinList, markedPOIs.get(nextPosition));
             markedPOIs.set(nextPosition,selectedPOIinList);
@@ -147,15 +147,15 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
             updateMarkedPOIsListView();
             selectedPOIinList="";
-        }else{
+        } else {
             //Toast: select a poi of the list
             Toast.makeText(CreateNewRouteActivity.this, "Selecciona un POI debajo de otro.", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void goDownPointSelectedInList(){
-        if(selectedPOIinList!="" && positionOfPOIinList != markedPOIs.size()-1){
-            int nextPosition = positionOfPOIinList+1;
+        if (selectedPOIinList!="" && positionOfPOIinList != markedPOIs.size()-1) {
+            nextPosition = positionOfPOIinList+1;
 
             markedPOIs.set(positionOfPOIinList, markedPOIs.get(nextPosition));
             markedPOIs.set(nextPosition,selectedPOIinList);
@@ -166,7 +166,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
             updateMarkedPOIsListView();
             selectedPOIinList="";
-        }else{
+        } else {
             //Toast: select a poi of the list
             Toast.makeText(CreateNewRouteActivity.this, "Selecciona un POI encima de otro", Toast.LENGTH_SHORT).show();
         }
