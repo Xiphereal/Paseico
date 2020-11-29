@@ -21,8 +21,22 @@ public class DistanceMatrixRequest {
     }
 
     /**
+     * Appends optional parameters to the request just after the '/responseFormat?'. A "&" is appended at the end
+     * for allowing consequent aditional parameters aditions or the adition of the {@link app.paseico.data.Route}
+     * {@link PointOfInterest}.
+     *
+     * @param optionalParameter The expected format is "parameterName=parameterValues".
+     */
+    public DistanceMatrixRequest addOptionalParameter(String optionalParameter) {
+        urlRequest.append(optionalParameter);
+        urlRequest.append("&");
+
+        return this;
+    }
+
+    /**
      * Adds the first {@link PointOfInterest} in the passed collection as an origin, the last as the
-     * destination and any other {@link PointOfInterest} as a waypoint for the route.
+     * destination and any other {@link PointOfInterest} as a waypoint for the {@link app.paseico.data.Route}.
      */
     public DistanceMatrixRequest addPointsOfInterest(List<PointOfInterest> pointsOfInterest) {
         urlRequest.append("origins=");
