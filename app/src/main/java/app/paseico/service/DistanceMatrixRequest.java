@@ -17,7 +17,7 @@ public class DistanceMatrixRequest {
     public DistanceMatrixRequest(Context context) {
         this.context = context;
 
-        urlRequest = new StringBuilder("http://maps.googleapis.com/maps/api/distancematrix/json?");
+        urlRequest = new StringBuilder("https://maps.googleapis.com/maps/api/distancematrix/json?");
     }
 
     /**
@@ -62,8 +62,6 @@ public class DistanceMatrixRequest {
     public void send() {
         urlRequest.append("&key=").append(context.getString(R.string.google_api_key));
 
-        String response = HttpService.executeGet(urlRequest.toString());
-
-        System.out.println(response);
+        HttpsService.executeGet(urlRequest.toString());
     }
 }
