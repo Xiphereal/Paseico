@@ -235,6 +235,7 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
     private void goToMainMenuActivity() {
         Intent goToMainMenuIntent = new Intent(getApplicationContext(), MainMenuActivity.class);
         startActivity(goToMainMenuIntent);
+        finish();
     }
 
     private void showNotEnoughPointsDialog() {
