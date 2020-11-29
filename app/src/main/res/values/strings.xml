@@ -38,12 +38,12 @@
     <string name="no_theme_choice">Sin temática</string>
 
     <string name="lt0.5">&lt; 0,5</string>
-    <string name="between0.5_1">0.5–1</string>
+    <string name="between0.5_1">0.5-1</string>
     <string name="lt1">&lt; 1</string> <!-- &lt; is '<' -->
-    <string name="between1_2">1–2</string>
-    <string name="between2_3">2–3</string>
-    <string name="between3_4">3–4</string>
-    <string name="between4_5">4–5</string>
+    <string name="between1_2">1-2</string>
+    <string name="between2_3">2-3</string>
+    <string name="between3_4">3-4</string>
+    <string name="between4_5">4-5</string>
     <string name="gt5">&gt; 5</string> <!-- &gt; is '>' -->
 
     <!-- Strings arrays used to populate searchFragment spinners -->
