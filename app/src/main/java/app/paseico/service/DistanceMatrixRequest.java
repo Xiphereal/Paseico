@@ -48,7 +48,7 @@ public class DistanceMatrixRequest {
         }
 
         urlRequest.append("&destinations=");
-        appendPointOfInterest(pointsOfInterest.get(pointsOfInterest.size()));
+        appendPointOfInterest(pointsOfInterest.get(pointsOfInterest.size() - 1));
 
         return this;
     }
