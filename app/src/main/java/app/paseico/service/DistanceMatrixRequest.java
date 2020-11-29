@@ -62,6 +62,6 @@ public class DistanceMatrixRequest {
     public void send() {
         urlRequest.append("&key=").append(context.getString(R.string.google_api_key));
 
-        // TODO: Send the request to Google.
+        HttpsService.executeGet(urlRequest.toString());
     }
 }
