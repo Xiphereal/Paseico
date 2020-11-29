@@ -17,6 +17,10 @@
     <string name="start_route">Empezar ruta</string>
     <string name="create_new_point_of_interest_button">Crear nuevo Punto de Interés</string>
 
+    <string name="orderedRoute_switch">Ordenada?</string>
+    <string name="poiUp_button">Subir</string>
+    <string name="poiDown_button">Bajar</string>
+
     <string name="discounts">DESCUENTOS</string>
 
     <string name="zero">0</string>

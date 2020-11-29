@@ -38,15 +38,15 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <ListView
-            android:id="@+id/marked_pois_list_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5pt"
-            android:layout_marginLeft="5pt"
-            android:layout_marginTop="40pt"
-            android:layout_marginEnd="130pt"
-            android:layout_marginRight="130pt"
-            android:background="#FFFFFF"/>
+        android:id="@+id/marked_pois_list_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5pt"
+        android:layout_marginLeft="5pt"
+        android:layout_marginTop="50pt"
+        android:layout_marginEnd="130pt"
+        android:layout_marginRight="130pt"
+        android:background="#FFFFFF" />
 
     <androidx.core.widget.NestedScrollView
             android:id="@+id/user_created_marker_bottom_sheet"
@@ -80,5 +80,33 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <Switch
+        android:id="@+id/orderedRoute_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5pt"
+        android:layout_marginTop="30pt"
+        android:text="@string/orderedRoute_switch" />
+
+    <Button
+        android:id="@+id/poiUp_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50pt"
+        android:layout_marginTop="30pt"
+        android:clickable="false"
+        android:text="@string/poiUp_button"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/poiDown_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50pt"
+        android:layout_marginTop="50pt"
+        android:clickable="false"
+        android:text="@string/poiDown_button"
+        android:visibility="invisible" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
