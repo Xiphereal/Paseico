@@ -253,7 +253,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:layout_gravity="center_vertical|center_horizontal"
-            android:src="@drawable/ic_myroutes"
+            android:src="@drawable/myroutes"
             android:textAlignment="center"
             android:textColor="@color/white"
             app:backgroundTint="@color/colorPrimary" />
