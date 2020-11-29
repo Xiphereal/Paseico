@@ -51,6 +51,12 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     private Marker userNewCustomPoiInCreation;
 
+    //int to know if the route is ordered or not
+    int isOrdered=0;
+
+    //Switch to set the route as ordered or not
+    Switch orderedRouteSwitch;
+
     //buttons to change order
     Button poiUp;
     Button poiDown;
@@ -207,7 +213,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         String authorId = FirebaseService.getCurrentUser().getUid();
 
         newRoute = new Route(textInputEditText.getText().toString(), selectedPointsOfInterest, authorId);
-
+        newRoute.setOrdered(isOrdered);
         FirebaseService.saveRoute(newRoute);
 
         //We add the created route name to the createdRoutes before returning to the main activity.
@@ -399,7 +405,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     }
 
     private void registerOrderedRouteSwitch(){
-        Switch orderedRouteSwitch = (Switch) findViewById(R.id.orderedRoute_switch);
+        orderedRouteSwitch = (Switch) findViewById(R.id.orderedRoute_switch);
         orderedRouteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
@@ -407,11 +413,13 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
                     poiUp.setClickable(true);
                     poiDown.setVisibility(View.VISIBLE);
                     poiDown.setClickable(true);
+                    isOrdered=1;
                 } else {
                     poiUp.setVisibility(View.INVISIBLE);
                     poiUp.setClickable(false);
                     poiDown.setVisibility(View.INVISIBLE);
                     poiDown.setClickable(false);
+                    isOrdered=0;
                 }
             }
         });
