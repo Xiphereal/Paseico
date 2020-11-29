@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import app.paseico.data.Router;
+import app.paseico.login.LogInActivity;
 import app.paseico.mainMenu.userCreatedRoutes.UserCreatedRoutesFragment;
 import app.paseico.service.FirebaseService;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -148,7 +149,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
             selectedPOIinList="";
         }else{
             //Toast: select a poi of the list
-            System.out.println("Selecciona  un POI debajo de otro");
+            Toast.makeText(CreateNewRouteActivity.this, "Selecciona un POI debajo de otro.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -167,7 +168,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
             selectedPOIinList="";
         }else{
             //Toast: select a poi of the list
-            System.out.println("Selecciona un POI encima de otro");
+            Toast.makeText(CreateNewRouteActivity.this, "Selecciona un POI encima de otro", Toast.LENGTH_SHORT).show();
         }
     }
 
