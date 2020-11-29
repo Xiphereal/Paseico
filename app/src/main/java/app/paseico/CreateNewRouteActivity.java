@@ -2,6 +2,7 @@ package app.paseico;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,6 +32,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.collection.LLRBNode;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -130,40 +133,41 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     }
 
     private void goUpPointSelectedInList(){
-        if(selectedPOIinList!=""){
+        System.out.println(positionOfPOIinList);
+        if(positionOfPOIinList != 0 && selectedPOIinList!=""){
             int nextPosition = positionOfPOIinList-1;
-            if(nextPosition == -1){
-                nextPosition = markedPOIs.size()-1;
-            }
+
             markedPOIs.set(positionOfPOIinList, markedPOIs.get(nextPosition));
             markedPOIs.set(nextPosition,selectedPOIinList);
 
+            PointOfInterest poiSelectedInListView = selectedPointsOfInterest.get(positionOfPOIinList);
+            selectedPointsOfInterest.set(positionOfPOIinList,selectedPointsOfInterest.get(nextPosition));
+            selectedPointsOfInterest.set(nextPosition,poiSelectedInListView);
+
             updateMarkedPOIsListView();
-
-            
-
             selectedPOIinList="";
         }else{
             //Toast: select a poi of the list
+            System.out.println("Selecciona  un POI debajo de otro");
         }
     }
 
     private void goDownPointSelectedInList(){
-        if(selectedPOIinList!=""){
+        if(selectedPOIinList!="" && positionOfPOIinList != markedPOIs.size()-1){
             int nextPosition = positionOfPOIinList+1;
-            if(nextPosition == markedPOIs.size()){
-                nextPosition = 0;
-            }
+
             markedPOIs.set(positionOfPOIinList, markedPOIs.get(nextPosition));
             markedPOIs.set(nextPosition,selectedPOIinList);
 
+            PointOfInterest poiSelectedInListView = selectedPointsOfInterest.get(positionOfPOIinList);
+            selectedPointsOfInterest.set(positionOfPOIinList,selectedPointsOfInterest.get(nextPosition));
+            selectedPointsOfInterest.set(nextPosition,poiSelectedInListView);
+
             updateMarkedPOIsListView();
-
-
-
             selectedPOIinList="";
         }else{
             //Toast: select a poi of the list
+            System.out.println("Selecciona un POI encima de otro");
         }
     }
 
