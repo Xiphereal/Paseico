@@ -5,13 +5,14 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".mainMenu.userCreatedRoutes.UserCreatedRoutesFragment">
+        tools:context=".mainMenu.userCreatedRoutes.UserCreatedRoutesFragment"
+        android:background="@color/background">
 
     <ListView
             android:id="@+id/created_routes_list_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFFFFF"
+            android:background="@color/background"
     />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton

@@ -6,7 +6,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".RouteInfModifyActivity"
-        style="@style/Theme.MaterialComponents.Light.NoActionBar">
+        style="@style/Theme.MaterialComponents.Light.NoActionBar"
+        android:background="@color/background">
+
     <TextView
             android:id="@+id/textView_routeInfo_themeText3"
             style="@style/SmallTextView"
