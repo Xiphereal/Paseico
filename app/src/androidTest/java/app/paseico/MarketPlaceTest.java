@@ -3,6 +3,9 @@ package app.paseico;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -11,6 +14,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -23,6 +27,8 @@ import androidx.test.rule.ActivityTestRule;
 import app.paseico.data.Router;
 import app.paseico.mainMenu.marketplace.marketplaceFragment;
 
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.*;
 
 import java.util.concurrent.Executor;
@@ -47,56 +53,34 @@ public class MarketPlaceTest {
     @Rule
     public FragmentTestRule<marketplaceFragment> mFragmentTestRule = new FragmentTestRule<>(marketplaceFragment.class);
 
-    @Rule
-    public ActivityTestRule<LogInActivity> mActivityRule =
-            new ActivityTestRule<>(LogInActivity.class);
 
     @Before
     public void setUpAll()  {
-        DatabaseReference usersDatabaseReference = FirebaseDatabase.getInstance().getReference();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
         String email = "avd@gmail.com";
         String password = "123456";
-        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(mActivityRule.getActivity(), task ->{
-            if (task.isSuccessful()) {
-                // Sign in success, update UI with the signed-in user's information
-                currentRouter = new Router();
-                FirebaseUser fbUser = firebaseAuth.getCurrentUser();
+        firebaseAuth.signInWithEmailAndPassword(email, password);
 
-                DatabaseReference myActualUserRef = usersDatabaseReference.child(fbUser.getUid());
-                myActualUserRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {// Get the actual user
-                        currentRouter = snapshot.getValue(Router.class);
-                    }
+    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        System.out.println("The db connection failed");
-                    }
-                });
-
-            } else {
-                // If sign in fails, the test fails.
-                fail();
-
-            }
-        });
-
-        //User currentUser = databaseReference.child("7YuiqRHra8OaosZc9vpbfGXdy9C2").child("");
+    @After
+    public void resetPoints(){
+        DatabaseReference  myActualUserRef = FirebaseDatabase.getInstance().getReference("users").child("7YuiqRHra8OaosZc9vpbfGXdy9C2").child("points");
+        myActualUserRef.setValue(0);
     }
 
     @Test
-    public void buy1000PointsTest() {
+    public void buy1000PointsTest() throws InterruptedException {
 
+        mFragmentTestRule.launchActivity(null);
 
-        assertEquals(currentRouter.getUsername(), "avdtesting");
+        Thread.sleep(4500);
+        onView(withId(R.id.textViewMarketplacePTS)).check(matches(withText("Tus puntos: 0")));
+        onView(withId(R.id.imageViewBuy1000Points)).perform(click());
+        onView(withId(R.id.textViewMarketplacePTS)).check(matches(withText("Tus puntos: 1000")));
 
-//        // Launch the activity to make the fragment visible
-//        mFragmentTestRule.launchActivity(null);
-//
-//        // Then use Espresso to test the Fragment
-//        onView(withId(R.id.imageViewBuy1000Points)).check(matches(isDisplayed()));
     }
+
+
 }
