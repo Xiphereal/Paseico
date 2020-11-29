@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RouteFinishedActivity">
+    tools:context=".RouteFinishedActivity"
+android:background="@drawable/geometrics_cut">
 
     <TextView
         android:id="@+id/textViewRouteFinished"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
-        android:text="Ruta completada!"
+        android:text="¡Ruta completada!"
         android:textSize="36sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -56,12 +57,16 @@
 
     <Button
         android:id="@+id/buttonTemporalMenuStartRoute"
+        style="@style/LargeButtonText"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/colorPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="30dp"
         android:text="Volver al menú principal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

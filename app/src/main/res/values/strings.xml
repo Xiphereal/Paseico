@@ -18,7 +18,7 @@
     <string name="finalize">Finalizar</string>
     <string name="create_new_point_of_interest_button">Crear nuevo Punto de Interés</string>
 
-    <string name="discounts">DESCUENTOS</string>
+    <string name="discounts">Descuentos</string>
 
     <string name="zero">0</string>
 
@@ -52,7 +52,7 @@
     <string name="gt5">&gt; 5</string> <!-- &gt; is '>' -->
 
     <!-- Strings arrays used to populate searchFragment spinners -->
-    <string name="search_fragment_title">Seleccione el filtro de búsqueda</string>
+    <string name="search_fragment_title">Seleccione el filtro de búsqueda...</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string-array name="route_category">
         <item>@string/default_spinner_choice</item>
@@ -131,7 +131,7 @@
 
     <string name="rutero">Rutero</string>
     <string name="organizaci_n">Organización</string>
-    <string name="nombre_de_la_organizaci_n">Nombre de la organización</string>
+    <string name="nombre_de_la_organizaci_n">Nombre organización</string>
     <string name="contrase_a">Contraseña</string>
     <string name="repita_la_contrase_a">Repita la contraseña</string>
 </resources>
