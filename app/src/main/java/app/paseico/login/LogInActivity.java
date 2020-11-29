@@ -48,7 +48,6 @@ public class LogInActivity extends AppCompatActivity {
     private UserDao userDao = new UserDao();
     private Button routerBtn,
             organiBtn;
-    int purple = R.color.purple;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,17 +87,21 @@ public class LogInActivity extends AppCompatActivity {
         routerBtn = findViewById(R.id.buttonLoginRouter);
         organiBtn = findViewById(R.id.buttonLoginOrganization);
         routerBtn.setEnabled(false);
-        routerBtn.setBackgroundColor(getResources().getColor(purple));
+        routerBtn.setBackground(getResources().getDrawable(R.drawable.gradient));
+        routerBtn.setTextColor(Color.WHITE);
         organiBtn.setEnabled(true);
-        organiBtn.setBackgroundColor(Color.DKGRAY);
+        organiBtn.setBackgroundColor(Color.TRANSPARENT);
+        organiBtn.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
 
         routerBtn.setOnClickListener(new View.OnClickListener() {@Override
         public void onClick(View view) {
             googleSignInButton.setVisibility(View.VISIBLE);
             routerBtn.setEnabled(false);
-            routerBtn.setBackgroundColor(getResources().getColor(purple));
+            routerBtn.setBackground(getResources().getDrawable(R.drawable.gradient));
+            routerBtn.setTextColor(Color.WHITE);
             organiBtn.setEnabled(true);
-            organiBtn.setBackgroundColor(Color.DKGRAY);
+            organiBtn.setBackgroundColor(Color.TRANSPARENT);
+            organiBtn.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
         }
         });
 
@@ -106,9 +109,11 @@ public class LogInActivity extends AppCompatActivity {
         public void onClick(View view) {
             googleSignInButton.setVisibility(View.GONE);
             routerBtn.setEnabled(true);
-            routerBtn.setBackgroundColor(Color.DKGRAY);
+            routerBtn.setBackgroundColor(Color.TRANSPARENT);
+            routerBtn.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
             organiBtn.setEnabled(false);
-            organiBtn.setBackgroundColor(getResources().getColor(purple));
+            organiBtn.setBackground(getResources().getDrawable(R.drawable.gradient));
+            organiBtn.setTextColor(Color.WHITE);
         }
         });
     }

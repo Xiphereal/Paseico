@@ -101,7 +101,7 @@ public class ProfileFragment extends Fragment {
                 userInfo();
                 getFollowers();
                 //if (profileid.equals(usernameFirebase)) { //HERE
-                buttonLogOut.setText("Cerrar sesion");
+                buttonLogOut.setText("Cerrar sesión");
                 setButtonLogOut();
             }
 
