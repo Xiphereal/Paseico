@@ -3,6 +3,7 @@ package app.paseico.mainMenu.userCreatedRoutes;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.MainMenuActivity;
@@ -26,8 +27,11 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
 
     private Router currentRouter;
     private Route newRoute;
+    private int routeCost;
 
     private List<PointOfInterest> selectedPointsOfInterest = new ArrayList<>();
+
+    final double ROUTE_TOTAL_COST_MULTIPLIER_TO_GET_REWARD_POINTS = 0.5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +87,7 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
     }
 
     private void showRouteCreationSummaryDialog() {
-        int routeCost = calculateRouteCost();
+        routeCost = calculateRouteCost();
 
         String dialogMessage = getResources().getString(R.string.route_creation_summary_message, routeCost);
 
@@ -161,14 +165,38 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
 
     private void createNewRoute() {
         TextInputEditText textInputEditText = findViewById(R.id.route_name_textInputEditText);
+        Spinner categorySpinner = findViewById(R.id.introduce_new_route_data_route_category_spinner);
+
+        String routeName = textInputEditText.getText().toString();
+        String category = categorySpinner.getSelectedItem().toString();
         String authorId = FirebaseService.getCurrentUser().getUid();
 
-        newRoute = new Route(textInputEditText.getText().toString(), selectedPointsOfInterest, authorId);
+        newRoute = new Route(routeName,
+                category,
+                calculateRouteLength(),
+                calculateRouteEstimatedTime(),
+                calculateRouteRewardPoints(),
+                selectedPointsOfInterest,
+                authorId);
 
         FirebaseService.saveRoute(newRoute);
 
         //We add the created route name to the createdRoutes before returning to the main activity.
         UserCreatedRoutesFragment.getCreatedRoutes().add(newRoute.getName());
+    }
+
+    private int calculateRouteLength() {
+        return 999;
+    }
+
+    private int calculateRouteEstimatedTime() {
+        return 999;
+    }
+
+    private int calculateRouteRewardPoints() {
+        double routeRewardPoints = routeCost * ROUTE_TOTAL_COST_MULTIPLIER_TO_GET_REWARD_POINTS;
+
+        return Math.toIntExact(Math.round(routeRewardPoints));
     }
 
     // TODO: Refactor and generalize this into a User instance method.
