@@ -172,17 +172,21 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
         String category = categorySpinner.getSelectedItem().toString();
         String authorId = FirebaseService.getCurrentUser().getUid();
 
-        DistanceMatrixRequest distanceMatrixRequest = new DistanceMatrixRequest(getApplicationContext());
-        distanceMatrixRequest.addPointsOfInterest(selectedPointsOfInterest)
-                .send();
+        // Get the estimated duration and distance for the newly created Route via a API request.
+        DistanceMatrixRequest distanceMatrixRequest = calculateRouteMetrics();
 
-        String response = distanceMatrixRequest.getResponse();
-        System.out.println(response);
+        double estimatedDistance = distanceMatrixRequest != null ?
+                distanceMatrixRequest.getRouteEstimatedDistance() :
+                0;
+
+        double estimatedDuration = distanceMatrixRequest != null ?
+                distanceMatrixRequest.getRouteEstimatedDuration() :
+                0;
 
         newRoute = new Route(routeName,
                 category,
-                calculateRouteLength(),
-                calculateRouteEstimatedTime(),
+                estimatedDistance,
+                estimatedDuration,
                 calculateRouteRewardPoints(),
                 selectedPointsOfInterest,
                 authorId);
@@ -193,12 +197,25 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
         UserCreatedRoutesFragment.getCreatedRoutes().add(newRoute.getName());
     }
 
-    private int calculateRouteLength() {
-        return 999;
-    }
+    /**
+     * Make a request to the Distance Matrix API to get the estimated duration and distance of the {@link Route}.
+     *
+     * @return The {@link DistanceMatrixRequest} containing the response. Can be queried with
+     * getRouteEstimatedDistance() and getRouteEstimatedDuration().
+     */
+    private DistanceMatrixRequest calculateRouteMetrics() {
 
-    private int calculateRouteEstimatedTime() {
-        return 999;
+        if (selectedPointsOfInterest.size() < 2) {
+            return null;
+        }
+
+        DistanceMatrixRequest distanceMatrixRequest = new DistanceMatrixRequest(getApplicationContext());
+        distanceMatrixRequest
+                .addOptionalParameter("mode=walking")
+                .addPointsOfInterest(selectedPointsOfInterest)
+                .send();
+
+        return distanceMatrixRequest;
     }
 
     private int calculateRouteRewardPoints() {

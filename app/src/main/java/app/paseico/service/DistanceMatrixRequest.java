@@ -4,6 +4,10 @@ import android.content.Context;
 import app.paseico.R;
 import app.paseico.data.PointOfInterest;
 import org.jetbrains.annotations.NotNull;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.util.List;
 
@@ -12,6 +16,8 @@ public class DistanceMatrixRequest {
     private StringBuilder urlRequest;
 
     private String response;
+    private double estimatedDistanceInMeters;
+    private double estimatedDurationInMinutes;
 
     private final Context context;
 
@@ -67,18 +73,50 @@ public class DistanceMatrixRequest {
         urlRequest.append("&key=").append(context.getString(R.string.google_api_key));
 
         // TODO: Thread synchronization to get the response synchronously.
-        new Thread(() ->
-                response = HttpsService.executeGet(urlRequest.toString())
-        ).start();
-    }
+        new Thread(() -> {
+            response = HttpsService.executeGet(urlRequest.toString());
 
-    public String getResponse() {
+            extractResultsFromJsonResponse();
+
+        }).start();
+
         try {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
 
-        return response;
+    private void extractResultsFromJsonResponse() {
+        try {
+            JSONParser jsonparser = new JSONParser();
+            JSONObject entireJsonFile = (JSONObject) jsonparser.parse(response);
+
+            JSONArray rows = (JSONArray) entireJsonFile.get("rows");
+            Object[] rowsArray = rows.toArray();
+
+            JSONArray elements = (JSONArray) ((JSONObject) rowsArray[0]).get("elements");
+            Object[] elementsArray = elements.toArray();
+
+            JSONObject distance = (JSONObject) ((JSONObject) elementsArray[0]).get("distance");
+            estimatedDistanceInMeters = ((Long) distance.get("value")).intValue();
+
+            JSONObject duration = (JSONObject) ((JSONObject) elementsArray[0]).get("duration");
+            estimatedDurationInMinutes = ((Long) duration.get("value")).intValue();
+
+            if (estimatedDurationInMinutes != 0)
+                estimatedDurationInMinutes /= 60;
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public double getRouteEstimatedDuration() {
+        return estimatedDurationInMinutes;
+    }
+
+    public double getRouteEstimatedDistance() {
+        return estimatedDistanceInMeters;
     }
 }
