@@ -1,10 +1,8 @@
 package app.paseico.data;
 
-
 import android.os.Parcel;
 import android.os.Parcelable;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
 
 public class Route implements Parcelable {
