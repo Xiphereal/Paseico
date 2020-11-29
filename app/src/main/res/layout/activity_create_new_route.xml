@@ -46,7 +46,9 @@
         android:layout_marginTop="50pt"
         android:layout_marginEnd="130pt"
         android:layout_marginRight="130pt"
-        android:background="#FFFFFF" />
+        android:background="#FFFFFF"
+        android:choiceMode="singleChoice"
+        android:listSelector="@android:color/holo_blue_light" />
 
     <androidx.core.widget.NestedScrollView
             android:id="@+id/user_created_marker_bottom_sheet"

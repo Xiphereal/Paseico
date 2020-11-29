@@ -10,14 +10,13 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
-import android.widget.ToggleButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import app.paseico.data.Router;
-import app.paseico.data.User;
 import app.paseico.mainMenu.userCreatedRoutes.UserCreatedRoutesFragment;
 import app.paseico.service.FirebaseService;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -59,10 +58,11 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     Switch orderedRouteSwitch;
 
     //buttons to change order
-    Button poiUp;
-    Button poiDown;
+    Button poiUpButton;
+    Button poiDownButton;
 
     String selectedPOIinList = "";
+    int positionOfPOIinList = 0;
 
 
     @Override
@@ -71,8 +71,9 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         setContentView(R.layout.activity_create_new_route);
         registerMarkedPOIsListView();
 
-        poiUp = findViewById(R.id.poiUp_button);
-        poiDown = findViewById(R.id.poiDown_button);
+        poiUpButton = findViewById(R.id.poiUp_button);
+        poiDownButton = findViewById(R.id.poiDown_button);
+        registerUpAndDownButtons();
         registerOrderedRouteSwitch();
 
         initializeMapFragment();
@@ -86,7 +87,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectedPOIinList = (String) markedPOIsListView.getItemAtPosition(position);
-                System.out.println(selectedPOIinList);
+                positionOfPOIinList = position;
             }
         });
     }
@@ -96,32 +97,78 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         orderedRouteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    poiUp.setVisibility(View.VISIBLE);
-                    poiUp.setClickable(true);
-                    poiDown.setVisibility(View.VISIBLE);
-                    poiDown.setClickable(true);
+                    poiUpButton.setVisibility(View.VISIBLE);
+                    poiUpButton.setClickable(true);
+                    poiDownButton.setVisibility(View.VISIBLE);
+                    poiDownButton.setClickable(true);
                     isOrdered=1;
                 } else {
-                    poiUp.setVisibility(View.INVISIBLE);
-                    poiUp.setClickable(false);
-                    poiDown.setVisibility(View.INVISIBLE);
-                    poiDown.setClickable(false);
+                    poiUpButton.setVisibility(View.INVISIBLE);
+                    poiUpButton.setClickable(false);
+                    poiDownButton.setVisibility(View.INVISIBLE);
+                    poiDownButton.setClickable(false);
                     isOrdered=0;
                 }
             }
         });
     }
 
+    private void registerUpAndDownButtons(){
+        poiUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goUpPointSelectedInList();
+            }
+        });
+
+        poiDownButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goDownPointSelectedInList();
+            }
+        });
+    }
+
     private void goUpPointSelectedInList(){
         if(selectedPOIinList!=""){
+            int nextPosition = positionOfPOIinList-1;
+            if(nextPosition == -1){
+                nextPosition = markedPOIs.size()-1;
+            }
+            markedPOIs.set(positionOfPOIinList, markedPOIs.get(nextPosition));
+            markedPOIs.set(nextPosition,selectedPOIinList);
 
+            updateMarkedPOIsListView();
+
+            
+
+            selectedPOIinList="";
+        }else{
+            //Toast: select a poi of the list
         }
     }
 
     private void goDownPointSelectedInList(){
         if(selectedPOIinList!=""){
+            int nextPosition = positionOfPOIinList+1;
+            if(nextPosition == markedPOIs.size()){
+                nextPosition = 0;
+            }
+            markedPOIs.set(positionOfPOIinList, markedPOIs.get(nextPosition));
+            markedPOIs.set(nextPosition,selectedPOIinList);
 
+            updateMarkedPOIsListView();
+
+
+
+            selectedPOIinList="";
+        }else{
+            //Toast: select a poi of the list
         }
+    }
+
+    private void launchToast(){
+
     }
 
     private void initializeMapFragment() {
