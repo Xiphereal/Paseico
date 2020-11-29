@@ -2,7 +2,6 @@ package app.paseico.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -126,4 +125,3 @@ public class PointOfInterest implements Serializable, Parcelable {
         dest.writeByte((byte) (createdByUser ? 1 : 0));
     }
 }
-//
