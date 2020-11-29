@@ -97,15 +97,19 @@ public class DiscountsFragment extends Fragment {
         });
 
         discountsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
                 final DatabaseReference myPointsReference = myActualUserRef.child("points");
                 if (discounts.get(i).getPoints() <= currentRouter.getPoints()) {
                     int updatedPoints = currentRouter.getPoints() - discounts.get(i).getPoints();
                     myPointsReference.setValue(updatedPoints);
-                    Toast.makeText(getActivity(), "Enhorabuena! Acabas de canjear un descuento de " + discounts.get(i).getName(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "Enhorabuena! Acabas de canjear un descuento de " + discounts.get(i).getName(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Enhorabuena! Acabas de canjear un descuento", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getActivity(), "No tienes puntos suficientes para canjear el descuento de " + discounts.get(i).getName(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "No tienes puntos suficientes para canjear el descuento de " + discounts.get(i).getName(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "No tienes puntos suficientes para canjear el descuento", Toast.LENGTH_SHORT).show();
                 }
             }
         });
