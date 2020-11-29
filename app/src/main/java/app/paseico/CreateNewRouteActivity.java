@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -61,11 +62,14 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     Button poiUp;
     Button poiDown;
 
+    String selectedPOIinList = "";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_route);
-        markedPOIsListView = findViewById(R.id.marked_pois_list_view);
+        registerMarkedPOIsListView();
 
         poiUp = findViewById(R.id.poiUp_button);
         poiDown = findViewById(R.id.poiDown_button);
@@ -74,6 +78,50 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         initializeMapFragment();
 
         getCurrentUserFromDatabaseAsync();
+    }
+
+    private void registerMarkedPOIsListView(){
+        markedPOIsListView = findViewById(R.id.marked_pois_list_view);
+        markedPOIsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedPOIinList = (String) markedPOIsListView.getItemAtPosition(position);
+                System.out.println(selectedPOIinList);
+            }
+        });
+    }
+
+    private void registerOrderedRouteSwitch(){
+        orderedRouteSwitch = (Switch) findViewById(R.id.orderedRoute_switch);
+        orderedRouteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    poiUp.setVisibility(View.VISIBLE);
+                    poiUp.setClickable(true);
+                    poiDown.setVisibility(View.VISIBLE);
+                    poiDown.setClickable(true);
+                    isOrdered=1;
+                } else {
+                    poiUp.setVisibility(View.INVISIBLE);
+                    poiUp.setClickable(false);
+                    poiDown.setVisibility(View.INVISIBLE);
+                    poiDown.setClickable(false);
+                    isOrdered=0;
+                }
+            }
+        });
+    }
+
+    private void goUpPointSelectedInList(){
+        if(selectedPOIinList!=""){
+
+        }
+    }
+
+    private void goDownPointSelectedInList(){
+        if(selectedPOIinList!=""){
+
+        }
     }
 
     private void initializeMapFragment() {
@@ -401,27 +449,6 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
             userNewCustomPoiInCreation = createNewRouteMap
                     .addMarker(new MarkerOptions().position(tapPoint).title("User Marker"));
-        });
-    }
-
-    private void registerOrderedRouteSwitch(){
-        orderedRouteSwitch = (Switch) findViewById(R.id.orderedRoute_switch);
-        orderedRouteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    poiUp.setVisibility(View.VISIBLE);
-                    poiUp.setClickable(true);
-                    poiDown.setVisibility(View.VISIBLE);
-                    poiDown.setClickable(true);
-                    isOrdered=1;
-                } else {
-                    poiUp.setVisibility(View.INVISIBLE);
-                    poiUp.setClickable(false);
-                    poiDown.setVisibility(View.INVISIBLE);
-                    poiDown.setClickable(false);
-                    isOrdered=0;
-                }
-            }
         });
     }
 
