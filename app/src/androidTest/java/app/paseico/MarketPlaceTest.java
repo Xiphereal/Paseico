@@ -57,18 +57,13 @@ public class MarketPlaceTest {
     @Before
     public void setUpAll()  {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-
+        // Login a created user which no have rewardsPoints.
         String email = "avd@gmail.com";
         String password = "123456";
         firebaseAuth.signInWithEmailAndPassword(email, password);
-
     }
 
-    @After
-    public void resetPoints(){
-        DatabaseReference  myActualUserRef = FirebaseDatabase.getInstance().getReference("users").child("7YuiqRHra8OaosZc9vpbfGXdy9C2").child("points");
-        myActualUserRef.setValue(0);
-    }
+
 
     @Test
     public void buy1000PointsTest() throws InterruptedException {
@@ -82,5 +77,35 @@ public class MarketPlaceTest {
 
     }
 
+    @Test
+    public void buy2000PointsTest() throws InterruptedException {
 
+        mFragmentTestRule.launchActivity(null);
+
+        Thread.sleep(4500);
+        onView(withId(R.id.textViewMarketplacePTS)).check(matches(withText("Tus puntos: 0")));
+        onView(withId(R.id.imageViewBuy2000Points)).perform(click());
+        onView(withId(R.id.textViewMarketplacePTS)).check(matches(withText("Tus puntos: 2000")));
+
+    }
+
+    @Test
+    public void buy6000PointsTest() throws InterruptedException {
+
+        mFragmentTestRule.launchActivity(null);
+
+        Thread.sleep(4500);
+        onView(withId(R.id.textViewMarketplacePTS)).check(matches(withText("Tus puntos: 0")));
+        onView(withId(R.id.imageViewBuy6000Points)).perform(click());
+        onView(withId(R.id.textViewMarketplacePTS)).check(matches(withText("Tus puntos: 6000")));
+
+    }
+
+
+    @After
+    public void resetPoints(){
+        // Reset the rewardPoints of the user used to test this Fragment.
+        DatabaseReference  myActualUserRef = FirebaseDatabase.getInstance().getReference("users").child("7YuiqRHra8OaosZc9vpbfGXdy9C2").child("points");
+        myActualUserRef.setValue(0);
+    }
 }
