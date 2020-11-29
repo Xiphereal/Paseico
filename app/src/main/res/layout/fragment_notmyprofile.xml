@@ -186,24 +186,9 @@
                 android:orientation="horizontal">
                 <!--This can be changed in the future-->
 
-                <ImageButton
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:id="@+id/my_routes"
-                    android:src="@drawable/ic_routes" />
-
-                <ImageButton
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:id="@+id/achievements"
-                    android:src="@drawable/ic_achievements" />
-
             </LinearLayout>
 
             <!--Here we can put the RecyclerView-->
-
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

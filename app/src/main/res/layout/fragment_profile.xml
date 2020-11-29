@@ -203,11 +203,12 @@
 
         <TextView
             android:id="@+id/POINTSProfileText"
+            style="@style/LargeTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:maxLines="1"
-            android:text="PUNTOS"
+            android:text="Puntos"
             android:textColor="#A6ACAF"
             android:textSize="22dp" />
 
@@ -218,17 +219,18 @@
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:maxLines="1"
-            android:textColor="#4E2D9E"
-            android:textSize="26dp" />
+            android:textColor="#048C94"
+            android:textSize="23dp" />
 
         <TextView
             android:id="@+id/RUTASProfileText"
+            style="@style/LargeTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             android:gravity="center"
             android:maxLines="1"
-            android:text="RUTAS"
+            android:text="Rutas"
             android:textColor="#A6ACAF"
             android:textSize="22dp" />
 
@@ -239,21 +241,22 @@
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:maxLines="1"
-            android:textColor="#4E2D9E"
-            android:textSize="26dp" />
+            android:textColor="#048C94"
+            android:textSize="23dp" />
 
         <ImageButton
-                android:id="@+id/my_routes"
-                android:layout_width="341dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_weight="1"
-                android:textAlignment="center"
-                android:gravity="center"
-                android:src="@drawable/ic_routes"
-                app:backgroundTint="@color/colorPrimary"
-                style="@style/LargeButtonText"
-                android:textColor="@color/white"/>
+            android:id="@+id/my_routes"
+            style="@style/LargeButtonText"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:src="@drawable/ic_myroutes"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/colorPrimary" />
 
 
     </LinearLayout>

@@ -51,7 +51,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@android:drawable/ic_delete"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/background"
         style="@style/LargeButtonText"
         android:textColor="@color/white"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
