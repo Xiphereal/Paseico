@@ -5,10 +5,12 @@ import org.junit.Test;
 
 import app.paseico.mainMenu.marketplace.DiscountsFragment;
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static org.hamcrest.Matchers.instanceOf;
 
 public class MyFragmentTest {
 
@@ -23,5 +25,12 @@ public class MyFragmentTest {
 
         // Then use Espresso to test the Fragment
         onView(withId(R.id.ListViewDiscounts)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void clickOnItem(){
+        mFragmentTestRule.launchActivity(null);
+        onData(instanceOf(String.class)).atPosition(0);
+        //onData(anything()).inAdapterView(withId(R.id.ListViewDiscounts)).atPosition(0).perform(click());
     }
 }
