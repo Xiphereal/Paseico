@@ -26,7 +26,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@color/background"/>
 
     <TextView
         android:id="@+id/textViewTitleRoutingActivity"
@@ -34,7 +35,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="NOMBRE DE RUTA"
-        android:textSize="30sp"
+        style="@style/LargeTextView"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -48,5 +50,8 @@
         android:src="@android:drawable/ic_delete"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@android:drawable/ic_delete" />
+        tools:src="@android:drawable/ic_delete"
+        app:backgroundTint="@color/colorPrimary"
+        style="@style/LargeButtonText"
+        android:textColor="@color/white"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
