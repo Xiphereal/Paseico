@@ -176,6 +176,9 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
         distanceMatrixRequest.addPointsOfInterest(selectedPointsOfInterest)
                 .send();
 
+        String response = distanceMatrixRequest.getResponse();
+        System.out.println(response);
+
         newRoute = new Route(routeName,
                 category,
                 calculateRouteLength(),

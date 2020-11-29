@@ -2,7 +2,9 @@ package app.paseico.service;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.util.Scanner;
 
 public class HttpsService {
 
@@ -14,7 +16,10 @@ public class HttpsService {
 
             HttpsURLConnection httpsURLConnection = (HttpsURLConnection) url.openConnection();
 
-            response = (String) httpsURLConnection.getContent();
+            InputStream inputStream = (InputStream) httpsURLConnection.getContent();
+
+            Scanner s = new Scanner(inputStream).useDelimiter("\\A");
+            response = s.hasNext() ? s.next() : "";
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -11,6 +11,8 @@ public class DistanceMatrixRequest {
 
     private StringBuilder urlRequest;
 
+    private String response;
+
     private final Context context;
 
     @NotNull
@@ -42,9 +44,11 @@ public class DistanceMatrixRequest {
         urlRequest.append("origins=");
         appendPointOfInterest(pointsOfInterest.get(0));
 
-        urlRequest.append("&waypoints=");
-        for (int i = 1; i < pointsOfInterest.size() - 1; i++) {
-            appendPointOfInterest(pointsOfInterest.get(i));
+        if (pointsOfInterest.size() > 2) {
+            urlRequest.append("&waypoints=");
+            for (int i = 1; i < pointsOfInterest.size() - 1; i++) {
+                appendPointOfInterest(pointsOfInterest.get(i));
+            }
         }
 
         urlRequest.append("&destinations=");
@@ -62,6 +66,19 @@ public class DistanceMatrixRequest {
     public void send() {
         urlRequest.append("&key=").append(context.getString(R.string.google_api_key));
 
-        HttpsService.executeGet(urlRequest.toString());
+        // TODO: Thread synchronization to get the response synchronously.
+        new Thread(() ->
+                response = HttpsService.executeGet(urlRequest.toString())
+        ).start();
+    }
+
+    public String getResponse() {
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return response;
     }
 }
