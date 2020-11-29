@@ -36,6 +36,11 @@
 
     <string name="default_spinner_choice">Indiferente</string>
     <string name="no_theme_choice">Sin temática</string>
+    <string name="museums">Museos</string>
+    <string name="restaurants">Restaurantes</string>
+    <string name="monuments">Monumentos</string>
+    <string name="nature">Naturaleza</string>
+    <string name="pubs">Bares</string>
 
     <string name="lt0.5">&lt; 0,5</string>
     <string name="between0.5_1">0.5-1</string>
@@ -52,11 +57,11 @@
     <string-array name="route_category">
         <item>@string/default_spinner_choice</item>
         <item>@string/no_theme_choice</item>
-        <item>Museos</item>
-        <item>Restaurantes</item>
-        <item>Monumentos</item>
-        <item>Naturaleza</item>
-        <item>Bares</item>
+        <item>@string/museums</item>
+        <item>@string/restaurants</item>
+        <item>@string/monuments</item>
+        <item>@string/nature</item>
+        <item>@string/pubs</item>
     </string-array>
 
     <string-array name="lengths_of_route">
@@ -77,6 +82,14 @@
         <item>@string/between3_4</item>
         <item>@string/between4_5</item>
         <item>@string/gt5</item>
+    </string-array>
+    <string-array name="route_creation_route_category">
+        <item>@string/no_theme_choice</item>
+        <item>@string/museums</item>
+        <item>@string/restaurants</item>
+        <item>@string/monuments</item>
+        <item>@string/nature</item>
+        <item>@string/pubs</item>
     </string-array>
 
     <string name="title_activity_main_menu">MainMenuActivity</string>
