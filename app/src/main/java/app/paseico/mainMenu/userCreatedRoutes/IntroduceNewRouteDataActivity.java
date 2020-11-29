@@ -11,6 +11,7 @@ import app.paseico.R;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import app.paseico.data.Router;
+import app.paseico.service.DistanceMatrixRequest;
 import app.paseico.service.FirebaseService;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -170,6 +171,10 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
         String routeName = textInputEditText.getText().toString();
         String category = categorySpinner.getSelectedItem().toString();
         String authorId = FirebaseService.getCurrentUser().getUid();
+
+        DistanceMatrixRequest distanceMatrixRequest = new DistanceMatrixRequest(getApplicationContext());
+        distanceMatrixRequest.addPointsOfInterest(selectedPointsOfInterest)
+                .send();
 
         newRoute = new Route(routeName,
                 category,
