@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/geometrics_cut"
+    android:background="@drawable/geometrics_profile"
     tools:context=".mainMenu.profile.ProfileFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -62,31 +62,31 @@
                     android:src="@drawable/defaultprofile" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="4dp">
+                        android:layout_width="match_parent"
+                        android:layout_height="102dp"
+                        android:orientation="vertical"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="4dp">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="horizontal">
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/posts"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:textColor="@color/colorPrimaryDark"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
+                                android:orientation="vertical">
+
+                            <TextView
+                                    android:id="@+id/posts"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:textColor="@color/colorPrimaryDark"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"/>
 
                             <!--For the future
                             <TextView
@@ -97,59 +97,62 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="35dp"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/followers"
-                                android:layout_width="60dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:textAlignment="center"
-                                android:textColor="@color/colorPrimaryDark"
-                                android:textSize="26dp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/textView_Followers"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="followers" />
+                                android:layout_marginLeft="35dp"
+                                android:orientation="vertical">
+
+                            <TextView
+                                    android:id="@+id/followers"
+                                    android:layout_width="60dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/colorPrimaryDark"
+                                    android:textSize="26dp"
+                                    android:textStyle="bold"/>
+
+                            <TextView
+                                    android:id="@+id/textView_Followers"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="followers"/>
 
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="35dp"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/following"
-                                android:layout_width="60dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:textAlignment="center"
-                                android:textColor="@color/colorPrimaryDark"
-                                android:textSize="26dp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/textView_Following"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="following" />
+                                android:layout_marginLeft="35dp"
+                                android:orientation="vertical">
+
+                            <TextView
+                                    android:id="@+id/following"
+                                    android:layout_width="60dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/colorPrimaryDark"
+                                    android:textSize="26dp"
+                                    android:textStyle="bold"/>
+
+                            <TextView
+                                    android:id="@+id/textView_Following"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="following"/>
 
                         </LinearLayout>
                     </LinearLayout>
 
                     <Button
-                        android:id="@+id/buttonLogOut"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp" />
+                            android:id="@+id/buttonLogOut"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            app:backgroundTint="@color/colorPrimary"
+                            style="@style/LargeButtonText"
+                            android:textColor="@color/white"/>
 
                 </LinearLayout>
             </LinearLayout>
@@ -240,13 +243,17 @@
             android:textSize="26dp" />
 
         <ImageButton
-            android:id="@+id/my_routes"
-            android:layout_width="341dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:src="@drawable/ic_routes" />
+                android:id="@+id/my_routes"
+                android:layout_width="341dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:src="@drawable/ic_routes"
+                app:backgroundTint="@color/colorPrimary"
+                style="@style/LargeButtonText"
+                android:textColor="@color/white"/>
 
 
     </LinearLayout>
