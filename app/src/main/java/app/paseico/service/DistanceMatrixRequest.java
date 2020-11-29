@@ -101,11 +101,16 @@ public class DistanceMatrixRequest {
             JSONObject distance = (JSONObject) ((JSONObject) elementsArray[0]).get("distance");
             estimatedDistanceInMeters = ((Long) distance.get("value")).intValue();
 
+            if (estimatedDistanceInMeters != 0) {
+                estimatedDistanceInMeters = Math.round(estimatedDistanceInMeters);
+            }
+
             JSONObject duration = (JSONObject) ((JSONObject) elementsArray[0]).get("duration");
             estimatedDurationInMinutes = ((Long) duration.get("value")).intValue();
 
-            if (estimatedDurationInMinutes != 0)
-                estimatedDurationInMinutes /= 60;
+            if (estimatedDurationInMinutes != 0) {
+                estimatedDurationInMinutes = Math.round(estimatedDurationInMinutes / 60);
+            }
 
         } catch (ParseException e) {
             e.printStackTrace();
