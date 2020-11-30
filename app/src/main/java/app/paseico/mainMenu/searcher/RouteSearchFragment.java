@@ -66,7 +66,7 @@ public class RouteSearchFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Action performed when a user search routes
-        view.findViewById(R.id.btn_search).setOnClickListener(view1 -> {
+        view.findViewById(R.id.button_route_searcher).setOnClickListener(view1 -> {
             assignValueOfFilterVariables();
 
             FirebaseFirestore database = FirebaseFirestore.getInstance();

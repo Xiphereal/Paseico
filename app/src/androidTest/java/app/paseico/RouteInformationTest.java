@@ -67,9 +67,10 @@ public class RouteInformationTest {
 
         onView(withId(R.id.editText_keyWord)).perform(typeText(expectedRouteName), closeSoftKeyboard());
 
-        onView(withId(R.id.btn_search)).perform(click());
+        onView(withId(R.id.button_route_searcher)).perform(click());
 
         onView(withText(expectedRouteName)).perform(click());
+        Thread.sleep(4500);
     }
 
     @AfterClass
