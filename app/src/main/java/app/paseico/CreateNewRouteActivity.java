@@ -42,32 +42,32 @@ import java.util.List;
 
 public class CreateNewRouteActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    private GoogleMap createNewRouteMap;
-    private final List<PointOfInterest> selectedPointsOfInterest = new ArrayList<>();
-    private static Route newRoute;
+    protected GoogleMap createNewRouteMap;
+    protected final List<PointOfInterest> selectedPointsOfInterest = new ArrayList<>();
+    protected static Route newRoute;
 
-    private ListView markedPOIsListView;
-    private final List<String> markedPOIs = new ArrayList<>();
+    protected ListView markedPOIsListView;
+    protected final List<String> markedPOIs = new ArrayList<>();
 
-    private final List<String> createdMarkers = new ArrayList<>();
+    protected final List<String> createdMarkers = new ArrayList<>();
 
-    private Router currentUser;
+    protected Router currentUser;
 
-    private Marker userNewCustomPoiInCreation;
+    protected Marker userNewCustomPoiInCreation;
 
     //int to know if the route is ordered or not
-    int isOrdered=0;
+    protected int isOrdered=0;
 
     //Switch to set the route as ordered or not
-    Switch orderedRouteSwitch;
+    protected Switch orderedRouteSwitch;
 
     //buttons to change order
-    Button poiUpButton;
-    Button poiDownButton;
+    protected Button poiUpButton;
+    protected Button poiDownButton;
 
-    String selectedPOIinList = "";
-    int positionOfPOIinList = 0;
-    int nextPosition = 0;
+    protected String selectedPOIinList = "";
+    protected int positionOfPOIinList = 0;
+    protected int nextPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
