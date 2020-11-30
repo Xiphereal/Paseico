@@ -15,6 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -45,24 +46,33 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 public class MarketPlaceTest {
-    private static Router currentRouter;
-    //private FirebaseAuth firebaseAuth;
-    //private static FirebaseUser fbUser;
-    //private static DatabaseReference usersDatabaseReference;
 
     @Rule
-    public FragmentTestRule<marketplaceFragment> mFragmentTestRule = new FragmentTestRule<>(marketplaceFragment.class);
+    public FragmentTestRule<marketplaceFragment> mFragmentTestRule =
+            new FragmentTestRule<>(marketplaceFragment.class);
 
 
     @Before
     public void setUpAll()  {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        // Login a created user which no have rewardsPoints.
+        // Login a created user.
         String email = "avd@gmail.com";
         String password = "123456";
         firebaseAuth.signInWithEmailAndPassword(email, password);
+
+        // Set to zero the rewards points of the logged user.
+        DatabaseReference  myActualUserRef = FirebaseDatabase.getInstance().getReference("users")
+                .child("7YuiqRHra8OaosZc9vpbfGXdy9C2").child("points");
+        myActualUserRef.setValue(0);
     }
 
+    @AfterClass
+    public void resetPoints(){
+        // Reset the rewardPoints of the user used to test this Fragment.
+        DatabaseReference  myActualUserRef = FirebaseDatabase.getInstance().getReference("users").
+                child("7YuiqRHra8OaosZc9vpbfGXdy9C2").child("points");
+        myActualUserRef.setValue(0);
+    }
 
 
     @Test
@@ -102,10 +112,5 @@ public class MarketPlaceTest {
     }
 
 
-    @After
-    public void resetPoints(){
-        // Reset the rewardPoints of the user used to test this Fragment.
-        DatabaseReference  myActualUserRef = FirebaseDatabase.getInstance().getReference("users").child("7YuiqRHra8OaosZc9vpbfGXdy9C2").child("points");
-        myActualUserRef.setValue(0);
-    }
+
 }
