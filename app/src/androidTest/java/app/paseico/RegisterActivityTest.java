@@ -1,48 +1,27 @@
 package app.paseico;
 
 
-import android.content.ComponentName;
-import android.content.Intent;
-import android.util.Log;
-import android.widget.Toast;
-
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-
+import androidx.test.rule.ActivityTestRule;
+import app.paseico.login.LogInActivity;
+import app.paseico.login.RegisterActivity;
+import com.google.firebase.auth.FirebaseAuth;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import androidx.test.rule.ActivityTestRule;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Random;
-import java.util.concurrent.Executor;
 
-import app.paseico.login.LogInActivity;
-import app.paseico.login.RegisterActivity;
-
-
-
-import static androidx.test.InstrumentationRegistry.getTargetContext;
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.action.ViewActions.*;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.espresso.matcher.ViewMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 
@@ -52,7 +31,7 @@ public class RegisterActivityTest {
     private String randomName;
 
     @Before
-    public void setRandomName(){
+    public void setRandomName() {
         Intents.init();
         char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
         StringBuilder sb = new StringBuilder(20);
@@ -63,18 +42,15 @@ public class RegisterActivityTest {
         }
         randomName = sb.toString();
     }
+
     @After
-    public void release(){
+    public void release() {
         Intents.release();
     }
-
 
     @Rule
     public ActivityTestRule<RegisterActivity> mActivityRule =
             new ActivityTestRule<>(RegisterActivity.class);
-
-
-
 
     @Test
     public void submitRegisterCorrectly() throws InterruptedException {
@@ -84,21 +60,18 @@ public class RegisterActivityTest {
         onView(withId(R.id.editTextPassword))
                 .perform(typeText("password123"), closeSoftKeyboard());
         onView(withId(R.id.editTextPasswordConf))
-                .perform(typeText("password123"),closeSoftKeyboard());
+                .perform(typeText("password123"), closeSoftKeyboard());
         onView(withId(R.id.editTextName))
-                .perform(typeText("Jose"),closeSoftKeyboard());
+                .perform(typeText("Jose"), closeSoftKeyboard());
         onView(withId(R.id.editTextSurname))
-                .perform(typeText("romero mohedano"),closeSoftKeyboard());
+                .perform(typeText("romero mohedano"), closeSoftKeyboard());
         onView(withId(R.id.editTextEmail))
                 .perform(typeText(randomName + "@gmail.com"), closeSoftKeyboard());
         onView(withId(R.id.buttonRegister))
                 .perform(click());
         onView(withText("Registro completado!")).inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
         intended(hasComponent(LogInActivity.class.getName()));
-
-
     }
-
 
     @Test
     public void submitRegisterPassTooShort() throws InterruptedException {
@@ -107,11 +80,11 @@ public class RegisterActivityTest {
         onView(withId(R.id.editTextPassword))
                 .perform(typeText("pass1"), closeSoftKeyboard());
         onView(withId(R.id.editTextPasswordConf))
-                .perform(typeText("pass1"),closeSoftKeyboard());
+                .perform(typeText("pass1"), closeSoftKeyboard());
         onView(withId(R.id.editTextName))
-                .perform(typeText("Jose"),closeSoftKeyboard());
+                .perform(typeText("Jose"), closeSoftKeyboard());
         onView(withId(R.id.editTextSurname))
-                .perform(typeText("romero mohedano"),closeSoftKeyboard());
+                .perform(typeText("romero mohedano"), closeSoftKeyboard());
         onView(withId(R.id.editTextEmail))
                 .perform(typeText("emaildejoseinventado555666@gmail.com"), closeSoftKeyboard());
         onView(withId(R.id.buttonRegister))
@@ -119,49 +92,48 @@ public class RegisterActivityTest {
 
         onView(withText("La contraseña debe contener mínimo 6 caracteres")).inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
 
-}
+    }
 
     @Test
-    public void submitEmptyRegister(){
-    onView(withId(R.id.buttonRegister))
-            .perform(click());
+    public void submitEmptyRegister() {
+        onView(withId(R.id.buttonRegister))
+                .perform(click());
 
-    onView(withText("Por favor, rellene todos los campos para poder registrarse")).inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+        onView(withText("Por favor, rellene todos los campos para poder registrarse")).inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+    }
 
-}
     @Test
-    public void submitRegisterExistingUsername(){
+    public void submitRegisterExistingUsername() {
         onView(withId(R.id.editTextUsername))
                 .perform(typeText("miguelmoreno"), closeSoftKeyboard());
         onView(withId(R.id.editTextPassword))
                 .perform(typeText("password123"), closeSoftKeyboard());
         onView(withId(R.id.editTextPasswordConf))
-                .perform(typeText("password123"),closeSoftKeyboard());
+                .perform(typeText("password123"), closeSoftKeyboard());
         onView(withId(R.id.editTextName))
-                .perform(typeText("miguel"),closeSoftKeyboard());
+                .perform(typeText("miguel"), closeSoftKeyboard());
         onView(withId(R.id.editTextSurname))
-                .perform(typeText("moreno"),closeSoftKeyboard());
+                .perform(typeText("moreno"), closeSoftKeyboard());
         onView(withId(R.id.editTextEmail))
                 .perform(typeText("random@gmail.com"), closeSoftKeyboard());
         onView(withId(R.id.buttonRegister))
                 .perform(click());
 
         onView(withText("Ese nombre de usuario ya existe")).inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
-
     }
 
     @Test
-    public void submitRegisterPassNotMatch(){
+    public void submitRegisterPassNotMatch() {
         onView(withId(R.id.editTextUsername))
                 .perform(typeText("miguelmoreno"), closeSoftKeyboard());
         onView(withId(R.id.editTextPassword))
                 .perform(typeText("password123"), closeSoftKeyboard());
         onView(withId(R.id.editTextPasswordConf))
-                .perform(typeText("password127"),closeSoftKeyboard());
+                .perform(typeText("password127"), closeSoftKeyboard());
         onView(withId(R.id.editTextName))
-                .perform(typeText("miguel"),closeSoftKeyboard());
+                .perform(typeText("miguel"), closeSoftKeyboard());
         onView(withId(R.id.editTextSurname))
-                .perform(typeText("moreno"),closeSoftKeyboard());
+                .perform(typeText("moreno"), closeSoftKeyboard());
         onView(withId(R.id.editTextEmail))
                 .perform(typeText("random@gmail.com"), closeSoftKeyboard());
         onView(withId(R.id.buttonRegister))
@@ -170,15 +142,6 @@ public class RegisterActivityTest {
         onView(withText("Las contraseñas no coinciden")).inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
 
     }
-
-
-
-
-
-
-
-
-
 }
 
 
