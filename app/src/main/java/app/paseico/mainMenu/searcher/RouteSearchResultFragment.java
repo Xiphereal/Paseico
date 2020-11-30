@@ -8,12 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+
+import app.paseico.CategoryManager;
 import app.paseico.R;
 import app.paseico.RouteInfModifyActivity;
 import app.paseico.RouteInformationActivity;
@@ -22,6 +25,8 @@ import app.paseico.data.Route;
 import java.util.ArrayList;
 import java.util.List;
 public class RouteSearchResultFragment extends Fragment {
+
+
 
     @Override
     public View onCreateView(
@@ -41,16 +46,27 @@ public class RouteSearchResultFragment extends Fragment {
         List<String> filteredRoutesLength = new ArrayList<>();
         List<String> filteredRoutesRewardPoints = new ArrayList<>();
 
+        List<Integer> filteredRoutesIcons = new ArrayList<>();
+
+
         for (Route route : filteredRoutes) {
             filteredRoutesNames.add(route.getName());
             filteredRoutesEstimatedTime.add(String.valueOf(route.getEstimatedTime()));
             filteredRoutesLength.add(String.valueOf(route.getLength()));
             filteredRoutesRewardPoints.add(String.valueOf(route.getRewardPoints()));
+
+            //Obtain route theme
+            String RouteCategory = route.getTheme();
+            System.out.println("categoria " + RouteCategory);
+            int index = CategoryManager.ConvertCategoryToIntDrawable(RouteCategory);
+            System.out.println("indice " + index);
+            filteredRoutesIcons.add(index);
+
         }
 
         ListView listView_filteredRoutes = (ListView) view.findViewById(R.id.listView_filteredRoutes);
 
-        FilteredListAdapter adapter = new FilteredListAdapter(this.getContext(), filteredRoutesNames, filteredRoutesEstimatedTime, filteredRoutesLength, filteredRoutesRewardPoints);
+        FilteredListAdapter adapter = new FilteredListAdapter(this.getContext(), filteredRoutesNames, filteredRoutesEstimatedTime, filteredRoutesLength, filteredRoutesRewardPoints, filteredRoutesIcons);
         listView_filteredRoutes.setAdapter(adapter);
 
         // Open RouteInfo screen.
@@ -74,8 +90,10 @@ public class RouteSearchResultFragment extends Fragment {
         List<String> estimatedTimes;
         List<String> lengths;
         List<String> points;
+        List<Integer> icons;
 
-        FilteredListAdapter(Context context, List<String> names, List<String> estimatedTimes, List<String> lengths, List<String> points) {
+
+        FilteredListAdapter(Context context, List<String> names, List<String> estimatedTimes, List<String> lengths, List<String> points, List<Integer> icons) {
             super(context, R.layout.item_route_search, R.id.routeName, names);
 
             this.context = context;
@@ -83,6 +101,7 @@ public class RouteSearchResultFragment extends Fragment {
             this.estimatedTimes = estimatedTimes;
             this.lengths = lengths;
             this.points = points;
+            this.icons = icons;
         }
 
         @NonNull
@@ -96,12 +115,19 @@ public class RouteSearchResultFragment extends Fragment {
             TextView myLengths = row.findViewById(R.id.routeLenght);
             TextView myPoints = row.findViewById(R.id.routeReward);
 
+            ImageView ListViewImage = (ImageView) row.findViewById(R.id.imageViewIcon);
+
             myNames.setText(names.get(position));
             myEstimatedTimes.setText(estimatedTimes.get(position));
             myLengths.setText(lengths.get(position));
             myPoints.setText(points.get(position));
 
+           ListViewImage.setImageResource(icons.get(position));
+
             return row;
         }
+
+
     }
+
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/geometrics_cut"
+    android:background="@drawable/geometrics_profile"
     tools:context=".mainMenu.profile.ProfileFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -59,34 +59,34 @@
                     android:id="@+id/image_profile"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:src="@drawable/defaultprofilepic" />
+                    android:src="@drawable/defaultprofile" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="4dp">
+                        android:layout_width="match_parent"
+                        android:layout_height="102dp"
+                        android:orientation="vertical"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="4dp">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="horizontal">
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/posts"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:textColor="@color/colorPrimaryDark"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
+                                android:orientation="vertical">
+
+                            <TextView
+                                    android:id="@+id/posts"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:textColor="@color/colorPrimaryDark"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"/>
 
                             <!--For the future
                             <TextView
@@ -97,10 +97,10 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="35dp"
-                            android:orientation="vertical">
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="35dp"
+                                android:orientation="vertical">
 
                             <TextView
                                 android:id="@+id/textView_followersNumber"
@@ -121,10 +121,10 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="35dp"
-                            android:orientation="vertical">
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="35dp"
+                                android:orientation="vertical">
 
                             <TextView
                                 android:id="@+id/textView_followingNumber"
@@ -146,10 +146,13 @@
                     </LinearLayout>
 
                     <Button
-                        android:id="@+id/buttonLogOut"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp" />
+                            android:id="@+id/buttonLogOut"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            app:backgroundTint="@color/colorPrimary"
+                            style="@style/LargeButtonText"
+                            android:textColor="@color/white"/>
 
                 </LinearLayout>
             </LinearLayout>
@@ -200,11 +203,12 @@
 
         <TextView
             android:id="@+id/POINTSProfileText"
+            style="@style/LargeTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:maxLines="1"
-            android:text="PUNTOS"
+            android:text="Puntos"
             android:textColor="#A6ACAF"
             android:textSize="22dp" />
 
@@ -215,17 +219,18 @@
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:maxLines="1"
-            android:textColor="#4E2D9E"
-            android:textSize="26dp" />
+            android:textColor="#048C94"
+            android:textSize="23dp" />
 
         <TextView
             android:id="@+id/RUTASProfileText"
+            style="@style/LargeTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             android:gravity="center"
             android:maxLines="1"
-            android:text="RUTAS"
+            android:text="Rutas"
             android:textColor="#A6ACAF"
             android:textSize="22dp" />
 
@@ -236,17 +241,22 @@
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:maxLines="1"
-            android:textColor="#4E2D9E"
-            android:textSize="26dp" />
+            android:textColor="#048C94"
+            android:textSize="23dp" />
 
         <ImageButton
             android:id="@+id/my_routes"
-            android:layout_width="341dp"
+            style="@style/LargeButtonText"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:src="@drawable/ic_routes" />
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:src="@drawable/myroutes"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/colorPrimary" />
 
 
     </LinearLayout>

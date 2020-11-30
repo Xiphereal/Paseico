@@ -12,6 +12,7 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 import app.paseico.mainMenu.searchUsers.FollowersActivity;
 import app.paseico.R;
+import app.paseico.data.Router;
 import app.paseico.data.User;
 import app.paseico.login.LogInActivity;
 import app.paseico.service.FirebaseService;
@@ -35,7 +36,10 @@ public class ProfileFragment extends Fragment {
     Button buttonLogOut;
     ImageButton userRoutes;
     private Boolean firstTimeCheckBoost = false;
-    private User user = new User();
+    private Router user = new Router();
+    private String usernameFirebase;
+    private UserAdapter userAdapter;
+    private List<User> mUsers;
     private int numberOfRoutes = 0;
 
     @Override
@@ -69,21 +73,27 @@ public class ProfileFragment extends Fragment {
         numberOfUserRoutes = view.findViewById(R.id.numberOfRoutesText);
         userRoutes = view.findViewById(R.id.my_routes);
 
-        FirebaseDatabase.getInstance().getReference("users")
-                .child(firebaseUser.getUid())
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        setUserInfoOnGetCurrentUserReady();
-                        getFollowers();
-                        buttonLogOut.setText("Cerrar sesion");
-                        setButtonLogOut();
-                    }
+        FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                //mUsers.add(user);
+                //mUsers.clear();
+                usernameFirebase = user.getUsername();
+                //userAdapter.notifyDataSetChanged();
+                userInfo();
+                getFollowers();
+                //if (profileid.equals(usernameFirebase)) { //HERE
+                buttonLogOut.setText("Cerrar sesión");
+                setButtonLogOut();
+            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                    }
-                });
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        //getGetUsernameFromFirebase(profileid);
 
         followers.setOnClickListener(followersView -> {
             Intent intent = new Intent(getContext(), FollowersActivity.class);
@@ -132,6 +142,11 @@ public class ProfileFragment extends Fragment {
                 if (getContext() == null) {
                     return;
                 }
+                Router user = snapshot.getValue(Router.class);
+                //Glide.with(getContext()).load("@drawable/defaultProfilePic").into(image_profile);
+                username.setText(user.getUsername());
+                fullname.setText(user.getName());
+                userPointsText.setText(Integer.toString(user.getPoints()));
 
                 User user = snapshot.getValue(User.class);
                 usernameLabel.setText(user.getUsername());
@@ -221,7 +236,7 @@ public class ProfileFragment extends Fragment {
         myActualUserRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                user = snapshot.getValue(User.class);
+                user = snapshot.getValue(Router.class);
                 if (user.isBoost() && !firstTimeCheckBoost) {
                     checkBoost();
                     firstTimeCheckBoost = true;

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.searchUsers.NotMyProfileFragment"
-    android:background="#FFFFFF">
+    android:background="@drawable/geometrics_profile">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -60,34 +60,34 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:id="@+id/image_profile"
-                    android:src="@drawable/defaultprofilepic"/>
+                    android:src="@drawable/defaultprofile"/>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="4dp"
-                    android:orientation="vertical">
+                        android:layout_width="match_parent"
+                        android:layout_height="99dp"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="4dp"
+                        android:orientation="vertical">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="horizontal">
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/posts"
-                                android:textColor="@color/colorPrimaryDark"
-                                android:layout_gravity="center"
-                                android:textSize="18sp"
-                                android:textStyle="bold"/>
+                                android:orientation="vertical">
+
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/posts"
+                                    android:textColor="@color/colorPrimaryDark"
+                                    android:layout_gravity="center"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"/>
 
                             <!--For the future
                             <TextView
@@ -98,10 +98,10 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="35dp"
-                            android:orientation="vertical">
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="35dp"
+                                android:orientation="vertical">
 
                             <TextView
                                 android:layout_width="60dp"
@@ -122,10 +122,10 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="35dp"
-                            android:orientation="vertical">
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="35dp"
+                                android:orientation="vertical">
 
                             <TextView
                                 android:layout_width="60dp"
@@ -147,10 +147,13 @@
                     </LinearLayout>
 
                     <Button
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:id="@+id/buttonLogOut" />
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:id="@+id/buttonLogOut"
+                            app:backgroundTint="@color/colorPrimary"
+                            style="@style/LargeButtonText"
+                            android:textColor="@color/white"/>
 
                 </LinearLayout>
             </LinearLayout>
@@ -183,24 +186,9 @@
                 android:orientation="horizontal">
                 <!--This can be changed in the future-->
 
-                <ImageButton
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:id="@+id/my_routes"
-                    android:src="@drawable/ic_routes" />
-
-                <ImageButton
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:id="@+id/achievements"
-                    android:src="@drawable/ic_achievements" />
-
             </LinearLayout>
 
             <!--Here we can put the RecyclerView-->
-
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

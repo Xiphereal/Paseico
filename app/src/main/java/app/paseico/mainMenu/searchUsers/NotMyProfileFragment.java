@@ -99,13 +99,13 @@ public class NotMyProfileFragment extends Fragment {
 
         buttonLogOut.setOnClickListener(v -> {
             String btn = buttonLogOut.getText().toString();
-            if (btn.equals("follow")) {
+            if (btn.equals("Follow")) {
                 FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername())
                         .child("following").child(profileid).setValue(true);
                 FirebaseDatabase.getInstance().getReference().child("Follow").child(profileid)
                         .child("followers").child(actualUser.getUsername()).setValue(true);
 
-            } else if (btn.equals("following")) {
+            } else if (btn.equals("Following")) {
                 FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername())
                         .child("following").child(profileid).removeValue();
                 FirebaseDatabase.getInstance().getReference().child("Follow").child(profileid)
@@ -144,9 +144,9 @@ public class NotMyProfileFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.child(profileid).exists()) {
-                    buttonLogOut.setText("following");
+                    buttonLogOut.setText("Following");
                 } else {
-                    buttonLogOut.setText("follow");
+                    buttonLogOut.setText("Follow");
                 }
             }
 
