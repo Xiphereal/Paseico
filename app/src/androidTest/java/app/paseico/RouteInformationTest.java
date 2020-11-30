@@ -1,10 +1,12 @@
 package app.paseico;
 
-import com.android21buttons.fragmenttestrule.FragmentTestRule;
+
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import app.paseico.mainMenu.searcher.RouteSearchFragment;
 import app.paseico.service.FirebaseService;
+import com.android21buttons.fragmenttestrule.FragmentTestRule;
+import com.google.firebase.auth.FirebaseAuth;
 import org.junit.*;
 
 import java.util.ArrayList;
@@ -36,6 +38,12 @@ public class RouteInformationTest {
 
     @Before
     public void beforeEach() {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
+        String email = "avd@gmail.com";
+        String password = "123456";
+        firebaseAuth.signInWithEmailAndPassword(email, password);
+
         fragmentTestRule.getActivity()
                 .getSupportFragmentManager().beginTransaction();
     }
