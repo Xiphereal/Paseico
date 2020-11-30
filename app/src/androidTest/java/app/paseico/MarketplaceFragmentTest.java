@@ -14,8 +14,12 @@ import app.paseico.mainMenu.marketplace.marketplaceFragment;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.not;
 
 public class MarketplaceFragmentTest {
 
@@ -36,6 +40,11 @@ public class MarketplaceFragmentTest {
         DatabaseReference  myActualUserRef = FirebaseDatabase.getInstance().getReference("users")
                 .child("7YuiqRHra8OaosZc9vpbfGXdy9C2").child("points");
         myActualUserRef.setValue(0);
+
+        //Set to false the boost of the logged user.
+        DatabaseReference  myActualUserRef2 = FirebaseDatabase.getInstance().getReference("users")
+                .child("7YuiqRHra8OaosZc9vpbfGXdy9C2").child("boost");
+        myActualUserRef2.setValue(false);
     }
 
     @AfterClass
@@ -44,6 +53,11 @@ public class MarketplaceFragmentTest {
         DatabaseReference  myActualUserRef = FirebaseDatabase.getInstance().getReference("users").
                 child("7YuiqRHra8OaosZc9vpbfGXdy9C2").child("points");
         myActualUserRef.setValue(0);
+
+        // Reset the boost of the user used to test this Fragment.
+        DatabaseReference  myActualUserRef2 = FirebaseDatabase.getInstance().getReference("users")
+                .child("7YuiqRHra8OaosZc9vpbfGXdy9C2").child("boost");
+        myActualUserRef2.setValue(false);
     }
 
 
@@ -83,6 +97,86 @@ public class MarketplaceFragmentTest {
 
     }
 
+    @Test
+    public void boostx2Test() throws InterruptedException {
 
+        mFragmentTestRule.launchActivity(null);
+
+        Thread.sleep(4500);
+
+        onView(withId(R.id.imageViewBuy2000Points)).perform(click());
+        onView(withId(R.id.imageViewBuyBoost2w)).perform(click());
+        onView(withId(R.id.textViewMarketplacePTS)).check(matches(withText("Tus puntos: 0")));
+
+    }
+
+    @Test
+    public void boostx2WithoutEnoughPointsTest() throws InterruptedException {
+
+        mFragmentTestRule.launchActivity(null);
+
+        Thread.sleep(4500);
+
+        onView(withId(R.id.imageViewBuyBoost2w)).perform(click());
+        onView(withText("No tienes puntos suficientes para comprar el BOOST!"))
+                .inRoot(withDecorView(is(not(mFragmentTestRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void boostx2WithAnotherBoostActiveTest() throws InterruptedException {
+
+        mFragmentTestRule.launchActivity(null);
+
+        Thread.sleep(4500);
+
+        onView(withId(R.id.imageViewBuy2000Points)).perform(click());
+        onView(withId(R.id.imageViewBuyBoost2w)).perform(click());
+        onView(withId(R.id.imageViewBuyBoost2w)).perform(click());
+        onView(withText("No puedes comprar un BOOST! Ya tienes uno activo"))
+                .inRoot(withDecorView(is(not(mFragmentTestRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void boostx5Test() throws InterruptedException {
+
+        mFragmentTestRule.launchActivity(null);
+
+        Thread.sleep(4500);
+
+        onView(withId(R.id.imageViewBuy6000Points)).perform(click());
+        onView(withId(R.id.imageViewBuyBoost5w)).perform(click());
+        onView(withId(R.id.textViewMarketplacePTS)).check(matches(withText("Tus puntos: 0")));
+
+    }
+
+    @Test
+    public void boostx5WithoutEnoughPointsTest() throws InterruptedException {
+
+        mFragmentTestRule.launchActivity(null);
+
+        Thread.sleep(4500);
+
+        onView(withId(R.id.imageViewBuyBoost5w)).perform(click());
+        onView(withText("No tienes puntos suficientes para comprar el BOOST!"))
+                .inRoot(withDecorView(is(not(mFragmentTestRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void boostx5WithAnotherBoostActiveTest() throws InterruptedException {
+
+        mFragmentTestRule.launchActivity(null);
+
+        Thread.sleep(4500);
+
+        onView(withId(R.id.imageViewBuy6000Points)).perform(click());
+        onView(withId(R.id.imageViewBuyBoost5w)).perform(click());
+        onView(withId(R.id.imageViewBuyBoost5w)).perform(click());
+        onView(withText("No puedes comprar un BOOST! Ya tienes uno activo"))
+                .inRoot(withDecorView(is(not(mFragmentTestRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+    }
 
 }
