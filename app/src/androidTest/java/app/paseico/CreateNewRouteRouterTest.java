@@ -12,6 +12,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import org.hamcrest.core.AllOf;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,7 +48,7 @@ public class CreateNewRouteRouterTest {
             new ActivityScenarioRule<>(CreateNewRouteActivity.class);
 
     @Before
-    public void logInAndPrepareRoute(){
+    public void prepareUser(){
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         String email = "avd@gmail.com";
         String password = "123456";
@@ -61,10 +62,12 @@ public class CreateNewRouteRouterTest {
     public void createRouteSuccessfullyTest() throws InterruptedException {
         myActualUserRef.setValue(200);
         Thread.sleep(5000);
-        onView(withId(R.id.route_name_textInputEditText)).perform(typeText("myRoute"),closeSoftKeyboard());
+        onView(withId(R.id.route_name_textInputEditText)).perform(typeText("myRoute"),
+                closeSoftKeyboard());
 
         onView(withId(R.id.new_route_map)).perform(longClick());
-        onView(withId(R.id.user_created_marker_name_text_input)).perform(typeText("Poi"),closeSoftKeyboard());
+        onView(withId(R.id.user_created_marker_name_text_input)).perform(typeText("Poi"),
+                closeSoftKeyboard());
         onView(withId(R.id.user_created_marker_button)).perform(click());
 
         onView(withId(R.id.finalize_route_creation_button)).perform(click());
@@ -77,10 +80,12 @@ public class CreateNewRouteRouterTest {
     public void createRouteNotSuccessfullyTest() throws InterruptedException {
         myActualUserRef.setValue(20);
         Thread.sleep(5000);
-        onView(withId(R.id.route_name_textInputEditText)).perform(typeText("myRoute"),closeSoftKeyboard());
+        onView(withId(R.id.route_name_textInputEditText)).perform(typeText("myRoute"),
+                closeSoftKeyboard());
 
         onView(withId(R.id.new_route_map)).perform(longClick());
-        onView(withId(R.id.user_created_marker_name_text_input)).perform(typeText("Poi"),closeSoftKeyboard());
+        onView(withId(R.id.user_created_marker_name_text_input)).perform(typeText("Poi"),
+                closeSoftKeyboard());
         onView(withId(R.id.user_created_marker_button)).perform(click());
 
         onView(withId(R.id.finalize_route_creation_button)).perform(click());
