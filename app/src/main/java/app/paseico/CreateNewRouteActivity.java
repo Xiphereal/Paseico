@@ -56,7 +56,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     protected Marker userNewCustomPoiInCreation;
 
     //int to know if the route is ordered or not
-    protected int isOrdered=0;
+    protected int isOrdered = 0;
 
     //Switch to set the route as ordered or not
     protected Switch orderedRouteSwitch;
