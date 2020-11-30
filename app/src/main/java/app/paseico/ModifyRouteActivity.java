@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import app.paseico.data.Router;
-import app.paseico.data.User;
 import app.paseico.service.FirebaseService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -353,7 +352,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
         String authorId = FirebaseService.getCurrentUser().getUid();
 
 
-        FirebaseService.updateRoute(retrievedRouteId, "pointsOfInterest", pointsOfInterest );
+        FirebaseService.updateDatabaseRoute(retrievedRouteId, "pointsOfInterest", pointsOfInterest );
     }
 
     // TODO: Refactor and generalize this into a User instance method.

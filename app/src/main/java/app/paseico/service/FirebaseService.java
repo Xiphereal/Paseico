@@ -1,11 +1,8 @@
 package app.paseico.service;
 
 import android.util.Log;
-import androidx.annotation.NonNull;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -32,29 +29,31 @@ public class FirebaseService {
     public static void saveRoute(Route route) {
         firebaseFirestore.collection("route").add(route).addOnSuccessListener(documentReference -> {
             String createdRouteID = documentReference.getId();
-            updateRoute(createdRouteID, "id", createdRouteID);
+            updateDatabaseRoute(createdRouteID, "id", createdRouteID);
+
+            route.setId(createdRouteID);
         });
 
         System.out.println("Route " + route.getName() + " successfully added to Firebase.");
     }
 
-    public static void updateRoute(String routeId, String attribute, String newValue) {
-        updateRouteObject(routeId, attribute, newValue);
+    public static void updateDatabaseRoute(String routeId, String attribute, String newValue) {
+        updateDatabaseRouteObject(routeId, attribute, newValue);
     }
 
-    public static void updateRoute(String routeId, String attribute, Double newValue) {
-        updateRouteObject(routeId, attribute, newValue);
+    public static void updateDatabaseRoute(String routeId, String attribute, Double newValue) {
+        updateDatabaseRouteObject(routeId, attribute, newValue);
     }
 
-    public static void updateRoute(String routeId, String attribute, int newValue) {
-        updateRouteObject(routeId, attribute, newValue);
+    public static void updateDatabaseRoute(String routeId, String attribute, int newValue) {
+        updateDatabaseRouteObject(routeId, attribute, newValue);
     }
 
-    public static void updateRoute(String routeId, String attribute, List<PointOfInterest> newValue) {
-        updateRouteObject(routeId, attribute, newValue);
+    public static void updateDatabaseRoute(String routeId, String attribute, List<PointOfInterest> newValue) {
+        updateDatabaseRouteObject(routeId, attribute, newValue);
     }
 
-    private static void updateRouteObject(String routeId, String attribute, Object newValue) {
+    private static void updateDatabaseRouteObject(String routeId, String attribute, Object newValue) {
         DocumentReference reference = firebaseFirestore.collection("route").document(routeId);
 
         reference
@@ -63,5 +62,16 @@ public class FirebaseService {
                 .addOnFailureListener(e -> Log.w("Failure", "Error updating document", e));
 
         System.out.println("Updated " + attribute + " as " + newValue.toString());
+    }
+
+    public static void deleteRoute(Route expectedRoute) {
+        DocumentReference reference = firebaseFirestore.collection("route").document(expectedRoute.getId());
+
+        reference.delete().addOnFailureListener(
+                (exception) -> System.err.println("An error has occurred while trying to delete the route: " +
+                        expectedRoute.getId() + System.lineSeparator() +
+                        exception.getMessage()
+                )
+        );
     }
 }
