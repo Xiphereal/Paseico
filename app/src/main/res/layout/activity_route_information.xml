@@ -118,7 +118,7 @@
         style="@style/SmallTextView"
         android:paddingStart="40dp"
         android:layout_marginTop="50dp"
-        android:text="@string/theme"
+        android:text="@string/category"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_routeInfo_nameOfRoute" />
 

@@ -66,17 +66,17 @@
         app:layout_constraintTop_toBottomOf="@+id/textView_routeSearchTitle" />
 
     <Spinner
-        android:id="@+id/spinner_route_theme"
-        android:layout_width="wrap_content"
-        android:layout_marginLeft="170dp"
-        android:layout_marginTop="49dp"
-        android:layout_height="wrap_content"
-        android:entries="@array/themes_of_route"
-        android:spinnerMode="dropdown"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_keyWord"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintVertical_bias="0.558" />
+            android:id="@+id/spinner_route_theme"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="170dp"
+            android:layout_marginTop="49dp"
+            android:layout_height="wrap_content"
+            android:entries="@array/route_category"
+            android:spinnerMode="dropdown"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_keyWord"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintVertical_bias="0.558" />
 
     <TextView
             android:id="@+id/textView_keyWord"
@@ -94,7 +94,7 @@
             style="@style/SmallTextView"
             android:paddingStart="40dp"
             android:layout_marginTop="50dp"
-            android:text="@string/theme"
+            android:text="@string/category"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_keyWord"/>
 

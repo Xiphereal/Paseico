@@ -8,7 +8,19 @@
         tools:context=".RouteInfModifyActivity"
         style="@style/Theme.MaterialComponents.Light.NoActionBar"
         android:background="@color/background">
-
+    <ImageView
+        android:id="@+id/imageViewIconRouteInformation"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="58dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="52dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView_routeInfo_themeText"
+        app:layout_constraintEnd_toStartOf="@+id/textView_routeInfo_nameOfRoute"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
     <TextView
             android:id="@+id/textView_routeInfo_themeText3"
             style="@style/SmallTextView"
@@ -106,7 +118,7 @@
             style="@style/SmallTextView"
             android:paddingStart="40dp"
             android:layout_marginTop="50dp"
-            android:text="@string/theme"
+            android:text="@string/category"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_routeInfo_nameOfRoute" />
 

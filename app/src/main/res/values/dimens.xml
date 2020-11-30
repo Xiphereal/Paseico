@@ -8,4 +8,5 @@
     <dimen name="text_margin">16dp</dimen>
 
     <dimen name="search_button_with">16dp</dimen>
+    <dimen name="text_field_label_font_size">25sp</dimen>
 </resources>
