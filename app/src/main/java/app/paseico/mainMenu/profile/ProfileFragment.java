@@ -15,6 +15,7 @@ import app.paseico.R;
 import app.paseico.data.Router;
 import app.paseico.data.User;
 import app.paseico.login.LogInActivity;
+import app.paseico.mainMenu.searchUsers.UserAdapter;
 import app.paseico.service.FirebaseService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,6 +28,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class ProfileFragment extends Fragment {
     ImageView image_profile;
@@ -81,7 +83,7 @@ public class ProfileFragment extends Fragment {
                 //mUsers.clear();
                 usernameFirebase = user.getUsername();
                 //userAdapter.notifyDataSetChanged();
-                userInfo();
+                setUserInfoOnGetCurrentUserReady();
                 getFollowers();
                 //if (profileid.equals(usernameFirebase)) { //HERE
                 buttonLogOut.setText("Cerrar sesión");
@@ -144,11 +146,7 @@ public class ProfileFragment extends Fragment {
                 }
                 Router user = snapshot.getValue(Router.class);
                 //Glide.with(getContext()).load("@drawable/defaultProfilePic").into(image_profile);
-                username.setText(user.getUsername());
-                fullname.setText(user.getName());
-                userPointsText.setText(Integer.toString(user.getPoints()));
 
-                User user = snapshot.getValue(User.class);
                 usernameLabel.setText(user.getUsername());
                 fullnameLabel.setText(user.getName());
                 userPointsLabel.setText(Integer.toString(user.getPoints()));
