@@ -195,7 +195,7 @@ public class NotMyProfileFragment extends Fragment {
 
         textView_followersText.setOnClickListener(view -> {
             Intent intent = new Intent(getContext(), FollowersActivity.class);
-            intent.putExtra("id", actualUser.getUsername());
+            intent.putExtra("id", foreignUser.getUsername());
             intent.putExtra("title", "followers");
             startActivity(intent);
         });
@@ -209,8 +209,8 @@ public class NotMyProfileFragment extends Fragment {
 
         textView_followingText.setOnClickListener(view -> {
             Intent intent = new Intent(getContext(), FollowersActivity.class);
-            intent.putExtra("id", actualUser.getUsername());
-            intent.putExtra("title", "followers");
+            intent.putExtra("id", foreignUser.getUsername());
+            intent.putExtra("title", "following");
             startActivity(intent);
         });
     }
