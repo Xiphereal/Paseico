@@ -5,7 +5,6 @@ import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import app.paseico.mainMenu.searcher.RouteSearchFragment;
 import app.paseico.service.FirebaseService;
-import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import com.google.firebase.auth.FirebaseAuth;
 import org.junit.*;
 
@@ -28,8 +27,8 @@ public class RouteInformationTest {
     private static Route expectedRoute;
 
     @Rule
-    public FragmentTestRule<?, RouteSearchFragment> fragmentTestRule =
-            FragmentTestRule.create(RouteSearchFragment.class);
+    public FragmentTestRule<RouteSearchFragment> fragmentTestRule =
+            new FragmentTestRule<>(RouteSearchFragment.class);
 
     @BeforeClass
     public static void beforeClass() {
@@ -43,9 +42,6 @@ public class RouteInformationTest {
         String email = "avd@gmail.com";
         String password = "123456";
         firebaseAuth.signInWithEmailAndPassword(email, password);
-
-        fragmentTestRule.getActivity()
-                .getSupportFragmentManager().beginTransaction();
     }
 
     private static void createRoute() {
@@ -65,7 +61,10 @@ public class RouteInformationTest {
     }
 
     @Test
-    public void routeAllTheDetailedInformationIsCorrect() {
+    public void routeAllTheDetailedInformationIsCorrect() throws InterruptedException {
+        fragmentTestRule.launchActivity(null);
+        Thread.sleep(4500);
+
         onView(withId(R.id.editText_keyWord)).perform(typeText(expectedRouteName), closeSoftKeyboard());
 
         onView(withId(R.id.btn_search)).perform(click());
