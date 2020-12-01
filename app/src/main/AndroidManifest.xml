@@ -23,14 +23,15 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
 
-        <activity
-            android:name=".MainMenuActivity"
-            android:label="@string/title_activity_main_menu"
-            android:theme="@style/AppTheme.NoActionBar" />
+
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+    <activity
+        android:name=".MainMenuActivity"
+        android:label="@string/title_activity_main_menu"
+        android:theme="@style/AppTheme.NoActionBar" />
 
         <activity android:name=".mainMenu.userCreatedRoutes.IntroduceNewRouteDataActivity"/>
         <activity android:name=".mainMenu.userCreatedRoutes.CreateNewRouteActivity"/>
@@ -54,5 +55,5 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
+    </application>
 </manifest>

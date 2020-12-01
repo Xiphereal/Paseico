@@ -81,7 +81,7 @@
         <item>@string/between4_5</item>
         <item>@string/gt5</item>
     </string-array>
-    <string-array name="estimated_times_of_route_choices">
+    <string-array name="estimated_times_of_route">
         <item>@string/default_spinner_choice</item>
         <item>@string/lt0.5</item>
         <item>@string/between0.5_1</item>
@@ -139,6 +139,8 @@
     <string name="route_creation_summary_message">"El coste de la ruta en creación es de: %1$d puntos"</string>
 
     <!-- TextInput related. -->
+    <string name="route_name_hint">Nombre de la ruta</string>
+    <string name="finalize_route_creation_toolbar_title">Finalizar creación de ruta</string>
     <string name="new_point_of_interest_name_text_input_hint">Nombre del nuevo Punto de Interés</string>
     <string name="router">Rutero</string>
     <string name="organization">Organización</string>
