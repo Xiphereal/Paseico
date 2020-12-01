@@ -6,50 +6,83 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".mainMenu.searcher.RouteSearchFragment"
-        style="@style/Theme.MaterialComponents.Light.NoActionBar">
+        style="@style/Theme.MaterialComponents.Light.NoActionBar"
+        android:background="@color/background">
 
     <Button
         android:id="@+id/btn_search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="64dp"
+        android:layout_width="200dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="108dp"
         android:text="@string/search"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:backgroundTint="@color/colorPrimary"
+        style="@style/LargeButtonText"
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:text="Búsqueda"
+        style="@style/LargeTextView"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
             android:id="@+id/textView_routeSearchTitle"
-            android:layout_width="202dp"
+            android:layout_width="match_parent"
             android:layout_height="31dp"
+            android:layout_marginTop="30dp"
             android:text="@string/search_fragment_title"
+            android:paddingStart="22dp"
             app:layout_constraintBottom_toTopOf="@id/btn_search"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.43"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.093"/>
+            app:layout_constraintVertical_bias="0.093"/><![CDATA[
+
+    "
+        app:layout_constraintVertical_bias="1.0" />
+
+
+
+    ]]>
 
     <EditText
-            android:id="@+id/editText_keyWord"
-            android:layout_width="207dp"
-            android:layout_height="46dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginTop="36dp"
-            android:ems="10"
-            android:hint="@string/route_name_hint"
-            android:inputType="textPersonName"
-            android:selectAllOnFocus="false"
-            app:layout_constraintBottom_toBottomOf="@+id/textView_keyWord"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_routeSearchTitle"/>
+        android:id="@+id/editText_keyWord"
+        android:layout_width="207dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="170dp"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:hint="@string/route_name_hint"
+        android:inputType="textPersonName"
+        android:selectAllOnFocus="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_routeSearchTitle" />
+
+    <Spinner
+            android:id="@+id/spinner_route_theme"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="170dp"
+            android:layout_marginTop="49dp"
+            android:layout_height="wrap_content"
+            android:entries="@array/route_category"
+            android:spinnerMode="dropdown"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_keyWord"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintVertical_bias="0.558" />
 
     <TextView
             android:id="@+id/textView_keyWord"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
+            style="@style/SmallTextView"
+            android:layout_marginTop="50dp"
+            android:paddingStart="40dp"
             android:text="@string/key_word"
             app:layout_constraintEnd_toStartOf="@+id/editText_keyWord"
             app:layout_constraintHorizontal_bias="0.658"
@@ -58,82 +91,61 @@
 
     <TextView
             android:id="@+id/textView_theme"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="72dp"
-            android:layout_marginStart="72dp"
-            android:layout_marginTop="72dp"
-            android:text="@string/theme"
+            style="@style/SmallTextView"
+            android:paddingStart="40dp"
+            android:layout_marginTop="50dp"
+            android:text="@string/category"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_keyWord"/>
 
-    <Spinner
-            android:id="@+id/spinner_route_theme"
-            android:layout_width="149dp"
-            android:layout_height="34dp"
-            android:layout_marginTop="24dp"
-            android:entries="@array/themes_of_route_choices"
-            android:spinnerMode="dropdown"
-            app:layout_constraintBottom_toBottomOf="@+id/textView_theme"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.348"
-            app:layout_constraintStart_toEndOf="@+id/textView_theme"
-            app:layout_constraintTop_toBottomOf="@+id/editText_keyWord"
-            app:layout_constraintVertical_bias="1.0"/>
-
     <TextView
             android:id="@+id/textView_length"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="64dp"
-            android:layout_marginStart="64dp"
-            android:layout_marginTop="52dp"
+            style="@style/SmallTextView"
             android:text="@string/length"
+            android:paddingStart="40dp"
+            android:layout_marginTop="50dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_theme"/>
 
     <TextView
             android:id="@+id/textView_estimatedTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="56dp"
-            android:text="@string/estimated_time"
+            style="@style/SmallTextView"
+            android:paddingStart="40dp"
+            android:layout_marginTop="50dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_length"/>
+            app:layout_constraintTop_toBottomOf="@+id/textView_length"
+            android:text="@string/estimated_time"/>
 
     <Spinner
             android:id="@+id/spinner_route_length"
             android:layout_width="140dp"
             android:layout_height="30dp"
-            android:layout_marginTop="52dp"
-            android:entries="@array/lengths_of_route_choices"
+            android:entries="@array/lengths_of_route"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.375"
-            app:layout_constraintStart_toEndOf="@+id/textView_length"
-            app:layout_constraintTop_toBottomOf="@+id/spinner_route_theme"/>
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="170dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinner_route_theme" />
 
     <Spinner
             android:id="@+id/spinner_route_estimated_time"
-            android:layout_width="108dp"
+            android:layout_width="140dp"
             android:layout_height="31dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="44dp"
-            android:entries="@array/estimated_times_of_route_choices"
+            android:entries="@array/estimated_times_of_route"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="50dp"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/textView_estimatedTime"
-            app:layout_constraintTop_toBottomOf="@+id/spinner_route_length"/>
+            android:layout_marginTop="43dp"
+            android:layout_marginLeft="170dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_length"/>
 
     <TextView
             android:id="@+id/textview_minNumOfPOI"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="52dp"
+            style="@style/SmallTextView"
+            android:paddingStart="40dp"
+            android:layout_marginTop="50dp"
             android:text="@string/number_of_POI"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_estimatedTime"/>
@@ -142,26 +154,23 @@
             android:id="@+id/editText_minimumNumberOfPOI"
             android:layout_width="126dp"
             android:layout_height="40dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="40dp"
             android:ems="10"
             android:focusableInTouchMode="true"
             android:inputType="number"
             android:nextFocusDown="@id/spinner_route_theme"
             android:text="@string/zero"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/textview_minNumOfPOI"
-            app:layout_constraintTop_toBottomOf="@+id/spinner_route_estimated_time"/>
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="250dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_estimatedTime"
+        />
 
     <TextView
             android:id="@+id/textView_pointsEarnedCompletingRoute"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="52dp"
-            android:layout_marginStart="52dp"
-            android:layout_marginTop="56dp"
+            style="@style/SmallTextView"
+            android:paddingStart="40dp"
+            android:layout_marginTop="50dp"
             android:text="@string/reward_points"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textview_minNumOfPOI"/>
@@ -170,13 +179,14 @@
             android:id="@+id/editText_minimumOfPoints"
             android:layout_width="137dp"
             android:layout_height="42dp"
-            android:layout_marginTop="28dp"
             android:ems="10"
             android:inputType="number"
             android:text="@string/zero"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.391"
-            app:layout_constraintStart_toEndOf="@+id/textView_pointsEarnedCompletingRoute"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="170dp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editText_minimumNumberOfPOI"/>
 
     <TextView

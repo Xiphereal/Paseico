@@ -5,25 +5,28 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".mainMenu.userCreatedRoutes.UserCreatedRoutesFragment">
+        tools:context=".mainMenu.userCreatedRoutes.UserCreatedRoutesFragment"
+        android:background="@color/background">
 
     <ListView
             android:id="@+id/created_routes_list_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFFFFF"
+            android:background="@color/background"
     />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/create_new_route_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/LargeButtonText"
+            android:layout_width="200dp"
+            android:layout_height="45dp"
             android:layout_margin="16dp"
             android:layout_gravity="bottom|center"
             android:text="Nueva Ruta"
             android:layout_marginBottom="683dp"
             android:layout_marginEnd="275dp"
-            app:backgroundTint="@color/colorAccent"
+            app:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/white"
     />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

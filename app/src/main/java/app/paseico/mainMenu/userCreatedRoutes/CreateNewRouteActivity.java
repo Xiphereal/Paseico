@@ -1,11 +1,11 @@
-package app.paseico;
+package app.paseico.mainMenu.userCreatedRoutes;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.os.Parcelable;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import app.paseico.R;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import app.paseico.data.Router;
@@ -82,7 +83,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
         initializeMapFragment();
 
-        getCurrentUserFromDatabaseAsync();
+        registerGoToIntroduceNewRouteDataButtonTransition();
     }
 
     private void registerMarkedPOIsListView(){
@@ -183,165 +184,19 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         mapFragment.getMapAsync(this);
     }
 
-    /**
-     * Gets the current User from the database asynchronously.
-     */
-    private void getCurrentUserFromDatabaseAsync() {
-        DatabaseReference currentUserReference = FirebaseService.getCurrentUserReference();
+    private void registerGoToIntroduceNewRouteDataButtonTransition() {
+        ExtendedFloatingActionButton extendedFloatingActionButton = findViewById(R.id.go_to_introduce_new_route_data_button);
 
-        currentUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                currentUser = snapshot.getValue(Router.class);
-
-                // Registering this callback here ensures that the button
-                // action is only performed when the User is ready.
-                registerFinalizeRouteCreationButtonTransition();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                System.out.println("The db connection failed: " + error.getMessage());
-            }
-        });
+        extendedFloatingActionButton.setOnClickListener(view -> goToIntroduceNewRouteDataActivity());
     }
 
-    private void registerFinalizeRouteCreationButtonTransition() {
-        ExtendedFloatingActionButton extendedFloatingActionButton = findViewById(R.id.finalize_route_creation_button);
+    private void goToIntroduceNewRouteDataActivity() {
+        Intent goToIntroduceNewRouteDataIntent = new Intent(getApplicationContext(), IntroduceNewRouteDataActivity.class);
 
-        extendedFloatingActionButton.setOnClickListener(view -> tryFinalizeRouteCreation());
-    }
+        goToIntroduceNewRouteDataIntent.putParcelableArrayListExtra("selectedPointsOfInterest",
+                (ArrayList<? extends Parcelable>) selectedPointsOfInterest);
 
-    /**
-     * Checks for the User requirements for creating the new Route. If everything is fine, a confirmation dialog
-     * appears and the Route creation finalizes. If anything goes wrong, a error dialogs appears and keeps the
-     * previous state.
-     */
-    private void tryFinalizeRouteCreation() {
-        if (currentUser.getHasFreeRouteCreation()) {
-            currentUser.setHasFreeRouteCreation(false);
-            showConfirmationDialog();
-        } else {
-            showRouteCreationSummaryDialog();
-        }
-    }
-
-    private void showRouteCreationSummaryDialog() {
-        int routeCost = calculateRouteCost();
-
-        String dialogMessage = getResources().getString(R.string.route_creation_summary_message, routeCost);
-
-        AlertDialog.Builder builder = setUpBuilder(dialogMessage);
-
-        builder.setOnDismissListener(dialog -> {
-            int currentUserPoints = currentUser.getPoints();
-
-            if (currentUserPoints >= routeCost) {
-                currentUser.setPoints(currentUserPoints - routeCost);
-                showConfirmationDialog();
-            } else {
-                showNotEnoughPointsDialog();
-            }
-        });
-
-        showDialog(builder);
-    }
-
-    private int calculateRouteCost() {
-        int totalRouteCost = 0;
-
-        for (PointOfInterest poi : selectedPointsOfInterest) {
-            if (poi.wasCreatedByUser()) {
-                totalRouteCost += getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost);
-            } else {
-                totalRouteCost += getResources().getInteger(R.integer.google_maps_point_of_interest_cost);
-            }
-        }
-
-        return totalRouteCost;
-    }
-
-    private void showDialog(AlertDialog.Builder builder) {
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    private void showConfirmationDialog() {
-        String dialogMessage = getResources().getString(R.string.route_creation_confirmation_message);
-        AlertDialog.Builder builder = setUpBuilder(dialogMessage);
-
-        // In case the user close the dialog either by tapping outside of the dialog or by pressing any button,
-        // it's considered dismissed.
-        builder.setOnDismissListener(dialog -> finalizeRouteCreation());
-
-        showDialog(builder);
-    }
-
-    /**
-     * Sets up a basic builder for an AlertDialog. The caller must ensures the setOnDismissListener is defined
-     * with the desired behavior for when closing the dialog.
-     *
-     * @param dialogMessage The String from resources can be retrieved by 'getResources().getString()'. This allows
-     *                      to use formatted Strings for dynamic messages.
-     * @return The setted up builder for the AlertDialog.
-     */
-    @NotNull
-    private AlertDialog.Builder setUpBuilder(String dialogMessage) {
-        // Where the alert dialog is going to be shown.
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setMessage(dialogMessage)
-                .setTitle(R.string.route_creation_finalize_title)
-                .setPositiveButton("OK", (dialog, which) -> {
-                    // This remains empty because when the dialog is closed by tapping on 'OK' or outside it,
-                    // it's considered to be dismissed in both cases, thus the call to the finalizer method must
-                    // be done only on the dismiss listener.
-                });
-
-        return builder;
-    }
-
-    private void finalizeRouteCreation() {
-        createNewRoute();
-        persistCurrentUserModifications();
-
-        goToPreviousActivity();
-    }
-
-    private void createNewRoute() {
-        TextInputEditText textInputEditText = findViewById(R.id.route_name_textInputEditText);
-        String authorId = FirebaseService.getCurrentUser().getUid();
-
-        newRoute = new Route(textInputEditText.getText().toString(), selectedPointsOfInterest, authorId);
-        newRoute.setOrdered(isOrdered);
-        FirebaseService.saveRoute(newRoute);
-
-        //We add the created route name to the createdRoutes before returning to the main activity.
-        UserCreatedRoutesFragment.getCreatedRoutes().add(newRoute.getName());
-    }
-
-    // TODO: Refactor and generalize this into a User instance method.
-    private void persistCurrentUserModifications() {
-        DatabaseReference currentUserReference = FirebaseService.getCurrentUserReference();
-
-        currentUserReference.child("hasFreeRouteCreation").setValue(currentUser.getHasFreeRouteCreation());
-        currentUserReference.child("points").setValue(currentUser.getPoints());
-    }
-
-    private void goToPreviousActivity() {
-        Intent goToRoutesIntent = new Intent(getApplicationContext(), MainMenuActivity.class);
-        startActivity(goToRoutesIntent);
-    }
-
-    private void showNotEnoughPointsDialog() {
-        String dialogMessage = getResources().getString(R.string.route_creation_not_enough_points_message);
-        AlertDialog.Builder builder = setUpBuilder(dialogMessage);
-
-        builder.setOnDismissListener(dialog -> {
-            // This remains empty because we want the app to do nothing in this case.
-        });
-
-        showDialog(builder);
+        startActivity(goToIntroduceNewRouteDataIntent);
     }
 
     @Override
@@ -386,10 +241,9 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     private void registerOnMarkerClickListener() {
         createNewRouteMap.setOnMarkerClickListener(marker -> {
 
-            /*Check if the marker selected is associated with the POI in creation
-            * If it not, we continue as planned.
-            * If it is, we do nothing.
-            * */
+            // Check if the marker selected is associated with the POI in creation
+            // If it not, we continue as planned.
+            // If it is, we do nothing.
             if (!marker.equals(userNewCustomPoiInCreation)) {
                 tryDeleteUserNewCustomPoiInCreation();
 
@@ -538,9 +392,5 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         });
-    }
-
-    public static Route getRoute() {
-        return newRoute;
     }
 }

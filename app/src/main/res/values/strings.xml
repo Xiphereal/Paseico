@@ -15,20 +15,21 @@
     <string name="search">Buscar</string>
     <string name="previous">Volver</string>
     <string name="start_route">Empezar ruta</string>
+    <string name="finalize">Finalizar</string>
     <string name="create_new_point_of_interest_button">Crear nuevo Punto de Interés</string>
 
     <string name="orderedRoute_switch">Ordenada?</string>
     <string name="poiUp_button">Subir</string>
     <string name="poiDown_button">Bajar</string>
 
-    <string name="discounts">DESCUENTOS</string>
+    <string name="discounts">Descuentos</string>
 
     <string name="zero">0</string>
-    <string name="route_name_hint">Nombre de la ruta</string>
 
     <!-- Strings used for textviews names-->
     <string name="key_word">Palabras clave:</string>
-    <string name="theme">Temática:</string>
+    <string name="category">Temática:</string>
+    <string name="category_without_colon">Temática</string>
     <string name="length">Longitud:</string>
     <string name="estimated_time">Duración estimada:</string>
     <string name="number_of_POI">Número de puntos de interés:</string>
@@ -43,6 +44,11 @@
     <string name="yes">Sí</string>
     <string name="no">No</string>
 
+    <string name="museums">Museos</string>
+    <string name="restaurants">Restaurantes</string>
+    <string name="monuments">Monumentos</string>
+    <string name="nature">Naturaleza</string>
+    <string name="pubs">Bares</string>
 
     <string name="lt0.5">&lt; 0,5</string>
     <string name="between0.5_1">0.5-1</string>
@@ -54,20 +60,19 @@
     <string name="gt5">&gt; 5</string> <!-- &gt; is '>' -->
 
     <!-- Strings arrays used to populate searchFragment spinners -->
-    <string name="search_fragment_title">Seleccione el filtro de búsqueda</string>
+    <string name="search_fragment_title">Seleccione el filtro de búsqueda...</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string-array name="themes_of_route_choices">
+    <string-array name="route_category">
         <item>@string/default_spinner_choice</item>
         <item>@string/no_theme_choice</item>
-        <item>Museos</item>
-        <item>Restaurantes</item>
-        <item>Monumentos</item>
-        <item>Naturaleza</item>
-        <item>Bares</item>
+        <item>@string/museums</item>
+        <item>@string/restaurants</item>
+        <item>@string/monuments</item>
+        <item>@string/nature</item>
+        <item>@string/pubs</item>
     </string-array>
 
-
-    <string-array name="lengths_of_route_choices">
+    <string-array name="lengths_of_route">
         <item>@string/default_spinner_choice</item>
         <item>@string/lt1</item>
         <item>@string/between1_2</item>
@@ -92,6 +97,14 @@
         <item>@string/no</item>
     </string-array>
 
+    <string-array name="route_creation_route_category">
+        <item>@string/no_theme_choice</item>
+        <item>@string/museums</item>
+        <item>@string/restaurants</item>
+        <item>@string/monuments</item>
+        <item>@string/nature</item>
+        <item>@string/pubs</item>
+    </string-array>
 
     <string name="title_activity_main_menu">MainMenuActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -114,7 +127,6 @@
 
     <string name="menu_route_search_fragment_label">Buscar rutas</string>
     <string name="route_search_result_fragment_label">Resultado busqueda</string>
-
 
     <!-- Messages displayed to the user. -->
     <string name="route_creation_finalize_title">"Finalizar creación de ruta"</string>

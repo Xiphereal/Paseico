@@ -1,6 +1,5 @@
 package app.paseico.data;
 
-
 import android.os.Parcel;
 import android.os.Parcelable;
 import org.jetbrains.annotations.NotNull;
@@ -35,8 +34,14 @@ public class Route implements Parcelable {
         this.authorId = authorId;
     }
 
-    // TODO: Add the userId and pass it wherever this constructor is used.
-    public Route(String name, String theme, double length, double estimatedTime, int rewardPoints, List<PointOfInterest> pointsOfInterest, int ordered) {
+    public Route(String name,
+                 String theme,
+                 double length,
+                 double estimatedTime,
+                 int rewardPoints,
+                 List<PointOfInterest> pointsOfInterest,
+                 String authorId,
+                 int ordered) {
         this.name = name;
         this.theme = theme;
         this.length = length;
@@ -44,6 +49,7 @@ public class Route implements Parcelable {
         this.rewardPoints = rewardPoints;
         this.pointsOfInterest = pointsOfInterest;
         this.ordered = ordered;
+        this.authorId = authorId;
     }
 
     public String getName() {
@@ -158,7 +164,11 @@ public class Route implements Parcelable {
         dest.writeInt(ordered);
     }
 
-    public void setId(String id) { this.id = id; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public String getId() { return id; }
+    public String getId() {
+        return id;
+    }
 }
