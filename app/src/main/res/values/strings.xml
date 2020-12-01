@@ -18,7 +18,8 @@
     <string name="finalize">Finalizar</string>
     <string name="create_new_point_of_interest_button">Crear nuevo Punto de Interés</string>
 
-    <string name="orderedRoute_switch">Ordenada?</string>
+    <string name="seeSelectedPOIs_switch">Ver lista POIs</string>
+    <string name="orderedRoute_switch">Ruta ordenada</string>
     <string name="poiUp_button">Subir</string>
     <string name="poiDown_button">Bajar</string>
 

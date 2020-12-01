@@ -75,12 +75,12 @@
     </androidx.core.widget.NestedScrollView>
 
     <Switch
-        android:id="@+id/orderedRoute_switch"
+        android:id="@+id/showPOIs_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5pt"
         android:layout_marginTop="30pt"
-        android:text="@string/orderedRoute_switch" />
+        android:text="@string/seeSelectedPOIs_switch" />
 
     <Button
         android:id="@+id/poiUp_button"

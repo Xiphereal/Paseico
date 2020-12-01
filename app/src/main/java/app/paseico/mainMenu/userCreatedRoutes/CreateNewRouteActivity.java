@@ -1,7 +1,6 @@
 package app.paseico.mainMenu.userCreatedRoutes;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,15 +12,12 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.R;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import app.paseico.data.Router;
-import app.paseico.login.LogInActivity;
-import app.paseico.mainMenu.userCreatedRoutes.UserCreatedRoutesFragment;
-import app.paseico.service.FirebaseService;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -30,11 +26,6 @@ import com.google.android.gms.maps.model.*;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.collection.LLRBNode;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -56,11 +47,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     protected Marker userNewCustomPoiInCreation;
 
-    //int to know if the route is ordered or not
-    protected int isOrdered = 0;
-
     //Switch to set the route as ordered or not
-    protected Switch orderedRouteSwitch;
+    protected Switch showPOIsSwitch;
 
     //buttons to change order
     protected Button poiUpButton;
@@ -98,21 +86,21 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     }
 
     private void registerOrderedRouteSwitch(){
-        orderedRouteSwitch = (Switch) findViewById(R.id.orderedRoute_switch);
-        orderedRouteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        showPOIsSwitch = (Switch) findViewById(R.id.showPOIs_switch);
+        showPOIsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     poiUpButton.setVisibility(View.VISIBLE);
                     poiUpButton.setClickable(true);
                     poiDownButton.setVisibility(View.VISIBLE);
                     poiDownButton.setClickable(true);
-                    isOrdered=1;
+                    markedPOIsListView.setVisibility(View.VISIBLE);
                 } else {
                     poiUpButton.setVisibility(View.INVISIBLE);
                     poiUpButton.setClickable(false);
                     poiDownButton.setVisibility(View.INVISIBLE);
                     poiDownButton.setClickable(false);
-                    isOrdered=0;
+                    markedPOIsListView.setVisibility(View.INVISIBLE);
                 }
             }
         });

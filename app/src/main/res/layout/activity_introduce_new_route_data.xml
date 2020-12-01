@@ -68,6 +68,16 @@
                         android:layout_marginBottom="8dp"/>
             </RelativeLayout>
 
+            <Switch
+                android:id="@+id/ordered_route_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30pt"
+                android:ellipsize="none"
+                android:fontFamily="@font/righteous"
+                android:text="@string/orderedRoute_switch"
+                android:textSize="@dimen/text_field_label_font_size" />
+
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
