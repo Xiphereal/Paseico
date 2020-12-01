@@ -27,16 +27,17 @@
 
     <ListView
         android:id="@+id/marked_pois_list_view"
-        android:layout_width="wrap_content"
+        android:layout_width="127dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5pt"
         android:layout_marginLeft="5pt"
-        android:layout_marginTop="50pt"
+        android:layout_marginTop="20pt"
         android:layout_marginEnd="130pt"
         android:layout_marginRight="130pt"
         android:background="#FFFFFF"
         android:choiceMode="singleChoice"
-        android:listSelector="@android:color/holo_blue_light" />
+        android:listSelector="@android:color/holo_blue_light"
+        android:visibility="invisible" />
 
     <androidx.core.widget.NestedScrollView
             android:id="@+id/user_created_marker_bottom_sheet"
@@ -79,15 +80,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5pt"
-        android:layout_marginTop="30pt"
+        android:layout_marginTop="5pt"
         android:text="@string/seeSelectedPOIs_switch" />
 
     <Button
         android:id="@+id/poiUp_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="55pt"
-        android:layout_marginTop="30pt"
+        android:layout_marginLeft="65pt"
+        android:layout_marginTop="5pt"
         android:clickable="false"
         android:text="@string/poiUp_button"
         android:visibility="invisible" />
@@ -96,8 +97,8 @@
         android:id="@+id/poiDown_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="55pt"
-        android:layout_marginTop="50pt"
+        android:layout_marginLeft="65pt"
+        android:layout_marginTop="35pt"
         android:clickable="false"
         android:text="@string/poiDown_button"
         android:visibility="invisible" />
