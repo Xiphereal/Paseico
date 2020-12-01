@@ -72,8 +72,8 @@ public class RouteInformationTest {
     public void routeAllTheDetailedInformationIsCorrect() throws InterruptedException {
         navigateToRouteInformation();
 
-        onView(withText(expectedRouteName)).check(matches(isDisplayed()));
-        onView(withText(expectedTheme)).check(matches(isDisplayed()));
+        onView(withId(R.id.textView_routeInfo_nameOfRoute)).check(matches(withText(expectedRouteName)));
+        onView(withId(R.id.textView_routeInfo_theme)).check(matches(withText(expectedTheme)));
 
         int kms = (int) expectedLength / 1000;
         int meters = (int) expectedLength % 1000;
@@ -82,10 +82,10 @@ public class RouteInformationTest {
         int minutes = ((int) expectedEstimatedTime) % 60;
         String estimatedTime = hours + " horas y " + minutes + " minutos";
 
-        onView(withText(length)).check(matches(isDisplayed()));
-        onView(withText(estimatedTime)).check(matches(isDisplayed()));
-        onView(withText(String.valueOf(expectedRewardPoints))).check(matches(isDisplayed()));
-        onView(withText(String.valueOf(expectedPointsOfInterest.size()))).check(matches(isDisplayed()));
+        onView(withId(R.id.textView_routeInfo_length)).check(matches(withText(length)));
+        onView(withId(R.id.textView_routeInfo_estimatedTime)).check(matches(withText(estimatedTime)));
+        onView(withId(R.id.textView_routeInfo_rewardPoints)).check(matches(withText(String.valueOf(expectedRewardPoints))));
+        onView(withId(R.id.textView_routeInfo_numberOfPOI)).check(matches(withText(String.valueOf(expectedPointsOfInterest.size()))));
 
         Thread.sleep(2000);
     }
