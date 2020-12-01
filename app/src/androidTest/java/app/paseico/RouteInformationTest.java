@@ -1,11 +1,14 @@
 package app.paseico;
 
 
+import androidx.test.espresso.contrib.NavigationViewActions;
+import androidx.test.rule.ActivityTestRule;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import app.paseico.mainMenu.searcher.RouteSearchFragment;
 import app.paseico.service.FirebaseService;
 import com.google.firebase.auth.FirebaseAuth;
+import androidx.test.espresso.contrib.DrawerActions;
 import org.junit.*;
 
 import java.util.ArrayList;
@@ -26,9 +29,13 @@ public class RouteInformationTest {
 
     private static Route expectedRoute;
 
+    //    @Rule
+//    public FragmentTestRule<RouteSearchFragment> fragmentTestRule =
+//            new FragmentTestRule<>(RouteSearchFragment.class);
+
     @Rule
-    public FragmentTestRule<RouteSearchFragment> fragmentTestRule =
-            new FragmentTestRule<>(RouteSearchFragment.class);
+    public ActivityTestRule<MainMenuActivity> mainMenuActivityActivityTestRule =
+            new ActivityTestRule<>(MainMenuActivity.class);
 
     @BeforeClass
     public static void beforeClass() {
@@ -62,8 +69,9 @@ public class RouteInformationTest {
 
     @Test
     public void routeAllTheDetailedInformationIsCorrect() throws InterruptedException {
-        fragmentTestRule.launchActivity(null);
-        Thread.sleep(4500);
+        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
+        onView(withId(R.id.nav_view))
+                .perform(NavigationViewActions.navigateTo(R.id.RouteSearchFragment));
 
         onView(withId(R.id.editText_keyWord)).perform(typeText(expectedRouteName), closeSoftKeyboard());
 
