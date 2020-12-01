@@ -70,16 +70,7 @@ public class RouteInformationTest {
 
     @Test
     public void routeAllTheDetailedInformationIsCorrect() throws InterruptedException {
-        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
-        onView(withId(R.id.nav_view))
-                .perform(NavigationViewActions.navigateTo(R.id.RouteSearchFragment));
-
-        onView(withId(R.id.editText_keyWord)).perform(typeText(expectedRouteName), closeSoftKeyboard());
-
-        onView(withId(R.id.button_route_searcher)).perform(click());
-
-        Thread.sleep(2000);
-        onData(anything()).atPosition(0).perform(click());
+        navigateToRouteInformation();
 
         onView(withText(expectedRouteName)).check(matches(isDisplayed()));
         onView(withText(expectedTheme)).check(matches(isDisplayed()));
@@ -97,6 +88,30 @@ public class RouteInformationTest {
         onView(withText(String.valueOf(expectedPointsOfInterest.size()))).check(matches(isDisplayed()));
 
         Thread.sleep(2000);
+    }
+
+    private void navigateToRouteInformation() throws InterruptedException {
+        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
+        onView(withId(R.id.nav_view))
+                .perform(NavigationViewActions.navigateTo(R.id.RouteSearchFragment));
+
+        onView(withId(R.id.editText_keyWord)).perform(typeText(expectedRouteName), closeSoftKeyboard());
+
+        onView(withId(R.id.button_route_searcher)).perform(click());
+
+        Thread.sleep(2000);
+        onData(anything()).atPosition(0).perform(click());
+    }
+
+    @Test
+    public void canInitiateRouteRunner() throws InterruptedException{
+        navigateToRouteInformation();
+        Thread.sleep(2000);
+
+        onView(withId(R.id.btn_routeInfo_startRoute)).perform(click());
+        Thread.sleep(2000);
+
+        onView(withId(R.id.textViewTitleRoutingActivity)).check(matches(isDisplayed()));
     }
 
     @AfterClass
