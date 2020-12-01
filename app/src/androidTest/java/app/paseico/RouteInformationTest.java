@@ -1,23 +1,24 @@
 package app.paseico;
 
 
+import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.rule.ActivityTestRule;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
-import app.paseico.mainMenu.searcher.RouteSearchFragment;
 import app.paseico.service.FirebaseService;
 import com.google.firebase.auth.FirebaseAuth;
-import androidx.test.espresso.contrib.DrawerActions;
 import org.junit.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.*;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.*;
+import static org.hamcrest.Matchers.anything;
 
 public class RouteInformationTest {
     private static final String expectedRouteName = "TestRoute";
@@ -77,8 +78,25 @@ public class RouteInformationTest {
 
         onView(withId(R.id.button_route_searcher)).perform(click());
 
-        onView(withText(expectedRouteName)).perform(click());
-        Thread.sleep(4500);
+        Thread.sleep(2000);
+        onData(anything()).atPosition(0).perform(click());
+
+        onView(withText(expectedRouteName)).check(matches(isDisplayed()));
+        onView(withText(expectedTheme)).check(matches(isDisplayed()));
+
+        int kms = (int) expectedLength / 1000;
+        int meters = (int) expectedLength % 1000;
+        String length = kms + " km y " + meters + " metros";
+        int hours = ((int) expectedEstimatedTime) / 60;
+        int minutes = ((int) expectedEstimatedTime) % 60;
+        String estimatedTime = hours + " horas y " + minutes + " minutos";
+
+        onView(withText(length)).check(matches(isDisplayed()));
+        onView(withText(estimatedTime)).check(matches(isDisplayed()));
+        onView(withText(String.valueOf(expectedRewardPoints))).check(matches(isDisplayed()));
+        onView(withText(String.valueOf(expectedPointsOfInterest.size()))).check(matches(isDisplayed()));
+
+        Thread.sleep(2000);
     }
 
     @AfterClass
