@@ -49,6 +49,7 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
      */
     private void getCurrentUserFromDatabaseAsync() {
         DatabaseReference currentUserReference = FirebaseService.getCurrentUserReference();
+        //DatabaseReference currentOrganizationReference = FirebaseService.getCurrentOrganizationReference();
 
         currentUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
