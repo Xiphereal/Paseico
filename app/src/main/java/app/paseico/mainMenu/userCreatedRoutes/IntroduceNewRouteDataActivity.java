@@ -33,14 +33,16 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
     private List<PointOfInterest> selectedPointsOfInterest = new ArrayList<>();
 
     final double ROUTE_TOTAL_COST_MULTIPLIER_TO_GET_REWARD_POINTS = 0.5;
-
+    private boolean isOrganization;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_introduce_new_route_data);
 
         selectedPointsOfInterest = getIntent().getParcelableArrayListExtra("selectedPointsOfInterest");
-
+        isOrganization = false;
+        Bundle b = getIntent().getExtras();
+        try{isOrganization = (boolean) b.get("organization");}catch(Exception e){isOrganization = false;}
         getCurrentUserFromDatabaseAsync();
     }
 

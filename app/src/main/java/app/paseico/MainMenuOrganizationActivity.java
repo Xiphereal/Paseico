@@ -24,6 +24,7 @@ public class MainMenuOrganizationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent createNewRouteIntent = new Intent(getApplicationContext(), CreateNewRouteActivity.class);
+                createNewRouteIntent.putExtra("organization", true);
                 startActivity(createNewRouteIntent);
             }
         });

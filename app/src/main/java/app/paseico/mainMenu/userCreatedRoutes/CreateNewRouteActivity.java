@@ -34,12 +34,16 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     private Marker userNewCustomPoiInCreation;
 
+    private boolean isOrganization;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_route);
         markedPOIsListView = findViewById(R.id.marked_pois_list_view);
-
+        Bundle b = getIntent().getExtras();
+        isOrganization = false;
+        try{isOrganization = (boolean) b.get("organization");}catch(Exception e){isOrganization = false;}
         initializeMapFragment();
 
         registerGoToIntroduceNewRouteDataButtonTransition();
@@ -63,7 +67,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
         goToIntroduceNewRouteDataIntent.putParcelableArrayListExtra("selectedPointsOfInterest",
                 (ArrayList<? extends Parcelable>) selectedPointsOfInterest);
-
+        goToIntroduceNewRouteDataIntent.putExtra("organization", isOrganization);
         startActivity(goToIntroduceNewRouteDataIntent);
     }
 
