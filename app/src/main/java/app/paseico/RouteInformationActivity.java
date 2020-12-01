@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,7 +23,7 @@ public class RouteInformationActivity extends AppCompatActivity {
     private TextView textView_length;
     private TextView textView_estimatedTime;
     private TextView textView_numberOfPOI;
-    private TextView textView_isOrdered;
+    private TextView textView_ordered;
 
     private ImageView themeIcon;
     @Override
@@ -62,15 +61,13 @@ public class RouteInformationActivity extends AppCompatActivity {
         textView_length = findViewById(R.id.textView_routeInfo_length);
         textView_estimatedTime = findViewById(R.id.textView_routeInfo_estimatedTime);
         textView_numberOfPOI = findViewById(R.id.textView_routeInfo_numberOfPOI);
-        textView_isOrdered = findViewById(R.id.textViewIsOrdered);
+        textView_ordered = findViewById(R.id.textView_routeInfo_ordered);
 
         themeIcon = (ImageView) findViewById(R.id.imageViewIconRouteInformation);
 
 
         Route route = (Route) getIntent().getExtras().get("route");
 
-        textView_isOrdered.setVisibility(View.GONE);
-        if (route.isOrdered() == 1) {textView_isOrdered.setVisibility(View.VISIBLE);}
         String name = route.getName();
         String rewardsPoints = ((Integer) route.getRewardPoints()).toString();
         int kms = (int) route.getLength() / 1000;
@@ -85,14 +82,17 @@ public class RouteInformationActivity extends AppCompatActivity {
         int iconIdex = CategoryManager.ConvertCategoryToIntDrawable(theme);
 
 
-
-
         textView_name.setText(name);
         textView_theme.setText(theme);
         textView_rewardsPoints.setText(rewardsPoints);
         textView_length.setText(length);
         textView_estimatedTime.setText(estimatedTime);
         textView_numberOfPOI.setText(numberOfPOI);
+        if (route.isOrdered() == 1) {
+            textView_ordered.setText(R.string.yes);
+        }else{
+            textView_ordered.setText(R.string.no);
+        }
 
         themeIcon.setImageResource(iconIdex);
 

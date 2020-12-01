@@ -258,7 +258,7 @@ public abstract class RouteRunnerBase<Polyline> extends FragmentActivity impleme
             pois.add(POI5);
             pois.add(POI6);
 
-            actualRoute = new app.paseico.data.Route(nombredeRuta, "Monumentos", 10, 10, 100, pois, 0);
+            actualRoute = new app.paseico.data.Route(nombredeRuta, "Monumentos", 10, 10, 100, pois, "Jhon Doe",0);
             List<PointOfInterest> routePois = actualRoute.getPointsOfInterest();
             rewpoints = 100;
             for (int i = 0; i < routePois.size(); i++) {
