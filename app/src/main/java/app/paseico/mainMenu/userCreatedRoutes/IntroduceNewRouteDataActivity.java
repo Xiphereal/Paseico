@@ -7,7 +7,9 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.MainMenuActivity;
+import app.paseico.MainMenuOrganizationActivity;
 import app.paseico.R;
+import app.paseico.data.Organization;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import app.paseico.data.Router;
@@ -27,13 +29,18 @@ import java.util.List;
 public class IntroduceNewRouteDataActivity extends AppCompatActivity {
 
     private Router currentRouter;
+    private Organization currentOrganization;
     private Route newRoute;
     private int routeCost;
 
     private List<PointOfInterest> selectedPointsOfInterest = new ArrayList<>();
 
     final double ROUTE_TOTAL_COST_MULTIPLIER_TO_GET_REWARD_POINTS = 0.5;
+    final double COST_POI_CREATED = 50;
+    final double COST_POI_GOOGLE = 20;
+
     private boolean isOrganization;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +49,12 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
         selectedPointsOfInterest = getIntent().getParcelableArrayListExtra("selectedPointsOfInterest");
         isOrganization = false;
         Bundle b = getIntent().getExtras();
-        try{isOrganization = (boolean) b.get("organization");}catch(Exception e){isOrganization = false;}
+        try {
+            isOrganization = (boolean) b.get("organization");
+        } catch (Exception e) {
+            isOrganization = false;
+        }
+
         getCurrentUserFromDatabaseAsync();
     }
 
@@ -50,24 +62,45 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
      * Gets the current User from the database asynchronously.
      */
     private void getCurrentUserFromDatabaseAsync() {
-        DatabaseReference currentUserReference = FirebaseService.getCurrentUserReference();
-        //DatabaseReference currentOrganizationReference = FirebaseService.getCurrentOrganizationReference();
+        DatabaseReference currentUserReference;
 
-        currentUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                currentRouter = snapshot.getValue(Router.class);
+        if (isOrganization) {
+            currentUserReference = FirebaseService.getCurrentOrganizationReference();
+            currentUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    currentOrganization = snapshot.getValue(Organization.class);
 
-                // Registering this callback here ensures that the button
-                // action is only performed when the User is ready.
-                registerTryFinalizeNewRouteCreationListener();
-            }
+                    // Registering this callback here ensures that the button
+                    // action is only performed when the User is ready.
+                    registerTryFinalizeNewRouteCreationListener();
+                }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                System.out.println("The db connection failed: " + error.getMessage());
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    System.out.println("The db connection failed: " + error.getMessage());
+                }
+            });
+        } else {
+            currentUserReference = FirebaseService.getCurrentUserReference();
+            currentUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    currentRouter = snapshot.getValue(Router.class);
+
+                    // Registering this callback here ensures that the button
+                    // action is only performed when the User is ready.
+                    registerTryFinalizeNewRouteCreationListener();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    System.out.println("The db connection failed: " + error.getMessage());
+                }
+            });
+        }
+
+
     }
 
     private void registerTryFinalizeNewRouteCreationListener() {
@@ -82,20 +115,40 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
      * previous state.
      */
     private void tryFinalizeRouteCreation() {
-        if (currentRouter.getHasFreeRouteCreation()) {
-            currentRouter.setHasFreeRouteCreation(false);
-            showConfirmationDialog();
+        if (isOrganization) {
+            showRouteCreationByOrganizationSummaryDialog();
         } else {
-            showRouteCreationSummaryDialog();
+            if (currentRouter.getHasFreeRouteCreation()) {
+                currentRouter.setHasFreeRouteCreation(false);
+                showConfirmationDialog();
+            } else {
+                showRouteCreationSummaryDialog();
+            }
         }
+    }
+
+    private void showRouteCreationByOrganizationSummaryDialog() {
+        routeCost = calculateRouteCost();
+
+        String dialogMessage = "El coste de la ruta en creación es de: " + routeCost + " €";
+        AlertDialog.Builder builder = setUpBuilder(dialogMessage);
+
+        builder.setOnDismissListener(dialog -> {
+            String dialogNewMessage = "El importe ha sido tramitado con éxito. Recibirá un correo con la factura correspondiente";
+            AlertDialog.Builder newBuilder = setUpBuilder(dialogNewMessage);
+            newBuilder.setOnDismissListener(newDialog -> showConfirmationDialog());
+            showDialog(newBuilder);
+        });
+
+        showDialog(builder);
     }
 
     private void showRouteCreationSummaryDialog() {
         routeCost = calculateRouteCost();
 
         String dialogMessage = getResources().getString(R.string.route_creation_summary_message, routeCost);
-
         AlertDialog.Builder builder = setUpBuilder(dialogMessage);
+
 
         builder.setOnDismissListener(dialog -> {
             int currentUserPoints = currentRouter.getPoints();
@@ -107,20 +160,30 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
                 showNotEnoughPointsDialog();
             }
         });
-
         showDialog(builder);
     }
 
     private int calculateRouteCost() {
         int totalRouteCost = 0;
 
-        for (PointOfInterest poi : selectedPointsOfInterest) {
-            if (poi.wasCreatedByUser()) {
-                totalRouteCost += getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost);
-            } else {
-                totalRouteCost += getResources().getInteger(R.integer.google_maps_point_of_interest_cost);
+        if (isOrganization) {
+            for (PointOfInterest poi : selectedPointsOfInterest) {
+                if (poi.wasCreatedByUser()) {
+                    totalRouteCost += COST_POI_CREATED;
+                } else {
+                    totalRouteCost += COST_POI_GOOGLE;
+                }
+            }
+        } else {
+            for (PointOfInterest poi : selectedPointsOfInterest) {
+                if (poi.wasCreatedByUser()) {
+                    totalRouteCost += getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost);
+                } else {
+                    totalRouteCost += getResources().getInteger(R.integer.google_maps_point_of_interest_cost);
+                }
             }
         }
+
 
         return totalRouteCost;
     }
@@ -162,9 +225,13 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
 
     private void finalizeRouteCreation() {
         createNewRoute();
-        persistCurrentUserModifications();
 
-        goToMainMenuActivity();
+        if(isOrganization){
+            goToMainMenuOrganizationActivity();
+        } else{
+            persistCurrentUserModifications();
+            goToMainMenuActivity();
+        }
     }
 
     private void createNewRoute() {
@@ -238,6 +305,13 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
     private void goToMainMenuActivity() {
         Intent goToMainMenuIntent = new Intent(getApplicationContext(), MainMenuActivity.class);
         startActivity(goToMainMenuIntent);
+        finish();
+    }
+
+    private void goToMainMenuOrganizationActivity() {
+        Intent goToMainMenuOrganizationIntent = new Intent(getApplicationContext(), MainMenuOrganizationActivity.class);
+        goToMainMenuOrganizationIntent.putExtra("organization", isOrganization);
+        startActivity(goToMainMenuOrganizationIntent);
         finish();
     }
 
