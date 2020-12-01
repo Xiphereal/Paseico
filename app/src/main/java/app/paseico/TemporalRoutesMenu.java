@@ -18,7 +18,7 @@ public class TemporalRoutesMenu extends AppCompatActivity {
         btnStartRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(TemporalRoutesMenu.this, RouteRunnerActivity.class);
+                Intent intent = new Intent(TemporalRoutesMenu.this, RouteRunnerNotOrderedActivity.class);
                 startActivity(intent);
                 finish();
             }

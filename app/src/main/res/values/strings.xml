@@ -18,6 +18,11 @@
     <string name="finalize">Finalizar</string>
     <string name="create_new_point_of_interest_button">Crear nuevo Punto de Interés</string>
 
+    <string name="seeSelectedPOIs_switch">Ver lista POIs</string>
+    <string name="orderedRoute_switch">Ruta ordenada</string>
+    <string name="poiUp_button">Subir</string>
+    <string name="poiDown_button">Bajar</string>
+
     <string name="discounts">Descuentos</string>
 
     <string name="zero">0</string>
@@ -33,9 +38,13 @@
     <string name="km">km</string>
     <string name="hours">h</string>
     <string name="reward_points">Puntos:</string>
+    <string name="ordered_route">Ruta ordenada:</string>
 
     <string name="default_spinner_choice">Indiferente</string>
     <string name="no_theme_choice">Sin temática</string>
+    <string name="yes">Sí</string>
+    <string name="no">No</string>
+
     <string name="museums">Museos</string>
     <string name="restaurants">Restaurantes</string>
     <string name="monuments">Monumentos</string>
@@ -83,6 +92,12 @@
         <item>@string/between4_5</item>
         <item>@string/gt5</item>
     </string-array>
+    <string-array name="ordered_route_choices">
+        <item>@string/default_spinner_choice</item>
+        <item>@string/yes</item>
+        <item>@string/no</item>
+    </string-array>
+
     <string-array name="route_creation_route_category">
         <item>@string/no_theme_choice</item>
         <item>@string/museums</item>
@@ -125,8 +140,6 @@
     <string name="route_creation_summary_message">"El coste de la ruta en creación es de: %1$d puntos"</string>
 
     <!-- TextInput related. -->
-    <string name="new_point_of_interest_name_text_input_hint">Nombre del nuevo Punto de Interés</string>
-    <string name="finalize_route_creation_toolbar_title">Finalizar creación de ruta</string>
     <string name="route_name_hint">Nombre de la ruta</string>
 
     <string name="rutero">Rutero</string>
@@ -135,4 +148,14 @@
     <string name="contrase_a">Contraseña</string>
     <string name="repita_la_contrase_a">Repita la contraseña</string>
     <string name="crear_ruta_organizacion">Crear Ruta Organización</string>
+    <string name="finalize_route_creation_toolbar_title">Finalizar creación de ruta</string>
+    <string name="new_point_of_interest_name_text_input_hint">Nombre del nuevo Punto de Interés</string>
+    <string name="router">Rutero</string>
+    <string name="organization">Organización</string>
+    <string name="organizationName">Nombre de la organización</string>
+    <string name="password">Contraseña</string>
+    <string name="passwordRepeat">Repita la contraseña</string>
+    <string name="nif">NIF</string>
+    <string name="email">Correo electrónico</string>
+    <string name="register">Registrarse</string>
 </resources>

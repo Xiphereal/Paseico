@@ -3,7 +3,10 @@ package app.paseico.mainMenu.userCreatedRoutes;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
+import android.widget.Switch;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.MainMenuActivity;
@@ -32,6 +35,9 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
     private Organization currentOrganization;
     private Route newRoute;
     private int routeCost;
+    private int isOrdered = 0;
+
+    private Switch orderedRouteSwitch;
 
     private List<PointOfInterest> selectedPointsOfInterest = new ArrayList<>();
 
@@ -45,6 +51,7 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_introduce_new_route_data);
+        registerOrderedRouteSwitch();
 
         selectedPointsOfInterest = getIntent().getParcelableArrayListExtra("selectedPointsOfInterest");
         isOrganization = false;
@@ -242,6 +249,7 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
         String category = categorySpinner.getSelectedItem().toString();
         String authorId = FirebaseService.getCurrentUser().getUid();
 
+
         // Get the estimated duration and distance for the newly created Route via a API request.
         DistanceMatrixRequest distanceMatrixRequest = calculateRouteMetrics();
 
@@ -259,7 +267,8 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
                 estimatedDuration,
                 calculateRouteRewardPoints(),
                 selectedPointsOfInterest,
-                authorId);
+                authorId,
+                isOrdered);
 
         FirebaseService.saveRoute(newRoute);
 
@@ -286,6 +295,19 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
                 .send();
 
         return distanceMatrixRequest;
+    }
+
+    private void registerOrderedRouteSwitch(){
+        orderedRouteSwitch = (Switch) findViewById(R.id.ordered_route_switch);
+        orderedRouteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    isOrdered=1;
+                } else {
+                    isOrdered=0;
+                }
+            }
+        });
     }
 
     private int calculateRouteRewardPoints() {

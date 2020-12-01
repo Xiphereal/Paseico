@@ -71,6 +71,17 @@
             app:layout_constraintTop_toBottomOf="@+id/textView_routeInfo_estimatedTimeText3" />
 
     <TextView
+        android:id="@+id/textView_routeIsOrdered"
+        style="@style/SmallTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:paddingStart="40dp"
+        android:text="@string/ordered_route"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_routeInfo_numberOfPOIText" />
+
+    <TextView
             android:id="@+id/textView_routeInfo_numberOfPOI"
             android:layout_width="126dp"
             android:layout_height="40dp"
@@ -80,6 +91,16 @@
             android:layout_marginLeft="250dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_routeInfo_estimatedTime" />
+
+    <TextView
+        android:id="@+id/textView_routeInfo_ordered"
+        android:layout_width="126dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="248dp"
+        android:layout_marginTop="30dp"
+        android:ems="10"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_routeInfo_numberOfPOI" />
 
     <TextView
             android:id="@+id/textView_routeInfo_rewardPointsText"
@@ -131,6 +152,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_routeInfo_nameOfRoute"
             android:layout_marginStart="248dp"/>
+
     <Button
             android:id="@+id/btn_routeInfo_modify"
             android:layout_width="134dp"

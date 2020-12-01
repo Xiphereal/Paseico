@@ -121,6 +121,7 @@
             android:layout_width="140dp"
             android:layout_height="30dp"
             android:entries="@array/lengths_of_route"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.375"
             android:layout_marginTop="40dp"
             android:layout_marginLeft="170dp"
@@ -132,6 +133,8 @@
             android:layout_width="140dp"
             android:layout_height="31dp"
             android:entries="@array/estimated_times_of_route"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="50dp"
             app:layout_constraintHorizontal_bias="0.0"
             android:layout_marginTop="43dp"
             android:layout_marginLeft="170dp"
@@ -209,5 +212,27 @@
             app:layout_constraintStart_toEndOf="@+id/spinner_route_estimated_time"
             app:layout_constraintTop_toTopOf="@+id/spinner_route_estimated_time"
             app:layout_constraintVertical_bias="1.0"/>
+
+    <TextView
+        android:id="@+id/textView_orderedRoute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="44dp"
+        android:text="@string/ordered_route"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_pointsEarnedCompletingRoute" />
+
+    <Spinner
+        android:id="@+id/spinner_orderedRoute"
+        android:layout_width="107dp"
+        android:layout_height="23dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="28dp"
+        android:entries="@array/ordered_route_choices"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.179"
+        app:layout_constraintStart_toEndOf="@+id/textView_orderedRoute"
+        app:layout_constraintTop_toBottomOf="@+id/editText_minimumOfPoints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
