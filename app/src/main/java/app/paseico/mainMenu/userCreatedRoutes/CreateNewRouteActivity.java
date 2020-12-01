@@ -47,7 +47,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     protected Marker userNewCustomPoiInCreation;
 
-    //Switch to set the route as ordered or not
+    //Switch to show or not the poi list and buttons to order it
     protected Switch showPOIsSwitch;
 
     //buttons to change order
@@ -121,21 +121,24 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
             }
         });
     }
+    
+    private void movePOIselectedInList(){
+        markedPOIs.set(positionOfPOIinList, markedPOIs.get(nextPosition));
+        markedPOIs.set(nextPosition,selectedPOIinList);
+
+        PointOfInterest poiSelectedInListView = selectedPointsOfInterest.get(positionOfPOIinList);
+        selectedPointsOfInterest.set(positionOfPOIinList,selectedPointsOfInterest.get(nextPosition));
+        selectedPointsOfInterest.set(nextPosition,poiSelectedInListView);
+
+        updateMarkedPOIsListView();
+        selectedPOIinList="";
+    }
 
     private void goUpPointSelectedInList(){
         System.out.println(positionOfPOIinList);
         if (selectedPOIinList!="" && positionOfPOIinList != 0) {
             nextPosition = positionOfPOIinList-1;
-
-            markedPOIs.set(positionOfPOIinList, markedPOIs.get(nextPosition));
-            markedPOIs.set(nextPosition,selectedPOIinList);
-
-            PointOfInterest poiSelectedInListView = selectedPointsOfInterest.get(positionOfPOIinList);
-            selectedPointsOfInterest.set(positionOfPOIinList,selectedPointsOfInterest.get(nextPosition));
-            selectedPointsOfInterest.set(nextPosition,poiSelectedInListView);
-
-            updateMarkedPOIsListView();
-            selectedPOIinList="";
+            movePOIselectedInList();
         } else {
             //Toast: select a poi of the list
             Toast.makeText(CreateNewRouteActivity.this, "Selecciona un POI debajo de otro.", Toast.LENGTH_SHORT).show();
@@ -145,16 +148,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     private void goDownPointSelectedInList(){
         if (selectedPOIinList!="" && positionOfPOIinList != markedPOIs.size()-1) {
             nextPosition = positionOfPOIinList+1;
-
-            markedPOIs.set(positionOfPOIinList, markedPOIs.get(nextPosition));
-            markedPOIs.set(nextPosition,selectedPOIinList);
-
-            PointOfInterest poiSelectedInListView = selectedPointsOfInterest.get(positionOfPOIinList);
-            selectedPointsOfInterest.set(positionOfPOIinList,selectedPointsOfInterest.get(nextPosition));
-            selectedPointsOfInterest.set(nextPosition,poiSelectedInListView);
-
-            updateMarkedPOIsListView();
-            selectedPOIinList="";
+            movePOIselectedInList();
         } else {
             //Toast: select a poi of the list
             Toast.makeText(CreateNewRouteActivity.this, "Selecciona un POI encima de otro", Toast.LENGTH_SHORT).show();
