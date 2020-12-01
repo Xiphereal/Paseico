@@ -27,7 +27,6 @@ public class MarketplaceFragmentTest {
     public FragmentTestRule<marketplaceFragment> mFragmentTestRule =
             new FragmentTestRule<>(marketplaceFragment.class);
 
-
     @Before
     public void setUpAll()  {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -35,12 +34,10 @@ public class MarketplaceFragmentTest {
         String email = "avd@gmail.com";
         String password = "123456";
         firebaseAuth.signInWithEmailAndPassword(email, password);
-
         // Set to zero the rewards points of the logged user.
         DatabaseReference  myActualUserRef = FirebaseDatabase.getInstance().getReference("users")
                 .child("7YuiqRHra8OaosZc9vpbfGXdy9C2").child("points");
         myActualUserRef.setValue(0);
-
         //Set to false the boost of the logged user.
         DatabaseReference  myActualUserRef2 = FirebaseDatabase.getInstance().getReference("users")
                 .child("7YuiqRHra8OaosZc9vpbfGXdy9C2").child("boost");
@@ -132,6 +129,7 @@ public class MarketplaceFragmentTest {
 
         onView(withId(R.id.imageViewBuy2000Points)).perform(click());
         onView(withId(R.id.imageViewBuyBoost2w)).perform(click());
+        onView(withId(R.id.imageViewBuy2000Points)).perform(click());
         onView(withId(R.id.imageViewBuyBoost2w)).perform(click());
         onView(withText("No puedes comprar un BOOST! Ya tienes uno activo"))
                 .inRoot(withDecorView(is(not(mFragmentTestRule.getActivity().getWindow().getDecorView()))))
@@ -173,6 +171,7 @@ public class MarketplaceFragmentTest {
 
         onView(withId(R.id.imageViewBuy6000Points)).perform(click());
         onView(withId(R.id.imageViewBuyBoost5w)).perform(click());
+        onView(withId(R.id.imageViewBuy6000Points)).perform(click());
         onView(withId(R.id.imageViewBuyBoost5w)).perform(click());
         onView(withText("No puedes comprar un BOOST! Ya tienes uno activo"))
                 .inRoot(withDecorView(is(not(mFragmentTestRule.getActivity().getWindow().getDecorView()))))
