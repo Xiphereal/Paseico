@@ -104,20 +104,20 @@
                                 android:orientation="vertical">
 
                             <TextView
-                                    android:layout_width="60dp"
-                                    android:layout_height="wrap_content"
-                                    android:id="@+id/followers"
-                                    android:textColor="@color/colorPrimaryDark"
-                                    android:layout_gravity="center"
-                                    android:textSize="18sp"
-                                    android:textAlignment="center"
-                                    android:textStyle="bold"/>
+                                android:layout_width="60dp"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/textView_followersNumber"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:layout_gravity="center"
+                                android:textSize="18sp"
+                                android:textAlignment="center"
+                                android:textStyle="bold"/>
 
                             <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="followers"
-                                    android:id="@+id/textView_Followers"/>
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="followers"
+                                android:id="@+id/textView_FollowersText"/>
 
                         </LinearLayout>
 
@@ -128,20 +128,20 @@
                                 android:orientation="vertical">
 
                             <TextView
-                                    android:layout_width="60dp"
-                                    android:layout_height="wrap_content"
-                                    android:id="@+id/following"
-                                    android:textColor="@color/colorPrimaryDark"
-                                    android:layout_gravity="center"
-                                    android:textSize="18sp"
-                                    android:textAlignment="center"
-                                    android:textStyle="bold"/>
+                                android:layout_width="60dp"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/textView_followingNumber"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:layout_gravity="center"
+                                android:textSize="18sp"
+                                android:textAlignment="center"
+                                android:textStyle="bold"/>
 
                             <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="following"
-                                    android:id="@+id/textView_Following"/>
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="following"
+                                android:id="@+id/textView_FollowingText"/>
 
                         </LinearLayout>
                     </LinearLayout>

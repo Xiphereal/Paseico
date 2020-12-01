@@ -36,7 +36,7 @@
         <activity android:name=".RouteRunnerActivity"/>
         <activity android:name=".TemporalRoutesMenu"/>
         <activity android:name=".RouteFinishedActivity"/>
-        <activity android:name=".FollowersActivity"/>
+        <activity android:name=".mainMenu.searchUsers.FollowersActivity"/>
         <activity android:name=".RouteInformationActivity"/>
         <activity android:name=".MainActivity"/>
         <activity android:name=".login.RegisterActivity"/>
