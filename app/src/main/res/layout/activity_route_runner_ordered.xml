@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RouteRunnerNotOrderedActivity">
+    tools:context=".RouteRunnerOrderedActivity">
 
     <fragment
         android:id="@+id/map"
@@ -18,16 +18,19 @@
         tools:context=".MainActivity" />
 
 
-
-    <ListView
+    <TextView
         android:id="@+id/TextNextRoute"
         android:layout_width="0dp"
         android:layout_height="150dp"
+        android:gravity="center"
+        android:text="Cargando..."
+        android:textSize="30dp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        android:background="@color/background"/>
+        app:layout_constraintTop_toBottomOf="@+id/map" />
 
     <TextView
         android:id="@+id/textViewTitleRoutingActivity"
@@ -35,8 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="NOMBRE DE RUTA"
-        style="@style/LargeTextView"
-        android:textAlignment="center"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -50,8 +52,5 @@
         android:src="@android:drawable/ic_delete"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@android:drawable/ic_delete"
-        app:backgroundTint="@color/background"
-        style="@style/LargeButtonText"
-        android:textColor="@color/white"/>
+        tools:src="@android:drawable/ic_delete" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,6 +12,7 @@ public class Route implements Parcelable {
     private String theme;   // TODO: The value of theme should be a constant.
     private double length;  // Meters.
     private double estimatedTime;  // Minutes
+    private int ordered = -1;
 
     // Points earned when the route is completed.
     private int rewardPoints;
@@ -27,19 +28,27 @@ public class Route implements Parcelable {
         readFromParcel(in);
     }
 
+    public Route(String name, List<PointOfInterest> pointOfInterests, String authorId) {
+        this.name = name;
+        this.pointsOfInterest = pointOfInterests;
+        this.authorId = authorId;
+    }
+
     public Route(String name,
                  String theme,
                  double length,
                  double estimatedTime,
                  int rewardPoints,
                  List<PointOfInterest> pointsOfInterest,
-                 String authorId) {
+                 String authorId,
+                 int ordered) {
         this.name = name;
         this.theme = theme;
         this.length = length;
         this.estimatedTime = estimatedTime;
         this.rewardPoints = rewardPoints;
         this.pointsOfInterest = pointsOfInterest;
+        this.ordered = ordered;
         this.authorId = authorId;
     }
 
@@ -75,6 +84,10 @@ public class Route implements Parcelable {
         this.estimatedTime = estimatedTime;
     }
 
+    public int isOrdered() { return ordered;}
+
+    public void setOrdered(int value) { ordered = value%2;  }
+
     public int getRewardPoints() {
         return rewardPoints;
     }
@@ -109,6 +122,7 @@ public class Route implements Parcelable {
                 ", estimatedTime=" + estimatedTime +
                 ", rewardsPoints=" + rewardPoints +
                 ", pointsOfInterest=" + pointsOfInterest +
+                ", ordered=" + ordered +
                 '}';
     }
 
@@ -119,6 +133,7 @@ public class Route implements Parcelable {
         this.estimatedTime = in.readDouble();
         this.rewardPoints = in.readInt();
         this.pointsOfInterest = in.readArrayList(PointOfInterest.class.getClassLoader());
+        this.ordered = in.readInt();
     }
 
     public static final Parcelable.Creator<Route> CREATOR = new Parcelable.Creator<Route>() {
@@ -146,6 +161,7 @@ public class Route implements Parcelable {
         dest.writeDouble(estimatedTime);
         dest.writeInt(rewardPoints);
         dest.writeList(pointsOfInterest);
+        dest.writeInt(ordered);
     }
 
     public void setId(String id) {

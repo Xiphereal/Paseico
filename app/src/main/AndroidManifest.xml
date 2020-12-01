@@ -23,25 +23,31 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
 
-        <activity
-                android:name=".MainMenuActivity"
-                android:label="@string/title_activity_main_menu"
-                android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity android:name=".MainMenuOrganizationActivity"/>
+
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+    <activity
+        android:name=".MainMenuActivity"
+        android:label="@string/title_activity_main_menu"
+        android:theme="@style/AppTheme.NoActionBar" />
+
         <activity android:name=".mainMenu.userCreatedRoutes.IntroduceNewRouteDataActivity"/>
-        <activity android:name=".ModifyRouteActivity"/>
-        <activity android:name=".RouteInfModifyActivity"/>
         <activity android:name=".mainMenu.userCreatedRoutes.CreateNewRouteActivity"/>
-        <activity android:name=".RouteRunnerActivity"/>
-        <activity android:name=".TemporalRoutesMenu"/>
-        <activity android:name=".RouteFinishedActivity"/>
+        <activity android:name=".RouteRunnerNotOrderedActivity" />
+        <activity android:name=".RouteRunnerOrderedActivity" />
+        <activity android:name=".TemporalRoutesMenu" />
+        <activity android:name=".RouteFinishedActivity" />
         <activity android:name=".mainMenu.searchUsers.FollowersActivity"/>
-        <activity android:name=".RouteInformationActivity"/>
-        <activity android:name=".MainActivity"/>
-        <activity android:name=".login.RegisterActivity"/>
+        <activity android:name=".RouteInformationActivity" />
+        <activity android:name=".login.RegisterActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".login.LogInActivity" />
         <activity android:name=".login.RegisterOrganizationActivity" />
-        <activity android:name=".login.LogInActivity"/>
+        <activity android:name=".MainMenuOrganizationActivity"/>
+         <activity android:name=".ModifyRouteActivity"/>
+        <activity android:name=".RouteInfModifyActivity"/>
         <activity android:name=".login.OpeningActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -49,9 +55,5 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
-        <meta-data
-                android:name="com.google.android.geo.API_KEY"
-                android:value="@string/google_maps_key"/>
     </application>
 </manifest>

@@ -7,6 +7,27 @@
     tools:context=".RouteInformationActivity"
     android:background="@color/background">
 
+    <TextView
+        android:id="@+id/textView_routeIsOrdered2"
+        style="@style/SmallTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:paddingStart="40dp"
+        android:text="@string/ordered_route"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_routeInfo_numberOfPOIText" />
+
+    <TextView
+        android:id="@+id/textView_routeInfo_ordered"
+        android:layout_width="126dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="248dp"
+        android:layout_marginTop="30dp"
+        android:ems="10"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_routeInfo_numberOfPOI" />
+
     <ImageView
         android:id="@+id/imageViewIconRouteInformation"
         android:layout_width="70dp"
