@@ -134,4 +134,5 @@
     <string name="nombre_de_la_organizaci_n">Nombre organización</string>
     <string name="contrase_a">Contraseña</string>
     <string name="repita_la_contrase_a">Repita la contraseña</string>
+    <string name="crear_ruta_organizacion">Crear Ruta Organización</string>
 </resources>
