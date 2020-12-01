@@ -29,6 +29,10 @@ public class FirebaseService {
         return firebaseDatabase.getReference("users").child(getCurrentUser().getUid());
     }
 
+    public static DatabaseReference getCurrentOrganizationReference() {
+        return firebaseDatabase.getReference("organizations").child(getCurrentUser().getUid());
+    }
+
     public static void saveRoute(Route route) {
         firebaseFirestore.collection("route").add(route).addOnSuccessListener(documentReference -> {
             String createdRouteID = documentReference.getId();

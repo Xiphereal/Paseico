@@ -58,17 +58,21 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     protected int positionOfPOIinList = 0;
     protected int nextPosition = 0;
 
+    private boolean isOrganization;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_route);
-        registerMarkedPOIsListView();
+        Bundle b = getIntent().getExtras();
+        isOrganization = false;
+        try{isOrganization = (boolean) b.get("organization");}catch(Exception e){isOrganization = false;}
+          registerMarkedPOIsListView();
 
-        poiUpButton = findViewById(R.id.poiUp_button);
-        poiDownButton = findViewById(R.id.poiDown_button);
-        registerUpAndDownButtons();
-        registerOrderedRouteSwitch();
-
+          poiUpButton = findViewById(R.id.poiUp_button);
+          poiDownButton = findViewById(R.id.poiDown_button);
+          registerUpAndDownButtons();
+          registerOrderedRouteSwitch();
         initializeMapFragment();
 
         registerGoToIntroduceNewRouteDataButtonTransition();
@@ -121,7 +125,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
             }
         });
     }
-    
+
     private void movePOIselectedInList(){
         markedPOIs.set(positionOfPOIinList, markedPOIs.get(nextPosition));
         markedPOIs.set(nextPosition,selectedPOIinList);
@@ -177,7 +181,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
         goToIntroduceNewRouteDataIntent.putParcelableArrayListExtra("selectedPointsOfInterest",
                 (ArrayList<? extends Parcelable>) selectedPointsOfInterest);
-
+        goToIntroduceNewRouteDataIntent.putExtra("organization", isOrganization);
         startActivity(goToIntroduceNewRouteDataIntent);
     }
 
