@@ -36,6 +36,10 @@ public class RouteInformationTest {
     public ActivityTestRule<MainMenuActivity> mainMenuActivityActivityTestRule =
             new ActivityTestRule<>(MainMenuActivity.class);
 
+    @Rule
+    public GrantPermissionRule permissionRule =
+            GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION);
+
     @BeforeClass
     public static void beforeClass() {
         createRoute();
