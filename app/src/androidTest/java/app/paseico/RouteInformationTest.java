@@ -1,9 +1,11 @@
 package app.paseico;
 
 
+import android.Manifest;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.rule.ActivityTestRule;
+import androidx.test.rule.GrantPermissionRule;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import app.paseico.service.FirebaseService;
@@ -30,10 +32,6 @@ public class RouteInformationTest {
 
     private static Route expectedRoute;
 
-    //    @Rule
-//    public FragmentTestRule<RouteSearchFragment> fragmentTestRule =
-//            new FragmentTestRule<>(RouteSearchFragment.class);
-
     @Rule
     public ActivityTestRule<MainMenuActivity> mainMenuActivityActivityTestRule =
             new ActivityTestRule<>(MainMenuActivity.class);
@@ -41,15 +39,6 @@ public class RouteInformationTest {
     @BeforeClass
     public static void beforeClass() {
         createRoute();
-    }
-
-    @Before
-    public void beforeEach() {
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-
-        String email = "avd@gmail.com";
-        String password = "123456";
-        firebaseAuth.signInWithEmailAndPassword(email, password);
     }
 
     private static void createRoute() {
@@ -68,13 +57,29 @@ public class RouteInformationTest {
         FirebaseService.saveRoute(expectedRoute);
     }
 
+    @Before
+    public void beforeEach() {
+        loginAsTestingUser();
+    }
+
+    private void loginAsTestingUser() {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
+        String email = "avd@gmail.com";
+        String password = "123456";
+        firebaseAuth.signInWithEmailAndPassword(email, password);
+    }
+
     @Test
     public void routeAllTheDetailedInformationIsCorrect() throws InterruptedException {
         navigateToRouteInformation();
 
+        // Assert the results
         onView(withId(R.id.textView_routeInfo_nameOfRoute)).check(matches(withText(expectedRouteName)));
         onView(withId(R.id.textView_routeInfo_theme)).check(matches(withText(expectedTheme)));
 
+        // Calculate the lenght like "XX km y XX metros"
+        // and estimatedTime like " hh horas y mm minutos"
         int kms = (int) expectedLength / 1000;
         int meters = (int) expectedLength % 1000;
         String length = kms + " km y " + meters + " metros";
@@ -106,11 +111,11 @@ public class RouteInformationTest {
     @Test
     public void canInitiateRouteRunner() throws InterruptedException{
         navigateToRouteInformation();
-        Thread.sleep(2000);
 
         onView(withId(R.id.btn_routeInfo_startRoute)).perform(click());
         Thread.sleep(2000);
 
+        // Assert the results
         onView(withId(R.id.textViewTitleRoutingActivity)).check(matches(isDisplayed()));
     }
 
