@@ -82,7 +82,7 @@ public class RouteInformationTest {
         onView(withId(R.id.textView_routeInfo_nameOfRoute)).check(matches(withText(expectedRouteName)));
         onView(withId(R.id.textView_routeInfo_theme)).check(matches(withText(expectedTheme)));
 
-        // Calculate the lenght like "XX km y XX metros"
+        // Calculate the length like "XX km y XX metros"
         // and estimatedTime like " hh horas y mm minutos"
         int kms = (int) expectedLength / 1000;
         int meters = (int) expectedLength % 1000;
