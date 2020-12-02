@@ -1,5 +1,6 @@
 package app.paseico.mainMenu.marketplace;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -24,10 +25,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import app.paseico.R;
 import app.paseico.data.Discount;
@@ -109,6 +113,7 @@ public class DiscountsFragment extends Fragment {
                     int updatedPoints = currentRouter.getPoints() - discounts.get(i).getPoints();
                     myPointsReference.setValue(updatedPoints);
                     Toast.makeText(getActivity(), "Enhorabuena! Acabas de canjear un descuento de " + discounts.get(i).getName(), Toast.LENGTH_SHORT).show();
+                    showDiscountCode(i);
                 } else {
                     Toast.makeText(getActivity(), "No tienes puntos suficientes para canjear el descuento de " + discounts.get(i).getName(), Toast.LENGTH_SHORT).show();
                 }
@@ -117,6 +122,29 @@ public class DiscountsFragment extends Fragment {
 
 
         return root;
+    }
+
+    public void showDiscountCode(int index){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Código: " + generateDiscountCode() + "\n \n ¡Acuérdate de apuntarlo antes de cerrar esta ventana!")
+                .setTitle("Descuento de " + discounts.get(index).getName() +" canjeado!")
+                .setPositiveButton("Vale!", (dialog, which) -> {
+
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
+
+    private String generateDiscountCode(){
+        char[] chars = "AXZC01759".toCharArray();
+        StringBuilder sb = new StringBuilder(6);
+        Random random = new Random();
+        for (int i = 0; i < 6; i++) {
+            char c = chars[random.nextInt(chars.length)];
+            sb.append(c);
+        }
+        return sb.toString();
     }
 
 
