@@ -1,5 +1,6 @@
 package app.paseico.mainMenu.marketplace;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -23,6 +24,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -117,6 +120,34 @@ public class DiscountsFragment extends Fragment {
 
 
         return root;
+    }
+
+    public void showDiscountCode(int index){
+        String dialogMessage = "Descuento de " + discounts.get(index).getName() +" canjeado!";
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(dialogMessage)
+                .setTitle("Descuento de " + discounts.get(index).getName() +" canjeado!")
+                .setPositiveButton("OK", (dialog, which) -> {
+
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
+    @NotNull
+    private AlertDialog.Builder setUpBuilder(String dialogMessage) {
+        // Where the alert dialog is going to be shown.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(dialogMessage)
+                .setTitle(R.string.route_creation_finalize_title)
+                .setPositiveButton("OK", (dialog, which) -> {
+                    // This remains empty because when the dialog is closed by tapping on 'OK' or outside it,
+                    // it's considered to be dismissed in both cases, thus the call to the finalizer method must
+                    // be done only on the dismiss listener.
+                });
+
+        return builder;
     }
 
 
