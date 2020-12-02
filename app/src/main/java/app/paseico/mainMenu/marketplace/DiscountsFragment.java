@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import app.paseico.R;
 import app.paseico.data.Discount;
@@ -112,6 +113,7 @@ public class DiscountsFragment extends Fragment {
                     int updatedPoints = currentRouter.getPoints() - discounts.get(i).getPoints();
                     myPointsReference.setValue(updatedPoints);
                     Toast.makeText(getActivity(), "Enhorabuena! Acabas de canjear un descuento de " + discounts.get(i).getName(), Toast.LENGTH_SHORT).show();
+                    showDiscountCode(i);
                 } else {
                     Toast.makeText(getActivity(), "No tienes puntos suficientes para canjear el descuento de " + discounts.get(i).getName(), Toast.LENGTH_SHORT).show();
                 }
@@ -123,31 +125,26 @@ public class DiscountsFragment extends Fragment {
     }
 
     public void showDiscountCode(int index){
-        String dialogMessage = "Descuento de " + discounts.get(index).getName() +" canjeado!";
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(dialogMessage)
+        builder.setMessage("Código: " + generateDiscountCode() + "\n \n ¡Acuérdate de apuntarlo antes de cerrar esta ventana!")
                 .setTitle("Descuento de " + discounts.get(index).getName() +" canjeado!")
-                .setPositiveButton("OK", (dialog, which) -> {
+                .setPositiveButton("Vale!", (dialog, which) -> {
 
                 });
         AlertDialog dialog = builder.create();
         dialog.show();
 
     }
-    @NotNull
-    private AlertDialog.Builder setUpBuilder(String dialogMessage) {
-        // Where the alert dialog is going to be shown.
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setMessage(dialogMessage)
-                .setTitle(R.string.route_creation_finalize_title)
-                .setPositiveButton("OK", (dialog, which) -> {
-                    // This remains empty because when the dialog is closed by tapping on 'OK' or outside it,
-                    // it's considered to be dismissed in both cases, thus the call to the finalizer method must
-                    // be done only on the dismiss listener.
-                });
-
-        return builder;
+    private String generateDiscountCode(){
+        char[] chars = "AXZC01759".toCharArray();
+        StringBuilder sb = new StringBuilder(6);
+        Random random = new Random();
+        for (int i = 0; i < 6; i++) {
+            char c = chars[random.nextInt(chars.length)];
+            sb.append(c);
+        }
+        return sb.toString();
     }
 
 
