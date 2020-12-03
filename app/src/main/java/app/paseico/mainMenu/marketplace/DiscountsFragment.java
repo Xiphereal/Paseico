@@ -88,7 +88,7 @@ public class DiscountsFragment extends Fragment {
 
                 for (int i = 0; i < discounts.size(); i++) {
                     String n = discounts.get(i).getName();
-                    String p = discounts.get(i).getPercentage();
+                    int p = discounts.get(i).getPercentage();
                     int pts = discounts.get(i).getPoints();
                     listDiscounts.add(new DiscountObj(n, p, pts));
                 }

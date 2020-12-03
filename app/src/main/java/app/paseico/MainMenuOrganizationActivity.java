@@ -18,8 +18,16 @@ public class MainMenuOrganizationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu_organization);
-        
+
         registerCreateNewOrganizationRouteButton();
+        Button createDisc = findViewById(R.id.buttonOrganiDiscounts);
+        createDisc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainMenuOrganizationActivity.this, OrganizationCouponsActivity.class);
+                startActivity(intent);
+            }
+        });
         createLogOutOrgButton();
     }
 
