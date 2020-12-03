@@ -1,59 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="app.paseico">
+    package="app.paseico">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAMLXmyf_ai85V6PdlA7jYhjL-nSgHl7mA"/>
+        android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyAMLXmyf_ai85V6PdlA7jYhjL-nSgHl7mA" />
     <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
+        android:name="com.google.android.gms.version"
+        android:value="@integer/google_play_services_version" />
 
     <application
-            android:allowBackup="true"
-            android:icon="@mipmap/ic_launcher"
-            android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_round"
-            android:supportsRtl="true"
-            android:theme="@style/AppTheme">
-
-
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".CreateCouponActivity"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-    <activity
-        android:name=".MainMenuActivity"
-        android:label="@string/title_activity_main_menu"
-        android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity android:name=".mainMenu.userCreatedRoutes.IntroduceNewRouteDataActivity"/>
-        <activity android:name=".mainMenu.userCreatedRoutes.CreateNewRouteActivity"/>
+        <activity
+            android:name=".MainMenuActivity"
+            android:label="@string/title_activity_main_menu"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".mainMenu.userCreatedRoutes.IntroduceNewRouteDataActivity" />
+        <activity android:name=".mainMenu.userCreatedRoutes.CreateNewRouteActivity" />
         <activity android:name=".RouteRunnerNotOrderedActivity" />
         <activity android:name=".RouteRunnerOrderedActivity" />
         <activity android:name=".TemporalRoutesMenu" />
         <activity android:name=".RouteFinishedActivity" />
-        <activity android:name=".mainMenu.searchUsers.FollowersActivity"/>
+        <activity android:name=".mainMenu.searchUsers.FollowersActivity" />
         <activity android:name=".RouteInformationActivity" />
         <activity android:name=".login.RegisterActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".login.LogInActivity" />
         <activity android:name=".login.RegisterOrganizationActivity" />
-        <activity android:name=".MainMenuOrganizationActivity"/>
-         <activity android:name=".ModifyRouteActivity"/>
-        <activity android:name=".RouteInfModifyActivity"/>
+        <activity android:name=".MainMenuOrganizationActivity" />
+        <activity android:name=".ModifyRouteActivity" />
+        <activity android:name=".RouteInfModifyActivity" />
         <activity android:name=".login.OpeningActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
+
 </manifest>

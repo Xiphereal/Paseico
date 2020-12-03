@@ -2,12 +2,13 @@ package app.paseico.data;
 
 public class Discount {
     private String name;
-    private String percentage;
+    private int percentage;
     private int points;
     private String organiID;
+
     public Discount() {}
 
-    public Discount(String n, String p, int pts, String organiID) {
+    public Discount(String n, int p, int pts, String organiID) {
         this.name = n;
         this.percentage = p;
         this.points = pts;
@@ -22,11 +23,11 @@ public class Discount {
         this.name = name;
     }
 
-    public String getPercentage() {
+    public int getPercentage() {
         return percentage;
     }
 
-    public void setPercentage(String percentage) {
+    public void setPercentage(int percentage) {
         this.percentage = percentage;
     }
 
@@ -38,6 +39,13 @@ public class Discount {
         this.points = points;
     }
 
+    public String getOrganiID() {
+        return organiID;
+    }
+
+    public void setOrganiID(String organiID) {
+        this.organiID = organiID;
+    }
 
 
 
