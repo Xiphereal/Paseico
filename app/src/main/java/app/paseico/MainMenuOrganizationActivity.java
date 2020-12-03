@@ -7,8 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import app.paseico.login.LogInActivity;
-import app.paseico.login.RegisterActivity;
 import app.paseico.mainMenu.userCreatedRoutes.CreateNewRouteActivity;
 
 public class MainMenuOrganizationActivity extends AppCompatActivity {
@@ -19,11 +17,11 @@ public class MainMenuOrganizationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu_organization);
         
         registerCreateNewOrganizationRouteButton();
-        Button createDisc = findViewById(R.id.buttonCreateDiscount);
+        Button createDisc = findViewById(R.id.buttonOrganiDiscounts);
         createDisc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainMenuOrganizationActivity.this, CreateCouponActivity.class);
+                Intent intent = new Intent(MainMenuOrganizationActivity.this, OrganizationCouponsActivity.class);
                 startActivity(intent);
             }
         });

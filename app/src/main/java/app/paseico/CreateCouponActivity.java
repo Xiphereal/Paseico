@@ -84,16 +84,7 @@ public class CreateCouponActivity extends AppCompatActivity {
         btnCancelCoupon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(CreateCouponActivity.this);
-
-                builder.setMessage("¿Seguro que quieres cancelar la creación de este cupón?")
-                        .setTitle("Cancelando cupón")
-                        .setPositiveButton("Sí", (dialog, which) -> {
-                            finish();
-                        })
-                    .setNegativeButton("No",(dialog, which) -> {
-                });
-                builder.show();
+                showCancelAlert();
             }
         });
     }
@@ -144,5 +135,22 @@ public class CreateCouponActivity extends AppCompatActivity {
 
     private void calculatePointCost(){
         cost = Integer.parseInt(discountPercentage.getText().toString()) * 250;
+    }
+    private void showCancelAlert(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(CreateCouponActivity.this);
+
+        builder.setMessage("¿Seguro que quieres cancelar la creación de este cupón?")
+                .setTitle("Cancelando cupón")
+                .setPositiveButton("Sí", (dialog, which) -> {
+                    finish();
+                })
+                .setNegativeButton("No",(dialog, which) -> {
+                });
+        builder.show();
+    }
+    @Override
+    public void onBackPressed()
+    {
+        showCancelAlert();
     }
 }

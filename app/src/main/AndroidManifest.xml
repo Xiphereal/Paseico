@@ -22,7 +22,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CreateCouponActivity"></activity>
+        <activity android:name=".OrganizationCouponsActivity"></activity>
+        <activity android:name=".CreateCouponActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

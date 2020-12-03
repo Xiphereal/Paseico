@@ -36,11 +36,14 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <Button
-        android:id="@+id/buttonCreateDiscount"
+        android:id="@+id/buttonOrganiDiscounts"
+        style="@style/LargeButtonText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
-        android:text="Crear cupón"
+        android:background="@color/colorPrimary"
+        android:text="Tus cupones"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/buttonCreateRouteOrg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
