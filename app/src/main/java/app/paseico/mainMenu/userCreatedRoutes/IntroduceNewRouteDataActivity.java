@@ -326,6 +326,10 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
 
     private void goToMainMenuActivity() {
         Intent goToMainMenuIntent = new Intent(getApplicationContext(), MainMenuActivity.class);
+
+        // Finishes all the opened activities.
+        goToMainMenuIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
         startActivity(goToMainMenuIntent);
         finish();
     }
@@ -333,6 +337,10 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
     private void goToMainMenuOrganizationActivity() {
         Intent goToMainMenuOrganizationIntent = new Intent(getApplicationContext(), MainMenuOrganizationActivity.class);
         goToMainMenuOrganizationIntent.putExtra("organization", isOrganization);
+
+        // Finishes all the opened activities.
+        goToMainMenuOrganizationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
         startActivity(goToMainMenuOrganizationIntent);
         finish();
     }
