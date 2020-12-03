@@ -4,12 +4,14 @@ public class Discount {
     private String name;
     private String percentage;
     private int points;
+    private String organiID;
     public Discount() {}
 
-    public Discount(String n, String p, int pts) {
+    public Discount(String n, String p, int pts, String organiID) {
         this.name = n;
         this.percentage = p;
         this.points = pts;
+        this.organiID = organiID;
     }
 
     public String getName() {
