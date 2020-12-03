@@ -1,7 +1,9 @@
 package app.paseico.mainMenu.userCreatedRoutes;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.os.Parcelable;
@@ -12,6 +14,7 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.R;
 import app.paseico.data.PointOfInterest;
@@ -42,6 +45,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     protected final List<String> markedPOIs = new ArrayList<>();
 
     protected final List<String> createdMarkers = new ArrayList<>();
+    protected final List<String> createdMarkersByUser = new ArrayList<>();
 
     protected Router currentUser;
 
@@ -369,14 +373,43 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         createNewPointOfInterestButton.setOnClickListener(button -> {
             TextInputEditText textInputEditText = findViewById(R.id.user_created_marker_name_text_input);
 
+            if(compareWithPOIs(textInputEditText.getText().toString())){
+
             userNewCustomPoiInCreation.setTitle(textInputEditText.getText().toString());
             textInputEditText.getText().clear();
 
             selectPointOfInterest(userNewCustomPoiInCreation, true);
+            createdMarkers.add(userNewCustomPoiInCreation.getTitle());
+            createdMarkersByUser.add(userNewCustomPoiInCreation.getTitle());
 
             userNewCustomPoiInCreation = null;
 
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        });
+        }});
+    }
+
+    private boolean compareWithPOIs(String routeName) {
+        //System.out.println(createdMarkers.size() + " XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        if (createdMarkersByUser.contains(routeName)){
+            makeAlert("Nombre ya existente. Escriba un nombre distinto.");
+            return false;
+        }
+
+        if (routeName.trim().isEmpty()){
+            makeAlert("Por favor, escriba un nombre para el punto.");
+            return false;
+        }
+        return true;
+    }
+
+    private void makeAlert(String s) {
+        new AlertDialog.Builder(this).setTitle("Error al crear punto")
+        .setMessage(s)
+        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Log.d("MsgCancelled", "cancelado");
+            }
+        }).show();
     }
 }
