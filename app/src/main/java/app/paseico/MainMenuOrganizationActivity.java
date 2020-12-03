@@ -25,6 +25,7 @@ public class MainMenuOrganizationActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 
     private void registerCreateNewOrganizationRouteButton() {

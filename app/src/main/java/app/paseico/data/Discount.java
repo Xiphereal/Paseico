@@ -6,13 +6,18 @@ public class Discount {
     private int points;
     private String organiID;
 
+
+
+    private String nodeId;
+
     public Discount() {}
 
-    public Discount(String n, int p, int pts, String organiID) {
+    public Discount(String n, int p, int pts, String organiID, String node) {
         this.name = n;
         this.percentage = p;
         this.points = pts;
         this.organiID = organiID;
+        this.nodeId = node;
     }
 
     public String getName() {
@@ -47,6 +52,13 @@ public class Discount {
         this.organiID = organiID;
     }
 
+    public String getNodeId() {
+        return nodeId;
+    }
+
+    public void setNodeId(String nodeId) {
+        this.nodeId = nodeId;
+    }
 
 
 }

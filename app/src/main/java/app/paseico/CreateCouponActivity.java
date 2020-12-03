@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -126,10 +127,13 @@ public class CreateCouponActivity extends AppCompatActivity {
         String discName = discountName.getText().toString();
         int percent = Integer.parseInt(discountPercentage.getText().toString());
         calculatePointCost();
-        Discount discount = new Discount(discName, percent, cost, fbUser.getUid().toString());
-        myDiscountsRef.child(UUID.randomUUID().toString()).setValue(discount);
+        String nodeUid =UUID.randomUUID().toString();
+        Discount discount = new Discount(discName, percent, cost, fbUser.getUid().toString(),nodeUid);
+        myDiscountsRef.child(nodeUid).setValue(discount);
         Toast.makeText(CreateCouponActivity.this, "Cupón creado! ",
                 Toast.LENGTH_LONG).show();
+        Intent couponLists = new Intent(getApplicationContext(), OrganizationCouponsActivity.class);
+        startActivity(couponLists);
         finish();
     }
 
@@ -142,6 +146,8 @@ public class CreateCouponActivity extends AppCompatActivity {
         builder.setMessage("¿Seguro que quieres cancelar la creación de este cupón?")
                 .setTitle("Cancelando cupón")
                 .setPositiveButton("Sí", (dialog, which) -> {
+                    Intent couponLists = new Intent(getApplicationContext(), OrganizationCouponsActivity.class);
+                    startActivity(couponLists);
                     finish();
                 })
                 .setNegativeButton("No",(dialog, which) -> {

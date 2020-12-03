@@ -13,5 +13,5 @@ public class DiscountObj {
         this.points = pts;
 
     }
-    public String toString(){return this.name + "\n" + this.percentage + "\n" + this.points + " pts.";}
+    public String toString(){return this.name + "\n" + this.percentage +"%"+ "\n" + this.points + " pts.";}
 }

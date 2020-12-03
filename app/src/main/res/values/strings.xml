@@ -158,4 +158,14 @@
     <string name="nif">NIF</string>
     <string name="email">Correo electrónico</string>
     <string name="register">Registrarse</string>
+    <string name="create_new_coupon">Crear Nuevo cupón</string>
+    <string name="delete_coupon">Borrar cupón</string>
+    <string name="your_coupon">Tus cupones</string>
+    <string name="discount_name">Nombre del descuento</string>
+    <string name="percentage_to_apply">Porcentaje a aplicar</string>
+    <string name="name">Nombre</string>
+    <string name="percentage">Porcentaje</string>
+    <string name="create_coupon">Crear</string>
+    <string name="cancel_coupon">Cancelar</string>
+    <string name="title_new_coupon">CREAR NUEVO CUPÓN</string>
 </resources>

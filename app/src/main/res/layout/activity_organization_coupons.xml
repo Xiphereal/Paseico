@@ -7,28 +7,29 @@
     android:background="@color/background"
     tools:context=".OrganizationCouponsActivity">
 
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Tus cupones"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ListView
         android:id="@+id/listViewOrganiCoupons"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="75dp"
+        android:layout_marginTop="100dp"
         android:layout_marginBottom="175dp"
         app:layout_constraintBottom_toTopOf="@+id/buttonDeleteCoupon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/your_coupon"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <Button
         android:id="@+id/buttonCreateNewCoupon"
@@ -39,7 +40,7 @@
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="30dp"
         android:background="@drawable/custom_button"
-        android:text="Crear Nuevo cupón"
+        android:text="@string/create_new_coupon"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -54,7 +55,7 @@
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/custom_button"
-        android:text="Borrar cupón"
+        android:text="@string/delete_coupon"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/buttonCreateNewCoupon"
         app:layout_constraintEnd_toEndOf="parent"

@@ -9,4 +9,4 @@
     android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
     android:drawableLeft="@drawable/cupon"
-    android:background="@color/background"/>
+    android:background="@drawable/bg_key"/>
