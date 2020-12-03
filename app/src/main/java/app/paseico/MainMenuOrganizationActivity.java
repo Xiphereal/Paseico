@@ -7,6 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.google.firebase.auth.FirebaseAuth;
+
+import app.paseico.login.LogInActivity;
 import app.paseico.mainMenu.userCreatedRoutes.CreateNewRouteActivity;
 
 public class MainMenuOrganizationActivity extends AppCompatActivity {
@@ -15,7 +18,7 @@ public class MainMenuOrganizationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu_organization);
-        
+
         registerCreateNewOrganizationRouteButton();
         Button createDisc = findViewById(R.id.buttonOrganiDiscounts);
         createDisc.setOnClickListener(new View.OnClickListener() {
@@ -25,7 +28,7 @@ public class MainMenuOrganizationActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+        createLogOutOrgButton();
     }
 
     private void registerCreateNewOrganizationRouteButton() {
@@ -40,5 +43,16 @@ public class MainMenuOrganizationActivity extends AppCompatActivity {
         });
     }
 
-    //buttonCreateDiscount
+    public void createLogOutOrgButton() {
+        final Button closeSessionOrg = findViewById(R.id.LogOutOrg);
+        closeSessionOrg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(MainMenuOrganizationActivity.this, LogInActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+    }
 }

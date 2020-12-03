@@ -168,4 +168,5 @@
     <string name="create_coupon">Crear</string>
     <string name="cancel_coupon">Cancelar</string>
     <string name="title_new_coupon">CREAR NUEVO CUPÓN</string>
+    <string name="log_out_organization">Cerrar sesión</string>
 </resources>
