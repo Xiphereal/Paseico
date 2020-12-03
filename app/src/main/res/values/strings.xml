@@ -158,4 +158,5 @@
     <string name="nif">NIF</string>
     <string name="email">Correo electrónico</string>
     <string name="register">Registrarse</string>
+    <string name="log_out_organization">Cerrar sesión</string>
 </resources>
