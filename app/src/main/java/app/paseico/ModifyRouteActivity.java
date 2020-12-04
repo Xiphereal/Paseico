@@ -56,6 +56,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_route);
+        
         markedPOIsListView = findViewById(R.id.marked_pois_list_view);
 
         Intent retrievedIntent = this.getIntent();
