@@ -1,12 +1,17 @@
 package app.paseico;
 
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -54,6 +59,28 @@ public class SelectedPoiActivity extends FragmentActivity implements OnMapReadyC
         LatLng selectedPoiPosition = new LatLng(selectedPoi.getLatitude(), selectedPoi.getLongitude());
         mMap.addMarker(new MarkerOptions().position(selectedPoiPosition).title(selectedPoi.getName()));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(selectedPoiPosition));
+
+        // This conditional is needed to get the router location. That check if the router doesn't have location's permission
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
+
+        mMap.setMyLocationEnabled(true);
+        mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+            @Override
+            public void onMyLocationChange(Location location) {
+
+//                    if (myLocation == null) {
+//                        myLocation = location;
+                    LatLng ltlng = new LatLng(location.getLatitude(), location.getLongitude());
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
+                            ltlng, 13f);
+
+                    mMap.animateCamera(cameraUpdate);
+                //}
+            }});
 
     }
 }
