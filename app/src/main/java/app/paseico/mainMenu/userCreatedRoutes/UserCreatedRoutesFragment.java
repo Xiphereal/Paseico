@@ -17,12 +17,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import app.paseico.R;
 import app.paseico.data.Organization;
+import app.paseico.data.Route;
 
 public class UserCreatedRoutesFragment extends Fragment {
     private ListView createdRoutesListView;
@@ -32,6 +36,16 @@ public class UserCreatedRoutesFragment extends Fragment {
     //
     private List<Organization> organizations = new ArrayList<Organization>();
     private List<String> organizationsKeys = new ArrayList<String>();
+    private List<Route> organizationRoutes = new ArrayList<Route>();
+    private String organizationKey = "";
+
+    private List<String> orgRoutesNames = new ArrayList<>();
+    private List<String> orgRoutesEstimatedTime = new ArrayList<>();
+    private List<String> orgRoutesLength = new ArrayList<>();
+    private List<String> orgRoutesRewardPoints = new ArrayList<>();
+    private List<String> orgRoutesAreOrdered = new ArrayList<>();
+    private List<String> orgRoutesCategory = new ArrayList<>();
+    private List<Integer> orgRoutesIcons = new ArrayList<>();
     //
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -65,15 +79,48 @@ public class UserCreatedRoutesFragment extends Fragment {
     }
     //
     private void readOrganizations(){
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("organizations");
-        reference.addValueEventListener(new ValueEventListener() {
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+        CollectionReference referenceRoutes = database.collection("route");
+
+        DatabaseReference referenceOrganizations = FirebaseDatabase.getInstance().getReference("organizations");
+        referenceOrganizations.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot datasnapshot) {
                 for(DataSnapshot snapshot : datasnapshot.getChildren()){
                     //Organization organization = snapshot.getValue(Organization.class);
                     //organizations.add(organization);
-                    organizationsKeys.add(snapshot.getRef().getKey());
+                    organizationKey = snapshot.getRef().getKey();
+                    organizationsKeys.add(organizationKey);
+                    System.out.println("la clave de la organizacion es" +  snapshot.getRef().getKey());
+
+                    referenceRoutes.whereEqualTo("authorId", organizationKey)
+                            .get()
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    for (DocumentSnapshot snapshotRuta : task.getResult()) {
+
+                                        Route route = snapshotRuta.toObject(Route.class);
+
+                                        orgRoutesNames.add(route.getName());
+                                        orgRoutesEstimatedTime.add(Double.toString(route.getEstimatedTime()));
+                                        orgRoutesLength.add(Double.toString(route.getLength()));
+                                        orgRoutesRewardPoints.add(Integer.toString(route.getRewardPoints()));
+                                        orgRoutesAreOrdered.add(Integer.toString(route.isOrdered()));
+                                        orgRoutesCategory.add(route.getTheme());
+
+
+                                        System.out.println("la ruta de nombre" + route.getName() + "id " + route.getId()+ " estimated time" + route.getEstimatedTime());
+                                        System.out.println("logitud " + route.getLength() + " reward point " + route.getRewardPoints());
+                                        System.out.println("ordenación " + route.isOrdered() + " categoria  " + route.getTheme());
+
+                                    }
+                                    System.out.println("bieeeeennnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn");
+                                } else {
+                                    System.out.println("eeeeeeeeeeeeeeeeeeeeeeeerrrrrrrrrrrrrrro");
+                                }
+                            });
                 }
+                //once I get organizations keys I retrieve their routes
             }
 
             @Override
@@ -83,7 +130,29 @@ public class UserCreatedRoutesFragment extends Fragment {
         });
     }
 
+
     public static List<String> getCreatedRoutes() {
         return createdRoutes;
     }
 }
+
+
+
+
+
+                /*referenceRoutes.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for(DataSnapshot snapshotRoute : snapshot.getChildren()){
+                           Route organizationRoute = snapshotRoute.getValue(Route.class);
+                           System.out.println("el nombre de la ruta creada por la organzizacion es" + organizationRoute.getName());
+                           organizationRoutes.add(organizationRoute);
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });*/
