@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -104,7 +105,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
         registerOnMapClick();
         registerOnMarkerClickListener();
         registerOnGoogleMapsPoiClickListener();
-
+        registerOnMapLongClick();
     }
 
     private void registerOnGoogleMapsPoiClickListener() {
@@ -122,6 +123,25 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
             }
 
             return;
+        });
+    }
+
+    /**
+     * Registers the listener for letting the user create Points Of Interest.
+     */
+    private void registerOnMapLongClick() {
+        BottomSheetBehavior bottomSheetBehavior = hideUserNewCustomPoiForm();
+
+        registerOnNewPoiButtonClicked(bottomSheetBehavior);
+
+        map.setOnMapLongClickListener(tapPoint -> {
+            tryDeleteUserNewCustomPoiInCreation();
+
+            // Opens the creation form.
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
+            userNewCustomPoiInCreation = map
+                    .addMarker(new MarkerOptions().position(tapPoint).title("User Marker"));
         });
     }
 
@@ -223,18 +243,17 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
 
     private void registerOnMarkerClickListener() {
         map.setOnMarkerClickListener(marker -> {
-            tryDeleteUserNewCustomPoiInCreation();
-            LatLng position = marker.getPosition();
-            String title = marker.getTitle();
+            if (!marker.equals(userNewCustomPoiInCreation)) {
+                tryDeleteUserNewCustomPoiInCreation();
 
-            PointOfInterest poi = findClickedPointOfInterest(position, title);
+                PointOfInterest poi = findClickedPointOfInterest(marker.getPosition(), marker.getTitle());
 
-            if (isPointOfInterestSelected(poi)) {
-                deselectPointOfInterest(marker, poi);
-            } else {
-                selectPointOfInterest(marker, false);
+                if (isPointOfInterestSelected(poi)) {
+                    deselectPointOfInterest(marker, poi);
+                } else {
+                    selectPointOfInterest(marker, false);
+                }
             }
-
             return true;
         });
     }
@@ -379,5 +398,27 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
         });
 
         showDialog(builder);
+    }
+
+    /**
+     * Registers the listener for accepting the new Point of Interest creation.
+     *
+     * @param bottomSheetBehavior The reference to the bottom sheet for hiding it.
+     */
+    private void registerOnNewPoiButtonClicked(BottomSheetBehavior bottomSheetBehavior) {
+        Button createNewPointOfInterestButton = findViewById(R.id.user_created_marker_button);
+
+        createNewPointOfInterestButton.setOnClickListener(button -> {
+            TextInputEditText textInputEditText = findViewById(R.id.user_created_marker_name_text_input);
+
+            userNewCustomPoiInCreation.setTitle(textInputEditText.getText().toString());
+            textInputEditText.getText().clear();
+
+            selectPointOfInterest(userNewCustomPoiInCreation, true);
+
+            userNewCustomPoiInCreation = null;
+
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        });
     }
 }
