@@ -7,18 +7,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import app.paseico.R;
+
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import app.paseico.R;
+import app.paseico.data.Organization;
 
 public class UserCreatedRoutesFragment extends Fragment {
     private ListView createdRoutesListView;
     private ArrayAdapter<String> createdRoutesListViewAdapter;
     private static List<String> createdRoutes = new ArrayList<>();
+
+    //
+    private List<Organization> organizations = new ArrayList<Organization>();
+    private List<String> organizationsKeys = new ArrayList<String>();
+    //
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -29,7 +43,8 @@ public class UserCreatedRoutesFragment extends Fragment {
 
         //TODO: the created routes list should display only routes created by the user,
         // currently it shown routes created independent of current user.
-        updateCreatedRoutesListView();
+        //updateCreatedRoutesListView();
+        readOrganizations();
 
         registerCreateNewRouteButtonTransition(root);
 
@@ -46,6 +61,25 @@ public class UserCreatedRoutesFragment extends Fragment {
         extendedFloatingActionButton.setOnClickListener(view -> {
             Intent createNewRouteIntent = new Intent(getActivity(), CreateNewRouteActivity.class);
             startActivity(createNewRouteIntent);
+        });
+    }
+    //
+    private void readOrganizations(){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("organizations");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot datasnapshot) {
+                for(DataSnapshot snapshot : datasnapshot.getChildren()){
+                    //Organization organization = snapshot.getValue(Organization.class);
+                    //organizations.add(organization);
+                    organizationsKeys.add(snapshot.getRef().getKey());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
         });
     }
 
