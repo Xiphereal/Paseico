@@ -105,7 +105,7 @@
         style="@style/SmallTextView"
         android:layout_marginTop="40dp"
         android:paddingStart="40dp"
-        android:text="@string/number_of_POI"
+        android:text="@string/list_of_POI"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_routeIsOrdered2" />
 
@@ -149,10 +149,10 @@
         app:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="@+id/btn_routeInfo_startRoute"
         app:layout_constraintEnd_toStartOf="@+id/btn_routeInfo_startRoute"
-        app:layout_constraintHorizontal_bias="0.464"
+        app:layout_constraintHorizontal_bias="0.449"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btn_routeInfo_startRoute"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/btn_routeInfo_startRoute"
@@ -163,22 +163,21 @@
         android:textColor="@color/white"
         app:backgroundTint="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.885"
+        app:layout_constraintHorizontal_bias="0.775"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/listView_routeInfo_poiList" />
 
     <ListView
         android:id="@+id/listView_routeInfo_poiList"
-        android:layout_width="409dp"
-        android:layout_height="147dp"
+        android:layout_width="340dp"
+        android:layout_height="153dp"
         android:layout_marginBottom="84dp"
         android:layout_marginTop="5dp"
         android:background="@color/background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_routeInfo_POIsofRouteText"
-        app:layout_constraintVertical_bias="0.159" />
+        app:layout_constraintVertical_bias="0.25" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
