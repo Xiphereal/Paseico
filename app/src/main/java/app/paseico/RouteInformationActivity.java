@@ -5,6 +5,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -16,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.annotations.NotNull;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import app.paseico.data.PointOfInterest;
@@ -37,6 +41,7 @@ public class RouteInformationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_route_information);
 
         Route route = setFilteredInformation();
+
 
         registerOnBackButtonClickedListener();
 
@@ -108,6 +113,17 @@ public class RouteInformationActivity extends AppCompatActivity {
 
         ArrayAdapter<String> pointsOfInterestNamesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,  pointsOfInterestNames);
         listView_poiList.setAdapter(pointsOfInterestNamesAdapter);
+
+        listView_poiList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                PointOfInterest selectedPoi = pois.get(position);
+
+                Intent selectedPOIIntent = new Intent(RouteInformationActivity.this, SelectedPoiActivity.class);
+                selectedPOIIntent.putExtra("poi", (Serializable) selectedPoi);
+                startActivity(selectedPOIIntent);
+            }
+        });
 
         findViewById(R.id.btn_routeInfo_back).setOnClickListener(v -> finish());
 
