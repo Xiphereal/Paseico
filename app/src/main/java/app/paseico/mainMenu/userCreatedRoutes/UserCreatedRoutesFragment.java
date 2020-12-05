@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -30,6 +31,7 @@ import java.util.List;
 
 import app.paseico.CategoryManager;
 import app.paseico.R;
+import app.paseico.RouteInformationActivity;
 import app.paseico.data.Organization;
 import app.paseico.data.Route;
 
@@ -51,6 +53,7 @@ public class UserCreatedRoutesFragment extends Fragment {
     private List<String> orgRoutesAreOrdered = new ArrayList<>();
     private List<String> orgRoutesCategory = new ArrayList<>();
     private List<Integer> orgRoutesIcons = new ArrayList<>();
+
 
     FilteredListAdapter adapter;
     //
@@ -86,6 +89,7 @@ public class UserCreatedRoutesFragment extends Fragment {
     }
     //
     private void readOrganizations(){
+
         FirebaseFirestore database = FirebaseFirestore.getInstance();
         CollectionReference referenceRoutes = database.collection("route");
 
@@ -108,6 +112,7 @@ public class UserCreatedRoutesFragment extends Fragment {
 
                                         Route route = snapshotRuta.toObject(Route.class);
 
+                                        organizationRoutes.add(route);
                                         orgRoutesNames.add(route.getName());
                                         orgRoutesEstimatedTime.add(Double.toString(route.getEstimatedTime()));
                                         orgRoutesLength.add(Double.toString(route.getLength()));
@@ -122,6 +127,17 @@ public class UserCreatedRoutesFragment extends Fragment {
                                                 orgRoutesRewardPoints, orgRoutesIcons, orgRoutesAreOrdered);
 
                                         organizationRoutesListView.setAdapter(adapter);
+
+                                        organizationRoutesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                            @Override
+                                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                Route selectedRoute = organizationRoutes.get(position);
+
+                                                Intent selectedRouteIntent = new Intent(getActivity(), RouteInformationActivity.class);
+                                                selectedRouteIntent.putExtra("route", selectedRoute);
+                                                startActivity(selectedRouteIntent);
+                                            }
+                                        });
 
                                     }
 
