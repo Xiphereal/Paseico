@@ -29,7 +29,7 @@ import app.paseico.data.Organization;
 import app.paseico.data.Route;
 
 public class UserCreatedRoutesFragment extends Fragment {
-    private ListView createdRoutesListView;
+    private ListView organizationRoutesListView;
     private ArrayAdapter<String> createdRoutesListViewAdapter;
     private static List<String> createdRoutes = new ArrayList<>();
 
@@ -53,7 +53,7 @@ public class UserCreatedRoutesFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_user_created_routes, container, false);
 
-        createdRoutesListView = root.findViewById(R.id.created_routes_list_view);
+        organizationRoutesListView = root.findViewById(R.id.organization_routes_list_view);
 
         //TODO: the created routes list should display only routes created by the user,
         // currently it shown routes created independent of current user.
@@ -67,7 +67,7 @@ public class UserCreatedRoutesFragment extends Fragment {
 
     private void updateCreatedRoutesListView() {
         createdRoutesListViewAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, createdRoutes);
-        createdRoutesListView.setAdapter(createdRoutesListViewAdapter);
+        organizationRoutesListView.setAdapter(createdRoutesListViewAdapter);
     }
 
     private void registerCreateNewRouteButtonTransition(View root) {

@@ -9,7 +9,7 @@
         android:background="@color/background">
 
     <ListView
-            android:id="@+id/created_routes_list_view"
+            android:id="@+id/organization_routes_list_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/background"
