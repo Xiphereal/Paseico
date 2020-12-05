@@ -1,14 +1,18 @@
 package app.paseico.mainMenu.userCreatedRoutes;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -24,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
+import app.paseico.CategoryManager;
 import app.paseico.R;
 import app.paseico.data.Organization;
 import app.paseico.data.Route;
@@ -46,6 +51,8 @@ public class UserCreatedRoutesFragment extends Fragment {
     private List<String> orgRoutesAreOrdered = new ArrayList<>();
     private List<String> orgRoutesCategory = new ArrayList<>();
     private List<Integer> orgRoutesIcons = new ArrayList<>();
+
+    FilteredListAdapter adapter;
     //
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -106,15 +113,18 @@ public class UserCreatedRoutesFragment extends Fragment {
                                         orgRoutesLength.add(Double.toString(route.getLength()));
                                         orgRoutesRewardPoints.add(Integer.toString(route.getRewardPoints()));
                                         orgRoutesAreOrdered.add(Integer.toString(route.isOrdered()));
-                                        orgRoutesCategory.add(route.getTheme());
 
+                                        String routeCategory = route.getTheme();
+                                        int index = CategoryManager.ConvertCategoryToIntDrawable(routeCategory);
+                                        orgRoutesIcons.add(index);
 
-                                        System.out.println("la ruta de nombre" + route.getName() + "id " + route.getId()+ " estimated time" + route.getEstimatedTime());
-                                        System.out.println("logitud " + route.getLength() + " reward point " + route.getRewardPoints());
-                                        System.out.println("ordenación " + route.isOrdered() + " categoria  " + route.getTheme());
+                                        adapter = new FilteredListAdapter(getContext(), orgRoutesNames, orgRoutesEstimatedTime, orgRoutesLength,
+                                                orgRoutesRewardPoints, orgRoutesIcons, orgRoutesAreOrdered);
+
+                                        organizationRoutesListView.setAdapter(adapter);
 
                                     }
-                                    System.out.println("bieeeeennnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn");
+
                                 } else {
                                     System.out.println("eeeeeeeeeeeeeeeeeeeeeeeerrrrrrrrrrrrrrro");
                                 }
@@ -130,29 +140,68 @@ public class UserCreatedRoutesFragment extends Fragment {
         });
     }
 
-
     public static List<String> getCreatedRoutes() {
         return createdRoutes;
     }
+
+    class FilteredListAdapter extends ArrayAdapter<String> {
+
+        Context context;
+        List<String> names;
+        List<String> estimatedTimes;
+        List<String> lengths;
+        List<String> points;
+        List<Integer> icons;
+        List<String> areOrdered;
+
+
+        FilteredListAdapter(Context context, List<String> names, List<String> estimatedTimes, List<String> lengths, List<String> points, List<Integer> icons, List<String> areOrdered) {
+            super(context, R.layout.item_route_search, R.id.routeName, names);
+
+            this.context = context;
+            this.names = names;
+            this.estimatedTimes = estimatedTimes;
+            this.lengths = lengths;
+            this.points = points;
+            this.icons = icons;
+            this.areOrdered = areOrdered;
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View row = layoutInflater.inflate(R.layout.item_route_search, parent, false);
+
+            TextView myNames = row.findViewById(R.id.routeName);
+            TextView myEstimatedTimes = row.findViewById(R.id.routeDuration);
+            TextView myLengths = row.findViewById(R.id.routeLenght);
+            TextView myPoints = row.findViewById(R.id.routeReward);
+            TextView orderedRoute = row.findViewById(R.id.textView_orderedRouteResult);
+
+
+            ImageView ListViewImage = (ImageView) row.findViewById(R.id.imageViewIcon);
+
+            myNames.setText(names.get(position));
+            myEstimatedTimes.setText(estimatedTimes.get(position));
+            myLengths.setText(lengths.get(position));
+            myPoints.setText(points.get(position));
+
+            String isOrdered = areOrdered.get(position);
+            if (isOrdered.equals("0")){
+                isOrdered = "No";
+            } else {
+                isOrdered = "Sí";
+            }
+
+            orderedRoute.setText(isOrdered);
+
+            ListViewImage.setImageResource(icons.get(position));
+
+            return row;
+        }
+
+    }
+
 }
 
-
-
-
-
-                /*referenceRoutes.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for(DataSnapshot snapshotRoute : snapshot.getChildren()){
-                           Route organizationRoute = snapshotRoute.getValue(Route.class);
-                           System.out.println("el nombre de la ruta creada por la organzizacion es" + organizationRoute.getName());
-                           organizationRoutes.add(organizationRoute);
-                        }
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });*/
