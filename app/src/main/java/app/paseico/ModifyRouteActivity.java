@@ -1,6 +1,7 @@
 package app.paseico;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -249,13 +250,34 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
                 PointOfInterest poi = findClickedPointOfInterest(marker.getPosition(), marker.getTitle());
 
                 if (isPointOfInterestSelected(poi)) {
-                    deselectPointOfInterest(marker, poi);
+                    showConfirmationDeselection(marker, poi);
                 } else {
                     selectPointOfInterest(marker, false);
                 }
             }
             return true;
         });
+    }
+
+    private void showConfirmationDeselection(Marker marker, PointOfInterest poi){
+        String message = "¿Queres deseleccionar el punto?";
+        AlertDialog.Builder builder = setUpBuilder(message);
+        builder.setCancelable(true);
+        builder.setPositiveButton(android.R.string.yes,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deselectPointOfInterest(marker, poi);
+                    }
+                });
+        builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void getCurrentUserFromDatabaseAsync() {
