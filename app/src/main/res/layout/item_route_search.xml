@@ -24,22 +24,22 @@
                 android:layout_height="70dp"
                 android:layout_alignParentTop="true" />
 
+
             <TextView
                 android:id="@+id/textViewWhite"
-                android:layout_width="50dp"
+                android:layout_width="52dp"
                 android:layout_height="wrap_content"
-                android:paddingLeft="150dp"/>
+                android:paddingLeft="150dp" />
 
             <TextView
                 android:id="@+id/routeName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Nombre Ruta"
                 android:layout_gravity="center"
+                android:text="Nombre Ruta"
                 android:textColor="#000000"
                 android:textSize="17sp"
                 android:textStyle="bold" />
-
 
 
         </TableRow>

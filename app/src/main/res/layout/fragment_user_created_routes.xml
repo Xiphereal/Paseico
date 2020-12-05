@@ -9,11 +9,10 @@
         android:background="@color/background">
 
     <ListView
-            android:id="@+id/organization_routes_list_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/background"
-    />
+        android:id="@+id/organization_routes_list_view"
+        android:layout_width="wrap_content"
+        android:layout_height="600dp"
+        android:background="@color/background" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/create_new_route_button"

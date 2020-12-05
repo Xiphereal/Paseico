@@ -51,7 +51,7 @@ public class UserCreatedRoutesFragment extends Fragment {
     private List<String> orgRoutesLength = new ArrayList<>();
     private List<String> orgRoutesRewardPoints = new ArrayList<>();
     private List<String> orgRoutesAreOrdered = new ArrayList<>();
-    private List<String> orgRoutesCategory = new ArrayList<>();
+    private List<String> orgNames = new ArrayList<>();
     private List<Integer> orgRoutesIcons = new ArrayList<>();
 
 
@@ -102,7 +102,10 @@ public class UserCreatedRoutesFragment extends Fragment {
                     //organizations.add(organization);
                     organizationKey = snapshot.getRef().getKey();
                     organizationsKeys.add(organizationKey);
-                    System.out.println("la clave de la organizacion es" +  snapshot.getRef().getKey());
+
+
+                    String organizationName = snapshot.child("name").getValue(String.class);
+
 
                     referenceRoutes.whereEqualTo("authorId", organizationKey)
                             .get()
@@ -118,6 +121,7 @@ public class UserCreatedRoutesFragment extends Fragment {
                                         orgRoutesLength.add(Double.toString(route.getLength()));
                                         orgRoutesRewardPoints.add(Integer.toString(route.getRewardPoints()));
                                         orgRoutesAreOrdered.add(Integer.toString(route.isOrdered()));
+                                        orgNames.add(organizationName);
 
                                         String routeCategory = route.getTheme();
                                         int index = CategoryManager.ConvertCategoryToIntDrawable(routeCategory);
