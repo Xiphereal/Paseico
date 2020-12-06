@@ -142,7 +142,6 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
         String dialogMessage = getResources().getString(R.string.route_creation_summary_message, routeCost);
         AlertDialog.Builder builder = setUpBuilder(dialogMessage);
 
-
         builder.setOnDismissListener(dialog -> {
             int currentUserPoints = currentRouter.getPoints();
 
@@ -159,21 +158,15 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
     private int calculateRouteCost() {
         int totalRouteCost = 0;
 
-        if (isOrganization) {
-            for (PointOfInterest poi : selectedPointsOfInterest) {
-                if (poi.wasCreatedByUser()) {
-                    totalRouteCost += getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost_in_euros);
-                } else {
-                    totalRouteCost += getResources().getInteger(R.integer.google_maps_point_of_interest_cost_in_euros);
-                }
-            }
-        } else {
-            for (PointOfInterest poi : selectedPointsOfInterest) {
-                if (poi.wasCreatedByUser()) {
-                    totalRouteCost += getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost_in_points);
-                } else {
-                    totalRouteCost += getResources().getInteger(R.integer.google_maps_point_of_interest_cost_in_points);
-                }
+        for (PointOfInterest poi : selectedPointsOfInterest) {
+            if (poi.wasCreatedByUser()) {
+                totalRouteCost += isOrganization ?
+                        getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost_in_euros) :
+                        getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost_in_points);
+            } else {
+                totalRouteCost += isOrganization ?
+                        getResources().getInteger(R.integer.google_maps_point_of_interest_cost_in_euros) :
+                        getResources().getInteger(R.integer.google_maps_point_of_interest_cost_in_points);
             }
         }
 
