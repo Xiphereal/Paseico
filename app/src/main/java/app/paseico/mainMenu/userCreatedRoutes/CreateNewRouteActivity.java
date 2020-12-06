@@ -301,8 +301,6 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
                 selectPointOfInterest(markerOfThePoi, false);
                 createdMarkers.add(poiSelected.name);
             }
-
-            return;
         });
     }
 
