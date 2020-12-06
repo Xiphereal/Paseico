@@ -126,7 +126,6 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     }
 
     private void goUpPointSelectedInList() {
-        System.out.println(positionOfPOIinList);
         if (selectedPOIinList != "" && positionOfPOIinList != 0) {
             nextPosition = positionOfPOIinList - 1;
             movePOIselectedInList();
