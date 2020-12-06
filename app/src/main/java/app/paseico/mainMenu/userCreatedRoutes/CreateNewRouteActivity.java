@@ -112,7 +112,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         poiUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goUpPointSelectedInList();
+                moveUpSelectedPoiInList();
             }
         });
 
@@ -120,32 +120,32 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         poiDownButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goDownPointSelectedInList();
+                moveDownSelectedPoiInList();
             }
         });
     }
 
-    private void goUpPointSelectedInList() {
+    private void moveUpSelectedPoiInList() {
         if (selectedPOIinList != "" && positionOfPOIinList != 0) {
             nextPosition = positionOfPOIinList - 1;
-            movePOIselectedInList();
+            moveSelectedPoiInList();
         } else {
             //Toast: select a poi of the list
             Toast.makeText(CreateNewRouteActivity.this, "Selecciona un POI debajo de otro.", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void goDownPointSelectedInList() {
+    private void moveDownSelectedPoiInList() {
         if (selectedPOIinList != "" && positionOfPOIinList != markedPOIs.size() - 1) {
             nextPosition = positionOfPOIinList + 1;
-            movePOIselectedInList();
+            moveSelectedPoiInList();
         } else {
             //Toast: select a poi of the list
             Toast.makeText(CreateNewRouteActivity.this, "Selecciona un POI encima de otro", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void movePOIselectedInList() {
+    private void moveSelectedPoiInList() {
         markedPOIs.set(positionOfPOIinList, markedPOIs.get(nextPosition));
         markedPOIs.set(nextPosition, selectedPOIinList);
 
