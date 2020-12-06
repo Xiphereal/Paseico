@@ -23,6 +23,7 @@ public class SelectedPoiActivity extends FragmentActivity implements OnMapReadyC
 
     private GoogleMap mMap;
     private PointOfInterest selectedPoi;
+    LatLng selectedPoiPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +57,14 @@ public class SelectedPoiActivity extends FragmentActivity implements OnMapReadyC
         mMap = googleMap;
 
         // Add a marker in selectedPoi position and move the camera
-        LatLng selectedPoiPosition = new LatLng(selectedPoi.getLatitude(), selectedPoi.getLongitude());
+        selectedPoiPosition = new LatLng(selectedPoi.getLatitude(), selectedPoi.getLongitude());
         mMap.addMarker(new MarkerOptions().position(selectedPoiPosition).title(selectedPoi.getName()));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(selectedPoiPosition));
+
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
+                selectedPoiPosition, 13f);
+
+        mMap.animateCamera(cameraUpdate);
 
         // This conditional is needed to get the router location. That check if the router doesn't have location's permission
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
@@ -68,19 +74,7 @@ public class SelectedPoiActivity extends FragmentActivity implements OnMapReadyC
         }
 
         mMap.setMyLocationEnabled(true);
-        mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-            @Override
-            public void onMyLocationChange(Location location) {
 
-//                    if (myLocation == null) {
-//                        myLocation = location;
-                    LatLng ltlng = new LatLng(location.getLatitude(), location.getLongitude());
-                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
-                            ltlng, 13f);
-
-                    mMap.animateCamera(cameraUpdate);
-                //}
-            }});
 
     }
 }
