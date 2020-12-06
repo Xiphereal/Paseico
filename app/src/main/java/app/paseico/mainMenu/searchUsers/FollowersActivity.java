@@ -42,7 +42,7 @@ public class FollowersActivity extends AppCompatActivity {
 
         toolbar.setNavigationOnClickListener(view -> finish());
 
-        FirebaseService.getCurrentUserReference().addValueEventListener(new ValueEventListener() {
+        FirebaseService.getCurrentRouterReference().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 currentUser = dataSnapshot.getValue(User.class);

@@ -25,7 +25,7 @@ public class FirebaseService {
         return firebaseAuth.getCurrentUser();
     }
 
-    public static DatabaseReference getCurrentUserReference() {
+    public static DatabaseReference getCurrentRouterReference() {
         return firebaseDatabase.getReference("users").child(getCurrentUser().getUid());
     }
 
