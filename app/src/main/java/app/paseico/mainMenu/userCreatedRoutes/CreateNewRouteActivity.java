@@ -63,22 +63,40 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_new_route);
-        Bundle b = getIntent().getExtras();
-        isOrganization = false;
-        try{isOrganization = (boolean) b.get("organization");}catch(Exception e){isOrganization = false;}
-          registerMarkedPOIsListView();
 
-          poiUpButton = findViewById(R.id.poiUp_button);
-          poiDownButton = findViewById(R.id.poiDown_button);
-          registerUpAndDownButtons();
-          registerOrderedRouteSwitch();
+        setContentView(R.layout.activity_create_new_route);
+
         initializeMapFragment();
+
+        checkIfUserIsAOrganization();
+
+        registerMarkedPOIsListView();
+        registerUpAndDownButtons();
+        registerOrderedRouteSwitch();
 
         registerGoToIntroduceNewRouteDataButtonTransition();
     }
 
-    private void registerMarkedPOIsListView(){
+    private void initializeMapFragment() {
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.new_route_map);
+        mapFragment.getMapAsync(this);
+    }
+
+    private void checkIfUserIsAOrganization() {
+        Bundle bundle = getIntent().getExtras();
+
+        isOrganization = false;
+
+        try {
+            isOrganization = (boolean) bundle.get("organization");
+        } catch (Exception e) {
+            isOrganization = false;
+        }
+    }
+
+    private void registerMarkedPOIsListView() {
         markedPOIsListView = findViewById(R.id.marked_pois_list_view);
         markedPOIsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -89,7 +107,58 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         });
     }
 
-    private void registerOrderedRouteSwitch(){
+    private void registerUpAndDownButtons() {
+        poiUpButton = findViewById(R.id.poiUp_button);
+        poiUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goUpPointSelectedInList();
+            }
+        });
+
+        poiDownButton = findViewById(R.id.poiDown_button);
+        poiDownButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goDownPointSelectedInList();
+            }
+        });
+    }
+
+    private void goUpPointSelectedInList() {
+        System.out.println(positionOfPOIinList);
+        if (selectedPOIinList != "" && positionOfPOIinList != 0) {
+            nextPosition = positionOfPOIinList - 1;
+            movePOIselectedInList();
+        } else {
+            //Toast: select a poi of the list
+            Toast.makeText(CreateNewRouteActivity.this, "Selecciona un POI debajo de otro.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void goDownPointSelectedInList() {
+        if (selectedPOIinList != "" && positionOfPOIinList != markedPOIs.size() - 1) {
+            nextPosition = positionOfPOIinList + 1;
+            movePOIselectedInList();
+        } else {
+            //Toast: select a poi of the list
+            Toast.makeText(CreateNewRouteActivity.this, "Selecciona un POI encima de otro", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void movePOIselectedInList() {
+        markedPOIs.set(positionOfPOIinList, markedPOIs.get(nextPosition));
+        markedPOIs.set(nextPosition, selectedPOIinList);
+
+        PointOfInterest poiSelectedInListView = selectedPointsOfInterest.get(positionOfPOIinList);
+        selectedPointsOfInterest.set(positionOfPOIinList, selectedPointsOfInterest.get(nextPosition));
+        selectedPointsOfInterest.set(nextPosition, poiSelectedInListView);
+
+        updateMarkedPOIsListView();
+        selectedPOIinList = "";
+    }
+
+    private void registerOrderedRouteSwitch() {
         showPOIsSwitch = (Switch) findViewById(R.id.showPOIs_switch);
         showPOIsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -108,66 +177,6 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
                 }
             }
         });
-    }
-
-    private void registerUpAndDownButtons(){
-        poiUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goUpPointSelectedInList();
-            }
-        });
-
-        poiDownButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goDownPointSelectedInList();
-            }
-        });
-    }
-
-    private void movePOIselectedInList(){
-        markedPOIs.set(positionOfPOIinList, markedPOIs.get(nextPosition));
-        markedPOIs.set(nextPosition,selectedPOIinList);
-
-        PointOfInterest poiSelectedInListView = selectedPointsOfInterest.get(positionOfPOIinList);
-        selectedPointsOfInterest.set(positionOfPOIinList,selectedPointsOfInterest.get(nextPosition));
-        selectedPointsOfInterest.set(nextPosition,poiSelectedInListView);
-
-        updateMarkedPOIsListView();
-        selectedPOIinList="";
-    }
-
-    private void goUpPointSelectedInList(){
-        System.out.println(positionOfPOIinList);
-        if (selectedPOIinList!="" && positionOfPOIinList != 0) {
-            nextPosition = positionOfPOIinList-1;
-            movePOIselectedInList();
-        } else {
-            //Toast: select a poi of the list
-            Toast.makeText(CreateNewRouteActivity.this, "Selecciona un POI debajo de otro.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void goDownPointSelectedInList(){
-        if (selectedPOIinList!="" && positionOfPOIinList != markedPOIs.size()-1) {
-            nextPosition = positionOfPOIinList+1;
-            movePOIselectedInList();
-        } else {
-            //Toast: select a poi of the list
-            Toast.makeText(CreateNewRouteActivity.this, "Selecciona un POI encima de otro", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void launchToast(){
-
-    }
-
-    private void initializeMapFragment() {
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.new_route_map);
-        mapFragment.getMapAsync(this);
     }
 
     private void registerGoToIntroduceNewRouteDataButtonTransition() {
