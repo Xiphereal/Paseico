@@ -42,8 +42,6 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
     private List<PointOfInterest> selectedPointsOfInterest = new ArrayList<>();
 
     final double ROUTE_TOTAL_COST_MULTIPLIER_TO_GET_REWARD_POINTS = 0.5;
-    final double COST_POI_CREATED = 50;
-    final double COST_POI_GOOGLE = 20;
 
     private boolean isOrganization;
 
@@ -176,21 +174,20 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
         if (isOrganization) {
             for (PointOfInterest poi : selectedPointsOfInterest) {
                 if (poi.wasCreatedByUser()) {
-                    totalRouteCost += COST_POI_CREATED;
+                    totalRouteCost += getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost_in_euros);
                 } else {
-                    totalRouteCost += COST_POI_GOOGLE;
+                    totalRouteCost += getResources().getInteger(R.integer.google_maps_point_of_interest_cost_in_euros);
                 }
             }
         } else {
             for (PointOfInterest poi : selectedPointsOfInterest) {
                 if (poi.wasCreatedByUser()) {
-                    totalRouteCost += getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost);
+                    totalRouteCost += getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost_in_points);
                 } else {
-                    totalRouteCost += getResources().getInteger(R.integer.google_maps_point_of_interest_cost);
+                    totalRouteCost += getResources().getInteger(R.integer.google_maps_point_of_interest_cost_in_points);
                 }
             }
         }
-
 
         return totalRouteCost;
     }
@@ -233,9 +230,9 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
     private void finalizeRouteCreation() {
         createNewRoute();
 
-        if(isOrganization){
+        if (isOrganization) {
             goToMainMenuOrganizationActivity();
-        } else{
+        } else {
             persistCurrentUserModifications();
             goToMainMenuActivity();
         }
@@ -297,14 +294,14 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
         return distanceMatrixRequest;
     }
 
-    private void registerOrderedRouteSwitch(){
+    private void registerOrderedRouteSwitch() {
         orderedRouteSwitch = (Switch) findViewById(R.id.ordered_route_switch);
         orderedRouteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    isOrdered=1;
+                    isOrdered = 1;
                 } else {
-                    isOrdered=0;
+                    isOrdered = 0;
                 }
             }
         });
