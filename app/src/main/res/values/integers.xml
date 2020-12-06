@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="google_maps_point_of_interest_cost">50</integer>
-    <integer name="user_newly_created_point_of_interest_cost">150</integer>
+    <integer name="google_maps_point_of_interest_cost_in_points">50</integer>
+    <integer name="google_maps_point_of_interest_cost_in_euros">20</integer>
+    <integer name="user_newly_created_point_of_interest_cost_in_points">150</integer>
+    <integer name="user_newly_created_point_of_interest_cost_in_euros">50</integer>
 </resources>
