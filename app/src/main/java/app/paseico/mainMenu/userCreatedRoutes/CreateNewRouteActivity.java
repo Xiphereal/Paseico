@@ -95,31 +95,18 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     private void registerMarkedPOIsListView() {
         markedPOIsListView = findViewById(R.id.marked_pois_list_view);
-        markedPOIsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedPOIinList = (String) markedPOIsListView.getItemAtPosition(position);
-                positionOfPOIinList = position;
-            }
+        markedPOIsListView.setOnItemClickListener((parent, view, position, id) -> {
+            selectedPOIinList = (String) markedPOIsListView.getItemAtPosition(position);
+            positionOfPOIinList = position;
         });
     }
 
     private void registerUpAndDownButtons() {
         poiUpButton = findViewById(R.id.poiUp_button);
-        poiUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                moveUpSelectedPoiInList();
-            }
-        });
+        poiUpButton.setOnClickListener(v -> moveUpSelectedPoiInList());
 
         poiDownButton = findViewById(R.id.poiDown_button);
-        poiDownButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                moveDownSelectedPoiInList();
-            }
-        });
+        poiDownButton.setOnClickListener(v -> moveDownSelectedPoiInList());
     }
 
     private void moveUpSelectedPoiInList() {
@@ -156,21 +143,19 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     private void registerOrderedRouteSwitch() {
         showPOIsSwitch = (Switch) findViewById(R.id.showPOIs_switch);
-        showPOIsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    poiUpButton.setVisibility(View.VISIBLE);
-                    poiUpButton.setClickable(true);
-                    poiDownButton.setVisibility(View.VISIBLE);
-                    poiDownButton.setClickable(true);
-                    markedPOIsListView.setVisibility(View.VISIBLE);
-                } else {
-                    poiUpButton.setVisibility(View.INVISIBLE);
-                    poiUpButton.setClickable(false);
-                    poiDownButton.setVisibility(View.INVISIBLE);
-                    poiDownButton.setClickable(false);
-                    markedPOIsListView.setVisibility(View.INVISIBLE);
-                }
+        showPOIsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                poiUpButton.setVisibility(View.VISIBLE);
+                poiUpButton.setClickable(true);
+                poiDownButton.setVisibility(View.VISIBLE);
+                poiDownButton.setClickable(true);
+                markedPOIsListView.setVisibility(View.VISIBLE);
+            } else {
+                poiUpButton.setVisibility(View.INVISIBLE);
+                poiUpButton.setClickable(false);
+                poiDownButton.setVisibility(View.INVISIBLE);
+                poiDownButton.setClickable(false);
+                markedPOIsListView.setVisibility(View.INVISIBLE);
             }
         });
     }
