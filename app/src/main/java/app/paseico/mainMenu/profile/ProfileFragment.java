@@ -205,7 +205,7 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    //ATTENTION: This is from the previous version idk if is needed on this one
+    //TODO: This is from the previous version idk if is needed on this one
     public void checkBoost() {  //Check if the boost its already gone
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser fbusr = firebaseAuth.getCurrentUser();
