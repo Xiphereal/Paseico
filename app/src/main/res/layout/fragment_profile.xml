@@ -245,7 +245,7 @@
             android:textSize="23dp" />
 
         <ImageButton
-            android:id="@+id/my_routes"
+            android:id="@+id/btn_my_routes"
             style="@style/LargeButtonText"
             android:layout_width="100dp"
             android:layout_height="wrap_content"

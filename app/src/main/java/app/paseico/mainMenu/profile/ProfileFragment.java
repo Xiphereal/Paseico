@@ -73,7 +73,7 @@ public class ProfileFragment extends Fragment {
         textView_following = view.findViewById(R.id.textView_FollowingText);
         userPointsLabel = view.findViewById(R.id.userPointsProfileText);
         numberOfUserRoutes = view.findViewById(R.id.numberOfRoutesText);
-        userRoutes = view.findViewById(R.id.my_routes);
+        userRoutes = view.findViewById(R.id.btn_my_routes);
 
         FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
