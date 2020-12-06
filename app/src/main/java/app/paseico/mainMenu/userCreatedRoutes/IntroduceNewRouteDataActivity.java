@@ -32,11 +32,8 @@ import java.util.List;
 public class IntroduceNewRouteDataActivity extends AppCompatActivity {
 
     private Router currentRouter;
-    private Route newRoute;
     private int routeCost;
     private int isOrdered = 0;
-
-    private Switch orderedRouteSwitch;
 
     private List<PointOfInterest> selectedPointsOfInterest = new ArrayList<>();
 
@@ -257,7 +254,7 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
                 distanceMatrixRequest.getRouteEstimatedDuration() :
                 0;
 
-        newRoute = new Route(routeName,
+        Route newRoute = new Route(routeName,
                 category,
                 estimatedDistance,
                 estimatedDuration,
@@ -294,7 +291,7 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
     }
 
     private void registerOrderedRouteSwitch() {
-        orderedRouteSwitch = (Switch) findViewById(R.id.ordered_route_switch);
+        Switch orderedRouteSwitch = (Switch) findViewById(R.id.ordered_route_switch);
         orderedRouteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
