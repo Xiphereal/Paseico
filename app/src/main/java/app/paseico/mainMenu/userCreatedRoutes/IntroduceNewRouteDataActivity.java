@@ -57,7 +57,9 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
 
     private void checkIfUserIsAOrganization() {
         Bundle bundle = getIntent().getExtras();
+
         isOrganization = false;
+
         try {
             isOrganization = (boolean) bundle.get("organization");
         } catch (Exception e) {
@@ -71,40 +73,27 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
     private void getCurrentUserFromDatabaseAsync() {
         DatabaseReference currentUserReference;
 
-        if (isOrganization) {
-            currentUserReference = FirebaseService.getCurrentOrganizationReference();
-            currentUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
+        currentUserReference = isOrganization ?
+                FirebaseService.getCurrentOrganizationReference() :
+                FirebaseService.getCurrentRouterReference();
 
-                    // Registering this callback here ensures that the button
-                    // action is only performed when the User is ready.
-                    registerTryFinalizeNewRouteCreationListener();
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    System.out.println("The db connection failed: " + error.getMessage());
-                }
-            });
-        } else {
-            currentUserReference = FirebaseService.getCurrentUserReference();
-            currentUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
+        currentUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!isOrganization) {
                     currentRouter = snapshot.getValue(Router.class);
-
-                    // Registering this callback here ensures that the button
-                    // action is only performed when the User is ready.
-                    registerTryFinalizeNewRouteCreationListener();
                 }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    System.out.println("The db connection failed: " + error.getMessage());
-                }
-            });
-        }
+                // Registering this callback here ensures that the button
+                // action is only performed when the User is ready.
+                registerTryFinalizeNewRouteCreationListener();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("The db connection failed: " + error.getMessage());
+            }
+        });
     }
 
     private void registerTryFinalizeNewRouteCreationListener() {
@@ -314,7 +303,7 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
 
     // TODO: Refactor and generalize this into a User instance method.
     private void persistCurrentUserModifications() {
-        DatabaseReference currentUserReference = FirebaseService.getCurrentUserReference();
+        DatabaseReference currentUserReference = FirebaseService.getCurrentRouterReference();
 
         currentUserReference.child("hasFreeRouteCreation").setValue(currentRouter.getHasFreeRouteCreation());
         currentUserReference.child("points").setValue(currentRouter.getPoints());

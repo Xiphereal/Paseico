@@ -238,7 +238,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
     }
 
     private void getCurrentUserFromDatabaseAsync() {
-        DatabaseReference currentUserReference = FirebaseService.getCurrentUserReference();
+        DatabaseReference currentUserReference = FirebaseService.getCurrentRouterReference();
 
         currentUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -357,7 +357,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
 
     // TODO: Refactor and generalize this into a User instance method.
     private void persistCurrentUserModifications() {
-        DatabaseReference currentUserReference = FirebaseService.getCurrentUserReference();
+        DatabaseReference currentUserReference = FirebaseService.getCurrentRouterReference();
 
         currentUserReference.child("hasFreeRouteCreation").setValue(currentRouter.getHasFreeRouteCreation());
         currentUserReference.child("points").setValue(currentRouter.getPoints());
