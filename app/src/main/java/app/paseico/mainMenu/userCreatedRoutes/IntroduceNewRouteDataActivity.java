@@ -70,7 +70,6 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
             currentUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    currentOrganization = snapshot.getValue(Organization.class);
 
                     // Registering this callback here ensures that the button
                     // action is only performed when the User is ready.
