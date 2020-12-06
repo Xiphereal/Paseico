@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.MainMenuActivity;
 import app.paseico.MainMenuOrganizationActivity;
 import app.paseico.R;
-import app.paseico.data.Organization;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import app.paseico.data.Router;
@@ -44,19 +43,26 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_introduce_new_route_data);
+
         registerOrderedRouteSwitch();
 
         selectedPointsOfInterest = getIntent().getParcelableArrayListExtra("selectedPointsOfInterest");
+
+        checkIfUserIsAOrganization();
+
+        getCurrentUserFromDatabaseAsync();
+    }
+
+    private void checkIfUserIsAOrganization() {
+        Bundle bundle = getIntent().getExtras();
         isOrganization = false;
-        Bundle b = getIntent().getExtras();
         try {
-            isOrganization = (boolean) b.get("organization");
+            isOrganization = (boolean) bundle.get("organization");
         } catch (Exception e) {
             isOrganization = false;
         }
-
-        getCurrentUserFromDatabaseAsync();
     }
 
     /**
@@ -99,8 +105,6 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
                 }
             });
         }
-
-
     }
 
     private void registerTryFinalizeNewRouteCreationListener() {
