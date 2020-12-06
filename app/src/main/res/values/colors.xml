@@ -7,4 +7,6 @@
     <color name="white">#FFFFFF</color>
     <color name="emphasizedBackground">#A09F9F</color>
     <color name="purple">#653cd4</color>
+    <color name="pressed_color">#4d90fe</color>
+    <color name="default_color">#E9E6E1</color>
 </resources>
