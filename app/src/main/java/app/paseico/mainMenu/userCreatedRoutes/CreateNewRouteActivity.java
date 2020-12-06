@@ -36,14 +36,11 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     protected GoogleMap createNewRouteMap;
     protected final List<PointOfInterest> selectedPointsOfInterest = new ArrayList<>();
-    protected static Route newRoute;
 
     protected ListView markedPOIsListView;
     protected final List<String> markedPOIs = new ArrayList<>();
 
     protected final List<String> createdMarkers = new ArrayList<>();
-
-    protected Router currentUser;
 
     protected Marker userNewCustomPoiInCreation;
 

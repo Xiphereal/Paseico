@@ -32,7 +32,6 @@ import java.util.List;
 public class IntroduceNewRouteDataActivity extends AppCompatActivity {
 
     private Router currentRouter;
-    private Organization currentOrganization;
     private Route newRoute;
     private int routeCost;
     private int isOrdered = 0;
