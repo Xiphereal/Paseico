@@ -3,6 +3,7 @@ package app.paseico.mainMenu.userCreatedRoutes;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +33,6 @@ import java.util.List;
 import app.paseico.CategoryManager;
 import app.paseico.R;
 import app.paseico.RouteInformationActivity;
-import app.paseico.data.Organization;
 import app.paseico.data.Route;
 
 public class UserCreatedRoutesFragment extends Fragment {
@@ -40,8 +40,6 @@ public class UserCreatedRoutesFragment extends Fragment {
     private ArrayAdapter<String> createdRoutesListViewAdapter;
     private static List<String> createdRoutes = new ArrayList<>();
 
-    //
-    private List<Organization> organizations = new ArrayList<Organization>();
     private List<String> organizationsKeys = new ArrayList<String>();
     private List<Route> organizationRoutes = new ArrayList<Route>();
     private String organizationKey = "";
@@ -56,7 +54,7 @@ public class UserCreatedRoutesFragment extends Fragment {
 
 
     FilteredListAdapter adapter;
-    //
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -65,19 +63,11 @@ public class UserCreatedRoutesFragment extends Fragment {
 
         organizationRoutesListView = root.findViewById(R.id.organization_routes_list_view);
 
-        //TODO: the created routes list should display only routes created by the user,
-        // currently it shown routes created independent of current user.
-        //updateCreatedRoutesListView();
         readOrganizations();
 
         registerCreateNewRouteButtonTransition(root);
 
         return root;
-    }
-
-    private void updateCreatedRoutesListView() {
-        createdRoutesListViewAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, createdRoutes);
-        organizationRoutesListView.setAdapter(createdRoutesListViewAdapter);
     }
 
     private void registerCreateNewRouteButtonTransition(View root) {
@@ -92,20 +82,16 @@ public class UserCreatedRoutesFragment extends Fragment {
 
         FirebaseFirestore database = FirebaseFirestore.getInstance();
         CollectionReference referenceRoutes = database.collection("route");
-
         DatabaseReference referenceOrganizations = FirebaseDatabase.getInstance().getReference("organizations");
+
         referenceOrganizations.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot datasnapshot) {
                 for(DataSnapshot snapshot : datasnapshot.getChildren()){
-                    //Organization organization = snapshot.getValue(Organization.class);
-                    //organizations.add(organization);
                     organizationKey = snapshot.getRef().getKey();
                     organizationsKeys.add(organizationKey);
 
-
                     String organizationName = snapshot.child("name").getValue(String.class);
-
 
                     referenceRoutes.whereEqualTo("authorId", organizationKey)
                             .get()
@@ -128,7 +114,7 @@ public class UserCreatedRoutesFragment extends Fragment {
                                         orgRoutesIcons.add(index);
 
                                         adapter = new FilteredListAdapter(getContext(), orgRoutesNames, orgRoutesEstimatedTime, orgRoutesLength,
-                                                orgRoutesRewardPoints, orgRoutesIcons, orgRoutesAreOrdered,orgNames);
+                                                orgRoutesRewardPoints, orgRoutesIcons, orgRoutesAreOrdered, orgNames);
 
                                         organizationRoutesListView.setAdapter(adapter);
 
@@ -142,15 +128,12 @@ public class UserCreatedRoutesFragment extends Fragment {
                                                 startActivity(selectedRouteIntent);
                                             }
                                         });
-
                                     }
-
                                 } else {
-                                    System.out.println("eeeeeeeeeeeeeeeeeeeeeeeerrrrrrrrrrrrrrro");
+                                    Log.d("Ruta2", "task is " + task.getException());
                                 }
                             });
                 }
-                //once I get organizations keys I retrieve their routes
             }
 
             @Override
