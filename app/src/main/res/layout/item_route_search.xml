@@ -139,7 +139,7 @@
                     android:id="@+id/routeReward"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="30dp"
+                    android:paddingLeft="26dp"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
                     android:text="300"
@@ -166,6 +166,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TextView"
+                    android:paddingLeft="26dp"
                     android:textAlignment="center" />
             </TableRow>
         </TableLayout>
