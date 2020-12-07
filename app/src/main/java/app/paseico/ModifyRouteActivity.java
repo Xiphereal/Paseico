@@ -98,7 +98,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
 
         pointsOfInterest = retrievedRoute.getPointsOfInterest();
         retrievedRouteId = getIntent().getStringExtra("routeID");
-        
+
         getCurrentUserFromDatabaseAsync();
     }
 
@@ -184,6 +184,8 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
             createdMarkers.add(pointsOfInterest.get(i).getName());
             markedPOIs.add(pointsOfInterest.get(i).getName());
             originalPOIs.add(pointsOfInterest.get(i));
+
+            //TODO:when map is ready we perform the zoom to the first poi of the list
         }
 
         LatLng fakeUserPosition = new LatLng(39.475, -0.375);
