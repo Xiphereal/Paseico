@@ -2,22 +2,12 @@ package app.paseico.mainMenu.userCreatedRoutes;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 import android.os.Parcelable;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.ListView;
-import android.widget.Switch;
-import android.widget.Toast;
-
+import android.view.View;
+import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.R;
 import app.paseico.data.PointOfInterest;
-import app.paseico.data.Route;
-import app.paseico.data.Router;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -26,7 +16,6 @@ import com.google.android.gms.maps.model.*;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -36,14 +25,11 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     protected GoogleMap createNewRouteMap;
     protected final List<PointOfInterest> selectedPointsOfInterest = new ArrayList<>();
-    protected static Route newRoute;
 
     protected ListView markedPOIsListView;
     protected final List<String> markedPOIs = new ArrayList<>();
 
     protected final List<String> createdMarkers = new ArrayList<>();
-
-    protected Router currentUser;
 
     protected Marker userNewCustomPoiInCreation;
 
@@ -63,104 +49,18 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_new_route);
-        Bundle b = getIntent().getExtras();
-        isOrganization = false;
-        try{isOrganization = (boolean) b.get("organization");}catch(Exception e){isOrganization = false;}
-          registerMarkedPOIsListView();
 
-          poiUpButton = findViewById(R.id.poiUp_button);
-          poiDownButton = findViewById(R.id.poiDown_button);
-          registerUpAndDownButtons();
-          registerOrderedRouteSwitch();
+        setContentView(R.layout.activity_create_new_route);
+
         initializeMapFragment();
 
+        checkIfUserIsAOrganization();
+
+        registerMarkedPOIsListView();
+        registerUpAndDownButtons();
+        registerOrderedRouteSwitch();
+
         registerGoToIntroduceNewRouteDataButtonTransition();
-    }
-
-    private void registerMarkedPOIsListView(){
-        markedPOIsListView = findViewById(R.id.marked_pois_list_view);
-        markedPOIsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedPOIinList = (String) markedPOIsListView.getItemAtPosition(position);
-                positionOfPOIinList = position;
-            }
-        });
-    }
-
-    private void registerOrderedRouteSwitch(){
-        showPOIsSwitch = (Switch) findViewById(R.id.showPOIs_switch);
-        showPOIsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    poiUpButton.setVisibility(View.VISIBLE);
-                    poiUpButton.setClickable(true);
-                    poiDownButton.setVisibility(View.VISIBLE);
-                    poiDownButton.setClickable(true);
-                    markedPOIsListView.setVisibility(View.VISIBLE);
-                } else {
-                    poiUpButton.setVisibility(View.INVISIBLE);
-                    poiUpButton.setClickable(false);
-                    poiDownButton.setVisibility(View.INVISIBLE);
-                    poiDownButton.setClickable(false);
-                    markedPOIsListView.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
-    }
-
-    private void registerUpAndDownButtons(){
-        poiUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goUpPointSelectedInList();
-            }
-        });
-
-        poiDownButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goDownPointSelectedInList();
-            }
-        });
-    }
-
-    private void movePOIselectedInList(){
-        markedPOIs.set(positionOfPOIinList, markedPOIs.get(nextPosition));
-        markedPOIs.set(nextPosition,selectedPOIinList);
-
-        PointOfInterest poiSelectedInListView = selectedPointsOfInterest.get(positionOfPOIinList);
-        selectedPointsOfInterest.set(positionOfPOIinList,selectedPointsOfInterest.get(nextPosition));
-        selectedPointsOfInterest.set(nextPosition,poiSelectedInListView);
-
-        updateMarkedPOIsListView();
-        selectedPOIinList="";
-    }
-
-    private void goUpPointSelectedInList(){
-        System.out.println(positionOfPOIinList);
-        if (selectedPOIinList!="" && positionOfPOIinList != 0) {
-            nextPosition = positionOfPOIinList-1;
-            movePOIselectedInList();
-        } else {
-            //Toast: select a poi of the list
-            Toast.makeText(CreateNewRouteActivity.this, "Selecciona un POI debajo de otro.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void goDownPointSelectedInList(){
-        if (selectedPOIinList!="" && positionOfPOIinList != markedPOIs.size()-1) {
-            nextPosition = positionOfPOIinList+1;
-            movePOIselectedInList();
-        } else {
-            //Toast: select a poi of the list
-            Toast.makeText(CreateNewRouteActivity.this, "Selecciona un POI encima de otro", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void launchToast(){
-
     }
 
     private void initializeMapFragment() {
@@ -168,6 +68,85 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.new_route_map);
         mapFragment.getMapAsync(this);
+    }
+
+    private void checkIfUserIsAOrganization() {
+        Bundle bundle = getIntent().getExtras();
+
+        isOrganization = false;
+
+        try {
+            isOrganization = (boolean) bundle.get("organization");
+        } catch (Exception e) {
+            isOrganization = false;
+        }
+    }
+
+    private void registerMarkedPOIsListView() {
+        markedPOIsListView = findViewById(R.id.marked_pois_list_view);
+        markedPOIsListView.setOnItemClickListener((parent, view, position, id) -> {
+            selectedPOIinList = (String) markedPOIsListView.getItemAtPosition(position);
+            positionOfPOIinList = position;
+        });
+    }
+
+    private void registerUpAndDownButtons() {
+        poiUpButton = findViewById(R.id.poiUp_button);
+        poiUpButton.setOnClickListener(v -> moveUpSelectedPoiInList());
+
+        poiDownButton = findViewById(R.id.poiDown_button);
+        poiDownButton.setOnClickListener(v -> moveDownSelectedPoiInList());
+    }
+
+    private void moveUpSelectedPoiInList() {
+        if (selectedPOIinList != "" && positionOfPOIinList != 0) {
+            nextPosition = positionOfPOIinList - 1;
+            moveSelectedPoiInList();
+        } else {
+            //Toast: select a poi of the list
+            Toast.makeText(CreateNewRouteActivity.this, "Selecciona un POI debajo de otro.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void moveDownSelectedPoiInList() {
+        if (selectedPOIinList != "" && positionOfPOIinList != markedPOIs.size() - 1) {
+            nextPosition = positionOfPOIinList + 1;
+            moveSelectedPoiInList();
+        } else {
+            //Toast: select a poi of the list
+            Toast.makeText(CreateNewRouteActivity.this, "Selecciona un POI encima de otro", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void moveSelectedPoiInList() {
+        markedPOIs.set(positionOfPOIinList, markedPOIs.get(nextPosition));
+        markedPOIs.set(nextPosition, selectedPOIinList);
+
+        PointOfInterest poiSelectedInListView = selectedPointsOfInterest.get(positionOfPOIinList);
+        selectedPointsOfInterest.set(positionOfPOIinList, selectedPointsOfInterest.get(nextPosition));
+        selectedPointsOfInterest.set(nextPosition, poiSelectedInListView);
+
+        updateMarkedPOIsListView();
+        selectedPOIinList = "";
+    }
+
+    private void registerOrderedRouteSwitch() {
+        showPOIsSwitch = (Switch) findViewById(R.id.showPOIs_switch);
+        showPOIsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                poiUpButton.setVisibility(View.VISIBLE);
+                poiUpButton.setClickable(true);
+                poiDownButton.setVisibility(View.VISIBLE);
+                poiDownButton.setClickable(true);
+                markedPOIsListView.setVisibility(View.VISIBLE);
+            } else {
+                poiUpButton.setVisibility(View.INVISIBLE);
+                poiUpButton.setClickable(false);
+                poiDownButton.setVisibility(View.INVISIBLE);
+                poiDownButton.setClickable(false);
+                markedPOIsListView.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     private void registerGoToIntroduceNewRouteDataButtonTransition() {
@@ -311,8 +290,6 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
                 selectPointOfInterest(markerOfThePoi, false);
                 createdMarkers.add(poiSelected.name);
             }
-
-            return;
         });
     }
 

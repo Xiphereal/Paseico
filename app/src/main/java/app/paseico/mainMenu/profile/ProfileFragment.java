@@ -136,7 +136,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setUserInfoOnGetCurrentUserReady() {
-        DatabaseReference currentUser = FirebaseService.getCurrentUserReference();
+        DatabaseReference currentUser = FirebaseService.getCurrentRouterReference();
 
         currentUser.addValueEventListener(new ValueEventListener() {
             @Override
