@@ -1,7 +1,10 @@
 package app.paseico.mainMenu.userCreatedRoutes;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,11 +19,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import app.paseico.R;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import app.paseico.data.Router;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -29,6 +35,7 @@ import com.google.android.gms.maps.model.*;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.protobuf.DescriptorProtos;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -62,6 +69,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     protected int positionOfPOIinList = 0;
     protected int nextPosition = 0;
 
+    Location myLocation;
+
     private boolean isOrganization;
 
     @Override
@@ -70,19 +79,23 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         setContentView(R.layout.activity_create_new_route);
         Bundle b = getIntent().getExtras();
         isOrganization = false;
-        try{isOrganization = (boolean) b.get("organization");}catch(Exception e){isOrganization = false;}
-          registerMarkedPOIsListView();
+        try {
+            isOrganization = (boolean) b.get("organization");
+        } catch (Exception e) {
+            isOrganization = false;
+        }
+        registerMarkedPOIsListView();
 
-          poiUpButton = findViewById(R.id.poiUp_button);
-          poiDownButton = findViewById(R.id.poiDown_button);
-          registerUpAndDownButtons();
-          registerOrderedRouteSwitch();
+        poiUpButton = findViewById(R.id.poiUp_button);
+        poiDownButton = findViewById(R.id.poiDown_button);
+        registerUpAndDownButtons();
+        registerOrderedRouteSwitch();
         initializeMapFragment();
 
         registerGoToIntroduceNewRouteDataButtonTransition();
     }
 
-    private void registerMarkedPOIsListView(){
+    private void registerMarkedPOIsListView() {
         markedPOIsListView = findViewById(R.id.marked_pois_list_view);
         markedPOIsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -93,7 +106,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         });
     }
 
-    private void registerOrderedRouteSwitch(){
+    private void registerOrderedRouteSwitch() {
         showPOIsSwitch = (Switch) findViewById(R.id.showPOIs_switch);
         showPOIsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -114,7 +127,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         });
     }
 
-    private void registerUpAndDownButtons(){
+    private void registerUpAndDownButtons() {
         poiUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,22 +143,22 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         });
     }
 
-    private void movePOIselectedInList(){
+    private void movePOIselectedInList() {
         markedPOIs.set(positionOfPOIinList, markedPOIs.get(nextPosition));
-        markedPOIs.set(nextPosition,selectedPOIinList);
+        markedPOIs.set(nextPosition, selectedPOIinList);
 
         PointOfInterest poiSelectedInListView = selectedPointsOfInterest.get(positionOfPOIinList);
-        selectedPointsOfInterest.set(positionOfPOIinList,selectedPointsOfInterest.get(nextPosition));
-        selectedPointsOfInterest.set(nextPosition,poiSelectedInListView);
+        selectedPointsOfInterest.set(positionOfPOIinList, selectedPointsOfInterest.get(nextPosition));
+        selectedPointsOfInterest.set(nextPosition, poiSelectedInListView);
 
         updateMarkedPOIsListView();
-        selectedPOIinList="";
+        selectedPOIinList = "";
     }
 
-    private void goUpPointSelectedInList(){
+    private void goUpPointSelectedInList() {
         System.out.println(positionOfPOIinList);
-        if (selectedPOIinList!="" && positionOfPOIinList != 0) {
-            nextPosition = positionOfPOIinList-1;
+        if (selectedPOIinList != "" && positionOfPOIinList != 0) {
+            nextPosition = positionOfPOIinList - 1;
             movePOIselectedInList();
         } else {
             //Toast: select a poi of the list
@@ -153,9 +166,9 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         }
     }
 
-    private void goDownPointSelectedInList(){
-        if (selectedPOIinList!="" && positionOfPOIinList != markedPOIs.size()-1) {
-            nextPosition = positionOfPOIinList+1;
+    private void goDownPointSelectedInList() {
+        if (selectedPOIinList != "" && positionOfPOIinList != markedPOIs.size() - 1) {
+            nextPosition = positionOfPOIinList + 1;
             movePOIselectedInList();
         } else {
             //Toast: select a poi of the list
@@ -163,7 +176,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         }
     }
 
-    private void launchToast(){
+    private void launchToast() {
 
     }
 
@@ -181,21 +194,42 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     }
 
     private void goToIntroduceNewRouteDataActivity() {
-        Intent goToIntroduceNewRouteDataIntent = new Intent(getApplicationContext(), IntroduceNewRouteDataActivity.class);
+        if (selectedPointsOfInterest.size() > 1) {
+            Intent goToIntroduceNewRouteDataIntent = new Intent(getApplicationContext(), IntroduceNewRouteDataActivity.class);
 
-        goToIntroduceNewRouteDataIntent.putParcelableArrayListExtra("selectedPointsOfInterest",
-                (ArrayList<? extends Parcelable>) selectedPointsOfInterest);
-        goToIntroduceNewRouteDataIntent.putExtra("organization", isOrganization);
-        startActivity(goToIntroduceNewRouteDataIntent);
+            goToIntroduceNewRouteDataIntent.putParcelableArrayListExtra("selectedPointsOfInterest",
+                    (ArrayList<? extends Parcelable>) selectedPointsOfInterest);
+            goToIntroduceNewRouteDataIntent.putExtra("organization", isOrganization);
+            startActivity(goToIntroduceNewRouteDataIntent);
+        } else {
+            makeAlert("Por favor, seleccione dos o más puntos.");
+        }
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         createNewRouteMap = googleMap;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
+        googleMap.setMyLocationEnabled(true);
+        googleMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+                                                    @Override
+                                                    public void onMyLocationChange(Location location) {
+                                                        if (myLocation == null) {
+                                                            myLocation = location;
+                                                            LatLng ltlng = new LatLng(location.getLatitude(), location.getLongitude());
+                                                            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
+                                                                    ltlng, 16f);
+
+                                                            googleMap.animateCamera(cameraUpdate);
+
+                                                        }
+                                                    }
+                                                });
 
         createNewRouteMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.create_route_style));
-
-        // TODO: Move camera to real user position.
         LatLng fakeUserPosition = new LatLng(39.475, -0.375);
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(fakeUserPosition));
 

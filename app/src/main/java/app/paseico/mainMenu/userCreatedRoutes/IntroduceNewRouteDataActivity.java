@@ -122,6 +122,13 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
      * previous state.
      */
     private void tryFinalizeRouteCreation() {
+        TextInputEditText textInputEditText = findViewById(R.id.route_name_textInputEditText);
+        if(textInputEditText.getText().toString().isEmpty()) {
+            String dialogMessage = getResources().getString(R.string.route_creation_empty_name);
+            AlertDialog.Builder builder = setUpBuilder(dialogMessage);
+            showDialog(builder);
+            return;
+        }
         if (isOrganization) {
             showRouteCreationByOrganizationSummaryDialog();
         } else {

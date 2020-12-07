@@ -169,4 +169,5 @@
     <string name="cancel_coupon">Cancelar</string>
     <string name="title_new_coupon">CREAR NUEVO CUPÓN</string>
     <string name="log_out_organization">Cerrar sesión</string>
+    <string name="route_creation_empty_name">Por favor, introduce un nombre válido</string>
 </resources>
