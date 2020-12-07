@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 import app.paseico.mainMenu.searchUsers.FollowersActivity;
@@ -73,7 +74,7 @@ public class ProfileFragment extends Fragment {
         textView_following = view.findViewById(R.id.textView_FollowingText);
         userPointsLabel = view.findViewById(R.id.userPointsProfileText);
         numberOfUserRoutes = view.findViewById(R.id.numberOfRoutesText);
-        userRoutes = view.findViewById(R.id.my_routes);
+        userRoutes = view.findViewById(R.id.btn_my_routes);
 
         FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
@@ -135,7 +136,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setUserInfoOnGetCurrentUserReady() {
-        DatabaseReference currentUser = FirebaseService.getCurrentUserReference();
+        DatabaseReference currentUser = FirebaseService.getCurrentRouterReference();
 
         currentUser.addValueEventListener(new ValueEventListener() {
             @Override
@@ -205,7 +206,7 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    //ATTENTION: This is from the previous version idk if is needed on this one
+    //TODO: This is from the previous version idk if is needed on this one
     public void checkBoost() {  //Check if the boost its already gone
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser fbusr = firebaseAuth.getCurrentUser();

@@ -56,7 +56,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         holder.username.setText(searchedUser.getUsername());
         holder.fullname.setText(searchedUser.getName());
 
-        FirebaseService.getCurrentUserReference().addValueEventListener(new ValueEventListener() {
+        FirebaseService.getCurrentRouterReference().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 actualUser = dataSnapshot.getValue(User.class);
@@ -82,19 +82,18 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                     searchUserFragment.navigateToProfileFragment();
                 }
             } else {
-
-                    SharedPreferences.Editor editor = context.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
-                    editor.putString("profileid", searchedUser.getUsername());
-                    editor.apply();
-                    Fragment mFragment;
                     if (!isClickedUserTheCurrentUser(searchedUser)) {
-                        mFragment = new NotMyProfileFragment();
-                    } else {
-                        mFragment = new ProfileFragment();
+
+                        SharedPreferences.Editor editor = context.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
+                        editor.putString("profileid", searchedUser.getUsername());
+                        editor.apply();
+
+                        Fragment mFragment = new NotMyProfileFragment();
+
+                        ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.followerActivity_frameLayout, mFragment)
+                                .commit();
                     }
-                    ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.followerActivity_frameLayout, mFragment)
-                            .commit();
 
             }
         });
