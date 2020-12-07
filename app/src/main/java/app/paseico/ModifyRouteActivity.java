@@ -4,14 +4,19 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Switch;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import app.paseico.data.Router;
+import app.paseico.mainMenu.userCreatedRoutes.CreateNewRouteActivity;
 import app.paseico.service.FirebaseService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -40,6 +45,8 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
     private TextInputLayout routeName;
     private ListView markedPOIsListView;
 
+    private int routeCost;
+
     private List<PointOfInterest> pointsOfInterest = new ArrayList<>();
     private List<PointOfInterest> originalPOIs = new ArrayList<>();
 
@@ -49,6 +56,19 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
 
     private List<PointOfInterest> newPointsOfInterest = new ArrayList<>();
 
+    final double ROUTE_TOTAL_COST_MULTIPLIER_TO_GET_REWARD_POINTS = 0.5;
+
+    //Switch to show or not the poi list and buttons to order it
+    protected Switch showPOIsSwitch;
+
+    //buttons to change order
+    protected Button poiUpButton;
+    protected Button poiDownButton;
+
+    protected String selectedPOIinList = "";
+    protected int positionOfPOIinList = 0;
+    protected int nextPosition = 0;
+
     private Router currentRouter;
     private Route retrievedRoute;
     private String retrievedRouteId;
@@ -57,8 +77,10 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_route);
-        
-        markedPOIsListView = findViewById(R.id.marked_pois_list_view);
+
+        registerMarkedPOIsListView();
+        registerUpAndDownButtons();
+        registerOrderedRouteSwitch();
 
         Intent retrievedIntent = this.getIntent();
         Bundle retrievedData = retrievedIntent.getExtras();
@@ -76,8 +98,75 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
 
         pointsOfInterest = retrievedRoute.getPointsOfInterest();
         retrievedRouteId = getIntent().getStringExtra("routeID");
-
+        
         getCurrentUserFromDatabaseAsync();
+    }
+
+    private void registerMarkedPOIsListView() {
+        markedPOIsListView = findViewById(R.id.marked_pois_list_view);
+        markedPOIsListView.setOnItemClickListener((parent, view, position, id) -> {
+            selectedPOIinList = (String) markedPOIsListView.getItemAtPosition(position);
+            positionOfPOIinList = position;
+        });
+    }
+
+    private void registerUpAndDownButtons() {
+        poiUpButton = findViewById(R.id.poiUp_button_modify);
+        poiUpButton.setOnClickListener(v -> moveUpSelectedPoiInList());
+
+        poiDownButton = findViewById(R.id.poiDown_button_modify);
+        poiDownButton.setOnClickListener(v -> moveDownSelectedPoiInList());
+    }
+
+    private void moveUpSelectedPoiInList() {
+        if (selectedPOIinList != "" && positionOfPOIinList != 0) {
+            nextPosition = positionOfPOIinList - 1;
+            moveSelectedPoiInList();
+        } else {
+            //Toast: select a poi of the list
+            Toast.makeText(ModifyRouteActivity.this, "Selecciona un POI debajo de otro.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void moveDownSelectedPoiInList() {
+        if (selectedPOIinList != "" && positionOfPOIinList != markedPOIs.size() - 1) {
+            nextPosition = positionOfPOIinList + 1;
+            moveSelectedPoiInList();
+        } else {
+            //Toast: select a poi of the list
+            Toast.makeText(ModifyRouteActivity.this, "Selecciona un POI encima de otro", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void moveSelectedPoiInList() {
+        markedPOIs.set(positionOfPOIinList, markedPOIs.get(nextPosition));
+        markedPOIs.set(nextPosition, selectedPOIinList);
+
+        PointOfInterest poiSelectedInListView = pointsOfInterest.get(positionOfPOIinList);
+        pointsOfInterest.set(positionOfPOIinList, pointsOfInterest.get(nextPosition));
+        pointsOfInterest.set(nextPosition, poiSelectedInListView);
+
+        updateMarkedPOIsListView();
+        selectedPOIinList = "";
+    }
+
+    private void registerOrderedRouteSwitch() {
+        showPOIsSwitch = (Switch) findViewById(R.id.showPOIs_switch_modify);
+        showPOIsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                poiUpButton.setVisibility(View.VISIBLE);
+                poiUpButton.setClickable(true);
+                poiDownButton.setVisibility(View.VISIBLE);
+                poiDownButton.setClickable(true);
+                markedPOIsListView.setVisibility(View.VISIBLE);
+            } else {
+                poiUpButton.setVisibility(View.INVISIBLE);
+                poiUpButton.setClickable(false);
+                poiDownButton.setVisibility(View.INVISIBLE);
+                poiDownButton.setClickable(false);
+                markedPOIsListView.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     @Override
@@ -106,6 +195,8 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
         registerOnMarkerClickListener();
         registerOnGoogleMapsPoiClickListener();
         registerOnMapLongClick();
+
+        updateMarkedPOIsListView();
     }
 
     private void registerOnGoogleMapsPoiClickListener() {
@@ -392,9 +483,33 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
     private void modifyRoute() {
         TextInputEditText textInputEditText = findViewById(R.id.route_name_textInputEditText);
         String authorId = FirebaseService.getCurrentUser().getUid();
+        int rewardPointsGranted = calculateRouteRewardPoints();
 
-
+        FirebaseService.updateRoute(retrievedRouteId, "rewardPoints", rewardPointsGranted);
         FirebaseService.updateRoute(retrievedRouteId, "pointsOfInterest", pointsOfInterest );
+    }
+
+    private int calculateRouteRewardPoints() {
+        routeCost = calculateRouteCostTotal();
+        double routeRewardPoints = routeCost * ROUTE_TOTAL_COST_MULTIPLIER_TO_GET_REWARD_POINTS;
+
+        return Math.toIntExact(Math.round(routeRewardPoints));
+    }
+
+    private int calculateRouteCostTotal() {
+        int totalRouteCost = 0;
+
+        for (PointOfInterest poi : pointsOfInterest) {
+            if (poi.wasCreatedByUser()) {
+                totalRouteCost +=
+                        getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost_in_points);
+            } else {
+                totalRouteCost +=
+                        getResources().getInteger(R.integer.google_maps_point_of_interest_cost_in_points);
+            }
+        }
+
+        return totalRouteCost;
     }
 
     // TODO: Refactor and generalize this into a User instance method.
