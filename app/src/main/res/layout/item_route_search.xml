@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/background"
+    android:background="@drawable/layout_bg"
     android:gravity="center"
     android:orientation="horizontal"
     android:padding="16dp">
@@ -16,19 +16,19 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="70dp">
+            android:layout_height="50dp">
+            <TextView
+                android:id="@+id/organizationNameTexts"
+                android:layout_width="20dp"
+                android:layout_height="wrap_content" />
 
             <ImageView
                 android:id="@+id/imageViewIcon"
-                android:layout_width="111dp"
-                android:layout_height="70dp"
-                android:layout_alignParentTop="true" />
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:paddingLeft="10dp" />
 
-            <TextView
-                android:id="@+id/textViewWhite"
-                android:layout_width="20dp"
-                android:layout_height="wrap_content"
-                android:paddingLeft="150dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -37,6 +37,7 @@
 
                 <TextView
                     android:id="@+id/routeName"
+                    android:paddingLeft="30dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -48,7 +49,8 @@
                 <TextView
                     android:id="@+id/organizationNameText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="30dp"/>
             </LinearLayout>
 
 
@@ -68,7 +70,7 @@
                     android:id="@+id/textView9"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="160dp"
+                    android:paddingLeft="26dp"
                     android:text="@string/estimated_time"
                     android:textColor="@color/colorPrimaryDark"
                     android:textStyle="bold" />
@@ -98,7 +100,7 @@
                     android:id="@+id/textView11"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="160dp"
+                    android:paddingLeft="26dp"
                     android:text="@string/length"
                     android:textColor="@color/colorPrimaryDark"
                     android:textStyle="bold" />
@@ -123,26 +125,27 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/routeReward"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="190dp"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:text="300"
-                    android:textColor="@color/colorPrimaryDark" />
-
                 <TextView
                     android:id="@+id/textView14"
                     android:layout_width="90dp"
                     android:layout_height="match_parent"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
-                    android:text="Puntos"
+                    android:text="Puntos:"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:paddingLeft="26dp"/>
+                <TextView
+                    android:id="@+id/routeReward"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="30dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="300"
+                    android:textColor="@color/colorPrimaryDark" />
+
+
             </TableRow>
 
             <TableRow
@@ -154,7 +157,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/ordered_route"
-                    android:textAlignment="textEnd" />
+                    android:paddingLeft="26dp"
+                    android:textStyle="bold"
+                    />
 
                 <TextView
                     android:id="@+id/textView_orderedRouteResult"
