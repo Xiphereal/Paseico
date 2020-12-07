@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import app.paseico.data.Router;
-import app.paseico.data.User;
 import app.paseico.service.FirebaseService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -281,7 +280,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
     }
 
     private void getCurrentUserFromDatabaseAsync() {
-        DatabaseReference currentUserReference = FirebaseService.getCurrentUserReference();
+        DatabaseReference currentUserReference = FirebaseService.getCurrentRouterReference();
 
         currentUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -343,9 +342,9 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
         for (PointOfInterest poi : newPointsOfInterest) {
             if(! originalPOIs.contains(poi)) {
                 if (poi.wasCreatedByUser()) {
-                    totalRouteCost += getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost);
+                    totalRouteCost += getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost_in_points);
                 } else {
-                    totalRouteCost += getResources().getInteger(R.integer.google_maps_point_of_interest_cost);
+                    totalRouteCost += getResources().getInteger(R.integer.google_maps_point_of_interest_cost_in_points);
                 }
             }
         }
@@ -400,7 +399,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
 
     // TODO: Refactor and generalize this into a User instance method.
     private void persistCurrentUserModifications() {
-        DatabaseReference currentUserReference = FirebaseService.getCurrentUserReference();
+        DatabaseReference currentUserReference = FirebaseService.getCurrentRouterReference();
 
         currentUserReference.child("hasFreeRouteCreation").setValue(currentRouter.getHasFreeRouteCreation());
         currentUserReference.child("points").setValue(currentRouter.getPoints());
