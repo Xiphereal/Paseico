@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import app.paseico.R;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.koalap.geofirestore.GeoQuery;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,4 +53,6 @@ public class UserCreatedRoutesFragment extends Fragment {
     public static List<String> getCreatedRoutes() {
         return createdRoutes;
     }
+
+
 }

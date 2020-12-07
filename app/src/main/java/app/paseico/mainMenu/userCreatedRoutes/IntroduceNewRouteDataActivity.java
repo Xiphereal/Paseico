@@ -31,6 +31,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.koalap.geofirestore.GeoFire;
+import com.koalap.geofirestore.GeoLocation;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -63,6 +65,8 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
         checkIfUserIsAOrganization();
 
         getCurrentUserFromDatabaseAsync();
+
+
     }
 
     private void checkIfUserIsAOrganization() {
