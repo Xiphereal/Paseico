@@ -423,7 +423,6 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     }
 
     private boolean compareWithPOIs(String routeName) {
-        //System.out.println(createdMarkers.size() + " XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
         if (createdMarkersByUser.contains(routeName)){
             makeAlert("Nombre ya existente. Escriba un nombre distinto.");
             return false;
