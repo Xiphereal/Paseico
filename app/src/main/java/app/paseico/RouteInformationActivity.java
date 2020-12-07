@@ -5,14 +5,24 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.annotations.NotNull;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+
+import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 
 public class RouteInformationActivity extends AppCompatActivity {
@@ -22,16 +32,16 @@ public class RouteInformationActivity extends AppCompatActivity {
     private TextView textView_rewardsPoints;
     private TextView textView_length;
     private TextView textView_estimatedTime;
-    private TextView textView_numberOfPOI;
     private TextView textView_ordered;
-
     private ImageView themeIcon;
+    private ListView listView_poiList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_information);
 
         Route route = setFilteredInformation();
+
 
         registerOnBackButtonClickedListener();
 
@@ -60,7 +70,7 @@ public class RouteInformationActivity extends AppCompatActivity {
         textView_rewardsPoints = findViewById(R.id.textView_routeInfo_rewardPoints);
         textView_length = findViewById(R.id.textView_routeInfo_length);
         textView_estimatedTime = findViewById(R.id.textView_routeInfo_estimatedTime);
-        textView_numberOfPOI = findViewById(R.id.textView_routeInfo_numberOfPOI);
+        listView_poiList = findViewById(R.id.listView_routeInfo_poiList);
         textView_ordered = findViewById(R.id.textView_routeInfo_ordered);
 
         themeIcon = (ImageView) findViewById(R.id.imageViewIconRouteInformation);
@@ -76,7 +86,7 @@ public class RouteInformationActivity extends AppCompatActivity {
         int hours = ((int) route.getEstimatedTime()) / 60;
         int minutes = ((int) route.getEstimatedTime()) % 60;
         String estimatedTime = hours + " horas y " + minutes + " minutos" ;
-        String numberOfPOI = route.getPointsOfInterest().size() + "";
+        ArrayList<PointOfInterest> pois = (ArrayList) route.getPointsOfInterest();
         String theme = (route.getTheme() == null) ? "Sin temática" : route.getTheme();
 
         int iconIdex = CategoryManager.ConvertCategoryToIntDrawable(theme);
@@ -87,7 +97,7 @@ public class RouteInformationActivity extends AppCompatActivity {
         textView_rewardsPoints.setText(rewardsPoints);
         textView_length.setText(length);
         textView_estimatedTime.setText(estimatedTime);
-        textView_numberOfPOI.setText(numberOfPOI);
+
         if (route.isOrdered() == 1) {
             textView_ordered.setText(R.string.yes);
         }else{
@@ -95,6 +105,25 @@ public class RouteInformationActivity extends AppCompatActivity {
         }
 
         themeIcon.setImageResource(iconIdex);
+
+        ArrayList<String> pointsOfInterestNames = new ArrayList<String>();
+        for (int i = 0; i < pois.size(); i++) {
+            pointsOfInterestNames.add(pois.get(i).getName());
+        }
+
+        ArrayAdapter<String> pointsOfInterestNamesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,  pointsOfInterestNames);
+        listView_poiList.setAdapter(pointsOfInterestNamesAdapter);
+
+        listView_poiList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                PointOfInterest selectedPoi = pois.get(position);
+
+                Intent selectedPOIIntent = new Intent(RouteInformationActivity.this, SelectedPoiActivity.class);
+                selectedPOIIntent.putExtra("poi", (Serializable) selectedPoi);
+                startActivity(selectedPOIIntent);
+            }
+        });
 
         findViewById(R.id.btn_routeInfo_back).setOnClickListener(v -> finish());
 

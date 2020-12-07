@@ -56,7 +56,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         holder.username.setText(searchedUser.getUsername());
         holder.fullname.setText(searchedUser.getName());
 
-        FirebaseService.getCurrentUserReference().addValueEventListener(new ValueEventListener() {
+        FirebaseService.getCurrentRouterReference().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 actualUser = dataSnapshot.getValue(User.class);
