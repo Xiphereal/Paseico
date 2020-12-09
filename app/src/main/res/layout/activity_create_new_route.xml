@@ -102,5 +102,24 @@
         android:clickable="false"
         android:text="@string/poiDown_button"
         android:visibility="invisible" />
+    <TextView
+            android:text="@string/puntos_map_TextView"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="135pt"
+            android:layout_marginTop="15pt"
+            android:id="@+id/textView12"/>
+
+    <TextView
+            android:text="@string/puntos_map_TextView"
+            style="@style/MediumTextView"
+            android:textStyle="bold"
+            android:textColor="@color/colorAccent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="135pt"
+            android:layout_marginTop="5pt"
+            android:id="@+id/availablePoints"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

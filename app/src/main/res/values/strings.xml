@@ -130,6 +130,7 @@
     <string name="title_new_coupon">CREAR NUEVO CUPÓN</string>
     <string name="log_out_organization">Cerrar sesión</string>
     <string name="title_activity_selected_poi">Map</string>
+    <string name="puntos_map_TextView">PUNTOS</string>
     <string-array name="route_category">
         <item>@string/default_spinner_choice</item>
         <item>@string/no_theme_choice</item>
