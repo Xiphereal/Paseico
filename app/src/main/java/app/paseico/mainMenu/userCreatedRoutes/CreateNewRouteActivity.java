@@ -40,6 +40,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     protected Button poiUpButton;
     protected Button poiDownButton;
 
+    protected TextView availablePoints;
+
     protected String selectedPOIinList = "";
     protected int positionOfPOIinList = 0;
     protected int nextPosition = 0;
@@ -56,12 +58,15 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
         checkIfUserIsAOrganization();
 
+        setAvailablePoints();
+
         registerMarkedPOIsListView();
         registerUpAndDownButtons();
         registerOrderedRouteSwitch();
 
         registerGoToIntroduceNewRouteDataButtonTransition();
     }
+
 
     private void initializeMapFragment() {
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -79,6 +84,18 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
             isOrganization = (boolean) bundle.get("organization");
         } catch (Exception e) {
             isOrganization = false;
+        }
+    }
+
+    private void setAvailablePoints() {
+        availablePoints = findViewById(R.id.availablePoints);
+
+        if(isOrganization){
+            availablePoints.setText("Crédito");
+        }else{
+            //TODO: get point for current user. In order to do this, abstract the method
+            // getCurrentUserFromDatabaseAsync from IntroduceNewDataActivity class
+            availablePoints.setText("10000058");
         }
     }
 
