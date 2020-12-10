@@ -3,18 +3,24 @@ package app.paseico.mainMenu.userCreatedRoutes;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavDirections;
+import androidx.navigation.fragment.NavHostFragment;
+
 import app.paseico.MainMenuActivity;
 import app.paseico.MainMenuOrganizationActivity;
 import app.paseico.R;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import app.paseico.data.Router;
+import app.paseico.mainMenu.searcher.RouteSearchFragment;
+import app.paseico.mainMenu.searcher.RouteSearchFragmentDirections;
 import app.paseico.service.DistanceMatrixRequest;
 import app.paseico.service.FirebaseService;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -23,12 +29,19 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.koalap.geofirestore.GeoFire;
+import com.koalap.geofirestore.GeoLocation;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class IntroduceNewRouteDataActivity extends AppCompatActivity {
+
+    private ExtendedFloatingActionButton extendedFloatingActionButton;
 
     private Router currentRouter;
     private int routeCost;
@@ -39,7 +52,6 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
     final double ROUTE_TOTAL_COST_MULTIPLIER_TO_GET_REWARD_POINTS = 0.5;
 
     private boolean isOrganization;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +65,8 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
         checkIfUserIsAOrganization();
 
         getCurrentUserFromDatabaseAsync();
+
+
     }
 
     private void checkIfUserIsAOrganization() {
@@ -97,7 +111,7 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
     }
 
     private void registerTryFinalizeNewRouteCreationListener() {
-        ExtendedFloatingActionButton extendedFloatingActionButton = findViewById(R.id.finalize_route_creation_button);
+        extendedFloatingActionButton = findViewById(R.id.finalize_route_creation_button);
 
         extendedFloatingActionButton.setOnClickListener(view -> tryFinalizeRouteCreation());
     }
@@ -108,16 +122,14 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
      * previous state.
      */
     private void tryFinalizeRouteCreation() {
-        if (isOrganization) {
-            showRouteCreationByOrganizationSummaryDialog();
-        } else {
-            if (currentRouter.getHasFreeRouteCreation()) {
-                currentRouter.setHasFreeRouteCreation(false);
-                showConfirmationDialog();
-            } else {
-                showRouteCreationSummaryDialog();
-            }
+        TextInputEditText textInputEditText = findViewById(R.id.route_name_textInputEditText);
+        if(textInputEditText.getText().toString().isEmpty()) {
+            String dialogMessage = getResources().getString(R.string.route_creation_empty_name);
+            AlertDialog.Builder builder = setUpBuilder(dialogMessage);
+            showDialog(builder);
+            return;
         }
+        checkExistingRouteName();
     }
 
     private void showRouteCreationByOrganizationSummaryDialog() {
@@ -210,8 +222,7 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
 
     private void finalizeRouteCreation() {
         createNewRoute();
-
-        if (isOrganization) {
+        if(isOrganization){
             goToMainMenuOrganizationActivity();
         } else {
             persistCurrentUserModifications();
@@ -337,5 +348,37 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
     private void showDialog(AlertDialog.Builder builder) {
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void checkExistingRouteName(){
+
+        TextInputEditText textInputEditText = findViewById(R.id.route_name_textInputEditText);
+        String routeName = textInputEditText.getText().toString();
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+        CollectionReference routesReference = database.collection("route");
+
+        routesReference.whereEqualTo("name",routeName).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                if(task.getResult().size()<=0){
+                    if (isOrganization) {
+                        showRouteCreationByOrganizationSummaryDialog();
+                    } else {
+                        if (currentRouter.getHasFreeRouteCreation()) {
+                            currentRouter.setHasFreeRouteCreation(false);
+                            showConfirmationDialog();
+                        } else {
+                            showRouteCreationSummaryDialog();
+                        }
+                    }
+                }else{
+                    String dialogMessage = "Ya existe una ruta con ese nombre, escoja otro";
+                    AlertDialog.Builder builder = setUpBuilder(dialogMessage);
+                    showDialog(builder);
+
+
+                }
+            }
+        });
+
     }
 }
