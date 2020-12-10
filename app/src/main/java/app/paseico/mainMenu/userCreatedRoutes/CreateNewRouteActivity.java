@@ -6,30 +6,16 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.os.Parcelable;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.ListView;
-import android.widget.Switch;
-import android.widget.Toast;
-
-import androidx.appcompat.app.AlertDialog;
-import android.os.Parcelable;
-import android.view.View;
 import android.widget.*;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-
+import androidx.core.content.ContextCompat;
 import app.paseico.R;
 import app.paseico.data.PointOfInterest;
-import app.paseico.data.Route;
-import app.paseico.data.Router;
-
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -38,8 +24,6 @@ import com.google.android.gms.maps.model.*;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.protobuf.DescriptorProtos;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -72,6 +56,10 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     Location myLocation;
 
     private boolean isOrganization;
+
+    // This value has been copied from RouteRunnerBase. It should
+    // represent the code for the location request.
+    private static final int LOCATION_REQUEST_CODE = 23;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,36 +186,69 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     @Override
     public void onMapReady(GoogleMap googleMap) {
         createNewRouteMap = googleMap;
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            return;
-        }
-        googleMap.setMyLocationEnabled(true);
-        googleMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-                                                    @Override
-                                                    public void onMyLocationChange(Location location) {
-                                                        if (myLocation == null) {
-                                                            myLocation = location;
-                                                            LatLng ltlng = new LatLng(location.getLatitude(), location.getLongitude());
-                                                            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
-                                                                    ltlng, 16f);
-
-                                                            googleMap.animateCamera(cameraUpdate);
-
-                                                        }
-                                                    }
-                                                });
 
         createNewRouteMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.create_route_style));
-        LatLng fakeUserPosition = new LatLng(39.475, -0.375);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(fakeUserPosition));
 
-        googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+        requestLocationPermission();
+
+        tryMoveCameraToUserPosition();
 
         registerOnMapClick();
         registerOnMarkerClickListener();
         registerOnGoogleMapsPoiClickListener();
         registerOnMapLongClick();
+    }
+
+    private void requestLocationPermission() {
+        if (!isCoarseLocationPermissionAlreadyGranted()) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    LOCATION_REQUEST_CODE);
+        }
+    }
+
+    private boolean isCoarseLocationPermissionAlreadyGranted() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
+    /**
+     * Try to move the camera to the user current position
+     * if the coarse location permission are already granted.
+     */
+    private void tryMoveCameraToUserPosition() {
+        if (isCoarseLocationPermissionAlreadyGranted()) {
+            moveCameraToUserPosition();
+        }
+    }
+
+    private void moveCameraToUserPosition() {
+        // Enables all the UI related to the user location and bearing.
+        createNewRouteMap.setMyLocationEnabled(true);
+
+        // The use of a deprecated method is due to convenience and ease of use.
+        // Also, a similar approach has been taken in other parts of this codebase.
+        createNewRouteMap.setOnMyLocationChangeListener(location -> {
+            if (location == null) {
+                return;
+            }
+
+            LatLng userCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
+            createNewRouteMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userCurrentLocation, 15));
+        });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == LOCATION_REQUEST_CODE) {
+            if (didUserGrantCoarseLocationPermission(grantResults)) {
+                moveCameraToUserPosition();
+            }
+        }
+    }
+
+    private boolean didUserGrantCoarseLocationPermission(int[] grantResults) {
+        return grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
     }
 
     private void registerOnMapClick() {
@@ -394,28 +415,29 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         createNewPointOfInterestButton.setOnClickListener(button -> {
             TextInputEditText textInputEditText = findViewById(R.id.user_created_marker_name_text_input);
 
-            if(compareWithPOIs(textInputEditText.getText().toString())){
+            if (compareWithPOIs(textInputEditText.getText().toString())) {
 
-            userNewCustomPoiInCreation.setTitle(textInputEditText.getText().toString());
-            textInputEditText.getText().clear();
+                userNewCustomPoiInCreation.setTitle(textInputEditText.getText().toString());
+                textInputEditText.getText().clear();
 
-            selectPointOfInterest(userNewCustomPoiInCreation, true);
-            createdMarkers.add(userNewCustomPoiInCreation.getTitle());
-            createdMarkersByUser.add(userNewCustomPoiInCreation.getTitle());
+                selectPointOfInterest(userNewCustomPoiInCreation, true);
+                createdMarkers.add(userNewCustomPoiInCreation.getTitle());
+                createdMarkersByUser.add(userNewCustomPoiInCreation.getTitle());
 
-            userNewCustomPoiInCreation = null;
+                userNewCustomPoiInCreation = null;
 
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        }});
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            }
+        });
     }
 
     private boolean compareWithPOIs(String routeName) {
-        if (createdMarkersByUser.contains(routeName)){
+        if (createdMarkersByUser.contains(routeName)) {
             makeAlert("Nombre ya existente. Escriba un nombre distinto.");
             return false;
         }
 
-        if (routeName.trim().isEmpty()){
+        if (routeName.trim().isEmpty()) {
             makeAlert("Por favor, escriba un nombre para el punto.");
             return false;
         }
@@ -424,12 +446,12 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     private void makeAlert(String s) {
         new AlertDialog.Builder(this).setTitle("Error al crear punto")
-        .setMessage(s)
-        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Log.d("MsgCancelled", "cancelado");
-            }
-        }).show();
+                .setMessage(s)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Log.d("MsgCancelled", "cancelado");
+                    }
+                }).show();
     }
 }
