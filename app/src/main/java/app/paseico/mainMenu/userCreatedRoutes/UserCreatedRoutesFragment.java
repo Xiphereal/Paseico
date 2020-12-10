@@ -2,6 +2,7 @@ package app.paseico.mainMenu.userCreatedRoutes;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
@@ -53,6 +55,8 @@ import java.util.List;
 import app.paseico.CategoryManager;
 import app.paseico.R;
 import app.paseico.RouteInformationActivity;
+import app.paseico.RouteRunnerNotOrderedActivity;
+import app.paseico.RouteRunnerOrderedActivity;
 import app.paseico.data.Route;
 import app.paseico.mainMenu.searcher.MyRecyclerViewAdapter;
 import app.paseico.mainMenu.searcher.RouteSearchFragment;
@@ -124,9 +128,36 @@ public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerVie
     private void registerCreateNewRouteButtonTransition(View root) {
         ExtendedFloatingActionButton extendedFloatingActionButton = root.findViewById(R.id.create_new_route_button);
         extendedFloatingActionButton.setOnClickListener(view -> {
+            checkLocation();
+        });
+    }
+    public void checkLocation(){
+        final LocationManager manager = (LocationManager) getContext().getSystemService( Context.LOCATION_SERVICE );
+
+        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            buildAlertMessageNoGps();
+        } else{
             Intent createNewRouteIntent = new Intent(getActivity(), CreateNewRouteActivity.class);
             startActivity(createNewRouteIntent);
-        });
+        }
+
+    }
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("Para poder usar Paseico necesitas activar la ubicación")
+                .setCancelable(false)
+                .setPositiveButton("Activar", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No activar", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 
     //
