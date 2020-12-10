@@ -10,8 +10,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.koalap.geofirestore.GeoFire;
+import com.koalap.geofirestore.GeoLocation;
 
 import java.util.List;
 
@@ -37,6 +40,7 @@ public class FirebaseService {
         firebaseFirestore.collection("route").add(route).addOnSuccessListener(documentReference -> {
             String createdRouteID = documentReference.getId();
             updateRoute(createdRouteID, "id", createdRouteID);
+            setGeoFireRoute(createdRouteID, route);
         });
 
         System.out.println("Route " + route.getName() + " successfully added to Firebase.");
@@ -67,5 +71,24 @@ public class FirebaseService {
                 .addOnFailureListener(e -> Log.w("Failure", "Error updating document", e));
 
         System.out.println("Updated " + attribute + " as " + newValue.toString());
+    }
+
+    private static void setGeoFireRoute(String id, Route route){
+        CollectionReference ref = FirebaseFirestore.getInstance().collection("geofire");
+        List<PointOfInterest> pois = route.getPointsOfInterest();
+        PointOfInterest first = pois.get(0);
+        GeoLocation geoLocation = new GeoLocation(first.getLatitude(), first.getLongitude());
+        GeoFire geoFire = new GeoFire(ref);
+        geoFire.setLocation(id, geoLocation,
+                new GeoFire.CompletionListener() {
+                    @Override
+                    public void onComplete(String key, Exception exception) {
+                        if (exception != null) {
+                            System.err.println("There was an error saving the location to GeoFire: " + exception.toString());
+                        } else {
+                            System.out.println("Location saved on server successfully!");
+                        }
+                    }
+                });
     }
 }
