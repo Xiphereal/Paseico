@@ -16,7 +16,15 @@ public class Tuple<T, K> {
         return firstElement;
     }
 
+    public void setFirstElement(T firstElement) {
+        this.firstElement = firstElement;
+    }
+
     public K getSecondElement() {
         return secondElement;
+    }
+
+    public void setSecondElement(K secondElement) {
+        this.secondElement = secondElement;
     }
 }
