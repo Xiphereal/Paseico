@@ -1,7 +1,6 @@
 package app.paseico;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -35,10 +34,7 @@ import java.util.stream.Collectors;
 public class ModifyRouteActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap modifyRouteMap;
-    private TextInputLayout routeName;
     private ListView markedPOIsListView;
-
-    private int routeCost;
 
     private List<PointOfInterest> pointsOfInterest = new ArrayList<>();
     private List<PointOfInterest> originalPOIs = new ArrayList<>();
@@ -63,7 +59,6 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
     protected int nextPosition = 0;
 
     private Router currentRouter;
-    private Route retrievedRoute;
     private String retrievedRouteId;
 
     @Override
@@ -71,28 +66,35 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_route);
 
-        registerMarkedPOIsListView();
-        registerUpAndDownButtons();
-        registerOrderedRouteSwitch();
+        Bundle retrievedData = this.getIntent().getExtras();
+        Route retrievedRoute = (Route) retrievedData.get("route");
 
-        Intent retrievedIntent = this.getIntent();
-        Bundle retrievedData = retrievedIntent.getExtras();
-
-        retrievedRoute = (Route) retrievedData.get("route");
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.new_route_map);
-        mapFragment.getMapAsync(this);
-
-        routeName = findViewById(R.id.route_name_textField);
-        routeName.setHint(retrievedRoute.getName());
-        //TODO: in order to make de name of the route modifiable, set enabled to true and build de logic
-        routeName.setEnabled(false);
+        setUpRouteNameNonIntractableDisplay(retrievedRoute);
 
         pointsOfInterest = retrievedRoute.getPointsOfInterest();
         retrievedRouteId = getIntent().getStringExtra("routeID");
 
+        registerMarkedPOIsListView();
+        registerUpAndDownButtons();
+        registerOrderedRouteSwitch();
+
+        initializeMapFragment();
+
         getCurrentUserFromDatabaseAsync();
+    }
+
+    private void setUpRouteNameNonIntractableDisplay(Route retrievedRoute) {
+        TextInputLayout routeName = findViewById(R.id.route_name_textField);
+        routeName.setHint(retrievedRoute.getName());
+
+        // Disables the edition.
+        routeName.setEnabled(false);
+    }
+
+    private void initializeMapFragment() {
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.new_route_map);
+        mapFragment.getMapAsync(this);
     }
 
     private void registerMarkedPOIsListView() {
@@ -532,7 +534,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
     }
 
     private int calculateRouteRewardPoints() {
-        routeCost = calculateRouteCostTotal();
+        int routeCost = calculateRouteCostTotal();
         double routeRewardPoints = routeCost * ROUTE_TOTAL_COST_MULTIPLIER_TO_GET_REWARD_POINTS;
 
         return Math.toIntExact(Math.round(routeRewardPoints));
