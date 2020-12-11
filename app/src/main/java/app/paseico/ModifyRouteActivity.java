@@ -166,21 +166,8 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        for (int i = 0; i < pointsOfInterest.size(); i++) {
-            Double latitude = pointsOfInterest.get(i).getLatitude();
-            Double longitude = pointsOfInterest.get(i).getLongitude();
-            String title = pointsOfInterest.get(i).getName();
 
-            LatLng latLng = new LatLng(latitude, longitude);
-            Marker marker = map.addMarker(new MarkerOptions().position(latLng).title(title));
-
-            marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-            createdMarkers.add(pointsOfInterest.get(i).getName());
-            markedPOIs.add(pointsOfInterest.get(i).getName());
-            originalPOIs.add(pointsOfInterest.get(i));
-
-            //TODO:when map is ready we perform the zoom to the first poi of the list
-        }
+        populateMapWithRoutePointsOfInterest();
 
         LatLng fakeUserPosition = new LatLng(39.475, -0.375);
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(fakeUserPosition));
@@ -193,6 +180,22 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
         registerOnMapLongClick();
 
         updateMarkedPOIsListView();
+    }
+
+    private void populateMapWithRoutePointsOfInterest() {
+        for (int i = 0; i < pointsOfInterest.size(); i++) {
+            Double latitude = pointsOfInterest.get(i).getLatitude();
+            Double longitude = pointsOfInterest.get(i).getLongitude();
+            String title = pointsOfInterest.get(i).getName();
+
+            LatLng latLng = new LatLng(latitude, longitude);
+            Marker marker = map.addMarker(new MarkerOptions().position(latLng).title(title));
+
+            marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+            createdMarkers.add(pointsOfInterest.get(i).getName());
+            markedPOIs.add(pointsOfInterest.get(i).getName());
+            originalPOIs.add(pointsOfInterest.get(i));
+        }
     }
 
     private void registerOnGoogleMapsPoiClickListener() {
@@ -390,7 +393,6 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
         ExtendedFloatingActionButton extendedFloatingActionButton = findViewById(R.id.finalize_route_creation_button);
 
         extendedFloatingActionButton.setOnClickListener(view -> tryFinalizeRouteCreation());
-
     }
 
     private void tryFinalizeRouteCreation() {
