@@ -117,7 +117,7 @@
                                 android:id="@+id/textView_FollowersText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="followers" />
+                                android:text="Seguidores" />
 
                         </LinearLayout>
 
@@ -135,13 +135,13 @@
                                 android:textAlignment="center"
                                 android:textColor="@color/colorPrimaryDark"
                                 android:textSize="18sp"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"/>
 
                             <TextView
                                 android:id="@+id/textView_FollowingText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="following" />
+                                android:text="Seguidos"/>
 
                         </LinearLayout>
                     </LinearLayout>
@@ -149,7 +149,7 @@
                     <Button
                         android:id="@+id/buttonLogOut"
                         style="@style/LargeButtonText"
-                        android:layout_width="200dp"
+                        android:layout_width="175dp"
                         android:layout_height="50dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginLeft="33dp"
