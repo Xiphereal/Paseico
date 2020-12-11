@@ -35,7 +35,7 @@ import java.util.List;
 
 public class ModifyRouteActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    private GoogleMap map;
+    private GoogleMap modifyRouteMap;
     private TextInputLayout routeName;
     private ListView markedPOIsListView;
 
@@ -165,7 +165,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
+        modifyRouteMap = googleMap;
 
         populateMapWithRoutePointsOfInterest();
 
@@ -182,30 +182,14 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
         updateMarkedPOIsListView();
     }
 
-    private void populateMapWithRoutePointsOfInterest() {
-        for (int i = 0; i < pointsOfInterest.size(); i++) {
-            Double latitude = pointsOfInterest.get(i).getLatitude();
-            Double longitude = pointsOfInterest.get(i).getLongitude();
-            String title = pointsOfInterest.get(i).getName();
-
-            LatLng latLng = new LatLng(latitude, longitude);
-            Marker marker = map.addMarker(new MarkerOptions().position(latLng).title(title));
-
-            marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-            createdMarkers.add(pointsOfInterest.get(i).getName());
-            markedPOIs.add(pointsOfInterest.get(i).getName());
-            originalPOIs.add(pointsOfInterest.get(i));
-        }
-    }
-
     private void registerOnGoogleMapsPoiClickListener() {
-        map.setOnPoiClickListener(poiSelected -> {
+        modifyRouteMap.setOnPoiClickListener(poiSelected -> {
             tryDeleteUserNewCustomPoiInCreation();
 
             PointOfInterest poi = findClickedPointOfInterest(poiSelected.latLng, poiSelected.name);
 
             if (!isPointOfInterestSelected(poi) && !markerWasCreated(poiSelected.name)) {
-                Marker markerOfThePoi = map
+                Marker markerOfThePoi = modifyRouteMap
                         .addMarker(new MarkerOptions().position(poiSelected.latLng).title(poiSelected.name));
 
                 selectPointOfInterest(markerOfThePoi, false);
@@ -224,13 +208,13 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
 
         registerOnNewPoiButtonClicked(bottomSheetBehavior);
 
-        map.setOnMapLongClickListener(tapPoint -> {
+        modifyRouteMap.setOnMapLongClickListener(tapPoint -> {
             tryDeleteUserNewCustomPoiInCreation();
 
             // Opens the creation form.
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
-            userNewCustomPoiInCreation = map
+            userNewCustomPoiInCreation = modifyRouteMap
                     .addMarker(new MarkerOptions().position(tapPoint).title("User Marker"));
         });
     }
@@ -328,11 +312,11 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
     }
 
     private void registerOnMapClick() {
-        map.setOnMapClickListener(tapPoint -> tryDeleteUserNewCustomPoiInCreation());
+        modifyRouteMap.setOnMapClickListener(tapPoint -> tryDeleteUserNewCustomPoiInCreation());
     }
 
     private void registerOnMarkerClickListener() {
-        map.setOnMarkerClickListener(marker -> {
+        modifyRouteMap.setOnMarkerClickListener(marker -> {
             if (!marker.equals(userNewCustomPoiInCreation)) {
                 tryDeleteUserNewCustomPoiInCreation();
 
