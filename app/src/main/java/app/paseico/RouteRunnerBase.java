@@ -99,9 +99,9 @@ public abstract class RouteRunnerBase<Polyline> extends FragmentActivity impleme
                     isCompleted.set(j, false);
                     poisLeft++;
                 }
-                Intent intent = new Intent(RouteRunnerBase.this, RouteInformationActivity.class);
-                intent.putExtra("route", actualRoute);
-                startActivity(intent);
+//                Intent intent = new Intent(RouteRunnerBase.this, RouteInformationActivity.class);
+//                intent.putExtra("route", actualRoute);
+//                startActivity(intent);
                 finish();
             }
         });
