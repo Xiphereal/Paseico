@@ -349,12 +349,8 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
         marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
         markedPOIs.remove(poi.getName());
-
         pointsOfInterest.remove(poi);
-
-        if (newPointsOfInterest.contains(poi)) {
-            newPointsOfInterest.remove(poi);
-        }
+        newPointsOfInterest.remove(poi);
 
         updateMarkedPOIsListView();
     }
@@ -408,16 +404,9 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
         AlertDialog.Builder builder = setUpBuilder(message);
         builder.setCancelable(true);
         builder.setPositiveButton(android.R.string.yes,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        deselectPointOfInterest(marker, poi);
-                    }
-                });
-        builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
+                (dialog, which) -> deselectPointOfInterest(marker, poi));
+        builder.setNegativeButton(android.R.string.no, (dialog, which) -> {
+            // If the user chooses no, nothing is done.
         });
 
         AlertDialog dialog = builder.create();
