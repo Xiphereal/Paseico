@@ -66,17 +66,15 @@
         app:layout_constraintTop_toBottomOf="@+id/textView_routeSearchTitle" />
 
     <Spinner
-            android:id="@+id/spinner_route_theme"
-            android:layout_width="wrap_content"
-            android:layout_marginLeft="170dp"
-            android:layout_marginTop="49dp"
-            android:layout_height="wrap_content"
-            android:entries="@array/route_category"
-            android:spinnerMode="dropdown"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_keyWord"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintVertical_bias="0.558" />
+        android:id="@+id/spinner_route_theme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="190dp"
+        android:layout_marginTop="48dp"
+        android:entries="@array/route_category"
+        android:spinnerMode="dropdown"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_keyWord" />
 
     <TextView
             android:id="@+id/textView_keyWord"
@@ -184,7 +182,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.391"
             android:layout_marginTop="30dp"
-            android:layout_marginLeft="170dp"
+            android:layout_marginLeft="135dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editText_minimumNumberOfPOI"/>
 
@@ -225,11 +223,10 @@
         android:id="@+id/spinner_orderedRoute"
         android:layout_width="107dp"
         android:layout_height="23dp"
-        android:layout_marginStart="18dp"
+        android:layout_marginStart="75dp"
         android:layout_marginTop="36dp"
         android:entries="@array/ordered_route_choices"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.673"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText_minimumOfPoints" />
 

@@ -99,7 +99,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         });
 
         holder.btn_follow.setOnClickListener(view -> {
-            if (holder.btn_follow.getText().toString().equals("Follow")) {
+            if (holder.btn_follow.getText().toString().equals("Seguir")) {
                 FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername())
                         .child("following").child(searchedUser.getUsername()).setValue(true);
                 FirebaseDatabase.getInstance().getReference().child("Follow").child(searchedUser.getUsername())
@@ -153,10 +153,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                     button.setVisibility(View.GONE);
                 } else {
                     if (snapshot.child(searchedUsername).exists()) {
-                        button.setText("Following");
+                        button.setText("Siguiendo");
                         button.setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
                     } else {
-                        button.setText("Follow");
+                        button.setText("Seguir");
                         button.setBackground(context.getResources().getDrawable(R.drawable.gradient));
                     }
                 }
