@@ -181,18 +181,16 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
     }
 
     private void populateMapWithRoutePointsOfInterest() {
-        for (int i = 0; i < pointsOfInterest.size(); i++) {
-            Double latitude = pointsOfInterest.get(i).getLatitude();
-            Double longitude = pointsOfInterest.get(i).getLongitude();
-            String title = pointsOfInterest.get(i).getName();
+        for (PointOfInterest pointOfInterest : pointsOfInterest) {
+            LatLng position = new LatLng(pointOfInterest.getLatitude(), pointOfInterest.getLongitude());
+            String title = pointOfInterest.getName();
 
-            LatLng latLng = new LatLng(latitude, longitude);
-            Marker marker = modifyRouteMap.addMarker(new MarkerOptions().position(latLng).title(title));
-
+            Marker marker = modifyRouteMap.addMarker(new MarkerOptions().position(position).title(title));
             marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-            createdMarkers.add(pointsOfInterest.get(i).getName());
-            markedPOIs.add(pointsOfInterest.get(i).getName());
-            originalPOIs.add(pointsOfInterest.get(i));
+
+            createdMarkers.add(pointOfInterest.getName());
+            markedPOIs.add(pointOfInterest.getName());
+            originalPOIs.add(pointOfInterest);
         }
     }
 
