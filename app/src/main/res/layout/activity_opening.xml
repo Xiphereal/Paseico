@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
 
         tools:context=".login.OpeningActivity"
-        android:background="@drawable/geometrics_cut">
+        android:background="@drawable/geometrics_cut_opening">
 
     <TextView
             android:text="PASEICO"
