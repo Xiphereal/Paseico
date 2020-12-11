@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/geometrics_profile"
+    android:background="@color/background"
     tools:context=".mainMenu.profile.ProfileFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -190,10 +190,34 @@
     </ScrollView>
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <View
+            android:layout_width="350dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="340dp"
+            android:background="@color/white" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <View
+            android:layout_width="350dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="460dp"
+            android:background="@color/white" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="400dp"
-        android:layout_height="300dp"
+        android:layout_height="330dp"
         android:layout_marginLeft="40dp"
-        android:layout_marginTop="285dp"
+        android:layout_marginTop="350dp"
         android:layout_marginRight="40dp"
         android:orientation="vertical">
 
@@ -245,7 +269,7 @@
             style="@style/LargeButtonText"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="40dp"
             android:layout_weight="1"
             android:gravity="center"
             android:layout_gravity="center_vertical|center_horizontal"
