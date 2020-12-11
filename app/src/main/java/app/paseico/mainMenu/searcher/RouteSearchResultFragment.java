@@ -14,11 +14,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 
 import app.paseico.CategoryManager;
 import app.paseico.R;
-import app.paseico.RouteInfModifyActivity;
 import app.paseico.RouteInformationActivity;
 
 import app.paseico.data.Route;
@@ -42,8 +40,10 @@ public class RouteSearchResultFragment extends Fragment {
 
         Route[] filteredRoutes = RouteSearchResultFragmentArgs.fromBundle(getArguments()).getFilteredList();
         List<String> filteredRoutesNames = new ArrayList<>();
-        List<String> filteredRoutesEstimatedTime = new ArrayList<>();
-        List<String> filteredRoutesLength = new ArrayList<>();
+        List<String> filteredRoutesEstimatedHours = new ArrayList<>();
+        List<String> filteredRoutesEstimatedMinutes = new ArrayList<>();
+        List<String> filteredRoutesKm = new ArrayList<>();
+        List<String> filteredRoutesMeters = new ArrayList<>();
         List<String> filteredRoutesRewardPoints = new ArrayList<>();
         List<String> filteredRoutesAreOrdered = new ArrayList<>();
 
@@ -52,8 +52,17 @@ public class RouteSearchResultFragment extends Fragment {
 
         for (Route route : filteredRoutes) {
             filteredRoutesNames.add(route.getName());
-            filteredRoutesEstimatedTime.add(String.valueOf(route.getEstimatedTime()));
-            filteredRoutesLength.add(String.valueOf(route.getLength()));
+
+            int hours = (int) (route.getEstimatedTime()/60);
+            int minutes = (int) (route.getEstimatedTime() - (hours*60));
+            filteredRoutesEstimatedHours.add(String.valueOf(hours));
+            filteredRoutesEstimatedMinutes.add(String.valueOf(minutes));
+
+            int km = (int) (route.getLength()/1000);
+            int meters = (int) (route.getLength()) - km*1000;
+            filteredRoutesKm.add(String.valueOf(km));
+            filteredRoutesMeters.add(String.valueOf(meters));
+
             filteredRoutesRewardPoints.add(String.valueOf(route.getRewardPoints()));
             filteredRoutesAreOrdered.add(String.valueOf(route.isOrdered()));
 
@@ -68,7 +77,7 @@ public class RouteSearchResultFragment extends Fragment {
 
         ListView listView_filteredRoutes = (ListView) view.findViewById(R.id.listView_filteredRoutes);
 
-        FilteredListAdapter adapter = new FilteredListAdapter(this.getContext(), filteredRoutesNames, filteredRoutesEstimatedTime, filteredRoutesLength,
+        FilteredListAdapter adapter = new FilteredListAdapter(this.getContext(), filteredRoutesNames, filteredRoutesEstimatedHours, filteredRoutesEstimatedMinutes,filteredRoutesKm, filteredRoutesMeters,
                 filteredRoutesRewardPoints, filteredRoutesIcons, filteredRoutesAreOrdered);
         listView_filteredRoutes.setAdapter(adapter);
 
@@ -90,20 +99,24 @@ public class RouteSearchResultFragment extends Fragment {
 
         Context context;
         List<String> names;
-        List<String> estimatedTimes;
-        List<String> lengths;
+        List<String> estimatedHours;
+        List<String> estimatedMinutes;
+        List<String> kms;
+        List<String> meters;
         List<String> points;
         List<Integer> icons;
         List<String> areOrdered;
 
 
-        FilteredListAdapter(Context context, List<String> names, List<String> estimatedTimes, List<String> lengths, List<String> points, List<Integer> icons, List<String> areOrdered) {
+        FilteredListAdapter(Context context, List<String> names, List<String> estimatedHours, List<String> estimatedMinutes, List<String> kms, List<String> meters, List<String> points, List<Integer> icons, List<String> areOrdered) {
             super(context, R.layout.item_route_search, R.id.routeName, names);
 
             this.context = context;
             this.names = names;
-            this.estimatedTimes = estimatedTimes;
-            this.lengths = lengths;
+            this.estimatedHours = estimatedHours;
+            this.estimatedMinutes = estimatedMinutes;
+            this.kms = kms;
+            this.meters = meters;
             this.points = points;
             this.icons = icons;
             this.areOrdered = areOrdered;
@@ -117,7 +130,9 @@ public class RouteSearchResultFragment extends Fragment {
 
             TextView myNames = row.findViewById(R.id.routeName);
             TextView myEstimatedTimes = row.findViewById(R.id.routeDuration);
-            TextView myLengths = row.findViewById(R.id.routeLenght);
+            TextView myEstimatedMinutes = row.findViewById(R.id.routeMinutes);
+            TextView myKms = row.findViewById(R.id.routeLenght);
+            TextView myMeters = row.findViewById(R.id.meters_textView);
             TextView myPoints = row.findViewById(R.id.routeReward);
             TextView orderedRoute = row.findViewById(R.id.textView_orderedRouteResult);
 
@@ -125,8 +140,10 @@ public class RouteSearchResultFragment extends Fragment {
             ImageView ListViewImage = (ImageView) row.findViewById(R.id.imageViewIcon);
 
             myNames.setText(names.get(position));
-            myEstimatedTimes.setText(estimatedTimes.get(position));
-            myLengths.setText(lengths.get(position));
+            myEstimatedTimes.setText(estimatedHours.get(position));
+            myEstimatedMinutes.setText(estimatedMinutes.get(position));
+            myKms.setText(kms.get(position));
+            myMeters.setText(meters.get(position));
             myPoints.setText(points.get(position));
 
             String isOrdered = areOrdered.get(position);
