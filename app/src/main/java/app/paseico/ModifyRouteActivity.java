@@ -196,18 +196,6 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
         }
     }
 
-    private void requestLocationPermission() {
-        if (!isCoarseLocationPermissionAlreadyGranted()) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    LOCATION_REQUEST_CODE);
-        }
-    }
-
-    private boolean isCoarseLocationPermissionAlreadyGranted() {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED;
-    }
-
     /**
      * Try to move the camera to the {@link PointOfInterest} geometric
      * center if the coarse location permission are already granted.
