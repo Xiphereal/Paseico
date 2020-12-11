@@ -1,21 +1,18 @@
 package app.paseico;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import app.paseico.data.Router;
 import app.paseico.service.FirebaseService;
+import app.paseico.utils.LocationPermissionRequester;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -68,10 +65,6 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
     private Router currentRouter;
     private Route retrievedRoute;
     private String retrievedRouteId;
-
-    // This value has been copied from RouteRunnerBase. It should
-    // represent the code for the location request.
-    private static final int LOCATION_REQUEST_CODE = 23;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,7 +168,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
 
         populateMapWithRoutePointsOfInterest();
 
-        requestLocationPermission();
+        LocationPermissionRequester.requestLocationPermission(this);
 
         tryCenterCameraOnRoutePointsOfInterestGeometricCenter();
 
@@ -220,7 +213,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
      * center if the coarse location permission are already granted.
      */
     private void tryCenterCameraOnRoutePointsOfInterestGeometricCenter() {
-        if (isCoarseLocationPermissionAlreadyGranted()) {
+        if (LocationPermissionRequester.isCoarseLocationPermissionAlreadyGranted(this)) {
             centerCameraOnRoutePointsOfInterestGeometricCenter();
         }
     }
@@ -267,15 +260,11 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == LOCATION_REQUEST_CODE) {
-            if (didUserGrantCoarseLocationPermission(grantResults)) {
+        if (requestCode == LocationPermissionRequester.LOCATION_REQUEST_CODE) {
+            if (LocationPermissionRequester.didUserGrantCoarseLocationPermission(grantResults)) {
                 centerCameraOnRoutePointsOfInterestGeometricCenter();
             }
         }
-    }
-
-    private boolean didUserGrantCoarseLocationPermission(int[] grantResults) {
-        return grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
     }
 
     private void registerOnGoogleMapsPoiClickListener() {
