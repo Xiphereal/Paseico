@@ -1,13 +1,17 @@
 package app.paseico;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import app.paseico.data.Router;
@@ -16,10 +20,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.*;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -32,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ModifyRouteActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -66,6 +68,10 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
     private Router currentRouter;
     private Route retrievedRoute;
     private String retrievedRouteId;
+
+    // This value has been copied from RouteRunnerBase. It should
+    // represent the code for the location request.
+    private static final int LOCATION_REQUEST_CODE = 23;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,10 +175,9 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
 
         populateMapWithRoutePointsOfInterest();
 
-        LatLng fakeUserPosition = new LatLng(39.475, -0.375);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(fakeUserPosition));
+        requestLocationPermission();
 
-        googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+        tryCenterCameraOnRoutePointsOfInterestGeometricCenter();
 
         registerOnMapClick();
         registerOnMarkerClickListener();
@@ -180,6 +185,97 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
         registerOnMapLongClick();
 
         updateMarkedPOIsListView();
+    }
+
+    private void populateMapWithRoutePointsOfInterest() {
+        for (int i = 0; i < pointsOfInterest.size(); i++) {
+            Double latitude = pointsOfInterest.get(i).getLatitude();
+            Double longitude = pointsOfInterest.get(i).getLongitude();
+            String title = pointsOfInterest.get(i).getName();
+
+            LatLng latLng = new LatLng(latitude, longitude);
+            Marker marker = modifyRouteMap.addMarker(new MarkerOptions().position(latLng).title(title));
+
+            marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+            createdMarkers.add(pointsOfInterest.get(i).getName());
+            markedPOIs.add(pointsOfInterest.get(i).getName());
+            originalPOIs.add(pointsOfInterest.get(i));
+        }
+    }
+
+    private void requestLocationPermission() {
+        if (!isCoarseLocationPermissionAlreadyGranted()) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    LOCATION_REQUEST_CODE);
+        }
+    }
+
+    private boolean isCoarseLocationPermissionAlreadyGranted() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
+    /**
+     * Try to move the camera to the {@link PointOfInterest} geometric
+     * center if the coarse location permission are already granted.
+     */
+    private void tryCenterCameraOnRoutePointsOfInterestGeometricCenter() {
+        if (isCoarseLocationPermissionAlreadyGranted()) {
+            centerCameraOnRoutePointsOfInterestGeometricCenter();
+        }
+    }
+
+    private void centerCameraOnRoutePointsOfInterestGeometricCenter() {
+        // Enables all the UI related to the user location and bearing.
+        modifyRouteMap.setMyLocationEnabled(true);
+
+        // The use of a deprecated method is due to convenience and ease of use.
+        // Also, a similar approach has been taken in other parts of this codebase.
+        modifyRouteMap.setOnMyLocationChangeListener(location -> {
+            if (location == null) {
+                return;
+            }
+
+            LatLngBounds pointsOfInterestBounds = calculatePointsBounds(pointsOfInterest);
+
+            int cameraPaddingForBounds = 200;
+            modifyRouteMap.moveCamera(
+                    CameraUpdateFactory.newLatLngBounds(pointsOfInterestBounds, cameraPaddingForBounds));
+        });
+    }
+
+    /**
+     * For the algorithm reference: https://stackoverflow.com/a/27601389
+     */
+    @NotNull
+    private LatLngBounds calculatePointsBounds(List<PointOfInterest> pointOfInterests) {
+        // First, the PointOfInterest list must be converted to plain positions.
+        // In this case, a position is represented by a LatLng.
+        List<LatLng> pointsOfInterestPositions =
+                pointOfInterests.stream()
+                        .map(poi -> new LatLng(poi.getLatitude(), poi.getLongitude()))
+                        .collect(Collectors.toList());
+
+        LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+
+        for (LatLng position : pointsOfInterestPositions) {
+            boundsBuilder.include(position);
+        }
+
+        return boundsBuilder.build();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == LOCATION_REQUEST_CODE) {
+            if (didUserGrantCoarseLocationPermission(grantResults)) {
+                centerCameraOnRoutePointsOfInterestGeometricCenter();
+            }
+        }
+    }
+
+    private boolean didUserGrantCoarseLocationPermission(int[] grantResults) {
+        return grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
     }
 
     private void registerOnGoogleMapsPoiClickListener() {
