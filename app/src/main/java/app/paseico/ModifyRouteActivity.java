@@ -268,8 +268,6 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
                 selectPointOfInterest(markerOfThePoi, false);
                 createdMarkers.add(poiSelected.name);
             }
-
-            return;
         });
     }
 
