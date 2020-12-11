@@ -300,7 +300,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
 
         pointsOfInterest.remove(poi);
 
-        if(newPointsOfInterest.contains(poi)) {
+        if (newPointsOfInterest.contains(poi)) {
             newPointsOfInterest.remove(poi);
         }
 
@@ -351,7 +351,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
         });
     }
 
-    private void showConfirmationDeselection(Marker marker, PointOfInterest poi){
+    private void showConfirmationDeselection(Marker marker, PointOfInterest poi) {
         String message = "¿Queres deseleccionar el punto?";
         AlertDialog.Builder builder = setUpBuilder(message);
         builder.setCancelable(true);
@@ -433,7 +433,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
         int totalRouteCost = 0;
 
         for (PointOfInterest poi : newPointsOfInterest) {
-            if(! originalPOIs.contains(poi)) {
+            if (!originalPOIs.contains(poi)) {
                 if (poi.wasCreatedByUser()) {
                     totalRouteCost += getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost_in_points);
                 } else {
@@ -444,6 +444,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
 
         return totalRouteCost;
     }
+
     @NotNull
     private AlertDialog.Builder setUpBuilder(String dialogMessage) {
         // Where the alert dialog is going to be shown.
@@ -459,6 +460,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
 
         return builder;
     }
+
     private void showDialog(AlertDialog.Builder builder) {
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -488,7 +490,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
         int rewardPointsGranted = calculateRouteRewardPoints();
 
         FirebaseService.updateRoute(retrievedRouteId, "rewardPoints", rewardPointsGranted);
-        FirebaseService.updateRoute(retrievedRouteId, "pointsOfInterest", pointsOfInterest );
+        FirebaseService.updateRoute(retrievedRouteId, "pointsOfInterest", pointsOfInterest);
     }
 
     private int calculateRouteRewardPoints() {
