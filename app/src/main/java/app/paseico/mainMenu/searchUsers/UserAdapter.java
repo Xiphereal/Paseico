@@ -104,11 +104,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                         .child("following").child(searchedUser.getUsername()).setValue(true);
                 FirebaseDatabase.getInstance().getReference().child("Follow").child(searchedUser.getUsername())
                         .child("followers").child(actualUser.getUsername()).setValue(true);
+                holder.btn_follow.setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
             } else {
                 FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername())
                         .child("following").child(searchedUser.getUsername()).removeValue();
                 FirebaseDatabase.getInstance().getReference().child("Follow").child(searchedUser.getUsername())
                         .child("followers").child(actualUser.getUsername()).removeValue();
+                holder.btn_follow.setBackground(context.getResources().getDrawable(R.drawable.gradient));
             }
         });
     }
@@ -152,8 +154,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 } else {
                     if (snapshot.child(searchedUsername).exists()) {
                         button.setText("Following");
+                        button.setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
                     } else {
                         button.setText("Follow");
+                        button.setBackground(context.getResources().getDrawable(R.drawable.gradient));
                     }
                 }
             }

@@ -104,12 +104,14 @@ public class NotMyProfileFragment extends Fragment {
                         .child("following").child(profileid).setValue(true);
                 FirebaseDatabase.getInstance().getReference().child("Follow").child(profileid)
                         .child("followers").child(actualUser.getUsername()).setValue(true);
+                buttonLogOut.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
             } else if (btn.equals("Following")) {
                 FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername())
                         .child("following").child(profileid).removeValue();
                 FirebaseDatabase.getInstance().getReference().child("Follow").child(profileid)
                         .child("followers").child(actualUser.getUsername()).removeValue();
+                buttonLogOut.setBackground(getResources().getDrawable(R.drawable.gradient));
             }
         });
 
@@ -145,8 +147,10 @@ public class NotMyProfileFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.child(profileid).exists()) {
                     buttonLogOut.setText("Following");
+                    buttonLogOut.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 } else {
                     buttonLogOut.setText("Follow");
+                    buttonLogOut.setBackground(getResources().getDrawable(R.drawable.gradient));
                 }
             }
 
