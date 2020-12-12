@@ -15,13 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -49,11 +46,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import app.paseico.CategoryManager;
-import app.paseico.FilteredListAdapter;
+import app.paseico.adapters.FilteredListAdapter;
 import app.paseico.R;
 import app.paseico.RouteInformationActivity;
 import app.paseico.data.Route;
-import app.paseico.mainMenu.searcher.MyRecyclerViewAdapter;
+import app.paseico.adapters.MyRecyclerViewAdapter;
 
 public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerViewAdapter.ItemClickListener {
     private ListView nearRoutesListView;

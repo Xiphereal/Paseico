@@ -1,4 +1,4 @@
-package app.paseico.mainMenu.searcher;
+package app.paseico.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
