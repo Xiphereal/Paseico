@@ -30,6 +30,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,7 +114,9 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         availablePoints = findViewById(R.id.availablePoints);
 
         if (isOrganization) {
-            availablePoints.setText("Crédito");
+            TextView availablePointsTitle = findViewById(R.id.availablePointsTitle);
+            availablePointsTitle.setText("");
+            availablePoints.setText("");
         } else {
             availablePoints.setText(String.valueOf(currentRouter.getPoints()));
         }

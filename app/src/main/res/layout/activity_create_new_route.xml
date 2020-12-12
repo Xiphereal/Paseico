@@ -121,7 +121,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="135pt"
             android:layout_marginTop="35pt"
-            android:id="@+id/textView12"/>
+            android:id="@+id/availablePointsTitle"/>
 
     <TextView
             android:text="@string/puntos_map_TextView"
