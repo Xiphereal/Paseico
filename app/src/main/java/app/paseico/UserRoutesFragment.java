@@ -5,14 +5,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import androidx.annotation.NonNull;
+
 import androidx.fragment.app.Fragment;
+
+import app.paseico.adapters.FilteredListAdapter;
 import app.paseico.data.Route;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -20,7 +19,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +40,15 @@ public class UserRoutesFragment extends Fragment {
     FirebaseFirestore database = FirebaseFirestore.getInstance();
     CollectionReference routesReference = database.collection("route");
     private List<Route> routes = new ArrayList<>();
-    private List<String> routeNames = new ArrayList<>();
+
+    private List<String> filteredRoutesNames = new ArrayList<>();
+    private List<String> filteredRoutesEstimatedHours = new ArrayList<>();
+    private List<String> filteredRoutesEstimatedMinutes = new ArrayList<>();
+    private List<String> filteredRoutesKm = new ArrayList<>();
+    private List<String> filteredRoutesMeters = new ArrayList<>();
+    private List<String> filteredRoutesRewardPoints = new ArrayList<>();
+    private List<String> filteredRoutesAreOrdered = new ArrayList<>();
+    private List<Integer> filteredRoutesIcons = new ArrayList<>();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -86,10 +92,32 @@ public class UserRoutesFragment extends Fragment {
                             routes.add(document.toObject(Route.class));
                         }
                         for (int i = 0; i < routes.size(); i++ ) {
-                            routeNames.add(routes.get(i).getName());
+                            filteredRoutesNames.add(routes.get(i).getName());
+                            int hours = (int) (routes.get(i).getEstimatedTime()/60);
+                            int minutes = (int) (routes.get(i).getEstimatedTime() - (hours*60));
+                            filteredRoutesEstimatedHours.add(String.valueOf(hours));
+                            filteredRoutesEstimatedMinutes.add(String.valueOf(minutes));
+
+                            int km = (int) (routes.get(i).getLength()/1000);
+                            int meters = (int) (routes.get(i).getLength()) - km*1000;
+                            filteredRoutesKm.add(String.valueOf(km));
+                            filteredRoutesMeters.add(String.valueOf(meters));
+
+                            filteredRoutesRewardPoints.add(String.valueOf(routes.get(i).getRewardPoints()));
+                            filteredRoutesAreOrdered.add(String.valueOf(routes.get(i).isOrdered()));
+
+                            //Obtain route theme
+                            String RouteCategory = routes.get(i).getTheme();
+                            System.out.println("categoria " + RouteCategory);
+                            int index = CategoryManager.ConvertCategoryToIntDrawable(RouteCategory);
+                            System.out.println("indice " + index);
+                            filteredRoutesIcons.add(index);
                         }
                        // MyItemRecyclerViewAdapter adapter = new MyItemRecyclerViewAdapter(this, routeNames);
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, routeNames);
+                        //ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, routeNames);
+
+                        FilteredListAdapter adapter = new FilteredListAdapter(this.getContext(), filteredRoutesNames, filteredRoutesEstimatedHours, filteredRoutesEstimatedMinutes,filteredRoutesKm, filteredRoutesMeters,
+                                filteredRoutesRewardPoints, filteredRoutesIcons, filteredRoutesAreOrdered);
                         userRoutesList.setAdapter(adapter);
                     }
                 });
