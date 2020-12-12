@@ -1,9 +1,7 @@
 package app.paseico.mainMenu.userCreatedRoutes;
 
-import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -12,10 +10,9 @@ import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import app.paseico.R;
 import app.paseico.data.PointOfInterest;
+import app.paseico.utils.LocationPermissionRequester;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -189,7 +186,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
         createNewRouteMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.create_route_style));
 
-        requestLocationPermission();
+        LocationPermissionRequester.requestLocationPermission(this);
 
         tryMoveCameraToUserPosition();
 
@@ -199,24 +196,12 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         registerOnMapLongClick();
     }
 
-    private void requestLocationPermission() {
-        if (!isCoarseLocationPermissionAlreadyGranted()) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    LOCATION_REQUEST_CODE);
-        }
-    }
-
-    private boolean isCoarseLocationPermissionAlreadyGranted() {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED;
-    }
-
     /**
      * Try to move the camera to the user current position
      * if the coarse location permission are already granted.
      */
     private void tryMoveCameraToUserPosition() {
-        if (isCoarseLocationPermissionAlreadyGranted()) {
+        if (LocationPermissionRequester.isCoarseLocationPermissionAlreadyGranted(this)) {
             moveCameraToUserPosition();
         }
     }
@@ -241,14 +226,10 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == LOCATION_REQUEST_CODE) {
-            if (didUserGrantCoarseLocationPermission(grantResults)) {
+            if (LocationPermissionRequester.didUserGrantCoarseLocationPermission(grantResults)) {
                 moveCameraToUserPosition();
             }
         }
-    }
-
-    private boolean didUserGrantCoarseLocationPermission(int[] grantResults) {
-        return grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
     }
 
     private void registerOnMapClick() {
