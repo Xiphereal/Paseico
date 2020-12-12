@@ -3,24 +3,17 @@ package app.paseico.mainMenu.userCreatedRoutes;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavDirections;
-import androidx.navigation.fragment.NavHostFragment;
-
 import app.paseico.MainMenuActivity;
 import app.paseico.MainMenuOrganizationActivity;
 import app.paseico.R;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import app.paseico.data.Router;
-import app.paseico.mainMenu.searcher.RouteSearchFragment;
-import app.paseico.mainMenu.searcher.RouteSearchFragmentDirections;
 import app.paseico.service.DistanceMatrixRequest;
 import app.paseico.service.FirebaseService;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -31,9 +24,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.koalap.geofirestore.GeoFire;
-import com.koalap.geofirestore.GeoLocation;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -151,7 +141,7 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
     private void showRouteCreationSummaryDialog() {
         routeCost = calculateRouteCost();
 
-        String dialogMessage = getResources().getString(R.string.route_creation_summary_message, routeCost);
+        String dialogMessage = getResources().getString(R.string.route_creation_summary_message, routeCost, (currentRouter.getPoints() - routeCost));
         AlertDialog.Builder builder = setUpBuilder(dialogMessage);
 
         builder.setOnDismissListener(dialog -> {

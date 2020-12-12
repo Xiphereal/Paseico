@@ -2,16 +2,20 @@ package app.paseico.mainMenu.userCreatedRoutes;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.R;
 import app.paseico.data.PointOfInterest;
+import app.paseico.data.Router;
+import app.paseico.service.FirebaseService;
 import app.paseico.utils.LocationPermissionRequester;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -21,7 +25,12 @@ import com.google.android.gms.maps.model.*;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +55,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     protected Button poiUpButton;
     protected Button poiDownButton;
 
+    protected TextView availablePoints;
+
     protected String selectedPOIinList = "";
     protected int positionOfPOIinList = 0;
     protected int nextPosition = 0;
@@ -53,6 +64,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     Location myLocation;
 
     private boolean isOrganization;
+    private Router currentRouter;
+    protected int accumulatedCost = 0;
 
     // This value has been copied from RouteRunnerBase. It should
     // represent the code for the location request.
@@ -68,12 +81,15 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
         checkIfUserIsAOrganization();
 
+        getCurrentRouter();
+
         registerMarkedPOIsListView();
         registerUpAndDownButtons();
         registerOrderedRouteSwitch();
 
         registerGoToIntroduceNewRouteDataButtonTransition();
     }
+
 
     private void initializeMapFragment() {
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -91,6 +107,63 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
             isOrganization = (boolean) bundle.get("organization");
         } catch (Exception e) {
             isOrganization = false;
+        }
+    }
+
+    private void setAvailablePoints() {
+        availablePoints = findViewById(R.id.availablePoints);
+
+        if (isOrganization) {
+            TextView availablePointsTitle = findViewById(R.id.availablePointsTitle);
+            availablePointsTitle.setText("");
+            availablePoints.setText("");
+        } else {
+            availablePoints.setText(String.valueOf(currentRouter.getPoints()));
+        }
+    }
+
+    private void getCurrentRouter() {
+        DatabaseReference currentRouterReference = FirebaseService.getCurrentRouterReference();
+        currentRouterReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                currentRouter = snapshot.getValue(Router.class);
+
+                setAvailablePoints();
+                setCosts();
+                setAccumulatedCostTextView(accumulatedCost);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("The db connection failed: " + error.getMessage());
+            }
+        });
+    }
+
+    private void setAccumulatedCostTextView(int accumulatedCost) {
+        TextView costs = findViewById(R.id.acumulatedCost);
+        costs.setText(String.valueOf(accumulatedCost));
+
+        if (!isOrganization && accumulatedCost > currentRouter.getPoints()) {
+            costs.setTextColor(Color.parseColor("#F5340B"));
+        } else {
+            costs.setTextColor(Color.parseColor("#048C94"));
+        }
+
+
+    }
+
+    private void setCosts() {
+        TextView userPOIcost = findViewById(R.id.newPOIcost);
+        String cost;
+
+        if (isOrganization) {
+            cost = String.valueOf(getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost_in_euros));
+            userPOIcost.setText(cost + "€");
+        } else {
+            cost = String.valueOf(getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost_in_points));
+            userPOIcost.setText(cost + " puntos");
         }
     }
 
@@ -300,7 +373,10 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
         selectedPointsOfInterest.remove(poi);
 
+        updateAccumulatedCost(poi.wasCreatedByUser(), false);
+
         updateMarkedPOIsListView();
+
     }
 
     private void selectPointOfInterest(@NotNull Marker marker, boolean createdByUser) {
@@ -315,6 +391,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
                 createdByUser);
 
         selectedPointsOfInterest.add(selectedPoi);
+
+        updateAccumulatedCost(createdByUser, true);
 
         updateMarkedPOIsListView();
     }
@@ -342,6 +420,33 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
             }
         });
     }
+
+    private void updateAccumulatedCost(boolean createdByUser, boolean addPoint) {
+        if (addPoint) {
+            if (createdByUser) {
+                accumulatedCost += isOrganization ?
+                        getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost_in_euros) :
+                        getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost_in_points);
+            } else {
+                accumulatedCost += isOrganization ?
+                        getResources().getInteger(R.integer.google_maps_point_of_interest_cost_in_euros) :
+                        getResources().getInteger(R.integer.google_maps_point_of_interest_cost_in_points);
+            }
+        } else {
+            if (createdByUser) {
+                accumulatedCost -= isOrganization ?
+                        getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost_in_euros) :
+                        getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost_in_points);
+            } else {
+                accumulatedCost -= isOrganization ?
+                        getResources().getInteger(R.integer.google_maps_point_of_interest_cost_in_euros) :
+                        getResources().getInteger(R.integer.google_maps_point_of_interest_cost_in_points);
+            }
+        }
+
+        setAccumulatedCostTextView(accumulatedCost);
+    }
+
 
     private boolean markerWasCreated(String name) {
         for (String createdMarkerName : createdMarkers) {
