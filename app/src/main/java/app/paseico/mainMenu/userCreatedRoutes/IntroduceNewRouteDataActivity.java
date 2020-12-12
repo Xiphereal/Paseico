@@ -141,7 +141,7 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
     private void showRouteCreationSummaryDialog() {
         routeCost = calculateRouteCost();
 
-        String dialogMessage = getResources().getString(R.string.route_creation_summary_message, routeCost);
+        String dialogMessage = getResources().getString(R.string.route_creation_summary_message, routeCost, (currentRouter.getPoints() - routeCost));
         AlertDialog.Builder builder = setUpBuilder(dialogMessage);
 
         builder.setOnDismissListener(dialog -> {

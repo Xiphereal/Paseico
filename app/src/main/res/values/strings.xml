@@ -93,7 +93,8 @@
     <string name="route_creation_not_enough_points_message">"No tienes los puntos suficientes para crear la ruta."
     </string>
 
-    <string name="route_creation_summary_message">"El coste de la ruta en creación es de: %1$d puntos"</string>
+    <string name="route_creation_summary_message">"El coste de la ruta en creación es de: %1$d puntos. \n
+        Tras crear esta ruta tendrás %2$d puntos en tu cuenta."</string>
     <string name="route_name_hint">Nombre de la ruta</string>
 
     <!-- Messages displayed to the user. -->
