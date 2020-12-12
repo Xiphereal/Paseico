@@ -64,8 +64,10 @@ public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerVie
     private String organizationKey = "";
 
     private List<String> orgRoutesNames = new ArrayList<>();
-    private List<String> orgRoutesEstimatedTime = new ArrayList<>();
-    private List<String> orgRoutesLength = new ArrayList<>();
+    private List<String> orgRoutesEstimatedHours = new ArrayList<>();
+    private List<String> orgRoutesEstimatedMinutes = new ArrayList<>();
+    private List<String> orgRoutesKm = new ArrayList<>();
+    private List<String> orgRoutesMeters = new ArrayList<>();
     private List<String> orgRoutesRewardPoints = new ArrayList<>();
     private List<String> orgRoutesAreOrdered = new ArrayList<>();
     private List<String> orgNames = new ArrayList<>();
@@ -180,8 +182,17 @@ public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerVie
 
                                         organizationRoutes.add(route);
                                         orgRoutesNames.add(route.getName());
-                                        orgRoutesEstimatedTime.add(Double.toString(route.getEstimatedTime()));
-                                        orgRoutesLength.add(Double.toString(route.getLength()));
+
+                                        int hours = (int) (route.getEstimatedTime()/60);
+                                        int minutes = (int) (route.getEstimatedTime() - (hours*60));
+                                        orgRoutesEstimatedHours.add(String.valueOf(hours));
+                                        orgRoutesEstimatedMinutes.add(String.valueOf(minutes));
+
+                                        int km = (int) (route.getLength()/1000);
+                                        int meters = (int) (route.getLength()) - km*1000;
+                                        orgRoutesKm.add(String.valueOf(km));
+                                        orgRoutesMeters.add(String.valueOf(meters));
+
                                         orgRoutesRewardPoints.add(Integer.toString(route.getRewardPoints()));
                                         orgRoutesAreOrdered.add(Integer.toString(route.isOrdered()));
                                         orgNames.add(organizationName);
@@ -195,7 +206,7 @@ public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerVie
                                         LinearLayoutManager horizontalLayoutManager
                                                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
                                         recyclerView.setLayoutManager(horizontalLayoutManager);
-                                        recyclerViewAdapter = new MyRecyclerViewAdapter(getContext(), orgRoutesNames, orgRoutesEstimatedTime, orgRoutesLength,
+                                        recyclerViewAdapter = new MyRecyclerViewAdapter(getContext(), orgRoutesNames, orgRoutesEstimatedHours, orgRoutesEstimatedMinutes, orgRoutesKm, orgRoutesMeters,
                                                 orgRoutesRewardPoints, orgRoutesIcons, orgRoutesAreOrdered, orgNames);
                                         recyclerViewAdapter.setClickListener(new MyRecyclerViewAdapter.ItemClickListener() {
                                             @Override
