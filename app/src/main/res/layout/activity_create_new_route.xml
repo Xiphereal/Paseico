@@ -70,6 +70,16 @@
                         android:textColor="@color/colorPrimaryDark"
                         android:background="@drawable/custom_button2"
                 />
+                <TextView
+                        android:text="TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/MediumTextView"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorAccent"
+                        android:id="@+id/newPOIcost"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"/>
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
@@ -108,7 +118,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="135pt"
-            android:layout_marginTop="15pt"
+            android:layout_marginTop="35pt"
             android:id="@+id/textView12"/>
 
     <TextView
@@ -119,7 +129,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="135pt"
-            android:layout_marginTop="5pt"
+            android:layout_marginTop="25pt"
             android:id="@+id/availablePoints"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

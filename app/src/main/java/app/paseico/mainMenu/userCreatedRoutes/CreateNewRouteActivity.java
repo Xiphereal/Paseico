@@ -125,6 +125,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
                 currentRouter = snapshot.getValue(Router.class);
 
                 setAvailablePoints();
+                setCosts();
             }
 
             @Override
@@ -132,6 +133,19 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
                 System.out.println("The db connection failed: " + error.getMessage());
             }
         });
+    }
+
+    private void setCosts() {
+        TextView userPOIcost = findViewById(R.id.newPOIcost);
+        String cost;
+
+        if (isOrganization) {
+            cost = String.valueOf(getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost_in_euros));
+            userPOIcost.setText(cost + "€");
+        } else {
+            cost = String.valueOf(getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost_in_points));
+            userPOIcost.setText(cost + " puntos");
+        }
     }
 
     private void registerMarkedPOIsListView() {
