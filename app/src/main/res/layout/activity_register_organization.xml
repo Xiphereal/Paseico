@@ -17,7 +17,7 @@
         android:ems="10"
         android:hint="@string/organizationName"
         android:inputType="textPersonName"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -32,7 +32,7 @@
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextOrganiName" />
@@ -47,7 +47,7 @@
         android:ems="10"
         android:hint="@string/passwordRepeat"
         android:inputType="textPassword"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextOrganiPass" />
@@ -63,7 +63,7 @@
         android:ems="10"
         android:hint="@string/nif"
         android:inputType="textPersonName"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextOrganiPassConf" />
@@ -78,7 +78,7 @@
         android:ems="10"
         android:hint="Correo electrónico"
         android:inputType="textPersonName"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextOrganiNif" />

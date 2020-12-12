@@ -7,6 +7,18 @@
     tools:context=".MainMenuOrganizationActivity"
     android:background="@color/background">
 
+    <TextView
+        android:id="@+id/textViewRouteFinished"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:text="¡Bienvenido!"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
             android:id="@+id/buttonCreateRouteOrg"
             style="@style/LargeButtonText"
@@ -14,7 +26,7 @@
             android:backgroundTint="@color/colorPrimary"
             android:layout_width="230dp"
             android:layout_height="50dp"
-            android:layout_marginBottom="200dp"
+            android:layout_marginBottom="120dp"
             android:text="@string/crear_ruta_organizacion"
             app:layout_constraintBottom_toTopOf="@+id/LogOutOrg"
             app:layout_constraintEnd_toEndOf="parent"
@@ -46,7 +58,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
+                android:background="@drawable/custom_button"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -65,4 +77,17 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationView"
+        android:layout_width="330dp"
+        android:layout_height="250dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/buttonOrganiDiscounts"
+        android:layout_marginBottom="70dp"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="anim_company.json"
+        app:lottie_loop="true" />
 </androidx.constraintlayout.widget.ConstraintLayout>
