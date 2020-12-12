@@ -2,6 +2,7 @@ package app.paseico.mainMenu.userCreatedRoutes;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -63,6 +64,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     private boolean isOrganization;
     private Router currentRouter;
+    protected int accumulatedCost = 0;
 
     // This value has been copied from RouteRunnerBase. It should
     // represent the code for the location request.
@@ -126,6 +128,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
                 setAvailablePoints();
                 setCosts();
+                setAccumulatedCostTextView(accumulatedCost);
             }
 
             @Override
@@ -133,6 +136,19 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
                 System.out.println("The db connection failed: " + error.getMessage());
             }
         });
+    }
+
+    private void setAccumulatedCostTextView(int accumulatedCost) {
+        TextView costs = findViewById(R.id.acumulatedCost);
+        costs.setText(String.valueOf(accumulatedCost));
+
+        if (!isOrganization && accumulatedCost > currentRouter.getPoints()) {
+            costs.setTextColor(Color.parseColor("#F5340B"));
+        } else {
+            costs.setTextColor(Color.parseColor("#048C94"));
+        }
+
+
     }
 
     private void setCosts() {
@@ -354,7 +370,10 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
         selectedPointsOfInterest.remove(poi);
 
+        updateAccumulatedCost(poi.wasCreatedByUser(), false);
+
         updateMarkedPOIsListView();
+
     }
 
     private void selectPointOfInterest(@NotNull Marker marker, boolean createdByUser) {
@@ -369,6 +388,8 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
                 createdByUser);
 
         selectedPointsOfInterest.add(selectedPoi);
+
+        updateAccumulatedCost(createdByUser, true);
 
         updateMarkedPOIsListView();
     }
@@ -396,6 +417,33 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
             }
         });
     }
+
+    private void updateAccumulatedCost(boolean createdByUser, boolean addPoint) {
+        if (addPoint) {
+            if (createdByUser) {
+                accumulatedCost += isOrganization ?
+                        getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost_in_euros) :
+                        getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost_in_points);
+            } else {
+                accumulatedCost += isOrganization ?
+                        getResources().getInteger(R.integer.google_maps_point_of_interest_cost_in_euros) :
+                        getResources().getInteger(R.integer.google_maps_point_of_interest_cost_in_points);
+            }
+        } else {
+            if (createdByUser) {
+                accumulatedCost -= isOrganization ?
+                        getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost_in_euros) :
+                        getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost_in_points);
+            } else {
+                accumulatedCost -= isOrganization ?
+                        getResources().getInteger(R.integer.google_maps_point_of_interest_cost_in_euros) :
+                        getResources().getInteger(R.integer.google_maps_point_of_interest_cost_in_points);
+            }
+        }
+
+        setAccumulatedCostTextView(accumulatedCost);
+    }
+
 
     private boolean markerWasCreated(String name) {
         for (String createdMarkerName : createdMarkers) {
