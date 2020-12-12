@@ -89,10 +89,8 @@ public class RouteFinishedActivity extends AppCompatActivity {
         goToMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(RouteFinishedActivity.this, RouteInformationActivity.class);
-                intent.putExtra("route",route);
-                startActivity(intent);
                 finish();
+                return;
             }
         });
     }
