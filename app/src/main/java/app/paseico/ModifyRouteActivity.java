@@ -440,11 +440,15 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
     }
 
     private void tryFinalizeRouteCreation() {
-        if (currentRouter.getHasFreeRouteCreation()) {
-            currentRouter.setHasFreeRouteCreation(false);
-            showConfirmationDialog();
-        } else {
-            showRouteCreationSummaryDialog();
+        if (pointsOfInterest.size()>=2) {
+            if (currentRouter.getHasFreeRouteCreation()) {
+                currentRouter.setHasFreeRouteCreation(false);
+                showConfirmationDialog();
+            } else {
+                showRouteCreationSummaryDialog();
+            }
+        }else{
+            Toast.makeText(ModifyRouteActivity.this, "Ruta debe tener 2 POIs mínimo", Toast.LENGTH_SHORT).show();
         }
     }
 
