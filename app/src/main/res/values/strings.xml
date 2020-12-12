@@ -87,6 +87,7 @@
     <string name="route_search_result_fragment_label">Resultado busqueda</string>
 
     <string name="route_creation_finalize_title">"Finalizar creación de ruta"</string>
+    <string name="route_modification_finalize_title">"Finalizar modificación de ruta"</string>
 
     <string name="route_creation_confirmation_message">"La nueva ruta ha sido guardada satisfactoriamente."</string>
     <string name="route_creation_not_enough_points_message">"No tienes los puntos suficientes para crear la ruta."
@@ -109,6 +110,7 @@
 
     <string name="crear_ruta_organizacion">Crear Ruta Organización</string>
     <string name="finalize_route_creation_toolbar_title">Finalizar creación de ruta</string>
+
     <string name="new_point_of_interest_name_text_input_hint">Nombre del nuevo Punto de Interés</string>
     <string name="router">Rutero</string>
     <string name="organization">Organización</string>
@@ -129,6 +131,8 @@
     <string name="cancel_coupon">Cancelar</string>
     <string name="title_new_coupon">CREAR NUEVO CUPÓN</string>
     <string name="log_out_organization">Cerrar sesión</string>
+
+    <string name="route_creation_empty_name">Por favor, introduce un nombre válido</string>
     <string name="title_activity_selected_poi">Map</string>
     <string name="puntos_map_TextView">PUNTOS</string>
     <string-array name="route_category">

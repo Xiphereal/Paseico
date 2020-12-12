@@ -1,13 +1,18 @@
 package app.paseico.mainMenu.userCreatedRoutes;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.R;
 import app.paseico.data.PointOfInterest;
+import app.paseico.utils.LocationPermissionRequester;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -30,6 +35,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     protected final List<String> markedPOIs = new ArrayList<>();
 
     protected final List<String> createdMarkers = new ArrayList<>();
+    protected final List<String> createdMarkersByUser = new ArrayList<>();
 
     protected Marker userNewCustomPoiInCreation;
 
@@ -46,7 +52,13 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     protected int positionOfPOIinList = 0;
     protected int nextPosition = 0;
 
+    Location myLocation;
+
     private boolean isOrganization;
+
+    // This value has been copied from RouteRunnerBase. It should
+    // represent the code for the location request.
+    private static final int LOCATION_REQUEST_CODE = 23;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,12 +185,16 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     }
 
     private void goToIntroduceNewRouteDataActivity() {
-        Intent goToIntroduceNewRouteDataIntent = new Intent(getApplicationContext(), IntroduceNewRouteDataActivity.class);
+        if (selectedPointsOfInterest.size() > 1) {
+            Intent goToIntroduceNewRouteDataIntent = new Intent(getApplicationContext(), IntroduceNewRouteDataActivity.class);
 
-        goToIntroduceNewRouteDataIntent.putParcelableArrayListExtra("selectedPointsOfInterest",
-                (ArrayList<? extends Parcelable>) selectedPointsOfInterest);
-        goToIntroduceNewRouteDataIntent.putExtra("organization", isOrganization);
-        startActivity(goToIntroduceNewRouteDataIntent);
+            goToIntroduceNewRouteDataIntent.putParcelableArrayListExtra("selectedPointsOfInterest",
+                    (ArrayList<? extends Parcelable>) selectedPointsOfInterest);
+            goToIntroduceNewRouteDataIntent.putExtra("organization", isOrganization);
+            startActivity(goToIntroduceNewRouteDataIntent);
+        } else {
+            makeAlert("Por favor, seleccione dos o más puntos.");
+        }
     }
 
     @Override
@@ -187,16 +203,50 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
         createNewRouteMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.create_route_style));
 
-        // TODO: Move camera to real user position.
-        LatLng fakeUserPosition = new LatLng(39.475, -0.375);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(fakeUserPosition));
+        LocationPermissionRequester.requestLocationPermission(this);
 
-        googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+        tryMoveCameraToUserPosition();
 
         registerOnMapClick();
         registerOnMarkerClickListener();
         registerOnGoogleMapsPoiClickListener();
         registerOnMapLongClick();
+    }
+
+    /**
+     * Try to move the camera to the user current position
+     * if the coarse location permission are already granted.
+     */
+    private void tryMoveCameraToUserPosition() {
+        if (LocationPermissionRequester.isCoarseLocationPermissionAlreadyGranted(this)) {
+            moveCameraToUserPosition();
+        }
+    }
+
+    private void moveCameraToUserPosition() {
+        // Enables all the UI related to the user location and bearing.
+        createNewRouteMap.setMyLocationEnabled(true);
+
+        // The use of a deprecated method is due to convenience and ease of use.
+        // Also, a similar approach has been taken in other parts of this codebase.
+        createNewRouteMap.setOnMyLocationChangeListener(location -> {
+            if (location == null) {
+                return;
+            }
+
+            LatLng userCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
+            createNewRouteMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userCurrentLocation, 15));
+        });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == LOCATION_REQUEST_CODE) {
+            if (LocationPermissionRequester.didUserGrantCoarseLocationPermission(grantResults)) {
+                moveCameraToUserPosition();
+            }
+        }
     }
 
     private void registerOnMapClick() {
@@ -363,14 +413,43 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
         createNewPointOfInterestButton.setOnClickListener(button -> {
             TextInputEditText textInputEditText = findViewById(R.id.user_created_marker_name_text_input);
 
-            userNewCustomPoiInCreation.setTitle(textInputEditText.getText().toString());
-            textInputEditText.getText().clear();
+            if (compareWithPOIs(textInputEditText.getText().toString())) {
 
-            selectPointOfInterest(userNewCustomPoiInCreation, true);
+                userNewCustomPoiInCreation.setTitle(textInputEditText.getText().toString());
+                textInputEditText.getText().clear();
 
-            userNewCustomPoiInCreation = null;
+                selectPointOfInterest(userNewCustomPoiInCreation, true);
+                createdMarkers.add(userNewCustomPoiInCreation.getTitle());
+                createdMarkersByUser.add(userNewCustomPoiInCreation.getTitle());
 
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                userNewCustomPoiInCreation = null;
+
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            }
         });
+    }
+
+    private boolean compareWithPOIs(String routeName) {
+        if (createdMarkersByUser.contains(routeName)) {
+            makeAlert("Nombre ya existente. Escriba un nombre distinto.");
+            return false;
+        }
+
+        if (routeName.trim().isEmpty()) {
+            makeAlert("Por favor, escriba un nombre para el punto.");
+            return false;
+        }
+        return true;
+    }
+
+    private void makeAlert(String s) {
+        new AlertDialog.Builder(this).setTitle("Error al crear punto")
+                .setMessage(s)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Log.d("MsgCancelled", "cancelado");
+                    }
+                }).show();
     }
 }
