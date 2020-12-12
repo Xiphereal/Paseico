@@ -74,7 +74,7 @@
                     android:id="@+id/textView9"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="26dp"
+                    android:paddingLeft="30dp"
                     android:text="@string/estimated_time"
                     android:textColor="@color/colorPrimaryDark"
                     android:textStyle="bold" />
@@ -120,7 +120,7 @@
                     android:id="@+id/textView11"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="26dp"
+                    android:paddingLeft="30dp"
                     android:text="@string/length"
                     android:textColor="@color/colorPrimaryDark"
                     android:textStyle="bold" />
@@ -163,14 +163,15 @@
                 android:layout_height="match_parent">
                 <TextView
                     android:id="@+id/textView14"
-                    android:layout_width="90dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
                     android:text="Puntos:"
                     android:textColor="@color/colorPrimaryDark"
                     android:textStyle="bold"
-                    android:paddingLeft="26dp"/>
+                    android:paddingLeft="30dp"/>
+
                 <TextView
                     android:id="@+id/routeReward"
                     android:layout_width="wrap_content"
@@ -193,7 +194,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/ordered_route"
-                    android:paddingLeft="26dp"
+                    android:paddingLeft="30dp"
                     android:textStyle="bold"
                     />
 
