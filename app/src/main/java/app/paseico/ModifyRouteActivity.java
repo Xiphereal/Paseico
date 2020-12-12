@@ -471,16 +471,6 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
                         showNotEnoughPointsDialog();
                     }
                 });
-        /*builder.setOnDismissListener(dialog -> {
-            int currentUserPoints = currentRouter.getPoints();
-
-            if (currentUserPoints >= routeCost) {
-                currentRouter.setPoints(currentUserPoints - routeCost);
-                showConfirmationDialog();
-            } else {
-                showNotEnoughPointsDialog();
-            }
-        });*/
 
         builder.setNegativeButton(android.R.string.no, (dialog, which) -> {
             // If the user chooses no, nothing is done.
