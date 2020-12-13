@@ -1,11 +1,8 @@
 package app.paseico.service;
 
 import android.util.Log;
-import androidx.annotation.NonNull;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;

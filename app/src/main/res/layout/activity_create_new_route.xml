@@ -18,6 +18,7 @@
             android:textColor="@color/white"
             style="@style/LargeButtonText"/>
 
+
     <fragment
             android:id="@+id/new_route_map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -72,6 +73,16 @@
                         android:layout_marginTop="14dp"
                         app:layout_constraintTop_toBottomOf="@+id/user_created_marker_name_text_input"
                 />
+                <TextView
+                        android:text="COSTE"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/MediumTextView"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorAccent"
+                        android:id="@+id/newPOIcost"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"/>
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
@@ -104,5 +115,46 @@
         android:clickable="false"
         android:text="@string/poiDown_button"
         android:visibility="invisible" />
+
+    <TextView
+            android:text="@string/puntos_map_TextView"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="135pt"
+            android:layout_marginTop="35pt"
+            android:id="@+id/availablePointsTitle"/>
+
+    <TextView
+            android:text="@string/puntos_map_TextView"
+            style="@style/MediumTextView"
+            android:textStyle="bold"
+            android:textColor="@color/colorAccent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="135pt"
+            android:layout_marginTop="25pt"
+            android:id="@+id/availablePoints"/>
+
+    <TextView
+            android:text="COSTE"
+            style="@style/MediumTextView"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:layout_gravity="bottom|right"
+            android:id="@+id/acumulatedCost"/>
+    <TextView
+            android:text="COSTE"
+            android:textStyle="bold"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:layout_gravity="bottom|right"
+            android:id="@+id/titleAcumulated"/>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
