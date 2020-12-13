@@ -138,11 +138,16 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
         String dialogMessage = "El coste de la ruta en creación es de: " + routeCost + " €";
         AlertDialog.Builder builder = setUpBuilder(dialogMessage);
 
-        builder.setOnDismissListener(dialog -> {
+        builder.setPositiveButton(android.R.string.yes,
+                (dialog, which) -> {
             String dialogNewMessage = "El importe ha sido tramitado con éxito. Recibirá un correo con la factura correspondiente";
             AlertDialog.Builder newBuilder = setUpBuilder(dialogNewMessage);
             newBuilder.setOnDismissListener(newDialog -> showConfirmationDialog());
             showDialog(newBuilder);
+                });
+
+        builder.setNegativeButton(android.R.string.no, (dialog, which) -> {
+            // If the user chooses no, nothing is done.
         });
 
         showDialog(builder);
