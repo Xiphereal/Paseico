@@ -455,7 +455,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
     private void showRouteCreationSummaryDialog() {
         int routeCost = calculateRouteCost();
 
-        String dialogMessage = getResources().getString(R.string.route_creation_summary_message, routeCost);
+        String dialogMessage = getResources().getString(R.string.route_creation_summary_message, routeCost, (currentRouter.getPoints() - routeCost));
 
         AlertDialog.Builder builder = setUpBuilder(dialogMessage);
         builder.setCancelable(true);
