@@ -18,6 +18,7 @@
             android:textColor="@color/white"
             style="@style/LargeButtonText"/>
 
+
     <fragment
             android:id="@+id/new_route_map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -26,15 +27,18 @@
             tools:context=".MainMapActivity"/>
 
     <ListView
-            android:id="@+id/marked_pois_list_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5pt"
-            android:layout_marginLeft="5pt"
-            android:layout_marginTop="40pt"
-            android:layout_marginEnd="130pt"
-            android:layout_marginRight="130pt"
-            android:background="#FFFFFF"/>
+        android:id="@+id/marked_pois_list_view"
+        android:layout_width="127dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5pt"
+        android:layout_marginLeft="5pt"
+        android:layout_marginTop="20pt"
+        android:layout_marginEnd="130pt"
+        android:layout_marginRight="130pt"
+        android:background="#FFFFFF"
+        android:choiceMode="singleChoice"
+        android:listSelector="@android:color/holo_blue_light"
+        android:visibility="invisible" />
 
     <androidx.core.widget.NestedScrollView
             android:id="@+id/user_created_marker_bottom_sheet"
@@ -61,15 +65,96 @@
                         android:id="@+id/user_created_marker_button"
                         android:text="@string/create_new_point_of_interest_button"
                         android:layout_width="300dp"
-                        android:layout_height="42dp"
+                        android:layout_height="50dp"
                         android:layout_gravity="center"
                         style="@style/LargeButtonText"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:background="@drawable/custom_button2"
+                        android:textColor="@color/white"
+                        app:backgroundTint="@color/colorPrimary"
+                        android:layout_marginTop="14dp"
+                        app:layout_constraintTop_toBottomOf="@+id/user_created_marker_name_text_input"
                 />
+                <TextView
+                        android:text="COSTE"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/MediumTextView"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorAccent"
+                        android:id="@+id/newPOIcost"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"/>
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <Switch
+        android:id="@+id/showPOIs_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5pt"
+        android:layout_marginTop="5pt"
+        android:text="@string/seeSelectedPOIs_switch" />
+
+    <Button
+        android:id="@+id/poiUp_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="65pt"
+        android:layout_marginTop="5pt"
+        android:clickable="false"
+        android:text="@string/poiUp_button"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/poiDown_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="65pt"
+        android:layout_marginTop="35pt"
+        android:clickable="false"
+        android:text="@string/poiDown_button"
+        android:visibility="invisible" />
+
+    <TextView
+            android:text="@string/puntos_map_TextView"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="135pt"
+            android:layout_marginTop="35pt"
+            android:id="@+id/availablePointsTitle"/>
+
+    <TextView
+            android:text="@string/puntos_map_TextView"
+            style="@style/MediumTextView"
+            android:textStyle="bold"
+            android:textColor="@color/colorAccent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="135pt"
+            android:layout_marginTop="25pt"
+            android:id="@+id/availablePoints"/>
+
+    <TextView
+            android:text="COSTE"
+            style="@style/MediumTextView"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:layout_gravity="bottom|right"
+            android:id="@+id/acumulatedCost"/>
+    <TextView
+            android:text="COSTE"
+            android:textStyle="bold"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:layout_gravity="bottom|right"
+            android:id="@+id/titleAcumulated"/>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

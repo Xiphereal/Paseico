@@ -36,7 +36,11 @@ public class marketplaceFragment extends Fragment {
     private DatabaseReference myActualUserRef;
     private Button btsDiscounts;
     private TextView tv7, tvm1000, tvm2000, tvm6000, tvme3, tvme5, tvme12, tvBoost, tvB2w, tvB5w, tvBPrice2000, tvBPrice6000, pointsView;
-    private ImageView btnBuyBoost2w, btnBuyBoost5w, btnBuy1000pts, btnBuy2000pts, btnBuy6000pts, btnFreeAd;
+    private ImageView btnBuyBoost2w;
+    private ImageView btnBuyBoost5w;
+    private ImageView btnBuy1000pts;
+    private ImageView btnBuy2000pts;
+    private ImageView btnBuy6000pts;
     private ProgressBar pbar;
     private DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
@@ -44,8 +48,6 @@ public class marketplaceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_marketplace, container, false);
-        btnFreeAd = root.findViewById(R.id.imageViewFreeAd);
-        btnFreeAd.setVisibility(View.GONE);
         pbar = root.findViewById(R.id.progressBarMarketPlace);
         btsDiscounts = root.findViewById(R.id.buttonMarketplaceDescuentos);
         btsDiscounts.setVisibility(View.GONE);
@@ -204,7 +206,6 @@ public class marketplaceFragment extends Fragment {
     }
 
     private void elementsVisible() {
-        btnFreeAd.setVisibility(View.VISIBLE);
         pbar.setVisibility(View.GONE);
         btsDiscounts.setVisibility(View.VISIBLE);
         tv7.setVisibility(View.VISIBLE);

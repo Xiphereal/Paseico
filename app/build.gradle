@@ -29,6 +29,13 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    sourceSets {
+        main {
+            assets {
+                srcDirs 'src\\main\\assets'
+            }
+        }
+    }
 
     testOptions {
         animationsDisabled = true
@@ -80,6 +87,12 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.8.0'
 
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+
+    implementation 'com.koalap:geofirestore-android:1.2.2'
+
+    def lottieVersion = "3.4.0"
+    implementation "com.airbnb.android:lottie:$lottieVersion"
+
 
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0'

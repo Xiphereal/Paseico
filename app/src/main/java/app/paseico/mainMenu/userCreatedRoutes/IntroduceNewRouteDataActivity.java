@@ -3,10 +3,13 @@ package app.paseico.mainMenu.userCreatedRoutes;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
+import android.widget.Switch;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import app.paseico.MainMenuActivity;
+import app.paseico.MainMenuOrganizationActivity;
 import app.paseico.R;
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
@@ -19,6 +22,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -26,34 +31,62 @@ import java.util.List;
 
 public class IntroduceNewRouteDataActivity extends AppCompatActivity {
 
+    private ExtendedFloatingActionButton extendedFloatingActionButton;
+
     private Router currentRouter;
-    private Route newRoute;
     private int routeCost;
+    private int isOrdered = 0;
 
     private List<PointOfInterest> selectedPointsOfInterest = new ArrayList<>();
 
     final double ROUTE_TOTAL_COST_MULTIPLIER_TO_GET_REWARD_POINTS = 0.5;
 
+    private boolean isOrganization;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_introduce_new_route_data);
+
+        registerOrderedRouteSwitch();
 
         selectedPointsOfInterest = getIntent().getParcelableArrayListExtra("selectedPointsOfInterest");
 
+        checkIfUserIsAOrganization();
+
         getCurrentUserFromDatabaseAsync();
+
+
+    }
+
+    private void checkIfUserIsAOrganization() {
+        Bundle bundle = getIntent().getExtras();
+
+        isOrganization = false;
+
+        try {
+            isOrganization = (boolean) bundle.get("organization");
+        } catch (Exception e) {
+            isOrganization = false;
+        }
     }
 
     /**
      * Gets the current User from the database asynchronously.
      */
     private void getCurrentUserFromDatabaseAsync() {
-        DatabaseReference currentUserReference = FirebaseService.getCurrentUserReference();
+        DatabaseReference currentUserReference;
+
+        currentUserReference = isOrganization ?
+                FirebaseService.getCurrentOrganizationReference() :
+                FirebaseService.getCurrentRouterReference();
 
         currentUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                currentRouter = snapshot.getValue(Router.class);
+                if (!isOrganization) {
+                    currentRouter = snapshot.getValue(Router.class);
+                }
 
                 // Registering this callback here ensures that the button
                 // action is only performed when the User is ready.
@@ -68,7 +101,7 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
     }
 
     private void registerTryFinalizeNewRouteCreationListener() {
-        ExtendedFloatingActionButton extendedFloatingActionButton = findViewById(R.id.finalize_route_creation_button);
+        extendedFloatingActionButton = findViewById(R.id.finalize_route_creation_button);
 
         extendedFloatingActionButton.setOnClickListener(view -> tryFinalizeRouteCreation());
     }
@@ -79,32 +112,57 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
      * previous state.
      */
     private void tryFinalizeRouteCreation() {
-        if (currentRouter.getHasFreeRouteCreation()) {
-            currentRouter.setHasFreeRouteCreation(false);
-            showConfirmationDialog();
-        } else {
-            showRouteCreationSummaryDialog();
+        TextInputEditText textInputEditText = findViewById(R.id.route_name_textInputEditText);
+        if(textInputEditText.getText().toString().isEmpty()) {
+            String dialogMessage = getResources().getString(R.string.route_creation_empty_name);
+            AlertDialog.Builder builder = setUpBuilder(dialogMessage);
+            showDialog(builder);
+            return;
         }
+        checkExistingRouteName();
+    }
+
+    private void showRouteCreationByOrganizationSummaryDialog() {
+        routeCost = calculateRouteCost();
+
+        String dialogMessage = "El coste de la ruta en creación es de: " + routeCost + " €";
+        AlertDialog.Builder builder = setUpBuilder(dialogMessage);
+
+        builder.setPositiveButton(android.R.string.yes,
+                (dialog, which) -> {
+            String dialogNewMessage = "El importe ha sido tramitado con éxito. Recibirá un correo con la factura correspondiente";
+            AlertDialog.Builder newBuilder = setUpBuilder(dialogNewMessage);
+            newBuilder.setOnDismissListener(newDialog -> showConfirmationDialog());
+            showDialog(newBuilder);
+                });
+
+        builder.setNegativeButton(android.R.string.no, (dialog, which) -> {
+            // If the user chooses no, nothing is done.
+        });
+
+        showDialog(builder);
     }
 
     private void showRouteCreationSummaryDialog() {
         routeCost = calculateRouteCost();
 
-        String dialogMessage = getResources().getString(R.string.route_creation_summary_message, routeCost);
-
+        String dialogMessage = getResources().getString(R.string.route_creation_summary_message, routeCost, (currentRouter.getPoints() - routeCost));
         AlertDialog.Builder builder = setUpBuilder(dialogMessage);
 
-        builder.setOnDismissListener(dialog -> {
-            int currentUserPoints = currentRouter.getPoints();
+        builder.setPositiveButton(android.R.string.yes,
+                (dialog, which) -> {
+                    int currentUserPoints = currentRouter.getPoints();
 
-            if (currentUserPoints >= routeCost) {
-                currentRouter.setPoints(currentUserPoints - routeCost);
-                showConfirmationDialog();
-            } else {
-                showNotEnoughPointsDialog();
-            }
+                    if (currentUserPoints >= routeCost) {
+                        currentRouter.setPoints(currentUserPoints - routeCost);
+                        showConfirmationDialog();
+                    } else {
+                        showNotEnoughPointsDialog();
+                    }
+                });
+        builder.setNegativeButton(android.R.string.no, (dialog, which) -> {
+            // If the user chooses no, nothing is done.
         });
-
         showDialog(builder);
     }
 
@@ -113,9 +171,13 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
 
         for (PointOfInterest poi : selectedPointsOfInterest) {
             if (poi.wasCreatedByUser()) {
-                totalRouteCost += getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost);
+                totalRouteCost += isOrganization ?
+                        getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost_in_euros) :
+                        getResources().getInteger(R.integer.user_newly_created_point_of_interest_cost_in_points);
             } else {
-                totalRouteCost += getResources().getInteger(R.integer.google_maps_point_of_interest_cost);
+                totalRouteCost += isOrganization ?
+                        getResources().getInteger(R.integer.google_maps_point_of_interest_cost_in_euros) :
+                        getResources().getInteger(R.integer.google_maps_point_of_interest_cost_in_points);
             }
         }
 
@@ -129,6 +191,11 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
         // In case the user close the dialog either by tapping outside of the dialog or by pressing any button,
         // it's considered dismissed.
         builder.setOnDismissListener(dialog -> finalizeRouteCreation());
+        builder.setPositiveButton("OK", (dialog, which) -> {
+            // This remains empty because when the dialog is closed by tapping on 'OK' or outside it,
+            // it's considered to be dismissed in both cases, thus the call to the finalizer method must
+            // be done only on the dismiss listener.
+        });
 
         showDialog(builder);
     }
@@ -159,9 +226,12 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
 
     private void finalizeRouteCreation() {
         createNewRoute();
-        persistCurrentUserModifications();
-
-        goToMainMenuActivity();
+        if(isOrganization){
+            goToMainMenuOrganizationActivity();
+        } else {
+            persistCurrentUserModifications();
+            goToMainMenuActivity();
+        }
     }
 
     private void createNewRoute() {
@@ -171,6 +241,7 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
         String routeName = textInputEditText.getText().toString();
         String category = categorySpinner.getSelectedItem().toString();
         String authorId = FirebaseService.getCurrentUser().getUid();
+
 
         // Get the estimated duration and distance for the newly created Route via a API request.
         DistanceMatrixRequest distanceMatrixRequest = calculateRouteMetrics();
@@ -183,13 +254,14 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
                 distanceMatrixRequest.getRouteEstimatedDuration() :
                 0;
 
-        newRoute = new Route(routeName,
+        Route newRoute = new Route(routeName,
                 category,
                 estimatedDistance,
                 estimatedDuration,
                 calculateRouteRewardPoints(),
                 selectedPointsOfInterest,
-                authorId);
+                authorId,
+                isOrdered);
 
         FirebaseService.saveRoute(newRoute);
 
@@ -218,6 +290,19 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
         return distanceMatrixRequest;
     }
 
+    private void registerOrderedRouteSwitch() {
+        Switch orderedRouteSwitch = (Switch) findViewById(R.id.ordered_route_switch);
+        orderedRouteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    isOrdered = 1;
+                } else {
+                    isOrdered = 0;
+                }
+            }
+        });
+    }
+
     private int calculateRouteRewardPoints() {
         double routeRewardPoints = routeCost * ROUTE_TOTAL_COST_MULTIPLIER_TO_GET_REWARD_POINTS;
 
@@ -226,7 +311,7 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
 
     // TODO: Refactor and generalize this into a User instance method.
     private void persistCurrentUserModifications() {
-        DatabaseReference currentUserReference = FirebaseService.getCurrentUserReference();
+        DatabaseReference currentUserReference = FirebaseService.getCurrentRouterReference();
 
         currentUserReference.child("hasFreeRouteCreation").setValue(currentRouter.getHasFreeRouteCreation());
         currentUserReference.child("points").setValue(currentRouter.getPoints());
@@ -234,7 +319,22 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
 
     private void goToMainMenuActivity() {
         Intent goToMainMenuIntent = new Intent(getApplicationContext(), MainMenuActivity.class);
+
+        // Finishes all the opened activities.
+        goToMainMenuIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
         startActivity(goToMainMenuIntent);
+        finish();
+    }
+
+    private void goToMainMenuOrganizationActivity() {
+        Intent goToMainMenuOrganizationIntent = new Intent(getApplicationContext(), MainMenuOrganizationActivity.class);
+        goToMainMenuOrganizationIntent.putExtra("organization", isOrganization);
+
+        // Finishes all the opened activities.
+        goToMainMenuOrganizationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        startActivity(goToMainMenuOrganizationIntent);
         finish();
     }
 
@@ -252,5 +352,37 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
     private void showDialog(AlertDialog.Builder builder) {
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void checkExistingRouteName(){
+
+        TextInputEditText textInputEditText = findViewById(R.id.route_name_textInputEditText);
+        String routeName = textInputEditText.getText().toString();
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+        CollectionReference routesReference = database.collection("route");
+
+        routesReference.whereEqualTo("name",routeName).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                if(task.getResult().size()<=0){
+                    if (isOrganization) {
+                        showRouteCreationByOrganizationSummaryDialog();
+                    } else {
+                        if (currentRouter.getHasFreeRouteCreation()) {
+                            currentRouter.setHasFreeRouteCreation(false);
+                            showConfirmationDialog();
+                        } else {
+                            showRouteCreationSummaryDialog();
+                        }
+                    }
+                }else{
+                    String dialogMessage = "Ya existe una ruta con ese nombre, escoja otro";
+                    AlertDialog.Builder builder = setUpBuilder(dialogMessage);
+                    showDialog(builder);
+
+
+                }
+            }
+        });
+
     }
 }

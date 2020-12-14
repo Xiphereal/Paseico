@@ -24,31 +24,62 @@
             android:layout_height="match_parent"
             tools:context=".MainMapActivity"/>
 
+    <Switch
+        android:id="@+id/showPOIs_switch_modify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5pt"
+        android:layout_marginTop="35pt"
+        android:text="@string/seeSelectedPOIs_switch" />
+
+    <Button
+        android:id="@+id/poiUp_button_modify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="65pt"
+        android:layout_marginTop="35pt"
+        android:clickable="false"
+        android:text="@string/poiUp_button"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/poiDown_button_modify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="65pt"
+        android:layout_marginTop="60pt"
+        android:clickable="false"
+        android:text="@string/poiDown_button"
+        android:visibility="invisible" />
+
     <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/route_name_textField"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="20dp"
-            android:hint="Nombre de la ruta" android:gravity="center">
+        android:id="@+id/route_name_textField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:hint="Nombre de la ruta">
 
         <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/route_name_textInputEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-        />
+            android:id="@+id/route_name_textInputEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <ListView
-            android:id="@+id/marked_pois_list_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5pt"
-            android:layout_marginLeft="5pt"
-            android:layout_marginTop="40pt"
-            android:layout_marginEnd="130pt"
-            android:layout_marginRight="130pt"
-            android:background="#FFFFFF"/>
+        android:id="@+id/marked_pois_list_view"
+        android:layout_width="129dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5pt"
+        android:layout_marginLeft="5pt"
+        android:layout_marginTop="50pt"
+        android:layout_marginEnd="130pt"
+        android:layout_marginRight="130pt"
+        android:background="#FFFFFF"
+        android:choiceMode="singleChoice"
+        android:listSelector="@android:color/holo_blue_light"
+        android:visibility="invisible" />
 
     <androidx.core.widget.NestedScrollView
             android:id="@+id/user_created_marker_bottom_sheet"
@@ -75,12 +106,13 @@
                         android:id="@+id/user_created_marker_button"
                         android:text="@string/create_new_point_of_interest_button"
                         android:layout_width="300dp"
-                        android:layout_height="42dp"
+                        android:layout_height="50dp"
                         android:layout_gravity="center"
                         style="@style/LargeButtonText"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:background="@drawable/custom_button2"
-                />
+                        android:textColor="@color/white"
+                        app:backgroundTint="@color/colorPrimary"
+                        android:layout_marginTop="14dp"
+                        app:layout_constraintTop_toBottomOf="@+id/user_created_marker_name_text_input" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>

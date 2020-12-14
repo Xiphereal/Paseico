@@ -5,34 +5,25 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
-
-import app.paseico.FollowersActivity;
+import app.paseico.mainMenu.searchUsers.FollowersActivity;
 import app.paseico.R;
 import app.paseico.data.Router;
 import app.paseico.data.User;
 import app.paseico.login.LogInActivity;
-//import app.paseico.mainMenu.searchUsers.ProfileFragmentDirections;
-import app.paseico.mainMenu.profile.ProfileFragmentDirections;
 import app.paseico.mainMenu.searchUsers.UserAdapter;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import app.paseico.service.FirebaseService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -42,7 +33,7 @@ import java.util.List;
 
 public class ProfileFragment extends Fragment {
     ImageView image_profile;
-    TextView followers, textView_followers, following, textView_following, fullname, username, userPointsText, numberOfUserRoutes;
+    TextView followers, textView_followers, following, textView_following, fullnameLabel, usernameLabel, userPointsLabel, numberOfUserRoutes;
     FirebaseUser firebaseUser;
     User actualUser;
     Button buttonLogOut;
@@ -54,41 +45,36 @@ public class ProfileFragment extends Fragment {
     private List<User> mUsers;
     private int numberOfRoutes = 0;
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstaanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-
-
-
-
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+
+        FirebaseDatabase.getInstance().getReference("users")
+                .child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 actualUser = dataSnapshot.getValue(User.class);
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
-        image_profile = view.findViewById(R.id.image_profile);
-        followers = view.findViewById(R.id.followers);
-        following = view.findViewById(R.id.following);
-        username = view.findViewById(R.id.username);
-        fullname = view.findViewById(R.id.fullname);
-        buttonLogOut = view.findViewById(R.id.buttonLogOut);
-        textView_followers = view.findViewById(R.id.textView_Followers);
-        textView_following = view.findViewById(R.id.textView_Following);
-        userPointsText = view.findViewById(R.id.userPointsProfileText);
-        numberOfUserRoutes = view.findViewById(R.id.numberOfRoutesText);
-        userRoutes = view.findViewById(R.id.my_routes);
 
+        image_profile = view.findViewById(R.id.image_profile);
+        followers = view.findViewById(R.id.textView_followersNumber);
+        following = view.findViewById(R.id.textView_followingNumber);
+        usernameLabel = view.findViewById(R.id.username);
+        fullnameLabel = view.findViewById(R.id.fullname);
+        buttonLogOut = view.findViewById(R.id.buttonLogOut);
+        textView_followers = view.findViewById(R.id.textView_FollowersText);
+        textView_following = view.findViewById(R.id.textView_FollowingText);
+        userPointsLabel = view.findViewById(R.id.userPointsProfileText);
+        numberOfUserRoutes = view.findViewById(R.id.numberOfRoutesText);
+        userRoutes = view.findViewById(R.id.btn_my_routes);
 
         FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
@@ -98,7 +84,7 @@ public class ProfileFragment extends Fragment {
                 //mUsers.clear();
                 usernameFirebase = user.getUsername();
                 //userAdapter.notifyDataSetChanged();
-                userInfo();
+                setUserInfoOnGetCurrentUserReady();
                 getFollowers();
                 //if (profileid.equals(usernameFirebase)) { //HERE
                 buttonLogOut.setText("Cerrar sesión");
@@ -140,9 +126,8 @@ public class ProfileFragment extends Fragment {
             startActivity(intent);
         });
 
-
         userRoutes.setOnClickListener(v -> {
-           NavDirections action = ProfileFragmentDirections.actionProfileToUserRoutesFragment();
+            NavDirections action = ProfileFragmentDirections.actionProfileToUserRoutesFragment();
             NavHostFragment.findNavController(ProfileFragment.this)
                     .navigate(action);
         });
@@ -150,22 +135,24 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    private void userInfo() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid());
-        reference.addValueEventListener(new ValueEventListener() {
+    private void setUserInfoOnGetCurrentUserReady() {
+        DatabaseReference currentUser = FirebaseService.getCurrentRouterReference();
+
+        currentUser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                 if (getContext() == null) {
                     return;
                 }
                 Router user = snapshot.getValue(Router.class);
                 //Glide.with(getContext()).load("@drawable/defaultProfilePic").into(image_profile);
-                username.setText(user.getUsername());
-                fullname.setText(user.getName());
-                userPointsText.setText(Integer.toString(user.getPoints()));
 
-                getNumberOfRouter(firebaseUser.getUid());
+                usernameLabel.setText(user.getUsername());
+                fullnameLabel.setText(user.getName());
+                userPointsLabel.setText(Integer.toString(user.getPoints()));
 
+                setNumberOfAuthoredRoutes(firebaseUser.getUid());
             }
 
             @Override
@@ -174,25 +161,22 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void getNumberOfRouter(String userUid) {
+    private void setNumberOfAuthoredRoutes(String userUid) {
         numberOfRoutes = 0;
         FirebaseFirestore database = FirebaseFirestore.getInstance();
         CollectionReference routesReference = database.collection("route");
         routesReference.whereEqualTo("authorId", userUid)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                numberOfRoutes++;
-                            }
-                            numberOfUserRoutes.setText(Integer.toString(numberOfRoutes));
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot ignored : task.getResult()) {
+                            numberOfRoutes++;
                         }
+                        numberOfUserRoutes.setText(Integer.toString(numberOfRoutes));
                     }
                 });
-        System.out.println(userUid +  " userUID");
-        System.out.println(numberOfRoutes +  " jasdhfjkashdkjfhasdjhfkajhfkajdhkas");
+        System.out.println(userUid + " userUID");
+        System.out.println(numberOfRoutes + " jasdhfjkashdkjfhasdjhfkajhfkajdhkas");
     }
 
     private void getFollowers() {
@@ -222,7 +206,7 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    //ATTENTION: This is from the previous version idk if is needed on this one
+    //TODO: This is from the previous version idk if is needed on this one
     public void checkBoost() {  //Check if the boost its already gone
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser fbusr = firebaseAuth.getCurrentUser();

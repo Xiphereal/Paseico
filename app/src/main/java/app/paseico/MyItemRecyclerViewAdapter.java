@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import app.paseico.dummy.DummyContent.DummyItem;
+import app.paseico.mainMenu.profile.dummy.DummyContent.DummyItem;
 
 import java.util.List;
 

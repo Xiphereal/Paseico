@@ -40,8 +40,8 @@ public class OpeningActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     try {
-                                        ProgressBar pBar = findViewById(R.id.progressBar);
-                                        pBar.setVisibility(View.GONE);
+                                        //ProgressBar pBar = findViewById(R.id.progressBar);
+                                        //pBar.setVisibility(View.GONE);
                                         if (!isUserSigned()) {
                                             Intent intent = new Intent(OpeningActivity.this, LogInActivity.class);
                                             startActivity(intent);

@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import app.paseico.FollowersActivity;
 import app.paseico.R;
 import app.paseico.data.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,7 +22,7 @@ import java.util.List;
 
 public class NotMyProfileFragment extends Fragment {
     ImageView image_profile;
-    TextView followers, textView_followers, textView_following, following, fullname, username;
+    TextView textView_followersNumber, textView_followersText, textView_followingText, textView_followingNumber, textView_fullname, textView_username;
     FirebaseUser firebaseUser;
     String profileid;
     User actualUser;
@@ -89,28 +88,30 @@ public class NotMyProfileFragment extends Fragment {
         });
 
         image_profile = view.findViewById(R.id.image_profile);
-        followers = view.findViewById(R.id.followers);
-        following = view.findViewById(R.id.following);
-        username = view.findViewById(R.id.username);
-        fullname = view.findViewById(R.id.fullname);
+        textView_followersNumber = view.findViewById(R.id.textView_followersNumber);
+        textView_followingNumber = view.findViewById(R.id.textView_followingNumber);
+        textView_username = view.findViewById(R.id.username);
+        textView_fullname = view.findViewById(R.id.fullname);
         buttonLogOut = view.findViewById(R.id.buttonLogOut);
-        textView_followers = view.findViewById(R.id.textView_Followers);
-        textView_following = view.findViewById(R.id.textView_Following);
+        textView_followersText = view.findViewById(R.id.textView_FollowersText);
+        textView_followingText = view.findViewById(R.id.textView_FollowingText);
 
 
         buttonLogOut.setOnClickListener(v -> {
             String btn = buttonLogOut.getText().toString();
-            if (btn.equals("Follow")) {
+            if (btn.equals("Seguir")) {
                 FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername())
                         .child("following").child(profileid).setValue(true);
                 FirebaseDatabase.getInstance().getReference().child("Follow").child(profileid)
                         .child("followers").child(actualUser.getUsername()).setValue(true);
+                buttonLogOut.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
-            } else if (btn.equals("Following")) {
+            } else if (btn.equals("Siguiendo")) {
                 FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername())
                         .child("following").child(profileid).removeValue();
                 FirebaseDatabase.getInstance().getReference().child("Follow").child(profileid)
                         .child("followers").child(actualUser.getUsername()).removeValue();
+                buttonLogOut.setBackground(getResources().getDrawable(R.drawable.gradient));
             }
         });
 
@@ -128,8 +129,8 @@ public class NotMyProfileFragment extends Fragment {
                 }
                 User user = snapshot.getValue(User.class);
                 foreignUser = user;
-                username.setText(user.getUsername());
-                fullname.setText(user.getName());
+                textView_username.setText(user.getUsername());
+                textView_fullname.setText(user.getName());
                 activateFollowListeners();
             }
 
@@ -145,9 +146,11 @@ public class NotMyProfileFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.child(profileid).exists()) {
-                    buttonLogOut.setText("Following");
+                    buttonLogOut.setText("Siguiendo");
+                    buttonLogOut.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 } else {
-                    buttonLogOut.setText("Follow");
+                    buttonLogOut.setText("Seguir");
+                    buttonLogOut.setBackground(getResources().getDrawable(R.drawable.gradient));
                 }
             }
 
@@ -163,7 +166,7 @@ public class NotMyProfileFragment extends Fragment {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                followers.setText("" + snapshot.getChildrenCount());
+                textView_followersNumber.setText("" + snapshot.getChildrenCount());
             }
 
             @Override
@@ -176,7 +179,7 @@ public class NotMyProfileFragment extends Fragment {
         reference1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                following.setText("" + snapshot.getChildrenCount());
+                textView_followingNumber.setText("" + snapshot.getChildrenCount());
             }
 
             @Override
@@ -187,31 +190,31 @@ public class NotMyProfileFragment extends Fragment {
     }
 
     public void activateFollowListeners() {
-        followers.setOnClickListener(view -> {
+        textView_followersNumber.setOnClickListener(view -> {
             Intent intent = new Intent(getContext(), FollowersActivity.class);
             intent.putExtra("id", foreignUser.getUsername());
             intent.putExtra("title", "followers");
             startActivity(intent);
         });
 
-        textView_followers.setOnClickListener(view -> {
+        textView_followersText.setOnClickListener(view -> {
             Intent intent = new Intent(getContext(), FollowersActivity.class);
-            intent.putExtra("id", actualUser.getUsername());
+            intent.putExtra("id", foreignUser.getUsername());
             intent.putExtra("title", "followers");
             startActivity(intent);
         });
 
-        following.setOnClickListener(view -> {
+        textView_followingNumber.setOnClickListener(view -> {
             Intent intent = new Intent(getContext(), FollowersActivity.class);
             intent.putExtra("id", foreignUser.getUsername());
             intent.putExtra("title", "following");
             startActivity(intent);
         });
 
-        textView_following.setOnClickListener(view -> {
+        textView_followingText.setOnClickListener(view -> {
             Intent intent = new Intent(getContext(), FollowersActivity.class);
-            intent.putExtra("id", actualUser.getUsername());
-            intent.putExtra("title", "followers");
+            intent.putExtra("id", foreignUser.getUsername());
+            intent.putExtra("title", "following");
             startActivity(intent);
         });
     }
