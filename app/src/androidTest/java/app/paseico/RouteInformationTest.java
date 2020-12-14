@@ -95,7 +95,11 @@ public class RouteInformationTest {
         onView(withId(R.id.textView_routeInfo_length)).check(matches(withText(length)));
         onView(withId(R.id.textView_routeInfo_estimatedTime)).check(matches(withText(estimatedTime)));
         onView(withId(R.id.textView_routeInfo_rewardPoints)).check(matches(withText(String.valueOf(expectedRewardPoints))));
-        onView(withId(R.id.textView_routeInfo_numberOfPOI)).check(matches(withText(String.valueOf(expectedPointsOfInterest.size()))));
+
+        // TODO: Change the String.valueOf() for something like listView.size(), so that check is translated from:
+        //  "The number of expected POIs relates to the int value of this String" to
+        //  "The number of expected POIs relates to the number of elements of this listView".
+        onView(withId(R.id.listView_routeInfo_poiList)).check(matches(withText(String.valueOf(expectedPointsOfInterest.size()))));
 
         Thread.sleep(2000);
     }
