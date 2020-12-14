@@ -49,7 +49,7 @@ public class LoginTest {
     }
 
     @Test
-    public void loginNotSuccessful() {
+    public void loginNotSuccessful() throws InterruptedException {
         onView(withId(R.id.editTextEmail))
                 .perform(typeText("miguelmoreno99@gmail.com"), closeSoftKeyboard());
         onView(withId(R.id.editTextPassword))
@@ -57,7 +57,11 @@ public class LoginTest {
         onView(withId(R.id.buttonLogIn))
                 .perform(click());
 
-        onView(withText("Correo electronico o contraseña incorrectos!")).inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+        // Workaround for waiting to the login to be processed.
+        Thread.sleep(2000);
+
+        // Check if the login screen is still present, with the "PASEICO" text being displayed.
+        onView(withText("PASEICO")).check(matches(isDisplayed()));
     }
 
     @Test
