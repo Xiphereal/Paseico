@@ -37,6 +37,7 @@ public class CreateNewRouteRouterTest {
                 .child("7YuiqRHra8OaosZc9vpbfGXdy9C2").child("points");
     }
 
+    // TODO: Update to take into account the new Route data form and new messages.
     @Test
     public void createRouteSuccessfullyTest() throws InterruptedException {
         myActualUserRef.setValue(200);
@@ -55,6 +56,7 @@ public class CreateNewRouteRouterTest {
         onView(withText("La nueva ruta ha sido guardada satisfactoriamente.")).check(matches(isDisplayed()));
     }
 
+    // TODO: Update to take into account the new Route data form and new messages.
     @Test
     public void createRouteNotSuccessfullyTest() throws InterruptedException {
         myActualUserRef.setValue(20);
