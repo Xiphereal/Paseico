@@ -56,7 +56,8 @@ public class RouteInformationTest {
                 expectedEstimatedTime,
                 expectedRewardPoints,
                 expectedPointsOfInterest,
-                null);
+                null,
+                0);
 
         FirebaseService.saveRoute(expectedRoute);
     }
@@ -113,7 +114,7 @@ public class RouteInformationTest {
     }
 
     @Test
-    public void canInitiateRouteRunner() throws InterruptedException{
+    public void canInitiateRouteRunner() throws InterruptedException {
         navigateToRouteInformation();
 
         onView(withId(R.id.btn_routeInfo_startRoute)).perform(click());
