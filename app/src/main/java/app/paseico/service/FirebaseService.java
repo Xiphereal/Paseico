@@ -36,7 +36,7 @@ public class FirebaseService {
     public static void saveRoute(Route route) {
         firebaseFirestore.collection("route").add(route).addOnSuccessListener(documentReference -> {
             String createdRouteID = documentReference.getId();
-            updateRoute(createdRouteID, "id", createdRouteID);
+            updateDatabaseRoute(createdRouteID, "id", createdRouteID);
             setGeoFireRoute(createdRouteID, route);
 
             route.setId(createdRouteID);

@@ -1,7 +1,9 @@
 package app.paseico;
 
-
 import android.Manifest;
+import android.view.View;
+import android.widget.ListView;
+import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.rule.ActivityTestRule;
@@ -10,6 +12,9 @@ import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import app.paseico.service.FirebaseService;
 import com.google.firebase.auth.FirebaseAuth;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.*;
 
 import java.util.ArrayList;
@@ -96,12 +101,7 @@ public class RouteInformationTest {
         onView(withId(R.id.textView_routeInfo_estimatedTime)).check(matches(withText(estimatedTime)));
         onView(withId(R.id.textView_routeInfo_rewardPoints)).check(matches(withText(String.valueOf(expectedRewardPoints))));
 
-        // TODO: Change the String.valueOf() for something like listView.size(), so that check is translated from:
-        //  "The number of expected POIs relates to the int value of this String" to
-        //  "The number of expected POIs relates to the number of elements of this listView".
-        onView(withId(R.id.listView_routeInfo_poiList)).check(matches(withText(String.valueOf(expectedPointsOfInterest.size()))));
-
-        Thread.sleep(2000);
+        onView(withId(R.id.listView_routeInfo_poiList)).check(ViewAssertions.matches(Matchers.withListSize(expectedPointsOfInterest.size())));
     }
 
     private void navigateToRouteInformation() throws InterruptedException {
@@ -113,7 +113,7 @@ public class RouteInformationTest {
 
         onView(withId(R.id.button_route_searcher)).perform(click());
 
-        Thread.sleep(2000);
+        Thread.sleep(3000);
         onData(anything()).atPosition(0).perform(click());
     }
 
@@ -135,5 +135,21 @@ public class RouteInformationTest {
 
     private static void deleteExpectedRouteFromDatabase() {
         FirebaseService.deleteRoute(expectedRoute);
+    }
+}
+
+class Matchers {
+    public static Matcher<View> withListSize(final int size) {
+        return new TypeSafeMatcher<View>() {
+            @Override
+            public boolean matchesSafely(final View view) {
+                return ((ListView) view).getCount() == size;
+            }
+
+            @Override
+            public void describeTo(final Description description) {
+                description.appendText("ListView should have " + size + " items");
+            }
+        };
     }
 }
