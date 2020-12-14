@@ -16,6 +16,7 @@ package app.paseico;
         import android.location.Location;
         import android.os.Bundle;
         import android.text.Html;
+        import android.util.Log;
         import android.view.View;
         import android.view.ViewGroup;
         import android.widget.AdapterView;
@@ -85,7 +86,6 @@ public class RouteRunnerNotOrderedActivity extends RouteRunnerBase  {
 
         for (int i = 0; i < locations.size(); i++) {
             isCompleted.add(false);
-            poisLeft++;
         }
 
 
