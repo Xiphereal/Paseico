@@ -455,7 +455,7 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
     private void showRouteCreationSummaryDialog() {
         int routeCost = calculateRouteCost();
 
-        String dialogMessage = getResources().getString(R.string.route_creation_summary_message, routeCost);
+        String dialogMessage = getResources().getString(R.string.route_creation_summary_message, routeCost, (currentRouter.getPoints() - routeCost));
 
         AlertDialog.Builder builder = setUpBuilder(dialogMessage);
         builder.setCancelable(true);
@@ -471,16 +471,6 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
                         showNotEnoughPointsDialog();
                     }
                 });
-        /*builder.setOnDismissListener(dialog -> {
-            int currentUserPoints = currentRouter.getPoints();
-
-            if (currentUserPoints >= routeCost) {
-                currentRouter.setPoints(currentUserPoints - routeCost);
-                showConfirmationDialog();
-            } else {
-                showNotEnoughPointsDialog();
-            }
-        });*/
 
         builder.setNegativeButton(android.R.string.no, (dialog, which) -> {
             // If the user chooses no, nothing is done.

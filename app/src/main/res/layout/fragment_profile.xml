@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/geometrics_profile"
+    android:background="@color/background"
     tools:context=".mainMenu.profile.ProfileFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -62,11 +62,11 @@
                     android:src="@drawable/defaultprofile" />
 
                 <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="102dp"
-                        android:orientation="vertical"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="4dp">
+                    android:layout_width="match_parent"
+                    android:layout_height="130dp"
+                    android:orientation="vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="4dp">
 
                     <LinearLayout
                             android:layout_width="match_parent"
@@ -87,12 +87,6 @@
                                     android:textColor="@color/colorPrimaryDark"
                                     android:textSize="18sp"
                                     android:textStyle="bold"/>
-
-                            <!--For the future
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="routes" /> -->
 
                         </LinearLayout>
 
@@ -116,7 +110,7 @@
                                 android:id="@+id/textView_FollowersText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="followers" />
+                                android:text="Seguidores" />
 
                         </LinearLayout>
 
@@ -134,25 +128,27 @@
                                 android:textAlignment="center"
                                 android:textColor="@color/colorPrimaryDark"
                                 android:textSize="26dp"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"/>
 
                             <TextView
                                 android:id="@+id/textView_FollowingText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="following" />
+                                android:text="Seguidos"
+                                />
 
                         </LinearLayout>
                     </LinearLayout>
 
                     <Button
                             android:id="@+id/buttonLogOut"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            app:backgroundTint="@color/colorPrimary"
+                            android:background="@color/colorPrimary"
                             style="@style/LargeButtonText"
-                            android:textColor="@color/white"/>
+                            android:layout_width="175dp"
+                            android:layout_height="50dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginLeft="33dp"
+                            android:textColor="@color/white" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -165,13 +161,15 @@
                 android:padding="12dp">
 
                 <TextView
-                    android:id="@+id/fullname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
+                    android:id="@+id/fullname"
+                    android:paddingStart="15dp"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textSize="26dp"
-                    android:textStyle="bold" />
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -194,10 +192,46 @@
     </ScrollView>
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <View
+            android:layout_width="350dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="310dp"
+            android:background="@color/white" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <View
+            android:layout_width="350dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="430dp"
+            android:background="@color/white" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <View
+            android:layout_width="350dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="552dp"
+            android:background="@color/white" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="400dp"
-        android:layout_height="300dp"
+        android:layout_height="370dp"
         android:layout_marginLeft="40dp"
-        android:layout_marginTop="250dp"
+        android:layout_marginTop="320dp"
         android:layout_marginRight="40dp"
         android:orientation="vertical">
 
@@ -220,7 +254,8 @@
             android:gravity="center"
             android:maxLines="1"
             android:textColor="#048C94"
-            android:textSize="23dp" />
+            android:textSize="23dp"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/RUTASProfileText"
@@ -242,24 +277,47 @@
             android:gravity="center"
             android:maxLines="1"
             android:textColor="#048C94"
-            android:textSize="23dp" />
+            android:textSize="23dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/MISRUTASProfileText"
+            style="@style/LargeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="Mis rutas"
+            android:textColor="#A6ACAF"
+            android:textSize="22dp" />
 
         <ImageButton
             android:id="@+id/btn_my_routes"
             style="@style/LargeButtonText"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="40dp"
             android:layout_weight="1"
             android:gravity="center"
             android:layout_gravity="center_vertical|center_horizontal"
-            android:src="@drawable/myroutes"
             android:textAlignment="center"
             android:textColor="@color/white"
-            app:backgroundTint="@color/colorPrimary" />
-
-
+            app:backgroundTint="@color/white" />
     </LinearLayout>
 
-
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationView"
+        android:layout_width="100dp"
+        android:layout_height="70dp"
+        app:lottie_fileName="anim_myroute.json"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="585dp"
+        android:layout_marginStart="150dp"
+        android:layout_marginEnd="150dp"/>
 </RelativeLayout>

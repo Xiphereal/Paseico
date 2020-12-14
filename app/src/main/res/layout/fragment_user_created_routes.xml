@@ -20,7 +20,9 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/organization_routes_recyclerview"
-        tools:text="Rutas cercanas" />
+        tools:text="Rutas cercanas"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"/>
 
     <ListView
         android:id="@+id/near_routes_list_view"
@@ -32,7 +34,11 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView13"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintVertical_bias="1.0"
+        android:divider = "@color/background"
+        android:dividerHeight = "16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp">
 
     </ListView>
 
@@ -72,7 +78,8 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingTop="10dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

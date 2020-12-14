@@ -99,17 +99,19 @@ public class NotMyProfileFragment extends Fragment {
 
         buttonLogOut.setOnClickListener(v -> {
             String btn = buttonLogOut.getText().toString();
-            if (btn.equals("Follow")) {
+            if (btn.equals("Seguir")) {
                 FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername())
                         .child("following").child(profileid).setValue(true);
                 FirebaseDatabase.getInstance().getReference().child("Follow").child(profileid)
                         .child("followers").child(actualUser.getUsername()).setValue(true);
+                buttonLogOut.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
-            } else if (btn.equals("Following")) {
+            } else if (btn.equals("Siguiendo")) {
                 FirebaseDatabase.getInstance().getReference().child("Follow").child(actualUser.getUsername())
                         .child("following").child(profileid).removeValue();
                 FirebaseDatabase.getInstance().getReference().child("Follow").child(profileid)
                         .child("followers").child(actualUser.getUsername()).removeValue();
+                buttonLogOut.setBackground(getResources().getDrawable(R.drawable.gradient));
             }
         });
 
@@ -144,9 +146,11 @@ public class NotMyProfileFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.child(profileid).exists()) {
-                    buttonLogOut.setText("Following");
+                    buttonLogOut.setText("Siguiendo");
+                    buttonLogOut.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 } else {
-                    buttonLogOut.setText("Follow");
+                    buttonLogOut.setText("Seguir");
+                    buttonLogOut.setBackground(getResources().getDrawable(R.drawable.gradient));
                 }
             }
 

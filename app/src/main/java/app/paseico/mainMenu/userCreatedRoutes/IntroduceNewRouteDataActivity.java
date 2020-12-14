@@ -128,11 +128,16 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
         String dialogMessage = "El coste de la ruta en creación es de: " + routeCost + " €";
         AlertDialog.Builder builder = setUpBuilder(dialogMessage);
 
-        builder.setOnDismissListener(dialog -> {
+        builder.setPositiveButton(android.R.string.yes,
+                (dialog, which) -> {
             String dialogNewMessage = "El importe ha sido tramitado con éxito. Recibirá un correo con la factura correspondiente";
             AlertDialog.Builder newBuilder = setUpBuilder(dialogNewMessage);
             newBuilder.setOnDismissListener(newDialog -> showConfirmationDialog());
             showDialog(newBuilder);
+                });
+
+        builder.setNegativeButton(android.R.string.no, (dialog, which) -> {
+            // If the user chooses no, nothing is done.
         });
 
         showDialog(builder);
@@ -144,15 +149,19 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
         String dialogMessage = getResources().getString(R.string.route_creation_summary_message, routeCost, (currentRouter.getPoints() - routeCost));
         AlertDialog.Builder builder = setUpBuilder(dialogMessage);
 
-        builder.setOnDismissListener(dialog -> {
-            int currentUserPoints = currentRouter.getPoints();
+        builder.setPositiveButton(android.R.string.yes,
+                (dialog, which) -> {
+                    int currentUserPoints = currentRouter.getPoints();
 
-            if (currentUserPoints >= routeCost) {
-                currentRouter.setPoints(currentUserPoints - routeCost);
-                showConfirmationDialog();
-            } else {
-                showNotEnoughPointsDialog();
-            }
+                    if (currentUserPoints >= routeCost) {
+                        currentRouter.setPoints(currentUserPoints - routeCost);
+                        showConfirmationDialog();
+                    } else {
+                        showNotEnoughPointsDialog();
+                    }
+                });
+        builder.setNegativeButton(android.R.string.no, (dialog, which) -> {
+            // If the user chooses no, nothing is done.
         });
         showDialog(builder);
     }
@@ -182,6 +191,11 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
         // In case the user close the dialog either by tapping outside of the dialog or by pressing any button,
         // it's considered dismissed.
         builder.setOnDismissListener(dialog -> finalizeRouteCreation());
+        builder.setPositiveButton("OK", (dialog, which) -> {
+            // This remains empty because when the dialog is closed by tapping on 'OK' or outside it,
+            // it's considered to be dismissed in both cases, thus the call to the finalizer method must
+            // be done only on the dismiss listener.
+        });
 
         showDialog(builder);
     }

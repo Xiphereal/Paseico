@@ -2,12 +2,12 @@
 package app.paseico;
 
         import androidx.annotation.NonNull;
+        import androidx.appcompat.app.AlertDialog;
         import androidx.core.app.ActivityCompat;
         import androidx.core.content.ContextCompat;
         import androidx.fragment.app.FragmentActivity;
 
         import android.Manifest;
-        import android.app.AlertDialog;
         import android.content.Context;
         import android.content.DialogInterface;
         import android.content.Intent;
@@ -291,6 +291,29 @@ public class RouteRunnerNotOrderedActivity extends RouteRunnerBase  {
 
                 return rowview;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setMessage("¿Seguro que quieres salir?");
+        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //if user pressed "yes", then he is allowed to exit from application
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //if user select "No", just cancel this dialog and continue with app
+                dialog.cancel();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 
