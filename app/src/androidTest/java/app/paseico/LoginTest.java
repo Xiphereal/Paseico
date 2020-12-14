@@ -1,26 +1,22 @@
 package app.paseico;
 
-
+import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
-
+import app.paseico.login.LogInActivity;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import app.paseico.login.LogInActivity;
-import app.paseico.login.RegisterActivity;
-
-import static androidx.test.InstrumentationRegistry.getTargetContext;
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.action.ViewActions.*;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.espresso.matcher.ViewMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 
@@ -31,8 +27,13 @@ public class LoginTest {
     public ActivityTestRule<LogInActivity> mActivityRule =
             new ActivityTestRule<>(LogInActivity.class);
 
+    @Before
+    public void beforeEach() {
+        Intents.init();
+    }
+
     @Test
-    public void loginSuccessful(){
+    public void loginSuccessful() throws InterruptedException {
         onView(withId(R.id.editTextEmail))
                 .perform(typeText("metralleta123@gmail.com"), closeSoftKeyboard());
         onView(withId(R.id.editTextPassword))
@@ -40,12 +41,15 @@ public class LoginTest {
         onView(withId(R.id.buttonLogIn))
                 .perform(click());
 
-        onView(withText("¡Bienvenido de nuevo!")).inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+        // Workaround for waiting to the login to be processed.
+        Thread.sleep(2000);
 
+        // Check if the previous intent is for going to the Main Menu Activity.
+        intended(hasComponent(MainMenuActivity.class.getName()));
     }
 
     @Test
-    public void loginNotSuccessful(){
+    public void loginNotSuccessful() {
         onView(withId(R.id.editTextEmail))
                 .perform(typeText("miguelmoreno99@gmail.com"), closeSoftKeyboard());
         onView(withId(R.id.editTextPassword))
@@ -54,11 +58,10 @@ public class LoginTest {
                 .perform(click());
 
         onView(withText("Correo electronico o contraseña incorrectos!")).inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
-
     }
 
     @Test
-    public void emptyLogIn(){
+    public void emptyLogIn() {
         onView(withId(R.id.editTextEmail))
                 .perform(typeText(""), closeSoftKeyboard());
         onView(withId(R.id.editTextPassword))
@@ -67,8 +70,11 @@ public class LoginTest {
                 .perform(click());
 
         onView(withText("Faltan campos por rellenar!")).inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
-
     }
 
+    @After
+    public void afterEach() {
+        Intents.release();
+    }
 }
 
