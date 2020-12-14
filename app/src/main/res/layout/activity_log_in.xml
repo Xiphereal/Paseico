@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".login.LogInActivity"
-    android:background="@drawable/geometrics_cut">
+    android:background="@drawable/geometrics_cut"
+    tools:context=".login.LogInActivity">
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
-        android:layout_width="258dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_width="283dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonLogIn" />
@@ -20,70 +20,121 @@
         android:id="@+id/textViewRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:text="No tienes una cuenta? \n      Regístrate aqui"
+        android:layout_marginBottom="220dp"
+        android:text="¿No tienes una cuenta?\nRegístrate aquí"
+        android:textAlignment="center"
         android:textColor="#2196F3"
-        android:textSize="20sp"
+        android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.511"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/buttonLogIn"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:background="@drawable/custom_button"
+        android:layout_width="280dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
         android:text="Iniciar Sesión"
+        android:textColor="#FFFFFF"
+        style="@style/LargeButtonText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
 
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="130dp"
+        android:fontFamily="@font/righteous"
+        android:gravity="center"
+        android:letterSpacing="0.25"
+        android:text="PASEICO"
+        android:textColor="#000000"
+        android:textSize="42sp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/editTextEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="250dp"
+        android:layout_width="280dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="230dp"
+        android:background="@drawable/custom_input_login"
+        android:drawableStart="@drawable/custom_email_icon"
+        android:drawablePadding="12dp"
         android:ems="10"
-        android:hint="Correo Electrónico"
+        android:hint="Correo electrónico"
+        android:textSize="18sp"
         android:inputType="textPersonName"
+        android:paddingStart="12dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editTextPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="280dp"
+        android:layout_height="45dp"
         android:layout_marginTop="20dp"
+        android:background="@drawable/custom_input_login"
+        android:drawableStart="@drawable/custom_lock_icon"
+        android:drawablePadding="12dp"
         android:ems="10"
         android:hint="Contraseña"
+        android:textSize="18sp"
         android:inputType="textPassword"
+        android:paddingStart="12dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmail"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="100dp"
+            android:background="@android:color/darker_gray" />
+
+    </LinearLayout>
 
     <Button
+        android:textColor="@android:color/darker_gray"
+        android:background="@drawable/custom_transparent_button"
         android:id="@+id/buttonLoginRouter"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="65dp"
         android:layout_weight="1"
-        android:text="@string/rutero"
+        android:text="@string/router"
         android:textStyle="bold"
+        style="@style/LargeButtonText"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <Button
+        android:textColor="@android:color/darker_gray"
         android:id="@+id/buttonLoginOrganization"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="65dp"
         android:layout_weight="1"
-        android:text="@string/organizaci_n"
+        android:background="@drawable/custom_transparent_button"
+        android:text="@string/organization"
         android:textStyle="bold"
+        style="@style/LargeButtonText"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/buttonLoginRouter"
         app:layout_constraintTop_toTopOf="parent" />
 

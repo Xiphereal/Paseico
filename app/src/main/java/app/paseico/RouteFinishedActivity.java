@@ -13,19 +13,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import app.paseico.data.PointOfInterest;
 import app.paseico.data.Route;
 import app.paseico.data.Router;
 import app.paseico.data.User;
-import app.paseico.login.OpeningActivity;
 
 public class RouteFinishedActivity extends AppCompatActivity {
 
@@ -82,7 +79,7 @@ public class RouteFinishedActivity extends AppCompatActivity {
         }
 
         listaPOISTV.setText(listado);
-        System.out.println(nombreRuta + " " + listado);
+        System.out.println(route.isOrdered());
 
 
 
@@ -92,10 +89,8 @@ public class RouteFinishedActivity extends AppCompatActivity {
         goToMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(RouteFinishedActivity.this, RouteInformationActivity.class);
-                intent.putExtra("route",route);
-                startActivity(intent);
                 finish();
+                return;
             }
         });
     }

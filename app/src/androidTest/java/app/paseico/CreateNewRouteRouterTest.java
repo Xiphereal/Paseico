@@ -1,42 +1,21 @@
 package app.paseico;
 
 
-import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.ActivityTestRule;
-
+import app.paseico.mainMenu.userCreatedRoutes.CreateNewRouteActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import org.hamcrest.core.AllOf;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import app.paseico.data.PointOfInterest;
-import app.paseico.data.Route;
-import app.paseico.data.Router;
-
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.longClick;
-import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.action.ViewActions.*;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
+import static androidx.test.espresso.matcher.ViewMatchers.*;
 
 @RunWith(AndroidJUnit4.class)
 public class CreateNewRouteRouterTest {
@@ -48,11 +27,11 @@ public class CreateNewRouteRouterTest {
             new ActivityScenarioRule<>(CreateNewRouteActivity.class);
 
     @Before
-    public void prepareUser(){
+    public void prepareUser() {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         String email = "avd@gmail.com";
         String password = "123456";
-        firebaseAuth.signInWithEmailAndPassword(email,password);
+        firebaseAuth.signInWithEmailAndPassword(email, password);
 
         myActualUserRef = FirebaseDatabase.getInstance().getReference("users")
                 .child("7YuiqRHra8OaosZc9vpbfGXdy9C2").child("points");
