@@ -4,6 +4,90 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainMenuOrganizationActivity">
+    tools:context=".MainMenuOrganizationActivity"
+    android:background="@color/background">
 
+    <TextView
+        android:id="@+id/textViewRouteFinished"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:text="¡Bienvenido!"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+            android:id="@+id/buttonCreateRouteOrg"
+            style="@style/LargeButtonText"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/colorPrimary"
+            android:layout_width="230dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="50dp"
+            android:text="@string/crear_ruta_organizacion"
+            app:layout_constraintBottom_toTopOf="@+id/LogOutOrg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+    />
+
+    <Button
+        android:id="@+id/LogOutOrg"
+        style="@style/LargeButtonText"
+        android:layout_width="230dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="162dp"
+        android:layout_marginEnd="162dp"
+        android:layout_marginBottom="80dp"
+        android:background="@drawable/custom_button"
+        android:text="@string/log_out_organization"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            tools:ignore="MissingConstraints">
+
+        <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@drawable/custom_button"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <Button
+        android:id="@+id/buttonOrganiDiscounts"
+        style="@style/LargeButtonText"
+        android:layout_width="220dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="50dp"
+        android:background="@color/colorPrimary"
+        android:text="Tus cupones"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/buttonCreateRouteOrg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationView"
+        android:layout_width="330dp"
+        android:layout_height="250dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/buttonOrganiDiscounts"
+        android:layout_marginBottom="70dp"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="anim_company.json"
+        app:lottie_loop="true" />
 </androidx.constraintlayout.widget.ConstraintLayout>

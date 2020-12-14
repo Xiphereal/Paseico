@@ -3,13 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:background="@color/background">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/image_profile"
-        android:src="@mipmap/ic_launcher"/>
+        android:src="@drawable/defaultprofile"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -22,28 +23,31 @@
         android:layout_marginLeft="5dp">
 
         <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
             android:id="@+id/username"
             android:text="username"
-            android:maxLines="1"
+            android:textSize="15sp"
             android:textStyle="bold"
-            android:textColor="@color/colorPrimaryDark"/>
+            android:textColor="@color/colorPrimaryDark"
+            android:maxLines="1" />
 
         <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
             android:id="@+id/fullname"
             android:text="Full Name"
+            android:textSize="15sp"
             android:maxLines="1"/>
     </LinearLayout>
 
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:backgroundTint="@color/colorAccent"
+        android:layout_height="35dp"
+        android:background="@drawable/custom_button3"
         android:id="@+id/btn_follow"
-        android:textColor="@color/colorPrimary"
+        style="@style/MediumButtonText"
+        android:textColor="#FFFFFF"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:visibility="gone"/>

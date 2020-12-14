@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="FollowersActivity">
+    tools:context="FollowersActivity"
+    android:background="@color/background">
     
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
@@ -19,7 +20,7 @@
         android:layout_below="@+id/toolbar"/>
 
     <FrameLayout
-        android:id="@+id/frameLayout"
+        android:id="@+id/followerActivity_frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

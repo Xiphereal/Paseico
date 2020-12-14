@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".mainMenu.userCreatedRoutes.IntroduceNewRouteDataActivity"
+        android:background="@color/background">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/introduce_new_route_data_toolbar"
+                android:background="@color/emphasizedBackground"
+                app:title="@string/finalize_route_creation_toolbar_title"
+                android:textAlignment="center" app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
+        />
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/route_name_textField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/route_name_hint"
+                android:gravity="center"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="20dp"
+                app:boxBackgroundColor="@color/emphasizedBackground"
+        >
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/route_name_textInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/category_without_colon"
+                    android:id="@+id/textView8"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginEnd="80dp"
+                    android:layout_marginStart="25dp"
+                    style="@style/LargeTextView"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="22dp"/>
+
+            <RelativeLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:background="@color/emphasizedBackground"
+                    android:layout_marginTop="15sp"
+            >
+                <Spinner
+                        android:id="@+id/introduce_new_route_data_route_category_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:entries="@array/route_creation_route_category"
+                        android:spinnerMode="dropdown" android:layout_alignParentTop="true"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginBottom="8dp"/>
+            </RelativeLayout>
+
+            <Switch
+                android:id="@+id/ordered_route_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30pt"
+                android:ellipsize="none"
+                android:text="@string/orderedRoute_switch"
+                style="@style/LargeTextView"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="22dp"  />
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/finalize_route_creation_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_gravity="bottom|center"
+            android:text="@string/finalize"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/colorAccent"
+            android:textAlignment="center" android:fontFamily="@font/righteous" android:textSize="16sp"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
