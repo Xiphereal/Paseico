@@ -1,60 +1,34 @@
-
 package app.paseico;
 
-        import androidx.annotation.NonNull;
-        import androidx.appcompat.app.AlertDialog;
-        import androidx.core.app.ActivityCompat;
-        import androidx.core.content.ContextCompat;
-        import androidx.fragment.app.FragmentActivity;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
+import android.location.Location;
+import android.os.Bundle;
+import android.text.Html;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.*;
+import androidx.appcompat.app.AlertDialog;
+import app.paseico.data.PointOfInterest;
+import app.paseico.utils.LocationPermissionRequester;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-        import android.Manifest;
-        import android.content.Context;
-        import android.content.DialogInterface;
-        import android.content.Intent;
-        import android.content.pm.PackageManager;
-        import android.graphics.Color;
-        import android.location.Location;
-        import android.os.Bundle;
-        import android.text.Html;
-        import android.util.Log;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.widget.AdapterView;
-        import android.widget.BaseAdapter;
-        import android.widget.ImageButton;
-        import android.widget.ListView;
-        import android.widget.TextView;
-        import android.widget.Toast;
+import java.util.ArrayList;
+import java.util.List;
 
-        import com.directions.route.AbstractRouting;
-        import com.directions.route.Route;
-        import com.directions.route.RouteException;
-        import com.directions.route.Routing;
-        import com.directions.route.RoutingListener;
-        import com.google.android.gms.common.ConnectionResult;
-        import com.google.android.gms.common.api.GoogleApiClient;
-        import com.google.android.gms.maps.CameraUpdate;
-        import com.google.android.gms.maps.CameraUpdateFactory;
-        import com.google.android.gms.maps.GoogleMap;
-        import com.google.android.gms.maps.OnMapReadyCallback;
-        import com.google.android.gms.maps.SupportMapFragment;
-        import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-        import com.google.android.gms.maps.model.LatLng;
-        import com.google.android.gms.maps.model.MarkerOptions;
-        import com.google.android.gms.maps.model.PolylineOptions;
-        import com.google.android.material.snackbar.Snackbar;
-
-        import java.util.ArrayList;
-        import java.util.List;
-
-        import app.paseico.data.PointOfInterest;
-
-public class RouteRunnerNotOrderedActivity extends RouteRunnerBase  {
+public class RouteRunnerNotOrderedActivity extends RouteRunnerBase {
 
     protected ArrayList<String> pointsOfInterestNames = new ArrayList<String>();
     public ArrayList<LatLng> locations = new ArrayList<LatLng>();
     public ArrayList<Boolean> isCompleted = new ArrayList<Boolean>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +46,12 @@ public class RouteRunnerNotOrderedActivity extends RouteRunnerBase  {
         mapFragment.getMapAsync(this);
         TextView routeTitle = findViewById(R.id.textViewTitleRoutingActivity);
 
-
         ImageButton cancelRoute = findViewById(R.id.buttonCancelRoute);
-        if (b != null && actualRoute == null) {actualRoute = (app.paseico.data.Route) b.get("route");
-        nombredeRuta = actualRoute.getName();
-        rewpoints = actualRoute.getRewardPoints();}
+        if (b != null && actualRoute == null) {
+            actualRoute = (app.paseico.data.Route) b.get("route");
+            nombredeRuta = actualRoute.getName();
+            rewpoints = actualRoute.getRewardPoints();
+        }
 
         List<PointOfInterest> routePois = actualRoute.getPointsOfInterest();
         for (int i = 0; i < routePois.size(); i++) {
@@ -88,54 +63,16 @@ public class RouteRunnerNotOrderedActivity extends RouteRunnerBase  {
             isCompleted.add(false);
         }
 
-
-        /*else { if (pointsOfInterestNames.isEmpty()){
-
-
-            //nombredeRuta = "Descubriendo Valencia";
-
-            PointOfInterest POI1 = new PointOfInterest(39.4736, -0.3790, "Mercado central");
-            PointOfInterest POI2 = new PointOfInterest(39.4758, -0.3839, "Torre de Quart");
-            PointOfInterest POI3 = new PointOfInterest(39.479284, -0.376167, "Torres de Serranos");
-            PointOfInterest POI4 = new PointOfInterest(39.475326, -0.375607, "El Miguelete");
-            PointOfInterest POI5 = new PointOfInterest(39.47441, -0.378259, "Lonja de la Seda");
-            PointOfInterest POI6 = new PointOfInterest(39.476391, -0.375277, "Plaza de la Virgen");
-
-            List<PointOfInterest> pois = new ArrayList<PointOfInterest>();
-            pois.add(POI1);
-            pois.add(POI2);
-            pois.add(POI3);
-            pois.add(POI4);
-            pois.add(POI5);
-            pois.add(POI6);
-
-            actualRoute = new app.paseico.data.Route(nombredeRuta, "Monumentos", 10, 10, 100, pois);
-            List<PointOfInterest> routePois = actualRoute.getPointsOfInterest();
-            rewpoints = 100;
-            for (int i = 0; i < routePois.size(); i++) {
-                pointsOfInterestNames.add(routePois.get(i).getName());
-                locations.add(new LatLng(routePois.get(i).getLatitude(), routePois.get(i).getLongitude()));
-            }
-
-            for (int i = 0; i < locations.size(); i++) {
-                isCompleted.add(false);
-                poisLeft++;
-            }
-        }
-        }*/
         routeTitle.setText(nombredeRuta);
 
         listView = findViewById(R.id.TextNextRoute);
         listView.setAdapter(arrayAdapter);
         cancelRoute.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v){
+            public void onClick(View v) {
 
             }
 
         });
-
-
-
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -157,20 +94,17 @@ public class RouteRunnerNotOrderedActivity extends RouteRunnerBase  {
                     actualPOI = i;
                     arrayAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(getApplicationContext(),"POI ya visitada!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "POI ya visitada!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
         cancelRoute.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view){
+            public void onClick(View view) {
                 CreateConfirmation();
             }
 
         });
-
-
-
     }
 
     public void placePOIsFromRoute() {
@@ -183,8 +117,9 @@ public class RouteRunnerNotOrderedActivity extends RouteRunnerBase  {
                 mMap.addMarker(new MarkerOptions().position(locations.get(i)).title(pointsOfInterestNames.get(i)));
             }
         }
-        if(poisLeft == 0) {
-            for(int j = 0; j < locations.size(); j++) {
+
+        if (poisLeft == 0) {
+            for (int j = 0; j < locations.size(); j++) {
                 isCompleted.set(j, false);
                 poisLeft++;
             }
@@ -193,44 +128,32 @@ public class RouteRunnerNotOrderedActivity extends RouteRunnerBase  {
             startActivity(intent);
             finish();
         }
-
     }
 
-
-    //to get user location
     public void getMyLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+        if (!LocationPermissionRequester.isCoarseLocationPermissionAlreadyGranted(this)) {
             return;
         }
+
         mMap.setMyLocationEnabled(true);
-        mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-            @Override
-            public void onMyLocationChange(Location location) {
 
-                if (myLocation == null) {
-                    myLocation = location;
+        mMap.setOnMyLocationChangeListener(location -> {
+            if (myLocation == null) {
+                myLocation = location;
+            }
 
-                }
-
-                if (currentDestination != null) {
-                    myLocation = location;
-                    if (myLocation.distanceTo(currentDestination) < 50) {
-                        System.out.println("HAS COMPLETADO EL POI");
-                        currentDestination = null;
-                        if(actualPOI > -1){
-                        isCompleted.set(actualPOI,true);
+            if (currentDestination != null) {
+                myLocation = location;
+                if (myLocation.distanceTo(currentDestination) < 50) {
+                    System.out.println("HAS COMPLETADO EL POI");
+                    currentDestination = null;
+                    if (actualPOI > -1) {
+                        isCompleted.set(actualPOI, true);
                         arrayAdapter.notifyDataSetChanged();
-                            actualPOI = -1;}
-                        poisLeft--;
-                        placePOIsFromRoute();
+                        actualPOI = -1;
                     }
+                    poisLeft--;
+                    placePOIsFromRoute();
                 }
             }
         });
@@ -242,17 +165,13 @@ public class RouteRunnerNotOrderedActivity extends RouteRunnerBase  {
 
             }
         });
-
     }
-    
 
     public class ArrayAdapterRutas extends BaseAdapter {
-
         Context context;
 
-
-        public ArrayAdapterRutas(Context c){
-                context = c;
+        public ArrayAdapterRutas(Context c) {
+            context = c;
         }
 
         @Override
@@ -272,20 +191,19 @@ public class RouteRunnerNotOrderedActivity extends RouteRunnerBase  {
 
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
-            View rowview = View.inflate(context, R.layout.activity_runner_textview,null);
-                TextView nom = rowview.findViewById(R.id.textPOI);
+            View rowview = View.inflate(context, R.layout.activity_runner_textview, null);
+            TextView nom = rowview.findViewById(R.id.textPOI);
 
+            if (isCompleted.get(i)) {
+                nom.setBackgroundColor(Color.GREEN);
+            }
+            if (actualPOI == i) {
+                nom.setText(Html.fromHtml("<b>" + pointsOfInterestNames.get(i) + "</b>"));
+            } else {
+                nom.setText(pointsOfInterestNames.get(i));
+            }
 
-                        if (isCompleted.get(i)) {
-                            nom.setBackgroundColor(Color.GREEN);
-                        }
-                        if (actualPOI == i){
-                            nom.setText(Html.fromHtml("<b>"+pointsOfInterestNames.get(i)+"</b>"));
-                        } else {
-                            nom.setText(pointsOfInterestNames.get(i));
-                        }
-
-                return rowview;
+            return rowview;
         }
     }
 
@@ -311,6 +229,4 @@ public class RouteRunnerNotOrderedActivity extends RouteRunnerBase  {
         AlertDialog alert = builder.create();
         alert.show();
     }
-
-
 }
