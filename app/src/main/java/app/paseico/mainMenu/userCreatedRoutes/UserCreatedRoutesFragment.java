@@ -1,39 +1,33 @@
 package app.paseico.mainMenu.userCreatedRoutes;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
+import app.paseico.CategoryManager;
+import app.paseico.R;
+import app.paseico.RouteInformationActivity;
+import app.paseico.adapters.FilteredListAdapter;
+import app.paseico.adapters.MyRecyclerViewAdapter;
+import app.paseico.data.Route;
+import app.paseico.utils.LocationPermissionRequester;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.*;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -41,20 +35,13 @@ import com.koalap.geofirestore.GeoFire;
 import com.koalap.geofirestore.GeoLocation;
 import com.koalap.geofirestore.GeoQuery;
 import com.koalap.geofirestore.GeoQueryEventListener;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import app.paseico.CategoryManager;
-import app.paseico.adapters.FilteredListAdapter;
-import app.paseico.R;
-import app.paseico.RouteInformationActivity;
-import app.paseico.data.Route;
-import app.paseico.adapters.MyRecyclerViewAdapter;
-
 public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerViewAdapter.ItemClickListener {
     private ListView nearRoutesListView;
-    private ArrayAdapter<String> createdRoutesListViewAdapter;
     private static List<String> createdRoutes = new ArrayList<>();
 
     private List<String> organizationsKeys = new ArrayList<String>();
@@ -71,8 +58,6 @@ public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerVie
     private List<String> orgNames = new ArrayList<>();
     private List<Integer> orgRoutesIcons = new ArrayList<>();
 
-
-
     private List<String> nearKeys = new ArrayList<String>();
     private List<Route> nearRoutes = new ArrayList<Route>();
 
@@ -86,9 +71,6 @@ public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerVie
     private List<String> nearNames = new ArrayList<>();
     private List<Integer> nearRoutesIcons = new ArrayList<>();
 
-    protected LocationManager locationManager;
-    protected LocationListener locationListener;
-
     private Location myLocation = null;
 
     FilteredListAdapter adapter;
@@ -97,22 +79,17 @@ public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerVie
 
     CollectionReference ref = FirebaseFirestore.getInstance().collection("geofire");
     GeoFire geoFire = new GeoFire(ref);
-    private FusedLocationProviderClient fusedLocationClient;
-
-
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
         View root = inflater.inflate(R.layout.fragment_user_created_routes, container, false);
 
         nearRoutesListView = root.findViewById(R.id.near_routes_list_view);
         recyclerView = root.findViewById(R.id.organization_routes_recyclerview);
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
-        getLastUserLocation();
-        readOrganizations();
+        LocationPermissionRequester.requestLocationPermission(this.getActivity());
 
+        readOrganizations();
 
         registerCreateNewRouteButtonTransition(root);
 
@@ -125,17 +102,18 @@ public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerVie
             checkLocation();
         });
     }
-    public void checkLocation(){
-        final LocationManager manager = (LocationManager) getContext().getSystemService( Context.LOCATION_SERVICE );
 
-        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+    public void checkLocation() {
+        final LocationManager manager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
-        } else{
+        } else {
             Intent createNewRouteIntent = new Intent(getActivity(), CreateNewRouteActivity.class);
             startActivity(createNewRouteIntent);
         }
-
     }
+
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage("Para poder usar Paseico necesitas activar la ubicación")
@@ -150,13 +128,12 @@ public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerVie
                         dialog.cancel();
                     }
                 });
+
         final AlertDialog alert = builder.create();
         alert.show();
     }
 
-    //
     private void readOrganizations() {
-
         FirebaseFirestore database = FirebaseFirestore.getInstance();
         CollectionReference referenceRoutes = database.collection("route");
         DatabaseReference referenceOrganizations = FirebaseDatabase.getInstance().getReference("organizations");
@@ -181,13 +158,13 @@ public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerVie
                                         organizationRoutes.add(route);
                                         orgRoutesNames.add(route.getName());
 
-                                        int hours = (int) (route.getEstimatedTime()/60);
-                                        int minutes = (int) (route.getEstimatedTime() - (hours*60));
+                                        int hours = (int) (route.getEstimatedTime() / 60);
+                                        int minutes = (int) (route.getEstimatedTime() - (hours * 60));
                                         orgRoutesEstimatedHours.add(String.valueOf(hours));
                                         orgRoutesEstimatedMinutes.add(String.valueOf(minutes));
 
-                                        int km = (int) (route.getLength()/1000);
-                                        int meters = (int) (route.getLength()) - km*1000;
+                                        int km = (int) (route.getLength() / 1000);
+                                        int meters = (int) (route.getLength()) - km * 1000;
                                         orgRoutesKm.add(String.valueOf(km));
                                         orgRoutesMeters.add(String.valueOf(meters));
 
@@ -200,25 +177,21 @@ public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerVie
                                         orgRoutesIcons.add(index);
 
 
-
                                         LinearLayoutManager horizontalLayoutManager
                                                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
                                         recyclerView.setLayoutManager(horizontalLayoutManager);
                                         recyclerViewAdapter = new MyRecyclerViewAdapter(getContext(), orgRoutesNames, orgRoutesEstimatedHours, orgRoutesEstimatedMinutes, orgRoutesKm, orgRoutesMeters,
                                                 orgRoutesRewardPoints, orgRoutesIcons, orgRoutesAreOrdered, orgNames);
-                                        recyclerViewAdapter.setClickListener(new MyRecyclerViewAdapter.ItemClickListener() {
-                                            @Override
-                                            public void onItemClick(View view, int position) {
-                                                Route selectedRoute = organizationRoutes.get(position);
 
-                                                Intent selectedRouteIntent = new Intent(getActivity(), RouteInformationActivity.class);
-                                                selectedRouteIntent.putExtra("route", selectedRoute);
-                                                startActivity(selectedRouteIntent);
-                                            }
+                                        recyclerViewAdapter.setClickListener((view, position) -> {
+                                            Route selectedRoute = organizationRoutes.get(position);
+
+                                            Intent selectedRouteIntent = new Intent(getActivity(), RouteInformationActivity.class);
+                                            selectedRouteIntent.putExtra("route", selectedRoute);
+                                            startActivity(selectedRouteIntent);
                                         });
 
                                         recyclerView.setAdapter(recyclerViewAdapter);
-
                                     }
                                 } else {
                                     Log.d("Ruta2", "task is " + task.getException());
@@ -229,7 +202,6 @@ public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerVie
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }
@@ -257,46 +229,37 @@ public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerVie
                             nearRoutes.add(route);
                             nearRoutesNames.add(route.getName());
 
-                            int hours = (int) (route.getEstimatedTime()/60);
-                            int minutes = (int) (route.getEstimatedTime() - (hours*60));
+                            int hours = (int) (route.getEstimatedTime() / 60);
+                            int minutes = (int) (route.getEstimatedTime() - (hours * 60));
                             nearRoutesEstimatedHours.add(String.valueOf(hours));
                             nearRoutesEstimatedMinutes.add(String.valueOf(minutes));
 
-                            int km = (int) (route.getLength()/1000);
-                            int meters = (int) (route.getLength()) - km*1000;
+                            int km = (int) (route.getLength() / 1000);
+                            int meters = (int) (route.getLength()) - km * 1000;
                             nearRoutesKm.add(String.valueOf(km));
                             nearRoutesMeters.add(String.valueOf(meters));
 
-                            //nearRoutesEstimatedHours.add(Double.toString(route.getEstimatedTime()));
-                            //nearRoutesKm.add(Double.toString(route.getLength()));
                             nearRoutesRewardPoints.add(Integer.toString(route.getRewardPoints()));
                             nearRoutesAreOrdered.add(Integer.toString(route.isOrdered()));
-
 
                             String routeCategory = route.getTheme();
                             int index = CategoryManager.ConvertCategoryToIntDrawable(routeCategory);
                             nearRoutesIcons.add(index);
 
-                            if(getActivity()!=null) {
+                            if (getActivity() != null) {
                                 adapter = new FilteredListAdapter(getActivity(), nearRoutesNames, nearRoutesEstimatedHours, nearRoutesEstimatedMinutes, nearRoutesKm, nearRoutesMeters,
                                         nearRoutesRewardPoints, nearRoutesIcons, nearRoutesAreOrdered);
                                 //nearNames
                                 nearRoutesListView.setAdapter(adapter);
 
-                                nearRoutesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                        Route selectedRoute = nearRoutes.get(position);
+                                nearRoutesListView.setOnItemClickListener((parent, view, position, id) -> {
+                                    Route selectedRoute = nearRoutes.get(position);
 
-                                        Intent selectedRouteIntent = new Intent(getActivity(), RouteInformationActivity.class);
-                                        selectedRouteIntent.putExtra("route", selectedRoute);
-                                        startActivity(selectedRouteIntent);
-                                    }
+                                    Intent selectedRouteIntent = new Intent(getActivity(), RouteInformationActivity.class);
+                                    selectedRouteIntent.putExtra("route", selectedRoute);
+                                    startActivity(selectedRouteIntent);
                                 });
                             }
-
-
-
                         }
                     } else {
                         Log.d("Ruta error", "Error getting documents: ", task.getException());
@@ -331,29 +294,29 @@ public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerVie
         Toast.makeText(getActivity(), "You clicked " + recyclerViewAdapter.getItem(position) + " on item position " + position, Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull @NotNull String[] permissions, @NonNull @NotNull int[] grantResults) {
+        if (requestCode == LocationPermissionRequester.LOCATION_REQUEST_CODE) {
+            if (LocationPermissionRequester.didUserGrantCoarseLocationPermission(grantResults)) {
+                getLastUserLocation();
+            }
+        }
+    }
 
-    public void getLastUserLocation() {
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+    private void getLastUserLocation() {
+        if (!LocationPermissionRequester.isCoarseLocationPermissionAlreadyGranted(this.getContext())) {
             return;
         }
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        if (location != null) {
 
-                            myLocation = location;
-                            loadNearRoutes();
-                        }
+        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(getActivity(), location -> {
+                    if (location != null) {
+
+                        myLocation = location;
+                        loadNearRoutes();
                     }
                 });
     }
-
 }
