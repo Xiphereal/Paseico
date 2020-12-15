@@ -15,7 +15,6 @@ import app.paseico.data.PointOfInterest;
 import app.paseico.utils.LocationPermissionRequester;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -37,14 +36,15 @@ public class RouteRunnerNotOrderedActivity extends RouteRunnerBase {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         actualPOI = -1;
-        arrayAdapter = new ArrayAdapterRutas(this);
+        arrayAdapter = new ArrayAdapterRoutes(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_runner);
-        //request location permission.
+
+        // Request location permission.
         requestPermision();
         InitiateAllVars();
 
-        //init google map fragment to show map.
+        // Init google map fragment to show map.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -58,9 +58,9 @@ public class RouteRunnerNotOrderedActivity extends RouteRunnerBase {
         }
 
         List<PointOfInterest> routePois = actualRoute.getPointsOfInterest();
-        for (int i = 0; i < routePois.size(); i++) {
-            pointsOfInterestNames.add(routePois.get(i).getName());
-            locations.add(new LatLng(routePois.get(i).getLatitude(), routePois.get(i).getLongitude()));
+        for (PointOfInterest pois : routePois) {
+            pointsOfInterestNames.add(pois.getName());
+            locations.add(new LatLng(pois.getLatitude(), pois.getLongitude()));
         }
 
         for (int i = 0; i < locations.size(); i++) {
@@ -71,44 +71,30 @@ public class RouteRunnerNotOrderedActivity extends RouteRunnerBase {
 
         listView = findViewById(R.id.TextNextRoute);
         listView.setAdapter(arrayAdapter);
-        cancelRoute.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
 
-            }
+        listView.setOnItemClickListener((adapterView, view, i, l) -> {
+            if (!isCompleted.get(i)) {
+                LatLng destination = new LatLng(locations.get(i).latitude, locations.get(i).longitude);
 
-        });
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (!isCompleted.get(i)) {
-                    LatLng destination = new LatLng(locations.get(i).latitude, locations.get(i).longitude);
-
-                    start = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
-                    //start route finding
-                    routeRunnerMap.clear();
-                    placePOIsFromRoute();
-                    Findroutes(start, destination);
-                    currentDestination = new Location(destination.toString());
-                    currentDestination.setLatitude(destination.latitude);
-                    currentDestination.setLongitude(destination.longitude);
-                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
-                            new LatLng(currentDestination.getLatitude(), currentDestination.getLongitude()), 16f);
-                    routeRunnerMap.animateCamera(cameraUpdate);
-                    actualPOI = i;
-                    arrayAdapter.notifyDataSetChanged();
-                } else {
-                    Toast.makeText(getApplicationContext(), "POI ya visitada!", Toast.LENGTH_SHORT).show();
-                }
+                start = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+                //start route finding
+                routeRunnerMap.clear();
+                placePOIsFromRoute();
+                Findroutes(start, destination);
+                currentDestination = new Location(destination.toString());
+                currentDestination.setLatitude(destination.latitude);
+                currentDestination.setLongitude(destination.longitude);
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
+                        new LatLng(currentDestination.getLatitude(), currentDestination.getLongitude()), 16f);
+                routeRunnerMap.animateCamera(cameraUpdate);
+                actualPOI = i;
+                arrayAdapter.notifyDataSetChanged();
+            } else {
+                Toast.makeText(getApplicationContext(), "POI ya visitada!", Toast.LENGTH_SHORT).show();
             }
         });
 
-        cancelRoute.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                CreateConfirmation();
-            }
-
-        });
+        cancelRoute.setOnClickListener(view -> CreateConfirmation());
     }
 
     public void placePOIsFromRoute() {
@@ -171,20 +157,12 @@ public class RouteRunnerNotOrderedActivity extends RouteRunnerBase {
                 }
             }
         });
-
-        //get destination location when user click on map    ///DEACTIVATED THIS IS NOT NEEDED (WE CAN DELETE IT BUT LETS KEEP IT A BIT BECAUSE WE DON'T KNOW IF WE'RE GONNA NEED IT IN THE FUTURE)
-        routeRunnerMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-
-            }
-        });
     }
 
-    public class ArrayAdapterRutas extends BaseAdapter {
+    public class ArrayAdapterRoutes extends BaseAdapter {
         Context context;
 
-        public ArrayAdapterRutas(Context c) {
+        public ArrayAdapterRoutes(Context c) {
             context = c;
         }
 
@@ -226,20 +204,17 @@ public class RouteRunnerNotOrderedActivity extends RouteRunnerBase {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setCancelable(false);
         builder.setMessage("¿Seguro que quieres salir?");
-        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //if user pressed "yes", then he is allowed to exit from application
-                finish();
-            }
+
+        builder.setPositiveButton("Sí", (dialog, which) -> {
+            //if user pressed "yes", then he is allowed to exit from application
+            finish();
         });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //if user select "No", just cancel this dialog and continue with app
-                dialog.cancel();
-            }
+
+        builder.setNegativeButton("No", (dialog, which) -> {
+            //if user select "No", just cancel this dialog and continue with app
+            dialog.cancel();
         });
+
         AlertDialog alert = builder.create();
         alert.show();
     }

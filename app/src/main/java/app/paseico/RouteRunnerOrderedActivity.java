@@ -1,27 +1,19 @@
 
 package app.paseico;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
-
-import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.view.View;
-
+import androidx.appcompat.app.AlertDialog;
+import app.paseico.data.Route;
+import app.paseico.utils.LocationPermissionRequester;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
-
-import app.paseico.data.Route;
 
 public class RouteRunnerOrderedActivity extends RouteRunnerBase {
 
@@ -30,6 +22,7 @@ public class RouteRunnerOrderedActivity extends RouteRunnerBase {
     public ArrayList<Boolean> isCompleted = (ArrayList<Boolean>) super.isCompleted;
     Route actualRoute;
     LatLng currentDest;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,13 +37,7 @@ public class RouteRunnerOrderedActivity extends RouteRunnerBase {
 
         routeTitle.setText(nombredeRuta);
 
-        cancelRoute.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view){
-                CreateConfirmation();
-            }
-
-        });
-
+        cancelRoute.setOnClickListener(view -> CreateConfirmation());
     }
 
     public void placePOIsFromRoute() {
@@ -67,8 +54,9 @@ public class RouteRunnerOrderedActivity extends RouteRunnerBase {
                 }
             }
         }
-        if(poisLeft == 0) {
-            for(int j = 0; j < locations.size(); j++) {
+
+        if (poisLeft == 0) {
+            for (int j = 0; j < locations.size(); j++) {
                 isCompleted.set(j, false);
                 poisLeft++;
             }
@@ -77,17 +65,16 @@ public class RouteRunnerOrderedActivity extends RouteRunnerBase {
             startActivity(intent);
             finish();
         }
-
     }
 
-
-    void setNextOrderedPoint(int i){
+    void setNextOrderedPoint(int i) {
         routeRunnerMap.clear();
+
         if (poisLeft > 0) {
             start = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
             LatLng destination = new LatLng(locations.get(i).latitude, locations.get(i).longitude);
             currentDest = destination;
-            routeDisplay.setText("Próximo destino: \n" +pointsOfInterestNames.get(i));
+            routeDisplay.setText("Próximo destino: \n" + pointsOfInterestNames.get(i));
             currentDestination = new Location(destination.toString());
             currentDestination.setLatitude(destination.latitude);
             currentDestination.setLongitude(destination.longitude);
@@ -97,59 +84,38 @@ public class RouteRunnerOrderedActivity extends RouteRunnerBase {
                     new LatLng(currentDestination.getLatitude(), currentDestination.getLongitude()), 16f);
             routeRunnerMap.animateCamera(cameraUpdate);
         }
+
         placePOIsFromRoute();
     }
 
     //to get user location
     public void getMyLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+        if (!LocationPermissionRequester.isCoarseLocationPermissionAlreadyGranted(this)) {
             return;
         }
+
         routeRunnerMap.setMyLocationEnabled(true);
-        routeRunnerMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-            @Override
-            public void onMyLocationChange(Location location) {
+        routeRunnerMap.setOnMyLocationChangeListener(location -> {
+            if (myLocation == null) {
+                myLocation = location;
 
+                actualPOI = 0;
+                setNextOrderedPoint(0);
+            }
 
-                if (myLocation == null) {
-                    myLocation = location;
+            if (currentDestination != null) {
+                myLocation = location;
 
-                    actualPOI = 0;
-                    setNextOrderedPoint(0);
-                }
-
-                if (currentDestination != null) {
-                    myLocation = location;
-
-
-
-                    if (myLocation.distanceTo(currentDestination) < 50) {
-                        System.out.println("HAS COMPLETADO EL POI");
-                        currentDestination = null;
-                            isCompleted.set(actualPOI,true);
-                            actualPOI++;
-                            poisLeft--;
-                            setNextOrderedPoint(actualPOI);
-                    }
+                if (myLocation.distanceTo(currentDestination) < 50) {
+                    System.out.println("HAS COMPLETADO EL POI");
+                    currentDestination = null;
+                    isCompleted.set(actualPOI, true);
+                    actualPOI++;
+                    poisLeft--;
+                    setNextOrderedPoint(actualPOI);
                 }
             }
         });
-
-        //get destination location when user click on map    ///DEACTIVATED THIS IS NOT NEEDED (WE CAN DELETE IT BUT LETS KEEP IT A BIT BECAUSE WE DON'T KNOW IF WE'RE GONNA NEED IT IN THE FUTURE)
-        routeRunnerMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-
-            }
-        });
-
     }
 
     @Override
@@ -157,19 +123,15 @@ public class RouteRunnerOrderedActivity extends RouteRunnerBase {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
         builder.setMessage("¿Seguro que quieres salir?");
-        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //if user pressed "yes", then he is allowed to exit from application
-                finish();
-            }
+
+        builder.setPositiveButton("Sí", (dialog, which) -> {
+            //if user pressed "yes", then he is allowed to exit from application
+            finish();
         });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //if user select "No", just cancel this dialog and continue with app
-                dialog.cancel();
-            }
+
+        builder.setNegativeButton("No", (dialog, which) -> {
+            //if user select "No", just cancel this dialog and continue with app
+            dialog.cancel();
         });
         AlertDialog alert = builder.create();
         alert.show();

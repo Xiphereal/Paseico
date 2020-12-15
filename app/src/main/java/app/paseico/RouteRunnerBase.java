@@ -65,7 +65,7 @@ public abstract class RouteRunnerBase<Polyline> extends FragmentActivity impleme
 
     int actualPOI;
     int poisLeft = 0;
-    RouteRunnerNotOrderedActivity.ArrayAdapterRutas arrayAdapter;
+    RouteRunnerNotOrderedActivity.ArrayAdapterRoutes arrayAdapter;
     int rewpoints;
     Bundle b;
 
@@ -91,29 +91,23 @@ public abstract class RouteRunnerBase<Polyline> extends FragmentActivity impleme
     public void CreateConfirmation() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("¿Estás seguro de que deseas cancelar?");
-        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                poisLeft = 0;
-                for(int j = 0; j < locations.size(); j++) {
-                    isCompleted.set(j, false);
-                    poisLeft++;
-                }
-//                Intent intent = new Intent(RouteRunnerBase.this, RouteInformationActivity.class);
-//                intent.putExtra("route", actualRoute);
-//                startActivity(intent);
-                finish();
+        builder.setPositiveButton("Sí", (dialogInterface, i) -> {
+            poisLeft = 0;
+
+            for (int j = 0; j < locations.size(); j++) {
+                isCompleted.set(j, false);
+                poisLeft++;
             }
+
+            finish();
         });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.cancel();
-            }
-        });
+
+        builder.setNegativeButton("No", (dialogInterface, i) -> dialogInterface.cancel());
+
         builder.create();
         builder.show();
     }
+
     // function to find Routes.
     public void Findroutes(LatLng Start, LatLng End) {
         if (Start == null || End == null) {
@@ -137,12 +131,10 @@ public abstract class RouteRunnerBase<Polyline> extends FragmentActivity impleme
         View parentLayout = findViewById(android.R.id.content);
         Snackbar snackbar = Snackbar.make(parentLayout, e.toString(), Snackbar.LENGTH_LONG);
         snackbar.show();
-//    Findroutes(start,end);
     }
 
     @Override
     public void onRoutingStart() {
-
     }
 
     //If Route finding success..
@@ -151,13 +143,14 @@ public abstract class RouteRunnerBase<Polyline> extends FragmentActivity impleme
 
         CameraUpdate center = CameraUpdateFactory.newLatLng(start);
         CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);
+
         if (polylines != null) {
             polylines.clear();
         }
+
         PolylineOptions polyOptions = new PolylineOptions();
         LatLng polylineStartLatLng = null;
         LatLng polylineEndLatLng = null;
-
 
         polylines = new ArrayList<>();
         //add route(s) to the map using polyline
@@ -172,10 +165,6 @@ public abstract class RouteRunnerBase<Polyline> extends FragmentActivity impleme
                 int k = ((com.google.android.gms.maps.model.Polyline) polyline).getPoints().size();
                 polylineEndLatLng = ((com.google.android.gms.maps.model.Polyline) polyline).getPoints().get(k - 1);
                 polylines.add(polyline);
-
-
-            } else {
-
             }
         }
     }
@@ -209,7 +198,6 @@ public abstract class RouteRunnerBase<Polyline> extends FragmentActivity impleme
         }
     }
 
-
     void InitiateAllVars() {
         //init google map fragment to show map.
         intent = getIntent();
@@ -218,7 +206,6 @@ public abstract class RouteRunnerBase<Polyline> extends FragmentActivity impleme
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         routeTitle = findViewById(R.id.textViewTitleRoutingActivity);
-
 
         cancelRoute = findViewById(R.id.buttonCancelRoute);
         if (b != null && actualRoute == null) {
@@ -237,10 +224,7 @@ public abstract class RouteRunnerBase<Polyline> extends FragmentActivity impleme
                 poisLeft++;
             }
 
-        }
-        else {
-
-
+        } else {
             nombredeRuta = "Descubriendo Valencia";
 
             PointOfInterest POI1 = new PointOfInterest(39.4736, -0.3790, "Mercado central");
@@ -258,7 +242,7 @@ public abstract class RouteRunnerBase<Polyline> extends FragmentActivity impleme
             pois.add(POI5);
             pois.add(POI6);
 
-            actualRoute = new app.paseico.data.Route(nombredeRuta, "Monumentos", 10, 10, 100, pois, "Jhon Doe",0);
+            actualRoute = new app.paseico.data.Route(nombredeRuta, "Monumentos", 10, 10, 100, pois, "Jhon Doe", 0);
             List<PointOfInterest> routePois = actualRoute.getPointsOfInterest();
             rewpoints = 100;
             for (int i = 0; i < routePois.size(); i++) {
@@ -271,7 +255,6 @@ public abstract class RouteRunnerBase<Polyline> extends FragmentActivity impleme
                 poisLeft++;
             }
         }
-
     }
 
     @Override
@@ -282,6 +265,7 @@ public abstract class RouteRunnerBase<Polyline> extends FragmentActivity impleme
     }
 
     public abstract void getMyLocation();
+
     public abstract void placePOIsFromRoute();
 }
 
