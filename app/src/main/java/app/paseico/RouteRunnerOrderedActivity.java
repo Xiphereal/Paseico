@@ -54,16 +54,16 @@ public class RouteRunnerOrderedActivity extends RouteRunnerBase {
     }
 
     public void placePOIsFromRoute() {
-        mMap.clear();
+        routeRunnerMap.clear();
 
         for (int i = 0; i < pointsOfInterestNames.size(); i++) {
             if (isCompleted.get(i)) {
-                mMap.addMarker(new MarkerOptions().position(locations.get(i)).title(pointsOfInterestNames.get(i)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                routeRunnerMap.addMarker(new MarkerOptions().position(locations.get(i)).title(pointsOfInterestNames.get(i)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
             } else {
                 if (i == actualPOI) {
-                    mMap.addMarker(new MarkerOptions().position(locations.get(i)).title(pointsOfInterestNames.get(i)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                    routeRunnerMap.addMarker(new MarkerOptions().position(locations.get(i)).title(pointsOfInterestNames.get(i)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
                 } else {
-                    mMap.addMarker(new MarkerOptions().position(locations.get(i)).title(pointsOfInterestNames.get(i)));
+                    routeRunnerMap.addMarker(new MarkerOptions().position(locations.get(i)).title(pointsOfInterestNames.get(i)));
                 }
             }
         }
@@ -82,7 +82,7 @@ public class RouteRunnerOrderedActivity extends RouteRunnerBase {
 
 
     void setNextOrderedPoint(int i){
-        mMap.clear();
+        routeRunnerMap.clear();
         if (poisLeft > 0) {
             start = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
             LatLng destination = new LatLng(locations.get(i).latitude, locations.get(i).longitude);
@@ -95,7 +95,7 @@ public class RouteRunnerOrderedActivity extends RouteRunnerBase {
 
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
                     new LatLng(currentDestination.getLatitude(), currentDestination.getLongitude()), 16f);
-            mMap.animateCamera(cameraUpdate);
+            routeRunnerMap.animateCamera(cameraUpdate);
         }
         placePOIsFromRoute();
     }
@@ -112,8 +112,8 @@ public class RouteRunnerOrderedActivity extends RouteRunnerBase {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        mMap.setMyLocationEnabled(true);
-        mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+        routeRunnerMap.setMyLocationEnabled(true);
+        routeRunnerMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
             @Override
             public void onMyLocationChange(Location location) {
 
@@ -143,7 +143,7 @@ public class RouteRunnerOrderedActivity extends RouteRunnerBase {
         });
 
         //get destination location when user click on map    ///DEACTIVATED THIS IS NOT NEEDED (WE CAN DELETE IT BUT LETS KEEP IT A BIT BECAUSE WE DON'T KNOW IF WE'RE GONNA NEED IT IN THE FUTURE)
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+        routeRunnerMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
 

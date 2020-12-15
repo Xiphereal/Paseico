@@ -43,7 +43,7 @@ import app.paseico.data.PointOfInterest;
 public abstract class RouteRunnerBase<Polyline> extends FragmentActivity implements
         GoogleApiClient.OnConnectionFailedListener, RoutingListener, OnMapReadyCallback, Serializable {
     //google map object
-    protected GoogleMap mMap;
+    protected GoogleMap routeRunnerMap;
     //current and destination location objects
     Location myLocation = null;
     Location destinationLocation = null;
@@ -167,7 +167,7 @@ public abstract class RouteRunnerBase<Polyline> extends FragmentActivity impleme
                 polyOptions.color(getResources().getColor(R.color.colorPrimary));
                 polyOptions.width(7);
                 polyOptions.addAll(route.get(shortestRouteIndex).getPoints());
-                Polyline polyline = (Polyline) mMap.addPolyline(polyOptions);
+                Polyline polyline = (Polyline) routeRunnerMap.addPolyline(polyOptions);
                 polylineStartLatLng = ((com.google.android.gms.maps.model.Polyline) polyline).getPoints().get(0);
                 int k = ((com.google.android.gms.maps.model.Polyline) polyline).getPoints().size();
                 polylineEndLatLng = ((com.google.android.gms.maps.model.Polyline) polyline).getPoints().get(k - 1);
@@ -276,7 +276,7 @@ public abstract class RouteRunnerBase<Polyline> extends FragmentActivity impleme
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+        routeRunnerMap = googleMap;
         getMyLocation();
         placePOIsFromRoute();
     }

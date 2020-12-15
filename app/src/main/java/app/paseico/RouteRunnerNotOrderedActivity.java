@@ -30,6 +30,10 @@ public class RouteRunnerNotOrderedActivity extends RouteRunnerBase {
     public ArrayList<LatLng> locations = new ArrayList<LatLng>();
     public ArrayList<Boolean> isCompleted = new ArrayList<Boolean>();
 
+    // This is involved in a hacky solution for making the automatic camera
+    // centering in the User current location just once.
+    private boolean firstLocationUpdate = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         actualPOI = -1;
@@ -82,7 +86,7 @@ public class RouteRunnerNotOrderedActivity extends RouteRunnerBase {
 
                     start = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
                     //start route finding
-                    mMap.clear();
+                    routeRunnerMap.clear();
                     placePOIsFromRoute();
                     Findroutes(start, destination);
                     currentDestination = new Location(destination.toString());
@@ -90,7 +94,7 @@ public class RouteRunnerNotOrderedActivity extends RouteRunnerBase {
                     currentDestination.setLongitude(destination.longitude);
                     CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
                             new LatLng(currentDestination.getLatitude(), currentDestination.getLongitude()), 16f);
-                    mMap.animateCamera(cameraUpdate);
+                    routeRunnerMap.animateCamera(cameraUpdate);
                     actualPOI = i;
                     arrayAdapter.notifyDataSetChanged();
                 } else {
@@ -108,13 +112,13 @@ public class RouteRunnerNotOrderedActivity extends RouteRunnerBase {
     }
 
     public void placePOIsFromRoute() {
-        mMap.clear();
+        routeRunnerMap.clear();
 
         for (int i = 0; i < pointsOfInterestNames.size(); i++) {
             if (isCompleted.get(i)) {
-                mMap.addMarker(new MarkerOptions().position(locations.get(i)).title(pointsOfInterestNames.get(i)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                routeRunnerMap.addMarker(new MarkerOptions().position(locations.get(i)).title(pointsOfInterestNames.get(i)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
             } else {
-                mMap.addMarker(new MarkerOptions().position(locations.get(i)).title(pointsOfInterestNames.get(i)));
+                routeRunnerMap.addMarker(new MarkerOptions().position(locations.get(i)).title(pointsOfInterestNames.get(i)));
             }
         }
 
@@ -135,11 +139,21 @@ public class RouteRunnerNotOrderedActivity extends RouteRunnerBase {
             return;
         }
 
-        mMap.setMyLocationEnabled(true);
+        routeRunnerMap.setMyLocationEnabled(true);
 
-        mMap.setOnMyLocationChangeListener(location -> {
+        routeRunnerMap.setOnMyLocationChangeListener(location -> {
             if (myLocation == null) {
                 myLocation = location;
+            }
+
+            // This is involved in a hacky solution for making the automatic camera
+            // centering in the User current location just once.
+            if (firstLocationUpdate) {
+                LatLng userCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
+                routeRunnerMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userCurrentLocation, 16));
+
+                firstLocationUpdate = false;
             }
 
             if (currentDestination != null) {
@@ -159,7 +173,7 @@ public class RouteRunnerNotOrderedActivity extends RouteRunnerBase {
         });
 
         //get destination location when user click on map    ///DEACTIVATED THIS IS NOT NEEDED (WE CAN DELETE IT BUT LETS KEEP IT A BIT BECAUSE WE DON'T KNOW IF WE'RE GONNA NEED IT IN THE FUTURE)
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+        routeRunnerMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
 
