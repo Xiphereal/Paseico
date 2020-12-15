@@ -30,7 +30,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,10 +65,6 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
     private boolean isOrganization;
     private Router currentRouter;
     protected int accumulatedCost = 0;
-
-    // This value has been copied from RouteRunnerBase. It should
-    // represent the code for the location request.
-    private static final int LOCATION_REQUEST_CODE = 23;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -298,7 +293,7 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == LOCATION_REQUEST_CODE) {
+        if (requestCode == LocationPermissionRequester.LOCATION_REQUEST_CODE) {
             if (LocationPermissionRequester.didUserGrantCoarseLocationPermission(grantResults)) {
                 moveCameraToUserPosition();
             }
