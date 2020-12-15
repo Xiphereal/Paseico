@@ -89,6 +89,8 @@ public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerVie
 
         LocationPermissionRequester.requestLocationPermission(this.getActivity());
 
+        tryLoadUserNearRoutes();
+
         readOrganizations();
 
         registerCreateNewRouteButtonTransition(root);
@@ -298,12 +300,12 @@ public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerVie
     public void onRequestPermissionsResult(int requestCode, @NonNull @NotNull String[] permissions, @NonNull @NotNull int[] grantResults) {
         if (requestCode == LocationPermissionRequester.LOCATION_REQUEST_CODE) {
             if (LocationPermissionRequester.didUserGrantCoarseLocationPermission(grantResults)) {
-                getLastUserLocation();
+                tryLoadUserNearRoutes();
             }
         }
     }
 
-    private void getLastUserLocation() {
+    private void tryLoadUserNearRoutes() {
         if (!LocationPermissionRequester.isCoarseLocationPermissionAlreadyGranted(this.getContext())) {
             return;
         }
