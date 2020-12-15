@@ -293,6 +293,9 @@ public class CreateNewRouteActivity extends AppCompatActivity implements OnMapRe
             LatLng userCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
 
             createNewRouteMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userCurrentLocation, 15));
+
+            // This is a hack to make the automatic centering just at startup and only once.
+            createNewRouteMap.setOnMyLocationChangeListener(null);
         });
     }
 
