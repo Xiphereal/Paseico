@@ -120,11 +120,7 @@ public class RouteRunnerOrderedActivity extends RouteRunnerBase {
 
                 if (myLocation == null) {
                     myLocation = location;
-                    LatLng ltlng = new LatLng(location.getLatitude(), location.getLongitude());
-                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
-                            ltlng, 16f);
 
-                    mMap.animateCamera(cameraUpdate);
                     actualPOI = 0;
                     setNextOrderedPoint(0);
                 }

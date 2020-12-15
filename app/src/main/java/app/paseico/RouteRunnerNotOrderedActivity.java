@@ -216,11 +216,7 @@ public class RouteRunnerNotOrderedActivity extends RouteRunnerBase  {
 
                 if (myLocation == null) {
                     myLocation = location;
-                    LatLng ltlng = new LatLng(location.getLatitude(), location.getLongitude());
-                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
-                            ltlng, 16f);
 
-                    mMap.animateCamera(cameraUpdate);
                 }
 
                 if (currentDestination != null) {
