@@ -15,18 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavDirections;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,22 +40,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.koalap.geofirestore.GeoFire;
 import com.koalap.geofirestore.GeoLocation;
 import com.koalap.geofirestore.GeoQuery;
-import com.koalap.geofirestore.GeoQueryDataValueEventListener;
-import com.koalap.geofirestore.GeoQueryDocumentChange;
 import com.koalap.geofirestore.GeoQueryEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import app.paseico.CategoryManager;
+import app.paseico.adapters.FilteredListAdapter;
 import app.paseico.R;
 import app.paseico.RouteInformationActivity;
-import app.paseico.RouteRunnerNotOrderedActivity;
-import app.paseico.RouteRunnerOrderedActivity;
 import app.paseico.data.Route;
-import app.paseico.mainMenu.searcher.MyRecyclerViewAdapter;
-import app.paseico.mainMenu.searcher.RouteSearchFragment;
-import app.paseico.mainMenu.searcher.RouteSearchFragmentDirections;
+import app.paseico.adapters.MyRecyclerViewAdapter;
 
 public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerViewAdapter.ItemClickListener {
     private ListView nearRoutesListView;
@@ -72,8 +62,10 @@ public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerVie
     private String organizationKey = "";
 
     private List<String> orgRoutesNames = new ArrayList<>();
-    private List<String> orgRoutesEstimatedTime = new ArrayList<>();
-    private List<String> orgRoutesLength = new ArrayList<>();
+    private List<String> orgRoutesEstimatedHours = new ArrayList<>();
+    private List<String> orgRoutesEstimatedMinutes = new ArrayList<>();
+    private List<String> orgRoutesKm = new ArrayList<>();
+    private List<String> orgRoutesMeters = new ArrayList<>();
     private List<String> orgRoutesRewardPoints = new ArrayList<>();
     private List<String> orgRoutesAreOrdered = new ArrayList<>();
     private List<String> orgNames = new ArrayList<>();
@@ -85,8 +77,10 @@ public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerVie
     private List<Route> nearRoutes = new ArrayList<Route>();
 
     private List<String> nearRoutesNames = new ArrayList<>();
-    private List<String> nearRoutesEstimatedTime = new ArrayList<>();
-    private List<String> nearRoutesLength = new ArrayList<>();
+    private List<String> nearRoutesEstimatedHours = new ArrayList<>();
+    private List<String> nearRoutesEstimatedMinutes = new ArrayList<>();
+    private List<String> nearRoutesKm = new ArrayList<>();
+    private List<String> nearRoutesMeters = new ArrayList<>();
     private List<String> nearRoutesRewardPoints = new ArrayList<>();
     private List<String> nearRoutesAreOrdered = new ArrayList<>();
     private List<String> nearNames = new ArrayList<>();
@@ -186,8 +180,17 @@ public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerVie
 
                                         organizationRoutes.add(route);
                                         orgRoutesNames.add(route.getName());
-                                        orgRoutesEstimatedTime.add(Double.toString(route.getEstimatedTime()));
-                                        orgRoutesLength.add(Double.toString(route.getLength()));
+
+                                        int hours = (int) (route.getEstimatedTime()/60);
+                                        int minutes = (int) (route.getEstimatedTime() - (hours*60));
+                                        orgRoutesEstimatedHours.add(String.valueOf(hours));
+                                        orgRoutesEstimatedMinutes.add(String.valueOf(minutes));
+
+                                        int km = (int) (route.getLength()/1000);
+                                        int meters = (int) (route.getLength()) - km*1000;
+                                        orgRoutesKm.add(String.valueOf(km));
+                                        orgRoutesMeters.add(String.valueOf(meters));
+
                                         orgRoutesRewardPoints.add(Integer.toString(route.getRewardPoints()));
                                         orgRoutesAreOrdered.add(Integer.toString(route.isOrdered()));
                                         orgNames.add(organizationName);
@@ -201,7 +204,7 @@ public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerVie
                                         LinearLayoutManager horizontalLayoutManager
                                                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
                                         recyclerView.setLayoutManager(horizontalLayoutManager);
-                                        recyclerViewAdapter = new MyRecyclerViewAdapter(getContext(), orgRoutesNames, orgRoutesEstimatedTime, orgRoutesLength,
+                                        recyclerViewAdapter = new MyRecyclerViewAdapter(getContext(), orgRoutesNames, orgRoutesEstimatedHours, orgRoutesEstimatedMinutes, orgRoutesKm, orgRoutesMeters,
                                                 orgRoutesRewardPoints, orgRoutesIcons, orgRoutesAreOrdered, orgNames);
                                         recyclerViewAdapter.setClickListener(new MyRecyclerViewAdapter.ItemClickListener() {
                                             @Override
@@ -253,8 +256,19 @@ public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerVie
 
                             nearRoutes.add(route);
                             nearRoutesNames.add(route.getName());
-                            nearRoutesEstimatedTime.add(Double.toString(route.getEstimatedTime()));
-                            nearRoutesLength.add(Double.toString(route.getLength()));
+
+                            int hours = (int) (route.getEstimatedTime()/60);
+                            int minutes = (int) (route.getEstimatedTime() - (hours*60));
+                            nearRoutesEstimatedHours.add(String.valueOf(hours));
+                            nearRoutesEstimatedMinutes.add(String.valueOf(minutes));
+
+                            int km = (int) (route.getLength()/1000);
+                            int meters = (int) (route.getLength()) - km*1000;
+                            nearRoutesKm.add(String.valueOf(km));
+                            nearRoutesMeters.add(String.valueOf(meters));
+
+                            //nearRoutesEstimatedHours.add(Double.toString(route.getEstimatedTime()));
+                            //nearRoutesKm.add(Double.toString(route.getLength()));
                             nearRoutesRewardPoints.add(Integer.toString(route.getRewardPoints()));
                             nearRoutesAreOrdered.add(Integer.toString(route.isOrdered()));
 
@@ -264,9 +278,9 @@ public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerVie
                             nearRoutesIcons.add(index);
 
                             if(getActivity()!=null) {
-                                adapter = new FilteredListAdapter(getActivity(), nearRoutesNames, nearRoutesEstimatedTime, nearRoutesLength,
-                                        nearRoutesRewardPoints, nearRoutesIcons, nearRoutesAreOrdered, nearNames);
-
+                                adapter = new FilteredListAdapter(getActivity(), nearRoutesNames, nearRoutesEstimatedHours, nearRoutesEstimatedMinutes, nearRoutesKm, nearRoutesMeters,
+                                        nearRoutesRewardPoints, nearRoutesIcons, nearRoutesAreOrdered);
+                                //nearNames
                                 nearRoutesListView.setAdapter(adapter);
 
                                 nearRoutesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -340,71 +354,6 @@ public class UserCreatedRoutesFragment extends Fragment implements MyRecyclerVie
                         }
                     }
                 });
-    }
-
-    class FilteredListAdapter extends ArrayAdapter<String> {
-
-        Context context;
-        List<String> names;
-        List<String> estimatedTimes;
-        List<String> lengths;
-        List<String> points;
-        List<Integer> icons;
-        List<String> areOrdered;
-        List<String> organization;
-
-
-        FilteredListAdapter(Context context, List<String> names, List<String> estimatedTimes, List<String> lengths, List<String> points,
-                            List<Integer> icons, List<String> areOrdered, List<String> organization) {
-            super(context, R.layout.item_route_search
-                    , R.id.routeName, names);
-
-            this.context = context;
-            this.names = names;
-            this.estimatedTimes = estimatedTimes;
-            this.lengths = lengths;
-            this.points = points;
-            this.icons = icons;
-            this.areOrdered = areOrdered;
-            this.organization = organization;
-        }
-
-        @NonNull
-        @Override
-        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View row = layoutInflater.inflate(R.layout.item_route_search, parent, false);
-
-            TextView myNames = row.findViewById(R.id.routeName);
-            TextView myEstimatedTimes = row.findViewById(R.id.routeDuration);
-            TextView myLengths = row.findViewById(R.id.routeLenght);
-            TextView myPoints = row.findViewById(R.id.routeReward);
-            TextView orderedRoute = row.findViewById(R.id.textView_orderedRouteResult);
-            //TextView organizationName = row.findViewById(R.id.organizationNameText);
-
-
-            ImageView ListViewImage = (ImageView) row.findViewById(R.id.imageViewIcon);
-
-            myNames.setText(names.get(position));
-            myEstimatedTimes.setText(estimatedTimes.get(position));
-            myLengths.setText(lengths.get(position));
-            myPoints.setText(points.get(position));
-//            organizationName.setText(organization.get(position));
-
-            String isOrdered = areOrdered.get(position);
-            if (isOrdered.equals("0")){
-                isOrdered = "No";
-            } else {
-                isOrdered = "Sí";
-            }
-
-            orderedRoute.setText(isOrdered);
-
-            ListViewImage.setImageResource(icons.get(position));
-
-            return row;
-        }
-
     }
 
 }

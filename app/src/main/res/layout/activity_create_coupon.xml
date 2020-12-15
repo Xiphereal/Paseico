@@ -9,7 +9,7 @@
 
     <EditText
         android:id="@+id/editTextTextCuponName"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:background="@drawable/custom_input_login"
@@ -24,7 +24,7 @@
 
     <EditText
         android:id="@+id/editTextTextCouponPercentage"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:background="@drawable/custom_input_login"
@@ -64,12 +64,11 @@
     <Button
         android:id="@+id/buttonCreateCoupon"
         style="@style/LargeButtonText"
-        android:layout_width="0dp"
+        android:layout_width="125dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginStart="23dp"
         android:layout_marginBottom="50dp"
-        android:background="@drawable/custom_button"
+        android:background="@color/colorPrimary"
         android:text="@string/create_coupon"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -79,12 +78,11 @@
     <Button
         android:id="@+id/buttonCancelCoupon"
         style="@style/LargeButtonText"
-        android:layout_width="0dp"
+        android:layout_width="125dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginEnd="23dp"
         android:layout_marginBottom="50dp"
-        android:background="@drawable/custom_button"
+        android:background="@color/colorPrimary"
         android:text="@string/cancel_coupon"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"

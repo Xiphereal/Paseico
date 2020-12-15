@@ -1,4 +1,4 @@
-package app.paseico.mainMenu.searcher;
+package app.paseico.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -16,8 +16,10 @@ import app.paseico.R;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
     List<String> names;
-    List<String> estimatedTimes;
-    List<String> lengths;
+    List<String> estimatedHours;
+    List<String> estimatedMinutes;
+    List<String> kms;
+    List<String> meters;
     List<String> points;
     List<Integer> icons;
     List<String> areOrdered;
@@ -25,12 +27,14 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
-    public MyRecyclerViewAdapter(Context context, List<String> names, List<String> estimatedTimes, List<String> lengths, List<String> points,
-                          List<Integer> icons, List<String> areOrdered, List<String> organization){
+    public MyRecyclerViewAdapter(Context context, List<String> names, List<String> estimatedHours, List<String> estimatedMinutes,List<String> kms, List<String> meters, List<String> points,
+                                 List<Integer> icons, List<String> areOrdered, List<String> organization){
         this.mInflater = LayoutInflater.from(context);
         this.names = names;
-        this.estimatedTimes = estimatedTimes;
-        this.lengths = lengths;
+        this.estimatedHours = estimatedHours;
+        this.estimatedMinutes = estimatedMinutes;
+        this.kms = kms;
+        this.meters = meters;
         this.points = points;
         this.icons = icons;
         this.areOrdered = areOrdered;
@@ -47,8 +51,10 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.myNames.setText(names.get(position));
-        holder.myEstimatedTimes.setText(estimatedTimes.get(position));
-        holder.myLengths.setText(lengths.get(position));
+        holder.myEstimatedTimes.setText(estimatedHours.get(position));
+        holder.myMinutes.setText(estimatedMinutes.get(position));
+        holder.myLengths.setText(kms.get(position));
+        holder.myMeters.setText(meters.get(position));
         holder.myPoints.setText(points.get(position));
         holder.organizationName.setText(organization.get(position));
 
@@ -73,7 +79,9 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         View myView;
         TextView myNames;
         TextView myEstimatedTimes;
+        TextView myMinutes;
         TextView myLengths;
+        TextView myMeters;
         TextView myPoints;
         TextView orderedRoute;
         TextView organizationName;
@@ -83,7 +91,9 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             super(itemView);
              myNames = itemView.findViewById(R.id.routeName);
              myEstimatedTimes = itemView.findViewById(R.id.routeDuration);
+             myMinutes = itemView.findViewById(R.id.routeMinutes);
              myLengths = itemView.findViewById(R.id.routeLenght);
+             myMeters = itemView.findViewById(R.id.meters_textView);
              myPoints = itemView.findViewById(R.id.routeReward);
              orderedRoute = itemView.findViewById(R.id.textView_orderedRouteResult);
              organizationName = itemView.findViewById(R.id.organizationNameText);
