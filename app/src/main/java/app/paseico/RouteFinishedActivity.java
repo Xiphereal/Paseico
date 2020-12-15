@@ -41,7 +41,7 @@ public class RouteFinishedActivity extends AppCompatActivity {
         //goToMenu.setClickable(false);
         Route route = (Route) getIntent().getExtras().get("route");
         myActualUserRef = myUsersRef.child(fbusr.getUid());
-        myActualUserRef.addValueEventListener(new ValueEventListener() {
+        myActualUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 currentRouter = snapshot.getValue(Router.class);

@@ -29,35 +29,7 @@ public class RouteRunnerOrderedActivity extends RouteRunnerBase {
     public ArrayList<LatLng> locations = (ArrayList<LatLng>) super.locations;
     public ArrayList<Boolean> isCompleted = (ArrayList<Boolean>) super.isCompleted;
     Route actualRoute;
-    /*
-        //google map object
-        private GoogleMap mMap;
-        //current and destination location objects
-        Location myLocation = null;
-        Location destinationLocation = null;
-        protected LatLng start = null;
-        protected LatLng end = null;
-        //to get location permissions.
-        private final static int LOCATION_REQUEST_CODE = 23;
-        boolean locationPermission = false;
-    
-        //polyline object
-        private List<Polyline> polylines = null;
-    
-        ArrayList<String> pointsOfInterestNames = new ArrayList<String>();
-        ArrayList<LatLng> locations = new ArrayList<LatLng>();
-        ArrayList<Boolean> isCompleted = new ArrayList<Boolean>();
-        int actualPOI = 0;
-        int poisLeft = 0;
-        int rewpoints;
-    
-        Location currentDestination;
-        TextView routeDisplay;
-        String nombredeRuta = "Descubriendo Valencia";
-    
-        private app.paseico.data.Route actualRoute;
-    
-    */
+    LatLng currentDest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +74,6 @@ public class RouteRunnerOrderedActivity extends RouteRunnerBase {
             }
             Intent intent = new Intent(RouteRunnerOrderedActivity.this, RouteFinishedActivity.class);
             intent.putExtra("route", actualRoute);
-            System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ "+actualRoute.isOrdered());
             startActivity(intent);
             finish();
         }
@@ -111,14 +82,17 @@ public class RouteRunnerOrderedActivity extends RouteRunnerBase {
 
 
     void setNextOrderedPoint(int i){
+        mMap.clear();
         if (poisLeft > 0) {
             start = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
             LatLng destination = new LatLng(locations.get(i).latitude, locations.get(i).longitude);
+            currentDest = destination;
             routeDisplay.setText("Próximo destino: \n" +pointsOfInterestNames.get(i));
             currentDestination = new Location(destination.toString());
             currentDestination.setLatitude(destination.latitude);
             currentDestination.setLongitude(destination.longitude);
-            Findroutes(start, destination);
+            Findroutes(start, currentDest);
+
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
                     new LatLng(currentDestination.getLatitude(), currentDestination.getLongitude()), 16f);
             mMap.animateCamera(cameraUpdate);
@@ -128,7 +102,7 @@ public class RouteRunnerOrderedActivity extends RouteRunnerBase {
 
     //to get user location
     public void getMyLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -143,6 +117,7 @@ public class RouteRunnerOrderedActivity extends RouteRunnerBase {
             @Override
             public void onMyLocationChange(Location location) {
 
+
                 if (myLocation == null) {
                     myLocation = location;
                     LatLng ltlng = new LatLng(location.getLatitude(), location.getLongitude());
@@ -156,6 +131,9 @@ public class RouteRunnerOrderedActivity extends RouteRunnerBase {
 
                 if (currentDestination != null) {
                     myLocation = location;
+
+
+
                     if (myLocation.distanceTo(currentDestination) < 50) {
                         System.out.println("HAS COMPLETADO EL POI");
                         currentDestination = null;

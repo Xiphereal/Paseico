@@ -16,6 +16,7 @@ package app.paseico;
         import android.location.Location;
         import android.os.Bundle;
         import android.text.Html;
+        import android.util.Log;
         import android.view.View;
         import android.view.ViewGroup;
         import android.widget.AdapterView;
@@ -85,7 +86,6 @@ public class RouteRunnerNotOrderedActivity extends RouteRunnerBase  {
 
         for (int i = 0; i < locations.size(); i++) {
             isCompleted.add(false);
-            poisLeft++;
         }
 
 
@@ -199,7 +199,7 @@ public class RouteRunnerNotOrderedActivity extends RouteRunnerBase  {
 
     //to get user location
     public void getMyLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
