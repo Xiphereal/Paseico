@@ -222,6 +222,9 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
             int cameraPaddingForBounds = 200;
             modifyRouteMap.moveCamera(
                     CameraUpdateFactory.newLatLngBounds(pointsOfInterestBounds, cameraPaddingForBounds));
+
+            // This is a hack to make the automatic centering just at startup and only once.
+            modifyRouteMap.setOnMyLocationChangeListener(null);
         });
     }
 
@@ -440,14 +443,14 @@ public class ModifyRouteActivity extends AppCompatActivity implements OnMapReady
     }
 
     private void tryFinalizeRouteCreation() {
-        if (pointsOfInterest.size()>=2) {
+        if (pointsOfInterest.size() >= 2) {
             if (currentRouter.getHasFreeRouteCreation()) {
                 currentRouter.setHasFreeRouteCreation(false);
                 showConfirmationDialog();
             } else {
                 showRouteCreationSummaryDialog();
             }
-        }else{
+        } else {
             Toast.makeText(ModifyRouteActivity.this, "Ruta debe tener 2 POIs mínimo", Toast.LENGTH_SHORT).show();
         }
     }
