@@ -5,15 +5,17 @@
         android:layout_height="wrap_content"
         android:scaleY="1">
 
-        <TextView
-            android:id="@+id/textPOI"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:hint="Nombres de ruta"
-            android:scaleY="1.2"
-            android:text="TEXTO DE EJEMPLO"
-            android:translationX="5dp">
+    <TextView
+        android:id="@+id/textPOI"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Nombres de ruta"
+        android:text="TEXTO DE EJEMPLO"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold"
+       >
 
-        </TextView>
+    </TextView>
 
     </LinearLayout>

@@ -221,12 +221,12 @@
 
     <Spinner
         android:id="@+id/spinner_orderedRoute"
-        android:layout_width="107dp"
-        android:layout_height="23dp"
-        android:layout_marginStart="75dp"
+        android:layout_width="170dp"
+        android:layout_height="25dp"
         android:layout_marginTop="36dp"
         android:entries="@array/ordered_route_choices"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.647"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText_minimumOfPoints" />
 
