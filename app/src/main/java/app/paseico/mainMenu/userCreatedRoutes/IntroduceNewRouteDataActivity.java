@@ -369,6 +369,7 @@ public class IntroduceNewRouteDataActivity extends AppCompatActivity {
                     } else {
                         if (currentRouter.getHasFreeRouteCreation()) {
                             currentRouter.setHasFreeRouteCreation(false);
+                            routeCost = calculateRouteCost();
                             showConfirmationDialog();
                         } else {
                             showRouteCreationSummaryDialog();
