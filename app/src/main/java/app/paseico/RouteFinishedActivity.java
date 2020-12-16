@@ -63,7 +63,6 @@ public class RouteFinishedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_route_finished);
 
         TextView nombreRutaTV = findViewById(R.id.textViewTemporalMenuName);
-        TextView listaPOISTV = findViewById(R.id.textViewTemporalMenuPOIS);
         TextView cantPuntos = findViewById(R.id.textViewRouteFinishedPoints);
 
         nombreRuta = route.getName();
@@ -72,19 +71,8 @@ public class RouteFinishedActivity extends AppCompatActivity {
         rewpoints = route.getRewardPoints();
         cantPuntos.setText("Puntos: " + rewpoints);
 
-        nombrePOIs = route.getPointsOfInterest();
-        String listado = "";
-        for (int i = 0; i < nombrePOIs.size(); i++) {
-            listado+="- "+nombrePOIs.get(i).getName() + "\n";
-        }
-
-        listaPOISTV.setText(listado);
         System.out.println(route.isOrdered());
 
-
-
-
-        //listaPOIS.setText(listado);
         Button goToMenu = findViewById(R.id.buttonTemporalMenuStartRoute);
         goToMenu.setOnClickListener(new View.OnClickListener() {
             @Override
