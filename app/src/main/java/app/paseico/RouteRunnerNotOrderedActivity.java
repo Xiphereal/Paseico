@@ -71,7 +71,7 @@ public class RouteRunnerNotOrderedActivity extends RouteRunnerBase {
 
         listView = findViewById(R.id.TextNextRoute);
         listView.setAdapter(arrayAdapter);
-
+        listView.setBackgroundResource(R.drawable.layout_bgt);
         listView.setOnItemClickListener((adapterView, view, i, l) -> {
             if (!isCompleted.get(i)) {
                 LatLng destination = new LatLng(locations.get(i).latitude, locations.get(i).longitude);
