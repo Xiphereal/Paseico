@@ -31,19 +31,6 @@ android:background="@drawable/geometrics_cut">
         app:layout_constraintTop_toBottomOf="@+id/textViewRouteFinished" />
 
     <TextView
-        android:id="@+id/textViewTemporalMenuPOIS"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="LISTA DE RUTAS"
-        android:textColor="#8BC34A"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTemporalMenuName" />
-
-    <TextView
         android:id="@+id/textViewRouteFinishedPoints"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -53,7 +40,7 @@ android:background="@drawable/geometrics_cut">
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTemporalMenuPOIS" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewTemporalMenuName" />
 
     <Button
         android:id="@+id/buttonTemporalMenuStartRoute"
@@ -75,12 +62,11 @@ android:background="@drawable/geometrics_cut">
         android:layout_height="250dp"
         android:layout_marginStart="80dp"
         android:layout_marginEnd="80dp"
+        android:layout_marginBottom="80dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonTemporalMenuStartRoute"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/buttonTemporalMenuStartRoute"
-        android:layout_marginBottom="90dp"
         app:lottie_autoPlay="true"
         app:lottie_fileName="anim_finished.json"
-        app:lottie_loop="true"
-        tools:layout_editor_absoluteY="356dp" />
+        app:lottie_loop="true" />
 </androidx.constraintlayout.widget.ConstraintLayout>
