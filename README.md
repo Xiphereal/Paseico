@@ -1,5 +1,8 @@
 
 # PASEICO
+
+[![Watch the video](https://img.youtube.com/vi/nIDN9CbM9tg/hqdefault.jpg)](https://youtu.be/nIDN9CbM9tg)
+
 ## Project context
 
 This application is a college project and the result of a 4 sprint long project (2 + 3 + 2 + 2 week distribution) working with other 7 devs. The porpuse was to improve our skills in managing a software development team with an agile philosophy, continuing the contents from *Software Development Process* in the last year course *Software Engineering Project*. In the context of that academical project, we made several collaborations with other courses like:
